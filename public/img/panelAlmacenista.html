@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<!-- saved from url=(0078)file:///C:/Users/Alondra/Documents/GitHub/RoyaltyCeramic/panelAlmacenista.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link href="./panelAlmacenista_files/metro.css" rel="stylesheet">
+        <link href="./panelAlmacenista_files/metro-responsive.min.css" rel="stylesheet">
+        <link href="./panelAlmacenista_files/metro-schemes.css" rel="stylesheet">
+        <script src="./panelAlmacenista_files/jquery.js.descarga"></script>
+        <link href="./panelAlmacenista_files/metro-icons.min.css" rel="stylesheet">
+        <script src="./panelAlmacenista_files/metro.js.descarga"></script>
+        <script>
+
+            function Notificacion()
+            {
+                $.Notify({
+                    caption: 'Correcto',
+                    content: 'La salida de mercancía fue guardada con éxito',
+                    type: 'success'
+                });
+            }
+            function NotificacionE()
+            {
+                $.Notify({
+                    caption: 'Cancelado',
+                    content: 'Se canceló la salida de mercancía',
+                    type: 'alert'
+                });
+                $("#Tabla").fadeOut();
+                $("#claveprod").val("");
+            }
+            function MostrarProd()
+            {
+
+                $("#Tabla").fadeIn();
+            }
+        </script>
+    </head>
+    <body>
+
+        <div class="app-bar fixed-top" data-role="appbar" style="background-color: #B82134;padding-right: 20px;">
+            <a class="app-bar-element" href="file:///C:/Users/Alondra/Documents/GitHub/RoyaltyCeramic/index.html"><img src="./panelAlmacenista_files/logo.png" style="height: 45px;width: 180px"></a>
+
+            <ul class="app-bar-menu">
+                <li data-flexorderorigin="0" data-flexorder="1"><a href="file:///C:/Users/Alondra/Documents/GitHub/RoyaltyCeramic/panelAlmacenista.html">Inicio</a></li>
+                <li data-flexorderorigin="1" data-flexorder="2"><a href="file:///C:/Users/Alondra/Documents/GitHub/RoyaltyCeramic/panelAlmacenista.html">Cuenta</a></li>
+                <li data-flexorderorigin="2" data-flexorder="3"><a href="file:///C:/Users/Alondra/Documents/GitHub/RoyaltyCeramic/panelAlmacenista.html">Contacto</a></li>
+                <ul class="app-bar-menu" data-flexorderorigin="3" data-flexorder="4">
+                    <li data-flexorderorigin="0" data-flexorder="1"><a href="file:///C:/Users/Alondra/Documents/GitHub/RoyaltyCeramic/panelAlmacenista.html">Soporte</a></li>
+                    <li data-flexorderorigin="1" data-flexorder="2">
+                        <a href="file:///C:/Users/Alondra/Documents/GitHub/RoyaltyCeramic/panelAlmacenista.html" class="dropdown-toggle">Productos</a>
+                        <ul class="d-menu" data-role="dropdown">
+                            <li><a href="file:///C:/Users/Alondra/Documents/GitHub/RoyaltyCeramic/panelAlmacenista.html">Línea Residencial</a></li>
+                            <li><a href="file:///C:/Users/Alondra/Documents/GitHub/RoyaltyCeramic/panelAlmacenista.html">Línea Comercial</a></li>
+                            <li><a href="file:///C:/Users/Alondra/Documents/GitHub/RoyaltyCeramic/panelAlmacenista.html">Lavabos</a></li>
+                            <li><a href="file:///C:/Users/Alondra/Documents/GitHub/RoyaltyCeramic/panelAlmacenista.html">Mingitorios</a></li>
+                            <li class="divider"></li>
+                            <li><a href="file:///C:/Users/Alondra/Documents/GitHub/RoyaltyCeramic/panelAlmacenista.html" class="dropdown-toggle">Otros productos</a>
+                                <ul class="d-menu" data-role="dropdown">
+                                    <li><a href="file:///C:/Users/Alondra/Documents/GitHub/RoyaltyCeramic/panelAlmacenista.html">Accesorios</a></li>
+                                    <li><a href="file:///C:/Users/Alondra/Documents/GitHub/RoyaltyCeramic/panelAlmacenista.html">Producto especial 2</a></li>
+                                    <li><a href="file:///C:/Users/Alondra/Documents/GitHub/RoyaltyCeramic/panelAlmacenista.html">Producto especial 3</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li data-flexorderorigin="2" data-flexorder="3"><a href="file:///C:/Users/Alondra/Documents/GitHub/RoyaltyCeramic/panelAlmacenista.html"></a></li>
+                    <li data-flexorderorigin="3" data-flexorder="4"><a href="file:///C:/Users/Alondra/Documents/GitHub/RoyaltyCeramic/panelAlmacenista.html"></a></li>
+                </ul>
+            </ul>
+            <div class="app-bar-element place-right">
+                <a class="dropdown-toggle fg-white"> <img src="./panelAlmacenista_files/user.png" width="35px;" style="border-radius: 50%"> &nbsp;&nbsp;Pedro Fuentes</a>
+                <div class="app-bar-drop-container bg-white fg-dark place-right" data-role="dropdown" data-no-close="true">
+                    <div class="padding10" style="width: 200px;">
+                        <center>
+                            <img src="./panelAlmacenista_files/user.png" style="width: 100px;">
+                            <br>
+                            <b>Pedro Fuentes López</b><br>
+                            Almacén<br>
+                            <i>Almacenista</i>
+                        </center>
+                    </div>
+                </div>
+            </div>
+        <div class="app-bar-pullbutton automatic" style="display: none;"></div><div class="clearfix" style="width: 0;"></div><nav class="app-bar-pullmenu hidden flexstyle-app-bar-menu" style="display: none;"><ul class="app-bar-pullmenubar hidden app-bar-menu"></ul><ul class="app-bar-pullmenubar hidden app-bar-menu"></ul></nav></div>
+        <div class="contenido" style="padding-left: 30px;padding-right: 30px"><br>
+            <br><br><br>
+            <h1>
+                <div class="dropdown-button">
+                    <button class="button dropdown-toggle large-button fg-darkCrimson" style="size: "> <span class="mif-link"></span></button>
+                    <ul class="split-content d-menu" data-role="dropdown" style="border-color:white">
+                        <li><a href="file:///C:/Users/Alondra/Documents/GitHub/RoyaltyCeramic/recibirAlmacen.html">Recibir Productos</a></li>
+                        <li><a href="file:///C:/Users/Alondra/Documents/GitHub/RoyaltyCeramic/SalidaAlmacen.html">Salida de Productos</a></li>
+                        <li><a href="file:///C:/Users/Alondra/Documents/GitHub/RoyaltyCeramic/capturaAccidenteA.html">Captura de accidentes</a></li>
+                        <li><a href="file:///C:/Users/Alondra/Documents/GitHub/RoyaltyCeramic/panelAlmacenista.html">Reportes por fecha</a></li>
+                        <li><a href="file:///C:/Users/Alondra/Documents/GitHub/RoyaltyCeramic/panelAlmacenista.html">Reportes de accidentes</a></li>
+                    </ul>
+                </div>
+                Panel de control</h1><br>
+            <center>
+                <div class="panel">
+                    <div class="heading bg-lightGray ">
+                        <span class="icon mif-home bg-darkGray "></span>
+                        <span class="title fg-black">Almacén</span>
+                    </div>
+                    <div class="content">
+                        <br><br>
+                        <button class="command-button icon-left bg-gray fg-white" onclick="window.location = &#39;BrecibirAlmacen.html&#39;">
+                            <span class="icon mif-arrow-right"></span>
+                            Recibir
+                            <small>Productos entrantes</small>
+                        </button>
+                        <button class="command-button icon-left success" onclick="window.location = &#39;SalidaAlmacen.html&#39;">
+                            <span class="icon mif-arrow-left"></span>
+                            Salida
+                            <small> de productos del almacén</small>
+                        </button>
+                        <button class="command-button icon-left primary" onclick="window.location = &#39;capturaAccidenteA.html&#39;">
+                            <span class="icon mif-warning"></span>
+                            Accidentes
+                            <small>Capturar accidentes</small>
+                        </button>
+                        <br><br>
+                        <br><br>
+                    </div>
+                </div>
+                <br><br>
+                <div class="panel">
+                    <div class="heading primary bg-lightGray">
+                        <span class="icon mif-home bg-darkGray"></span>
+                        <span class="title fg-black">Reportes</span>
+                    </div>
+                    <div class="content example ">
+                        <br><br>
+                        <button class="command-button icon-left warning">
+                            <span class="icon mif-calendar"></span>
+                            Reporte
+                            <small>Reporte de clasificación por fecha</small>
+                        </button>
+                        <button class="command-button icon-left bg-brown fg-white">
+                            <span class="icon mif-fire"></span>
+                            Reporte
+                            <small>Reporte de clasificación por horno</small>
+                        </button>
+                        <br><br>
+                    </div>
+                </div>
+            </center>
+        </div>
+    
+
+</body></html>

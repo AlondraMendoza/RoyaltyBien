@@ -10,22 +10,17 @@ class Modeloclasificador extends CI_Model {
         $this->load->database();
     }
 
-    public function ListaHornosDia($dia) {
-        $this->db->select('h.*');
+    public function ListaHornos($dia) {
+        $this->db->select('*');
         $this->db->from('Productos p');
         $this->db->join('Hornos h', 'h.idhornos=p.hornosid');
         $this->db->where('DATE(p.FechaQuemado)', $dia);
         $this->db->where('h.Activo', 1);
         $this->db->where('p.Activo', 1);
-        $this->db->where('p.Activo', 0);
+        $this->db->where('p.Clasificado', 0);
         $this->db->group_by('h.IdHornos');
         $query = $this->db->get();
-        return $query->result();
-//        $con = new Conexion();
-//        $dia = $con->EscapaCaracteres($dia);
-//        $query = "SELECT h.* FROM Productos p JOIN Hornos h ON h.idhornos=p.hornosid WHERE DATE(p.FechaQuemado)='$dia' AND h.Activo=1 AND p.Activo=1 AND p.Clasificado=0 GROUP BY h.IdHornos ";
-//        $datos = $con->Consultar($query);
-//        return $datos;
+        return $query;
     }
 
     public static function FechaIngles($date) {
@@ -57,7 +52,19 @@ class Modeloclasificador extends CI_Model {
 //        return "";
     }
 
-    public static function ListaProductosDia($dia, $horno) {
+    public function ProductosPendientesHornos($dia, $horno) {
+        $this->db->select('h.*');
+        $this->db->from('Productos p');
+        $this->db->join('Hornos h', 'h.idhornos=p.hornosid');
+        $this->db->where('DATE(p.FechaQuemado)', $dia);
+        $this->db->where('h.Activo', 1);
+        $this->db->where('p.Activo', 1);
+        $this->db->where('p.Clasificado', 0);
+        $this->db->where('p.HornosId', $horno);
+        $this->db->where('p.HornosId', $horno);
+        $this->db->group_by('p.IdProductos');
+        $cuantos = $this->db->get()->num_rows();
+        return $cuantos;
 //        $con = new Conexion();
 //        $dia = $con->EscapaCaracteres($dia);
 //        $query = "SELECT h.* FROM Productos p JOIN Hornos h ON h.idhornos=p.hornosid WHERE DATE(p.FechaQuemado)='$dia' AND h.Activo=1 AND p.Activo=1 AND p.HornosId=$horno AND p.Clasificado=0  GROUP BY p.IdProductos";

@@ -3,7 +3,7 @@
     {
         $("#divclasificacion").html('');
         $("#tdhornos").html('<span style="font-size:5em" class="mif-spinner5 mif-ani-spin"></span> Cargando hornos con productos pendientes de clasificar...');
-        $("#tdhornos").load("ObtenerHornosPendientes/" + d, function () {
+        $("#tdhornos").load("clasificador/ObtenerHornos", {"d": d}, function () {
             CargarProductos();
         });
     }

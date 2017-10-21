@@ -19,10 +19,12 @@ class Clasificador extends CI_Controller {
         $this->load->view('template/footerd', '');
     }
 
-    public function ObtenerHornosPendientes($d = null) {
+    public function ObtenerHornos() {
+        $d = $this->input->post_get('d', TRUE);
         $this->load->model("modeloclasificador");
-        $infocontent["hornos"] = $this->modeloclasificador->ListaHornosDia($this->FechaIngles($d));
-        $this->load->view('clasificador/ObtenerHornosPendientes', $infocontent);
+        $infocontent["hornos"] = $this->modeloclasificador->ListaHornos($this->FechaIngles($d));
+        $infocontent["d"] = $this->FechaIngles($d);
+        $this->load->view('clasificador/ObtenerHornos', $infocontent);
         // $dia = $this->FechaIngles($d);
 //        $hornos = \Models\Hornos::ListaHornosDia($dia);
 //        $arreglo = [

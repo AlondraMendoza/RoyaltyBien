@@ -62,34 +62,27 @@ class Clasificador extends CI_Controller {
         return "";
     }
 
-//    public function index() {
-//
-////        $hoy = date("d/m/Y");
-////        $hoyingles = $this->FechaIngles($hoy);
-////        $hornos = \Models\Hornos::ListaHornosDia($hoyingles);
-////        $arreglo = [
-////            "hornos" => $hornos,
-////            "hoy" => $hoy,
-////            "hoyingles" => $hoyingles
-////        ];
-////        return $arreglo;
-//    }
+    public function ObtenerProductos() {
 
-
-
-    public function ProductosHornoFecha() {
-//        $horno = $_POST["horno"];
-//        $fecha = $_POST["fecha"];
-//        $dia = $this->FechaIngles($fecha);
-//        $productos = \Models\Productos::ListarProductosHornoFecha($dia, $horno);
-//        $arreglo = [
-//            "dia" => $dia,
-//            "productos" => $productos
-//        ];
-//        return $arreglo;
+        $horno = $this->input->post_get('horno', TRUE);
+        $fecha = $this->input->post_get('fecha', TRUE);
+        $this->load->model("modeloclasificador");
+        $infocontent["productos"] = $this->modeloclasificador->ListaProductos($this->FechaIngles($fecha), $horno);
+        $infocontent["dia"] = $fecha;
+        $infocontent["horno"] = $horno;
+        $this->load->view('clasificador/ObtenerProductos', $infocontent);
     }
 
-    public function ModelosHornoFechaProducto() {
+    public function ObtenerModelos() {
+        $horno = $this->input->post_get('horno', TRUE);
+        $fecha = $this->input->post_get('fecha', TRUE);
+        $cprod = $this->input->post_get('cprod', TRUE);
+        $this->load->model("modeloclasificador");
+        $infocontent["modelos"] = $this->modeloclasificador->ListaModelos($this->FechaIngles($fecha), $horno, $cprod);
+        $infocontent["dia"] = $fecha;
+        $infocontent["cprod"] = $cprod;
+        $infocontent["horno"] = $horno;
+        $this->load->view('clasificador/ObtenerModelos', $infocontent);
 //        $horno = $_REQUEST["horno"];
 //        $fecha = $_REQUEST["fecha"];
 //        $cprod = $_REQUEST["cprod"];

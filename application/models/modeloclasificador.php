@@ -24,32 +24,32 @@ class Modeloclasificador extends CI_Model {
     }
 
     public static function FechaIngles($date) {
-//        if ($date) {
-//            $fecha = $date;
-//            $hora = "";
-//
-//            # separamos la fecha recibida por el espacio de separación entre
-//            # la fecha y la hora
-//            $fechaHora = explode(" ", $date);
-//            if (count($fechaHora) == 2) {
-//                $fecha = $fechaHora[0];
-//                $hora = $fechaHora[1];
-//            }
-//
-//            # cogemos los valores de la fecha
-//            $values = preg_split('/(\/|-)/', $fecha);
-//            if (count($values) == 3) {
-//                # devolvemos la fecha en formato ingles
-//                if ($hora && count(explode(":", $hora)) == 3) {
-//                    # si la hora esta separada por : y hay tres valores...
-//                    $hora = explode(":", $hora);
-//                    return date("Ymd H:i:s", mktime($hora[0], $hora[1], $hora[2], $values[1], $values[0], $values[2]));
-//                } else {
-//                    return date("Ymd", mktime(0, 0, 0, $values[1], $values[0], $values[2]));
-//                }
-//            }
-//        }
-//        return "";
+        if ($date) {
+            $fecha = $date;
+            $hora = "";
+
+            # separamos la fecha recibida por el espacio de separación entre
+            # la fecha y la hora
+            $fechaHora = explode(" ", $date);
+            if (count($fechaHora) == 2) {
+                $fecha = $fechaHora[0];
+                $hora = $fechaHora[1];
+            }
+
+            # cogemos los valores de la fecha
+            $values = preg_split('/(\/|-)/', $fecha);
+            if (count($values) == 3) {
+                # devolvemos la fecha en formato ingles
+                if ($hora && count(explode(":", $hora)) == 3) {
+                    # si la hora esta separada por : y hay tres valores...
+                    $hora = explode(":", $hora);
+                    return date("Ymd H:i:s", mktime($hora[0], $hora[1], $hora[2], $values[1], $values[0], $values[2]));
+                } else {
+                    return date("Ymd", mktime(0, 0, 0, $values[1], $values[0], $values[2]));
+                }
+            }
+        }
+        return "";
     }
 
     public function ProductosPendientesHornos($dia, $horno) {
@@ -61,19 +61,37 @@ class Modeloclasificador extends CI_Model {
         $this->db->where('p.Activo', 1);
         $this->db->where('p.Clasificado', 0);
         $this->db->where('p.HornosId', $horno);
-        $this->db->where('p.HornosId', $horno);
         $this->db->group_by('p.IdProductos');
         $cuantos = $this->db->get()->num_rows();
         return $cuantos;
-//        $con = new Conexion();
-//        $dia = $con->EscapaCaracteres($dia);
-//        $query = "SELECT h.* FROM Productos p JOIN Hornos h ON h.idhornos=p.hornosid WHERE DATE(p.FechaQuemado)='$dia' AND h.Activo=1 AND p.Activo=1 AND p.HornosId=$horno AND p.Clasificado=0  GROUP BY p.IdProductos";
-//        $datos = $con->Consultar($query);
-//        $con->Cerrar();
-//        return $datos;
     }
 
-    public static function ListarProductosHornoFecha($dia, $horno) {
+    public function ListaProductos($dia, $horno) {
+        $this->db->select('*');
+        $this->db->from('Productos p');
+        $this->db->join('CProductos cp', 'cp.IdCProductos=p.CProductosId');
+        $this->db->where('DATE(p.FechaQuemado)', $dia);
+        $this->db->where('cp.Activo', 1);
+        $this->db->where('p.Activo', 1);
+        $this->db->where('p.HornosId', $horno);
+        $this->db->where('p.Clasificado', 0);
+        $this->db->group_by('p.CProductosId');
+        $query = $this->db->get();
+        return $query;
+    }
+
+    public function ProductosPendientesCproductos($dia, $horno, $cprod) {
+        $this->db->select('*');
+        $this->db->from('Productos p');
+        $this->db->join('CProductos cp', 'cp.IdCProductos=p.CProductosId');
+        $this->db->where('DATE(p.FechaQuemado)', $this->FechaIngles($dia));
+        $this->db->where('cp.Activo', 1);
+        $this->db->where('p.Activo', 1);
+        $this->db->where('p.HornosId', $horno);
+        $this->db->where('p.CProductosId', $cprod);
+        $this->db->where('p.Clasificado', 0);
+        $query = $this->db->get()->num_rows();
+        return $query;
 //        $con = new Conexion();
 //        $dia = $con->EscapaCaracteres($dia);
 //        $query = "SELECT Imagen,IdCProductos,Nombre,HornosId,CProductosId "
@@ -89,7 +107,7 @@ class Modeloclasificador extends CI_Model {
 //        return $datos;
     }
 
-    public static function ListarProductosHornoFechaCProd($dia, $horno, $cprod) {
+    public function ListarProductosHornoFechaCProd($dia, $horno, $cprod) {
 //        $con = new Conexion();
 //        $dia = $con->EscapaCaracteres($dia);
 //        $query = "SELECT count(*)as cuantos "
@@ -106,7 +124,17 @@ class Modeloclasificador extends CI_Model {
 //        return $fila["cuantos"];
     }
 
-    public static function ListarProductosHornoFechaCProdModelo($dia, $horno, $cprod, $modelo) {
+    public function ProductosPendientesModelos($dia, $horno, $cprod, $modelo) {
+        $this->db->select('*');
+        $this->db->from('Productos p');
+        $this->db->where('DATE(p.FechaQuemado)', $this->FechaIngles($dia));
+        $this->db->where('p.Activo', 1);
+        $this->db->where('p.HornosId', $horno);
+        $this->db->where('p.CProductosId', $cprod);
+        $this->db->where('p.ModelosId', $modelo);
+        $this->db->where('p.Clasificado', 0);
+        $query = $this->db->get()->num_rows();
+        return $query;
 //        $con = new Conexion();
 //        $dia = $con->EscapaCaracteres($dia);
 //        $query = "SELECT count(*)as cuantos "
@@ -123,7 +151,20 @@ class Modeloclasificador extends CI_Model {
 //        return $fila["cuantos"];
     }
 
-    public static function ListarModelosHornoFechaProducto($dia, $horno, $cprod) {
+    public function ListaModelos($dia, $horno, $cprod) {
+        $this->db->select('m.Nombre,p.ModelosId,p.CProductosId,pm.Imagen,p.HornosId');
+        $this->db->from('Productos p');
+        $this->db->join('Modelos m', 'm.IdModelos=p.ModelosId');
+        $this->db->join('CProductosModelos pm', 'pm.ModelosId=p.ModelosId');
+        $this->db->where('DATE(p.FechaQuemado)', $dia);
+        $this->db->where('pm.CProductosId', 'p.CProductosId');
+        $this->db->where('p.CProductosId', $cprod);
+        $this->db->where('p.Activo', 1);
+        $this->db->where('p.HornosId', $horno);
+        $this->db->where('p.Clasificado', 0);
+        $this->db->group_by('m.IdModelos');
+        $query = $this->db->get();
+        return $query;
 //        $con = new Conexion();
 //        $dia = $con->EscapaCaracteres($dia);
 //        $query = "SELECT m.Nombre,"
@@ -146,7 +187,7 @@ class Modeloclasificador extends CI_Model {
 //        return $datos;
     }
 
-    public static function ListarColoresClasificacion($dia, $horno, $cprod, $mod) {
+    public function ListarColoresClasificacion($dia, $horno, $cprod, $mod) {
 //        $con = new Conexion();
 //        $dia = $con->EscapaCaracteres($dia);
 //        $query = "SELECT c.Nombre,"
@@ -169,7 +210,7 @@ class Modeloclasificador extends CI_Model {
 //        return $datos;
     }
 
-    public static function ProdPendientesColores($dia, $horno, $cprod, $modelo, $color) {
+    public function ProdPendientesColores($dia, $horno, $cprod, $modelo, $color) {
 //        $con = new Conexion();
 //        $dia = $con->EscapaCaracteres($dia);
 //        $query = "SELECT count(*)as cuantos "
@@ -187,7 +228,7 @@ class Modeloclasificador extends CI_Model {
 //        return $fila["cuantos"];
     }
 
-    public static function ProductosSeleccion($dia, $horno, $cprod, $mod, $color) {
+    public function ProductosSeleccion($dia, $horno, $cprod, $mod, $color) {
 //        $con = new Conexion();
 //        $dia = $con->EscapaCaracteres($dia);
 //        $query = "SELECT c.Nombre,"

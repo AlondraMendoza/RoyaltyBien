@@ -335,6 +335,16 @@ class Modeloclasificador extends CI_Model {
         return $this->db->get();
     }
 
+    public function GuardarClasificacion($idprod, $idclasi) {
+        $datos = array(
+            'ProductosId' => $idprod,
+            'FechaClasificacion' => date('Y-m-d | h:i:sa'),
+            'ClasificacionesId' => $idclasi,
+            'UsuariosId' => 1
+        );
+        $this->db->insert('HistorialClasificacion', $datos);
+    }
+
 }
 
 ?>

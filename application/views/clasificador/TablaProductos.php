@@ -34,6 +34,7 @@ $cont = 1;
                             <b>Clasificacion</b><br><br>
                             <?php foreach ($clasificaciones->result() as $clasificacion): ?>
                                 <button  id="botonclasificacion<?= $clasificacion->IdClasificaciones ?>-<?= $producto->IdProductos ?>" class="botonesclasificacion button cycle-button <?= $clasificacion->Color ?>" style="width: 100px;height:100px;font-size: 3em" onclick="SeleccionarClasificacion(<?= $clasificacion->IdClasificaciones ?>,<?= $producto->IdProductos ?>)"><?= $clasificacion->Letra ?></button>
+                                <input type="hidden" id="clasel<?= $producto->IdProductos ?>">
                             <?php endforeach; ?>
                         </td>
                     </tr>
@@ -94,6 +95,20 @@ $cont = 1;
                     </td>
 
                     </tr>
+                    <tr><td colspan="2">
+                            <p style="text-align: right;margin-right: 10px;">
+                                <button id="botonsiguiente<?= $producto->IdProductos ?>" style="height: 80px;" class="button block-shadow-success text-shadow success big-button botonessiguiente" onclick="Siguiente(<?= $producto->IdProductos ?>)"><span class="mif-arrow-right mif-ani-hover-horizontal"></span> 
+                                    <?php
+                                    if ($cont == $productos->num_rows()) {
+                                        echo ("<span id='spanbotonsiguiente" . $producto->IdProductos . "'>Finalizar clasificación</span>");
+                                    } else {
+                                        echo("<span id='spanbotonsiguiente" . $producto->IdProductos . "'>Siguiente</span>");
+                                    }
+                                    ?>
+                                </button>
+                            </p>
+                        </td>
+                    </tr>
                 </table>
             </div>
         </div>
@@ -101,8 +116,9 @@ $cont = 1;
     <?php
     $cont++;
     ?>
+
 <?php endforeach; ?>    
-<p style="text-align: right;margin-right: 10px;"><button id="botonsiguiente" style="height: 80px" class="button block-shadow-success text-shadow success big-button" onclick="Siguiente()"><span class="mif-arrow-right mif-ani-hover-horizontal"></span> Siguiente producto</button></p>
+
 <script>
     function CargarDefectos(idprod, ndef)
     {
@@ -110,32 +126,36 @@ $cont = 1;
         var idcat = $("#catdefectos" + ndef + idprod).val();
         if (idcat != 0)
         {
-            $("#divdefecto" + ndef + idprod).load("clasificador/CargarDefectos", {"cat_id": idcat, "ndef": ndef, "idprod": idprod});
+            $("#divdefecto" + ndef + idprod).load("CargarDefectos", {"cat_id": idcat, "ndef": ndef, "idprod": idprod});
         }
     }
     var cont = 2;
     var ultimo = <?php echo $cont - 1; ?>;
-    function Siguiente()
+    function Siguiente(idprod)
     {
         /*Guardar clasificacion*/
+        var idclasi = $("#clasel" + idprod).val();
+        $.post("GuardarClasificacion", {"idclasi": idclasi, "idprod": idprod}, function (data) {
+
+        });
+        /*Fin guardado*/
         $(".tablasproductos").hide();
         $("#tabla" + cont).fadeIn();
-        if ($("#botonsiguiente").html() == "Finalizar clasificación")
+        alert($("#spanbotonsiguiente" + idprod).html());
+        if ($("#spanbotonsiguiente" + idprod).html() == "Finalizar clasificación")
         {
             var d = $("#fecha").val();
             CargarHornos(d);
         }
-        if (ultimo == cont)
-        {
-            $("#botonsiguiente").html("Finalizar clasificación");
-        }
+
 
         cont++;
     }
     function SeleccionarClasificacion(clasificacion, producto)
     {
         $(".botonesclasificacion").css("border", "1px");
+        $("#clasel" + producto).val(clasificacion);
+        //alert(clasificacion);
         $("#botonclasificacion" + clasificacion + "-" + producto).css("border", "3px solid black");
-
     }
 </script>

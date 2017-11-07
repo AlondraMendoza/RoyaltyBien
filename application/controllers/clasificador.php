@@ -120,6 +120,13 @@ class Clasificador extends CI_Controller {
 //        return $arreglo;
     }
 
+    public function GuardarClasificacion() {
+        $idclasi = $this->input->post_get('idclasi', TRUE);
+        $idprod = $this->input->post_get('idprod', TRUE);
+        $this->load->model("modeloclasificador");
+        $this->modeloclasificador->GuardarClasificacion($idprod, $idclasi);
+    }
+
     public function TablaProductos() {
         $horno = $this->input->post_get('horno', TRUE);
         $fecha = $this->input->post_get('fecha', TRUE);
@@ -129,6 +136,7 @@ class Clasificador extends CI_Controller {
         $this->load->model("modeloclasificador");
         $infocontent["mod"] = $mod;
         $infocontent["cprod"] = $cprod;
+        $infocontent["color"] = $color;
         $infocontent["clasificaciones"] = $this->modeloclasificador->Clasificaciones();
         $infocontent["productos"] = $this->modeloclasificador->ProductosSeleccion($this->FechaIngles($fecha), $horno, $cprod, $mod, $color);
         $this->load->view('clasificador/TablaProductos', $infocontent);

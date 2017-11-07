@@ -76,6 +76,10 @@ $query_builder = TRUE;
 
 $db['default'] = array(
     'dsn' => '',
+//    'hostname' => 'localhost',
+//    'username' => 'root',
+//    'password' => 'root',
+//    'database' => 'royaltyceramic',
     'hostname' => '23.229.173.39',
     'username' => 'TCTH',
     'password' => 'tania123',

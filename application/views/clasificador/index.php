@@ -26,14 +26,14 @@
         var d = $("#fecha").val();
         var horno = $("#hornos").val();
         $("#divclasificacion").html('<span style="font-size:5em" class="mif-spinner5 mif-ani-spin"></span> <br>Cargando colores con productos pendientes de clasificar...');
-        $("#divclasificacion").load("clasificador/ObtenerColores", {"fecha": d, "withouttem": 1, "horno": horno, "cprod": cprod, "mod": mod});
+        $("#divclasificacion").load("clasificador/ObtenerColores", {"fecha": d, "horno": horno, "cprod": cprod, "mod": mod});
     }
     function TablaProductos(cprod, mod, color)
     {
         var d = $("#fecha").val();
         var horno = $("#hornos").val();
         $("#divclasificacion").html('<span style="font-size:5em" class="mif-spinner5 mif-ani-spin"></span> <br>Cargando colores con productos pendientes de clasificar...');
-        $("#divclasificacion").load("clasificador/TablaProductos", {"fecha": d, "withouttem": 1, "horno": horno, "cprod": cprod, "mod": mod, "color": color});
+        $("#divclasificacion").load("clasificador/TablaProductos", {"fecha": d, "horno": horno, "cprod": cprod, "mod": mod, "color": color});
     }
     $(document).ready(function () {
         CargarProductos();

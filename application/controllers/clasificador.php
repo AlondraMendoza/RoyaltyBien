@@ -78,6 +78,7 @@ class Clasificador extends CI_Controller {
         $fecha = $this->input->post_get('fecha', TRUE);
         $cprod = $this->input->post_get('cprod', TRUE);
         $this->load->model("modeloclasificador");
+        //print_r($cprod . ' ' . $horno . ' ' . $fecha);
         $infocontent["modelos"] = $this->modeloclasificador->ListaModelos($this->FechaIngles($fecha), $horno, $cprod);
         $infocontent["dia"] = $fecha;
         $infocontent["cprod"] = $cprod;
@@ -95,13 +96,22 @@ class Clasificador extends CI_Controller {
 //        return $arreglo;
     }
 
-    public function CargarColoresClasificacion() {
-//        $horno = $_REQUEST["horno"];
-//        $fecha = $_REQUEST["fecha"];
-//        $cprod = $_REQUEST["cprod"];
+    public function ObtenerColores() {
+        $horno = $this->input->post_get('horno', TRUE);
+        $fecha = $this->input->post_get('fecha', TRUE);
+        $cprod = $this->input->post_get('cprod', TRUE);
+        $mod = $this->input->post_get('mod', TRUE);
+
 //        $mod = $_REQUEST["mod"];
 //        $dia = $this->FechaIngles($fecha);
-//        $colores = \Models\Productos::ListarColoresClasificacion($dia, $horno, $cprod, $mod);
+        $this->load->model("modeloclasificador");
+        $infocontent["colores"] = $this->modeloclasificador->ListaColores($this->FechaIngles($fecha), $horno, $cprod, $mod);
+        $infocontent["dia"] = $fecha;
+        $infocontent["cprod"] = $cprod;
+        $infocontent["horno"] = $horno;
+        $infocontent["mod"] = $mod;
+        $this->load->view('clasificador/ObtenerColores', $infocontent);
+        // $colores = \Models\Productos::ListarColoresClasificacion($dia, $horno, $cprod, $mod);
 //        $arreglo = [
 //            "dia" => $dia,
 //            "colores" => $colores,
@@ -111,6 +121,17 @@ class Clasificador extends CI_Controller {
     }
 
     public function TablaProductos() {
+        $horno = $this->input->post_get('horno', TRUE);
+        $fecha = $this->input->post_get('fecha', TRUE);
+        $cprod = $this->input->post_get('cprod', TRUE);
+        $mod = $this->input->post_get('mod', TRUE);
+        $color = $this->input->post_get('color', TRUE);
+        $this->load->model("modeloclasificador");
+        $infocontent["mod"] = $mod;
+        $infocontent["cprod"] = $cprod;
+        $infocontent["clasificaciones"] = $this->modeloclasificador->Clasificaciones();
+        $infocontent["productos"] = $this->modeloclasificador->ProductosSeleccion($this->FechaIngles($fecha), $horno, $cprod, $mod, $color);
+        $this->load->view('clasificador/TablaProductos', $infocontent);
 //        $horno = $_REQUEST["horno"];
 //        $fecha = $_REQUEST["fecha"];
 //        $cprod = $_REQUEST["cprod"];
@@ -130,6 +151,14 @@ class Clasificador extends CI_Controller {
     }
 
     public function CargarDefectos() {
+        $idcat = $this->input->post_get('cat_id', TRUE);
+        $idprod = $this->input->post_get('idprod', TRUE);
+        $ndef = $this->input->post_get('ndef', TRUE);
+        $infocontent["idprod"] = $idprod;
+        $infocontent["ndef"] = $ndef;
+        $this->load->model("modeloclasificador");
+        $infocontent["defectos"] = $this->modeloclasificador->ListarDefectos($idcat);
+        $this->load->view('clasificador/CargarDefectos', $infocontent);
 //        $idcat = $_REQUEST["cat_id"];
 //        $idprod = $_REQUEST["idprod"];
 //        $defectos = \Models\FuncionesUsuario::ListarDefectos($idcat);

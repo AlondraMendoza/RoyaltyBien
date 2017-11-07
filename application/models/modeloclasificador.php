@@ -92,19 +92,6 @@ class Modeloclasificador extends CI_Model {
         $this->db->where('p.Clasificado', 0);
         $query = $this->db->get()->num_rows();
         return $query;
-//        $con = new Conexion();
-//        $dia = $con->EscapaCaracteres($dia);
-//        $query = "SELECT Imagen,IdCProductos,Nombre,HornosId,CProductosId "
-//                . "FROM Productos p JOIN CProductos cp "
-//                . "ON cp.IdCProductos=p.CProductosid "
-//                . "WHERE DATE(p.FechaQuemado)='$dia' "
-//                . "AND p.Activo=1 "
-//                . "AND p.HornosId=$horno "
-//                . "AND p.Clasificado=0 "
-//                . "GROUP BY p.CProductosId";
-//        $datos = $con->Consultar($query);
-//        $con->Cerrar();
-//        return $datos;
     }
 
     public function ListarProductosHornoFechaCProd($dia, $horno, $cprod) {
@@ -151,18 +138,27 @@ class Modeloclasificador extends CI_Model {
 //        return $fila["cuantos"];
     }
 
+    public function ImagenProductoModelo($cprod, $mod) {
+        $this->db->select('*');
+        $this->db->from('CProductosModelos cpm');
+        $this->db->where('cpm.CProductosId', $cprod);
+        $this->db->where('cpm.ModelosId', $mod);
+        $query = $this->db->get()->row()->Imagen;
+        return $query;
+    }
+
     public function ListaModelos($dia, $horno, $cprod) {
-        $this->db->select('m.Nombre,p.ModelosId,p.CProductosId,pm.Imagen,p.HornosId');
-        $this->db->from('Productos p');
-        $this->db->join('Modelos m', 'm.IdModelos=p.ModelosId');
-        $this->db->join('CProductosModelos pm', 'pm.ModelosId=p.ModelosId');
-        $this->db->where('DATE(p.FechaQuemado)', $dia);
-        $this->db->where('pm.CProductosId', 'p.CProductosId');
-        $this->db->where('p.CProductosId', $cprod);
-        $this->db->where('p.Activo', 1);
-        $this->db->where('p.HornosId', $horno);
-        $this->db->where('p.Clasificado', 0);
-        $this->db->group_by('m.IdModelos');
+        //print_r($dia . ' ' . $horno . ' ' . $cprod);
+        $this->db->select('m.Nombre,p.ModelosId,p.CProductosId,p.HornosId');
+        $this->db->from(' Productos p ');
+        $this->db->join(' Modelos m', 'm.IdModelos=p.ModelosId ');
+        $this->db->where(' DATE(p.FechaQuemado) ', $dia);
+        $this->db->where(' p.CProductosId ', $cprod);
+        $this->db->where(' p.Activo ', 1);
+        $this->db->where(' p.HornosId ', $horno);
+        $this->db->where(' p.Clasificado ', 0);
+        $this->db->group_by(' m.IdModelos ');
+        //print_r($this->db->get_compiled_select());
         $query = $this->db->get();
         return $query;
 //        $con = new Conexion();
@@ -187,7 +183,19 @@ class Modeloclasificador extends CI_Model {
 //        return $datos;
     }
 
-    public function ListarColoresClasificacion($dia, $horno, $cprod, $mod) {
+    public function ListaColores($dia, $horno, $cprod, $mod) {
+        $this->db->select('c.Nombre,c.Descripcion,p.ModelosId,p.CProductosId,p.HornosId,c.IdColores,p.HornosId');
+        $this->db->from('Productos p');
+        $this->db->join('Colores c', 'c.IdColores=p.ColoresId');
+        $this->db->where('DATE(p.FechaQuemado)', $dia);
+        $this->db->where('p.CProductosId', $cprod);
+        $this->db->where('p.ModelosId', $mod);
+        $this->db->where('p.Activo', 1);
+        $this->db->where('p.HornosId', $horno);
+        $this->db->where('p.Clasificado', 0);
+        $this->db->group_by('c.IdColores');
+        $query = $this->db->get();
+        return $query;
 //        $con = new Conexion();
 //        $dia = $con->EscapaCaracteres($dia);
 //        $query = "SELECT c.Nombre,"
@@ -210,7 +218,18 @@ class Modeloclasificador extends CI_Model {
 //        return $datos;
     }
 
-    public function ProdPendientesColores($dia, $horno, $cprod, $modelo, $color) {
+    public function ProductosPendientesColores($dia, $horno, $cprod, $modelo, $color) {
+        $this->db->select('*');
+        $this->db->from('Productos p');
+        $this->db->where('DATE(p.FechaQuemado)', $this->FechaIngles($dia));
+        $this->db->where('p.Activo', 1);
+        $this->db->where('p.HornosId', $horno);
+        $this->db->where('p.Clasificado ', 0);
+        $this->db->where('p.CProductosId', $cprod);
+        $this->db->where('p.ModelosId', $modelo);
+        $this->db->where('p.ColoresId', $color);
+        $query = $this->db->get()->num_rows();
+        return $query;
 //        $con = new Conexion();
 //        $dia = $con->EscapaCaracteres($dia);
 //        $query = "SELECT count(*)as cuantos "
@@ -229,6 +248,22 @@ class Modeloclasificador extends CI_Model {
     }
 
     public function ProductosSeleccion($dia, $horno, $cprod, $mod, $color) {
+
+        $this->db->select('c.Descripcion,cp.Nombre as NombreProducto,p.ModelosId,p.CProductosId,p.HornosId,c.IdColores,c.Nombre as NombreColor,m.Nombre as NombreModelo,p.IdProductos', FALSE);
+        $this->db->from('Productos p');
+        $this->db->join('Modelos m', "m.IdModelos=p.ModelosId");
+        $this->db->join('CProductos cp', "cp.IdCProductos=p.CProductosId");
+        $this->db->join('Colores c', "c.IdColores=p.ColoresId");
+        $this->db->where('DATE(p.FechaQuemado)', $dia);
+        $this->db->where('p.Activo', 1);
+        $this->db->where('p.HornosId', $horno);
+        $this->db->where('p.Clasificado ', 0);
+        $this->db->where('p.CProductosId', $cprod);
+        $this->db->where('p.ModelosId', $mod);
+        $this->db->where('p.ColoresId', $color);
+        $query = $this->db->get();
+        //print_r($this->db->get_compiled_select());
+        return $query;
 //        $con = new Conexion();
 //        $dia = $con->EscapaCaracteres($dia);
 //        $query = "SELECT c.Nombre,"
@@ -255,6 +290,49 @@ class Modeloclasificador extends CI_Model {
 //        $datos = $con->Consultar($query);
 //        $con->Cerrar();
 //        return $datos;
+    }
+
+    public function CategoriasDefectos() {
+        $this->db->select('c.Nombre,c.IdCatDefectos');
+        $this->db->from('CategoriasDefectos c');
+        $this->db->where('c.Activo', 1);
+        $query = $this->db->get();
+        //print_r($this->db->get_compiled_select());
+        return $query;
+        /* $con = new Conexion();
+          $query = "SELECT c.Nombre,"
+          . "c.IdCatDefectos "
+          . "FROM CategoriasDefectos c "
+          . "WHERE c.Activo=1 ";
+          $datos = $con->Consultar($query);
+          $con->Cerrar();
+          return $datos;
+         */
+    }
+
+    public function ListarDefectos($cat_id) {
+        $this->db->select('d.Nombre,d.IdDefectos');
+        $this->db->from('Defectos d');
+        $this->db->where('d.Activo', 1);
+        $this->db->where('d.CatDefectosId', $cat_id);
+        $query = $this->db->get();
+        return $query;
+        /* $con = new Conexion();
+          $query = "SELECT d.Nombre,"
+          . "d.IdDefectos "
+          . "FROM Defectos d "
+          . "WHERE d.Activo=1 "
+          . "AND d.CatDefectosId=$cat_id";
+          $datos = $con->Consultar($query);
+          $con->Cerrar();
+          return $datos; */
+    }
+
+    public function Clasificaciones() {
+        $this->db->select('c.Letra,c.Color,c.IdClasificaciones');
+        $this->db->from("Clasificaciones c");
+        $this->db->where("Activo=", 1);
+        return $this->db->get();
     }
 
 }

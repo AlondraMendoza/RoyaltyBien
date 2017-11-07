@@ -1,81 +1,142 @@
-
-
 <?php
-$productos = $datos["productos"];
 $cont = 1;
-while ($fila = mysqli_fetch_assoc($productos)) {
+?>
+<?php foreach ($productos->result() as $producto): ?>
+    <?php
     $oculto = "";
     if ($cont > 1) {
         $oculto = "display:none";
     }
     ?>
-    <div class="tablasproductos" id="tabla<?php echo $cont; ?>" style="font-size: 1.2em;<?php echo $oculto; ?>" >
-        <table class="table hovered border " >
+    <div class="panel primary tablasproductos" data-role="panel" style="font-size: 1.2em;<?= $oculto ?>" id="tabla<?= $cont ?>">
+        <div class="heading">
+            <span class="icon mif-stack fg-white bg-darkBlue"></span>
+            <span class="title"> Producto 
+                <?= $cont ?> de
+                <?= $productos->num_rows() ?>
+                según filtros seleccionados.</span>
+        </div>
+        <div class="content">
+            <div class=""  >
+                <table class="table hovered border bordered" >
+                    <tr class="center primary" style="font-size: 1.2em">
+                        <td class="center" style="text-align: center"><span onclick="CargarColores(<?= $mod . ',' . $cprod ?>)" style="font-size: 3em" class="mif-undo mif-ani-hover-spanner mif-ani-slow" title="Regresar a lista de Colores"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                        <td class="center" style="text-align: center"><b>Clave producto:</b><br> <?= $producto->IdProductos ?></td>
+                        <td class="center" style="text-align: center"><b>Nombre producto:</b><br> <?= $producto->NombreProducto ?></td>
+                        <td class="center" style="text-align: center"><b>Modelo:</b><br> <?= $producto->NombreModelo ?></td>
+                        <td class="center" style="text-align: center"><b>Color:</b><br> <?= $producto->NombreColor ?></td>
+                    </tr>
 
-            <tr class="center primary">
-                <td class="center" style="text-align: center"><span onclick="CargarColores(<?php echo $datos["mod"] . ',' . $datos["cprod"]; ?>)" style="font-size: 3em" class="mif-undo mif-ani-hover-spanner mif-ani-slow" title="Regresar a lista de Colores"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-                <td class="center" style="text-align: center"><b>Clave producto:</b><br> <?php echo $fila["IdProductos"]; ?></td>
-                <td class="center" style="text-align: center"><b>Nombre producto:</b><br> <?php echo $fila["NombreProducto"]; ?></td>
-                <td class="center" style="text-align: center"><b>Modelo:</b><br> <?php echo $fila["NombreModelo"]; ?></td>
-                <td class="center" style="text-align: center"><b>Color:</b><br> <?php echo $fila["NombreColor"]; ?></td>
-            </tr>
-
-        </table>
-        <table class="table">
-            <tr>
-                <td class="center">
+                </table>
+                <table class="table bordered hovered border" style="font-size: 1.2em">
+                    <tr>
+                        <td class="center" colspan="4">
+                            <b>Clasificacion</b><br><br>
+                            <?php foreach ($clasificaciones->result() as $clasificacion): ?>
+                                <button  id="botonclasificacion<?= $clasificacion->IdClasificaciones ?>-<?= $producto->IdProductos ?>" class="botonesclasificacion button cycle-button <?= $clasificacion->Color ?>" style="width: 100px;height:100px;font-size: 3em" onclick="SeleccionarClasificacion(<?= $clasificacion->IdClasificaciones ?>,<?= $producto->IdProductos ?>)"><?= $clasificacion->Letra ?></button>
+                            <?php endforeach; ?>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width: 45%">
+                    <center><strong><u>DEFECTO 1</u></strong><br><br></center>
                     <b>Categoría defectos</b><br>
                     <div id="" class="input-control select full-size" style="height: 80px;">
-                        <select onchange="CargarDefectos(<?php echo $fila["IdProductos"]; ?>)" id="catdefectos<?php echo $fila["IdProductos"]; ?>">
+                        <select onchange="CargarDefectos(<?= $producto->IdProductos ?>, 1)" id="catdefectos1<?= $producto->IdProductos ?>">
                             <option value="0">Selecciona categoría</option>
                             <?php
-                            $catdefectos = Models\FuncionesUsuario::CategoriasDefectos();
-                            while ($filadef = mysqli_fetch_assoc($catdefectos)) {
-                                ?>
-                                <option value="<?php echo $filadef["IdCatDefectos"]; ?>"><?php echo $filadef["Nombre"]; ?></option>
-                                <?php
-                            }
+                            $ci = &get_instance();
+                            $ci->load->model("modeloclasificador");
+                            $catdefectos = $ci->modeloclasificador->CategoriasDefectos();
                             ?>
+                            <?php foreach ($catdefectos->result() as $categoria): ?>
+                                <option value="<?= $categoria->IdCatDefectos ?>"><?= $categoria->Nombre ?></option>
+                            <?php endforeach; ?>  
                         </select>
                     </div>
-                </td>
-                <td id="tddefectos<?php echo $fila["IdProductos"]; ?>" class="center" colspan="2">
-
-                </td>
-                <td class="center">
+                    <div id="divdefecto1<?= $producto->IdProductos ?>">
+                        <b>Defecto</b><br>
+                        <div id="" class="input-control select full-size" style="height: 80px;">
+                            <select>
+                                <option>Selecciona primero una categoría</option>
+                            </select>
+                        </div>
+                    </div>
                     <b>Clave de empleado</b><br>
-                    <input type="text" id="claveempleado" style="height: 80px;font-size: 1.6em">
-                </td>
-                <td><button class="button primary block-shadow-info text-shadow" style="height:80px"><span class="mif-plus fg-white " style="font-size: 4em"></span></button></td>
-            </tr>
-        </table>
+                    <input type="text" class="input-control text full-size" id="claveempleadodef1<?= $producto->IdProductos ?>" style="height: 80px;font-size: 1.6em">
+                    </td>
+                    <td style="width: 45%">
+                    <center><strong><u>DEFECTO 2</u></strong><br><br></center>
+                    <b>Categoría defectos</b><br>
+                    <div id="" class="input-control select full-size" style="height: 80px;">
+                        <select onchange="CargarDefectos(<?= $producto->IdProductos ?>, 2)" id="catdefectos2<?= $producto->IdProductos ?>">
+                            <option value="0">Selecciona categoría</option>
+                            <?php
+                            $ci = &get_instance();
+                            $ci->load->model("modeloclasificador");
+                            $catdefectos = $ci->modeloclasificador->CategoriasDefectos();
+                            ?>
+                            <?php foreach ($catdefectos->result() as $categoria): ?>
+                                <option value="<?= $categoria->IdCatDefectos ?>"><?= $categoria->Nombre ?></option>
+                            <?php endforeach; ?>  
+                        </select>
+                    </div>
+                    <div id="divdefecto2<?= $producto->IdProductos ?>">
+                        <b>Defecto</b><br>
+                        <div id="" class="input-control select full-size" style="height: 80px;">
+                            <select>
+                                <option>Selecciona primero una categoría</option>
+                            </select>
+                        </div>
+                    </div>
+                    <b>Clave de empleado</b><br>
+                    <input type="text" class="input-control text full-size" id="claveempleadodef2<?= $producto->IdProductos ?>" style="height: 80px;font-size: 1.6em">
+                    </td>
+
+                    </tr>
+                </table>
+            </div>
+        </div>
     </div>
     <?php
     $cont++;
-}
-?>
+    ?>
+<?php endforeach; ?>    
 <p style="text-align: right;margin-right: 10px;"><button id="botonsiguiente" style="height: 80px" class="button block-shadow-success text-shadow success big-button" onclick="Siguiente()"><span class="mif-arrow-right mif-ani-hover-horizontal"></span> Siguiente producto</button></p>
 <script>
-    function CargarDefectos(idprod)
+    function CargarDefectos(idprod, ndef)
     {
-        var idcat = $("#catdefectos" + idprod).val();
+
+        var idcat = $("#catdefectos" + ndef + idprod).val();
         if (idcat != 0)
         {
-            $("#tddefectos" + idprod).load("clasificador/CargarDefectos", {"cat_id": idcat, "withouttem": 1, "idprod": idprod});
+            $("#divdefecto" + ndef + idprod).load("clasificador/CargarDefectos", {"cat_id": idcat, "ndef": ndef, "idprod": idprod});
         }
     }
     var cont = 2;
     var ultimo = <?php echo $cont - 1; ?>;
     function Siguiente()
     {
+        /*Guardar clasificacion*/
         $(".tablasproductos").hide();
         $("#tabla" + cont).fadeIn();
+        alert("ultiml" + ultimo + "cont" + cont);
+        if ($("#botonsiguiente").html() == "Finalizar clasificación")
+        {
+            var d = $("#fecha").val();
+            CargarHornos(d);
+        }
         if (ultimo == cont)
         {
-            $("#botonsiguiente").fadeOut();
+            $("#botonsiguiente").html("Finalizar clasificación");
         }
-        cont++;
 
+        cont++;
+    }
+    function SeleccionarClasificacion(clasificacion, producto)
+    {
+        $(".botonesclasificacion").css("border", "1px");
+        $("#botonclasificacion" + clasificacion + "-" + producto).css("border", "3px solid black");
 
     }
 </script>

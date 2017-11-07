@@ -120,7 +120,6 @@ $cont = 1;
         /*Guardar clasificacion*/
         $(".tablasproductos").hide();
         $("#tabla" + cont).fadeIn();
-        alert("ultiml" + ultimo + "cont" + cont);
         if ($("#botonsiguiente").html() == "Finalizar clasificación")
         {
             var d = $("#fecha").val();

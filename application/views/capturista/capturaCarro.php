@@ -51,7 +51,7 @@
         var col = Color;
         var piezas = $("#piezas").val();
         var fecha = $("#fecha").val();
-        $("#Resultados").load("capturista/Resultados", {"carro": carro,"horno": horno,"prod": prod,"mod": mod,"col": col,"piezas": piezas,"fecha": fecha, "withouttem": 1});
+        $("#Resultados").load("Resultados", {"carro": carro,"horno": horno,"prod": prod,"mod": mod,"col": col,"piezas": piezas,"fecha": fecha, "withouttem": 1});
     }
     
     function Cancelar()
@@ -164,5 +164,7 @@
             </div>
         </div>
     </div>
+    <div id="Resultados"></div>
 </center><br><br><br>
+
 

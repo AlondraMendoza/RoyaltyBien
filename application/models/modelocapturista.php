@@ -101,19 +101,58 @@ class Modelocapturista extends CI_Model {
             'Activo'=>1,
             'Clasificado'=>0,
             'ModelosId'=>$mod
-            );
+            );             
             //falta repetir dependiendo de piezas
-            for ($i = 0; $i <= $piezas; $i++) {
+             $lista=array();
+            for ($i = 0; $i < $piezas; $i++) {
                 $this->db->set('FechaCaptura', 'NOW()', FALSE);
                 $this->db->insert('Productos', $datos);  
+                $id=$this->db->insert_id();
+                array_push($lista, $id);
             }
-            return "bien";
+            return $lista;
         } catch (Exception $exc) {
             echo $exc->getTraceAsString();
             return "mal";
         }
         }
     
+        public function Buscar($row) {
+            $this->db->select('p.FechaQuemado, cp.Nombre as producto, ca.Nombre as carro, h.NHorno, m.Nombre as modelo, c.Nombre as color');
+            $this->db->from('Productos p');
+            $this->db->join('CProductos cp', 'p.CProductosId=cp.IdCProductos');
+            $this->db->join('Carros ca', 'p.CarrosId=ca.IdCarros');
+            $this->db->join('Hornos h', 'p.HornosId=h.IdHornos');
+            $this->db->join('Modelos m', 'p.ModelosId=m.IdModelos');
+            $this->db->join('Colores c', 'p.ColoresId=c.IdColores');
+            $this->db->where('p.IdProductos', $row);
+            $this->db->where('p.Activo', 1);
+            $query = $this->db->get();
+            return $query;
+        }
+        
+        public function ListarAccesoriosGuardados($fecha){
+        try {
+             $datos = array(
+            'CProductosId'=> 7,
+            'FechaQuemado'=> $fecha,
+            'UsuariosId'=>1,
+            );             
+            $this->db->set('FechaCaptura', 'NOW()', FALSE);
+            $this->db->insert('CarrosAccesorios', $datos);  
+            $id = $this->db->insert_id();
+            $this->db->select('*');
+            $this->db->from('CarrosAccesorios');
+            $this->db->where('IdCarrosAccesorios', $id);
+            $query = $this->db->get();
+            return $query;
+        } catch (Exception $exc) {
+            echo $exc->getTraceAsString();
+            return "mal";
+        }
+        }
+        
+        
 
 }
 

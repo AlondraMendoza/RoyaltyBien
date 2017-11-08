@@ -1,4 +1,4 @@
-<h1><b> CAPTURA DE PRODUCTOS</b></h1><br>
+
 <center>
     <div class="panel warning" data-role="panel">
         <div class="heading">
@@ -7,51 +7,45 @@
         </div>
         <div class="content" id="Resultados">
             <table class="table">
+                
+                <?php $ci = &get_instance();
+                $ci->load->model("modelocapturista");
+                $prod = $ci->modelocapturista->Buscar($lista[0])->row(); ?>
                 <tr>
                     <td class="center">
                         <b style="font-size: 1.3em" class="fg-darkEmerald">Carro:</b><br>
-                        <div class="input-control text full-size" style="height: 80px;">  
-                            <input type="text" disabled>
-                        </div>
+                        <?= $prod->carro ?>
                     </td>
-                     <td class="center">
+                    <td class="center">
                         <b style="font-size: 1.3em" class="fg-darkEmerald">Horno:</b><br>
-                        <div class="input-control text full-size" style="height: 80px;">  
-                            <input type="text" disabled>
-                        </div>
+                        <?= $prod->NHorno ?>
                     </td>
-                     <td class="center">
+                    <td class="center">
                         <b style="font-size: 1.3em" class="fg-darkEmerald">Producto:</b><br>
-                        <div class="input-control text full-size" style="height: 80px;">  
-                            <input type="text" disabled>
-                        </div>
+                        <?= $prod->producto ?>
                     </td>
-                     <td class="center">
+                    <td class="center">
                         <b style="font-size: 1.3em" class="fg-darkEmerald">Modelo:</b><br>
-                        <div class="input-control text full-size" style="height: 80px;">  
-                            <input type="text" disabled>
-                        </div>
+                        <?= $prod->modelo ?>
                     </td>
-                     <td class="center">
+                    <td class="center">
                         <b style="font-size: 1.3em" class="fg-darkEmerald">Color:</b><br>
-                        <div class="input-control text full-size" style="height: 80px;">  
-                            <input type="text" disabled>
-                        </div>
+                        <?= $prod->color ?>
                     </td>
-                     <td class="center">
+                    <td class="center">
                         <b style="font-size: 1.3em" class="fg-darkEmerald">Cantidad:</b><br>
-                        <div class="input-control text full-size" style="height: 80px;">  
-                            <input type="text" disabled>
-                        </div>
+                        <?= count($lista) ?>
                     </td>
-                     <td class="center">
+                    <td class="center">
                         <b style="font-size: 1.3em" class="fg-darkEmerald">Fecha Quemado:</b><br>
-                        <div class="input-control text full-size" style="height: 80px;">  
-                            <input type="text" disabled>
-                        </div>
+                        <?php
+                        $date = date_create($prod->FechaQuemado);
+                        ?>
+                        <?= date_format($date,'d-M-Y'); ?>
                     </td>
                 </tr>
             </table>
         </div>
     </div>
 </center>
+

@@ -177,4 +177,12 @@ class Clasificador extends CI_Controller {
 //        return $arreglo;
     }
 
+    public function VerificarEmpleado() {
+        $clave = $this->input->post_get('clave', TRUE);
+        $categoria = $this->input->post_get('categoria', TRUE);
+        $this->load->model("modeloclasificador");
+        $nombre = $this->modeloclasificador->BuscarClavePuesto($clave, $categoria);
+        print($nombre);
+    }
+
 }

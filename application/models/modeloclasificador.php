@@ -345,6 +345,31 @@ class Modeloclasificador extends CI_Model {
         $this->db->insert('HistorialClasificacion', $datos);
     }
 
+    public function ObtenerArea($categoria) {
+        $this->db->select("AreasId ");
+        $this->db->from("CategoriasDefectos ");
+        $this->db->where("IdCatDefectos ", $categoria);
+        return $this->db->get()->row()->AreasId;
+    }
+
+    public function BuscarClavePuesto($clave, $categoria) {
+
+        $area = $this->ObtenerArea($categoria);
+        $this->db->select("p.*");
+        $this->db->from("Puestos pu ");
+        $this->db->join("Personas p", "p.IdPersonas=pu.PersonasId");
+        $this->db->where("pu.AreasId", $area);
+        $this->db->where("pu.Clave", $clave);
+        //print($this->db->get_compiled_select());
+        $fila = $this->db->get();
+        if ($fila->num_rows() > 0) {
+            //print("si entro");
+            return $fila->row()->Nombre . ' ' . $fila->row()->APaterno . ' ' . $fila->row()->AMaterno;
+        } else {
+            return "No se encontró trabajador";
+        }
+    }
+
 }
 
 ?>

@@ -11,7 +11,7 @@ $cont = 1;
     <div class="panel primary tablasproductos" data-role="panel" style="font-size: 1.2em;<?= $oculto ?>" id="tabla<?= $cont ?>">
         <div class="heading">
             <span class="icon mif-stack fg-white bg-darkBlue"></span>
-            <span class="title"> Producto 
+            <span class="title"> Producto
                 <?= $cont ?> de
                 <?= $productos->num_rows() ?>
                 según filtros seleccionados.</span>
@@ -41,63 +41,77 @@ $cont = 1;
                     <tr>
                         <td style="width: 45%">
                     <center><strong><u>DEFECTO 1</u></strong><br><br></center>
-                    <b>Categoría defectos</b><br>
-                    <div id="" class="input-control select full-size" style="height: 80px;">
-                        <select onchange="CargarDefectos(<?= $producto->IdProductos ?>, 1)" id="catdefectos1<?= $producto->IdProductos ?>">
-                            <option value="0">Selecciona categoría</option>
-                            <?php
-                            $ci = &get_instance();
-                            $ci->load->model("modeloclasificador");
-                            $catdefectos = $ci->modeloclasificador->CategoriasDefectos();
-                            ?>
-                            <?php foreach ($catdefectos->result() as $categoria): ?>
-                                <option value="<?= $categoria->IdCatDefectos ?>"><?= $categoria->Nombre ?></option>
-                            <?php endforeach; ?>  
-                        </select>
+                    <div id="masdefecto1<?= $producto->IdProductos ?>" class="center">
+                        <span class="mif-plus fg-darkBlue" style="font-size: 5em" onclick="ApareceFormulario(1,<?= $producto->IdProductos ?>)"></span>
                     </div>
-                    <div id="divdefecto1<?= $producto->IdProductos ?>">
-                        <b>Defecto</b><br>
+                    <div id="formulariodefecto1<?= $producto->IdProductos ?>" style="display:none">
+                        <b>Categoría defectos</b><br>
                         <div id="" class="input-control select full-size" style="height: 80px;">
-                            <select>
-                                <option>Selecciona primero una categoría</option>
+                            <select onchange="CargarDefectos(<?= $producto->IdProductos ?>, 1)" id="catdefectos1<?= $producto->IdProductos ?>">
+                                <option value="0">Selecciona categoría</option>
+                                <?php
+                                $ci = &get_instance();
+                                $ci->load->model("modeloclasificador");
+                                $catdefectos = $ci->modeloclasificador->CategoriasDefectos();
+                                ?>
+                                <?php foreach ($catdefectos->result() as $categoria): ?>
+                                    <option value="<?= $categoria->IdCatDefectos ?>"><?= $categoria->Nombre ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
+                        <div id="divdefecto1<?= $producto->IdProductos ?>">
+                            <b>Defecto</b><br>
+                            <div id="" class="input-control select full-size" style="height: 80px;">
+                                <select>
+                                    <option>Selecciona primero una categoría</option>
+                                </select>
+                            </div>
+                        </div>
+                        <b>Clave de empleado</b><br>
+                        <input type="text" class="input-control text full-size" id="claveempleadodef1<?= $producto->IdProductos ?>" style="height: 80px;font-size: 1.6em" onkeyup="VerificarEmpleado(1,<?= $producto->IdProductos ?>)">
+                        <span id="resclaveempleadodef1<?= $producto->IdProductos ?>"></span>
                     </div>
-                    <b>Clave de empleado</b><br>
-                    <input type="text" class="input-control text full-size" id="claveempleadodef1<?= $producto->IdProductos ?>" style="height: 80px;font-size: 1.6em">
                     </td>
                     <td style="width: 45%">
                     <center><strong><u>DEFECTO 2</u></strong><br><br></center>
-                    <b>Categoría defectos</b><br>
-                    <div id="" class="input-control select full-size" style="height: 80px;">
-                        <select onchange="CargarDefectos(<?= $producto->IdProductos ?>, 2)" id="catdefectos2<?= $producto->IdProductos ?>">
-                            <option value="0">Selecciona categoría</option>
-                            <?php
-                            $ci = &get_instance();
-                            $ci->load->model("modeloclasificador");
-                            $catdefectos = $ci->modeloclasificador->CategoriasDefectos();
-                            ?>
-                            <?php foreach ($catdefectos->result() as $categoria): ?>
-                                <option value="<?= $categoria->IdCatDefectos ?>"><?= $categoria->Nombre ?></option>
-                            <?php endforeach; ?>  
-                        </select>
+                    <div id="masdefecto2<?= $producto->IdProductos ?>" class="center">
+                        <span class="mif-plus fg-darkGreen" style="font-size: 5em" onclick="ApareceFormulario(2,<?= $producto->IdProductos ?>)"></span>
                     </div>
-                    <div id="divdefecto2<?= $producto->IdProductos ?>">
-                        <b>Defecto</b><br>
+
+                    <div id="formulariodefecto2<?= $producto->IdProductos ?>" style="display:none">
+
+                        <b>Categoría defectos</b><br>
                         <div id="" class="input-control select full-size" style="height: 80px;">
-                            <select>
-                                <option>Selecciona primero una categoría</option>
+                            <select onchange="CargarDefectos(<?= $producto->IdProductos ?>, 2)" id="catdefectos2<?= $producto->IdProductos ?>">
+                                <option value="0">Selecciona categoría</option>
+                                <?php
+                                $ci = &get_instance();
+                                $ci->load->model("modeloclasificador");
+                                $catdefectos = $ci->modeloclasificador->CategoriasDefectos();
+                                ?>
+                                <?php foreach ($catdefectos->result() as $categoria): ?>
+                                    <option value="<?= $categoria->IdCatDefectos ?>"><?= $categoria->Nombre ?></option>
+                                <?php endforeach; ?>
                             </select>
                         </div>
+                        <div id="divdefecto2<?= $producto->IdProductos ?>">
+                            <b>Defecto</b><br>
+                            <div id="" class="input-control select full-size" style="height: 80px;">
+                                <select>
+                                    <option>Selecciona primero una categoría</option>
+                                </select>
+                            </div>
+                        </div>
+                        <b>Clave de empleado</b><br>
+                        <input type="text" class="input-control text full-size" id="claveempleadodef2<?= $producto->IdProductos ?>" style="height: 80px;font-size: 1.6em" onkeyup="VerificarEmpleado(2,<?= $producto->IdProductos ?>)">
+                        <span id="resclaveempleadodef2<?= $producto->IdProductos ?>"></span>
                     </div>
-                    <b>Clave de empleado</b><br>
-                    <input type="text" class="input-control text full-size" id="claveempleadodef2<?= $producto->IdProductos ?>" style="height: 80px;font-size: 1.6em">
                     </td>
 
                     </tr>
                     <tr><td colspan="2">
                             <p style="text-align: right;margin-right: 10px;">
-                                <button id="botonsiguiente<?= $producto->IdProductos ?>" style="height: 80px;" class="button block-shadow-success text-shadow success big-button botonessiguiente" onclick="Siguiente(<?= $producto->IdProductos ?>)"><span class="mif-arrow-right mif-ani-hover-horizontal"></span> 
+                                <button id="botonsiguiente<?= $producto->IdProductos ?>" style="height: 80px;" class="button block-shadow-success text-shadow success big-button botonessiguiente" onclick="Siguiente(<?= $producto->IdProductos ?>)"><span class="mif-arrow-right mif-ani-hover-horizontal"></span>
                                     <?php
                                     if ($cont == $productos->num_rows()) {
                                         echo ("<span id='spanbotonsiguiente" . $producto->IdProductos . "'>Finalizar clasificación</span>");
@@ -117,12 +131,23 @@ $cont = 1;
     $cont++;
     ?>
 
-<?php endforeach; ?>    
+<?php endforeach; ?>
 
 <script>
+    function ApareceFormulario(defecto, producto)
+    {
+        if (defecto == 1)
+        {
+            $("#formulariodefecto1" + producto).fadeIn();
+            $("#masdefecto1" + producto).fadeOut();
+        } else
+        {
+            $("#formulariodefecto2" + producto).fadeIn();
+            $("#masdefecto2" + producto).fadeOut();
+        }
+    }
     function CargarDefectos(idprod, ndef)
     {
-
         var idcat = $("#catdefectos" + ndef + idprod).val();
         if (idcat != 0)
         {
@@ -135,7 +160,7 @@ $cont = 1;
     {
         /*Guardar clasificacion*/
         var idclasi = $("#clasel" + idprod).val();
-        $.post("GuardarClasificacion", {"idclasi": idclasi, "idprod": idprod}, function (data) {
+        $.post("GuardarClasificacion", {"idclasi": idclasi, "idprod": idprod}, function(data) {
 
         });
         /*Fin guardado*/
@@ -157,5 +182,14 @@ $cont = 1;
         $("#clasel" + producto).val(clasificacion);
         //alert(clasificacion);
         $("#botonclasificacion" + clasificacion + "-" + producto).css("border", "3px solid black");
+    }
+    function VerificarEmpleado(defecto, producto)
+    {
+        var clave = $("#claveempleadodef" + defecto + producto).val();
+        var categoria = $("#catdefectos" + defecto + producto).val();
+        $.post("VerificarEmpleado", {"clave": clave, "categoria": categoria}, function(data) {
+            alert(data);
+            $("#resclaveempleadodef" + defecto + producto).html(data);
+        });
     }
 </script>

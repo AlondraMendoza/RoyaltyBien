@@ -62,14 +62,15 @@ $cont = 1;
                         <div id="divdefecto1<?= $producto->IdProductos ?>">
                             <b>Defecto</b><br>
                             <div id="" class="input-control select full-size" style="height: 80px;">
-                                <select>
-                                    <option>Selecciona primero una categoría</option>
+                                <select id="defecto1<?= $producto->IdProductos ?>">
+                                    <option value="0">Selecciona primero una categoría</option>
                                 </select>
                             </div>
                         </div>
                         <b>Clave de empleado</b><br>
                         <input type="text" class="input-control text full-size" id="claveempleadodef1<?= $producto->IdProductos ?>" style="height: 80px;font-size: 1.6em" onkeyup="VerificarEmpleado(1,<?= $producto->IdProductos ?>)">
                         <span id="resclaveempleadodef1<?= $producto->IdProductos ?>"></span>
+                        <input type="hidden" id="puestoclaveempleadodef1<?= $producto->IdProductos ?>">
                     </div>
                     </td>
                     <td style="width: 45%">
@@ -97,14 +98,15 @@ $cont = 1;
                         <div id="divdefecto2<?= $producto->IdProductos ?>">
                             <b>Defecto</b><br>
                             <div id="" class="input-control select full-size" style="height: 80px;">
-                                <select>
-                                    <option>Selecciona primero una categoría</option>
+                                <select id="defecto2<?= $producto->IdProductos ?>">
+                                    <option value="0">Selecciona primero una categoría</option>
                                 </select>
                             </div>
                         </div>
                         <b>Clave de empleado</b><br>
                         <input type="text" class="input-control text full-size" id="claveempleadodef2<?= $producto->IdProductos ?>" style="height: 80px;font-size: 1.6em" onkeyup="VerificarEmpleado(2,<?= $producto->IdProductos ?>)">
                         <span id="resclaveempleadodef2<?= $producto->IdProductos ?>"></span>
+                        <input type="hidden" id="puestoclaveempleadodef2<?= $producto->IdProductos ?>">
                     </div>
                     </td>
 
@@ -134,6 +136,15 @@ $cont = 1;
 <?php endforeach; ?>
 
 <script>
+    function Notificacion(titulo, texto, icono, color)
+    {
+        $.Notify({
+            caption: titulo,
+            content: texto,
+            icon: "<span class='mif-" + icono + "'></span>",
+            type: color
+        });
+    }
     function ApareceFormulario(defecto, producto)
     {
         if (defecto == 1)
@@ -154,19 +165,40 @@ $cont = 1;
             $("#divdefecto" + ndef + idprod).load("CargarDefectos", {"cat_id": idcat, "ndef": ndef, "idprod": idprod});
         }
     }
+
     var cont = 2;
     var ultimo = <?php echo $cont - 1; ?>;
     function Siguiente(idprod)
     {
         /*Guardar clasificacion*/
         var idclasi = $("#clasel" + idprod).val();
-        $.post("GuardarClasificacion", {"idclasi": idclasi, "idprod": idprod}, function(data) {
-
+        var iddefecto1 = $("#defecto1" + idprod).val();
+        var iddefecto2 = $("#defecto2" + idprod).val();
+        var clavepuesto1 = $("#puestoclaveempleadodef1" + idprod).val();
+        var clavepuesto2 = $("#puestoclaveempleadodef2" + idprod).val();
+        if (iddefecto1 != 0 && clavepuesto1 == "")
+        {
+            Notificacion("Error", "Es necesario que captures la clave del empleado relacionado al defecto 1.", "cancel", "alert");
+            return(0);
+        }
+        if (iddefecto2 != 0 && clavepuesto2 == "")
+        {
+            Notificacion("Error", "Es necesario que captures la clave del empleado relacionado al defecto 2.", "cancel", "alert");
+            return(0);
+        }
+        $.post("GuardarClasificacion", {"idclasi": idclasi, "idprod": idprod, "defecto1": iddefecto1, "defecto2": iddefecto2, "puestodefecto1": clavepuesto1, "puestodefecto2": clavepuesto2}, function (data) {
+            if (data == "correcto")
+            {
+                Notificacion("Correcto", "La Clasificación se guardó correctamente", "check", "success");
+            } else
+            {
+                Notificacion("Error", "Ocurrió un error al guardar la clasificación", "cancel", "alert");
+            }
         });
         /*Fin guardado*/
         $(".tablasproductos").hide();
         $("#tabla" + cont).fadeIn();
-        alert($("#spanbotonsiguiente" + idprod).html());
+        //alert($("#spanbotonsiguiente" + idprod).html());
         if ($("#spanbotonsiguiente" + idprod).html() == "Finalizar clasificación")
         {
             var d = $("#fecha").val();
@@ -180,16 +212,23 @@ $cont = 1;
     {
         $(".botonesclasificacion").css("border", "1px");
         $("#clasel" + producto).val(clasificacion);
-        //alert(clasificacion);
         $("#botonclasificacion" + clasificacion + "-" + producto).css("border", "3px solid black");
     }
     function VerificarEmpleado(defecto, producto)
     {
         var clave = $("#claveempleadodef" + defecto + producto).val();
         var categoria = $("#catdefectos" + defecto + producto).val();
-        $.post("VerificarEmpleado", {"clave": clave, "categoria": categoria}, function(data) {
-            alert(data);
-            $("#resclaveempleadodef" + defecto + producto).html(data);
+        $("#resclaveempleadodef" + defecto + producto).html("Verificando Empleado");
+        $.getJSON("VerificarEmpleado", {"clave": clave, "categoria": categoria}, function (data) {
+
+            $("#resclaveempleadodef" + defecto + producto).html(data.nombre);
+            if (data.puesto_id != null)
+            {
+                $("#puestoclaveempleadodef" + defecto + producto).val(data.puesto_id);
+            } else
+            {
+                $("#puestoclaveempleadodef" + defecto + producto).val("");
+            }
         });
     }
 </script>

@@ -336,6 +336,10 @@ class Modeloclasificador extends CI_Model {
     }
 
     public function GuardarClasificacion($idprod, $idclasi) {
+        $this->db->set("Clasificado", 1);
+        $this->db->where("IdProductos", $idprod);
+        $this->db->update("Productos");
+
         $datos = array(
             'ProductosId' => $idprod,
             'FechaClasificacion' => date('Y-m-d | h:i:sa'),
@@ -343,6 +347,28 @@ class Modeloclasificador extends CI_Model {
             'UsuariosId' => 1
         );
         $this->db->insert('HistorialClasificacion', $datos);
+        return $this->db->insert_id();
+    }
+
+    public function GuardarDefectos($defecto1, $puestodefecto1, $defecto2, $puestodefecto2, $idclasificacion) {
+        if ($defecto1 != null && $defecto1 != 0) {
+            $datos = array(
+                'Defectosid' => $defecto1,
+                'HistorialClasificacionId' => $idclasificacion,
+                'PuestosId' => $puestodefecto1,
+                'Activo' => 1
+            );
+            $this->db->insert("HistorialClasificacionDefectos", $datos);
+        }
+        if ($defecto2 != null && $defecto2 != 0) {
+            $datos2 = array(
+                'Defectosid' => $defecto2,
+                'HistorialClasificacionId' => $idclasificacion,
+                'PuestosId' => $puestodefecto2,
+                'Activo' => 1
+            );
+            $this->db->insert("HistorialClasificacionDefectos", $datos2);
+        }
     }
 
     public function ObtenerArea($categoria) {
@@ -355,7 +381,7 @@ class Modeloclasificador extends CI_Model {
     public function BuscarClavePuesto($clave, $categoria) {
 
         $area = $this->ObtenerArea($categoria);
-        $this->db->select("p.*");
+        $this->db->select("p.Nombre,p.APaterno,p.AMaterno,pu.IdPuestos");
         $this->db->from("Puestos pu ");
         $this->db->join("Personas p", "p.IdPersonas=pu.PersonasId");
         $this->db->where("pu.AreasId", $area);
@@ -364,7 +390,7 @@ class Modeloclasificador extends CI_Model {
         $fila = $this->db->get();
         if ($fila->num_rows() > 0) {
             //print("si entro");
-            return $fila->row()->Nombre . ' ' . $fila->row()->APaterno . ' ' . $fila->row()->AMaterno;
+            return $fila->row();
         } else {
             return "No se encontró trabajador";
         }

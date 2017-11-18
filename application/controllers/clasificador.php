@@ -123,8 +123,15 @@ class Clasificador extends CI_Controller {
     public function GuardarClasificacion() {
         $idclasi = $this->input->post_get('idclasi', TRUE);
         $idprod = $this->input->post_get('idprod', TRUE);
+        $defecto1 = $this->input->post_get('defecto1', TRUE);
+        $defecto2 = $this->input->post_get('defecto2', TRUE);
+        $puestodefecto2 = $this->input->post_get('puestodefecto2', TRUE);
+        $puestodefecto1 = $this->input->post_get('puestodefecto1', TRUE);
+
         $this->load->model("modeloclasificador");
-        $this->modeloclasificador->GuardarClasificacion($idprod, $idclasi);
+        $idclasificacion = $this->modeloclasificador->GuardarClasificacion($idprod, $idclasi);
+        $this->modeloclasificador->GuardarDefectos($defecto1, $puestodefecto1, $defecto2, $puestodefecto2, $idclasificacion);
+        print("correcto");
     }
 
     public function TablaProductos() {
@@ -181,8 +188,13 @@ class Clasificador extends CI_Controller {
         $clave = $this->input->post_get('clave', TRUE);
         $categoria = $this->input->post_get('categoria', TRUE);
         $this->load->model("modeloclasificador");
-        $nombre = $this->modeloclasificador->BuscarClavePuesto($clave, $categoria);
-        print($nombre);
+        $fila = $this->modeloclasificador->BuscarClavePuesto($clave, $categoria);
+        $infocontent["nombre"] = "No se encontró trabajador";
+        if ($fila != "No se encontró trabajador") {
+            $infocontent["nombre"] = $fila->Nombre . ' ' . $fila->APaterno . ' ' . $fila->AMaterno;
+            $infocontent["puesto_id"] = $fila->IdPuestos;
+        }
+        print json_encode($infocontent);
     }
 
 }

@@ -1,4 +1,4 @@
-<!DOCTYPE html >
+<!DOCTYPE html>
 <html>
     <head>
         <meta charset="UTF-8">
@@ -7,9 +7,6 @@
         <link href="<?= base_url() ?>public/css/metro-icons.min.css" rel="stylesheet">
         <script src="<?= base_url() ?>public/js/metro.js"></script>
         <script type="text/javascript">
-            $(document).ready(function () {
-
-            });
         </script>
         <title><?= $titulo ?></title>
     </head>

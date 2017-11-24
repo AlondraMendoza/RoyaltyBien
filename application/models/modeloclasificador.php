@@ -249,7 +249,7 @@ class Modeloclasificador extends CI_Model {
 
     public function ProductosSeleccion($dia, $horno, $cprod, $mod, $color) {
 
-        $this->db->select('c.Descripcion,cp.Nombre as NombreProducto,p.ModelosId,p.CProductosId,p.HornosId,c.IdColores,c.Nombre as NombreColor,m.Nombre as NombreModelo,p.IdProductos', FALSE);
+        $this->db->select('c.Descripcion,cp.Nombre as NombreProducto,p.ModelosId,p.CProductosId,p.HornosId,c.IdColores,c.Nombre as NombreColor,m.Nombre as NombreModelo,p.IdProductos,p.FechaQuemado', FALSE);
         $this->db->from('Productos p');
         $this->db->join('Modelos m', "m.IdModelos=p.ModelosId");
         $this->db->join('CProductos cp', "cp.IdCProductos=p.CProductosId");
@@ -335,7 +335,7 @@ class Modeloclasificador extends CI_Model {
         return $this->db->get();
     }
 
-    public function GuardarClasificacion($idprod, $idclasi) {
+    public function GuardarClasificacion($idprod, $idclasi, $fueratono) {
         $this->db->set("Clasificado", 1);
         $this->db->where("IdProductos", $idprod);
         $this->db->update("Productos");
@@ -344,6 +344,7 @@ class Modeloclasificador extends CI_Model {
             'ProductosId' => $idprod,
             'FechaClasificacion' => date('Y-m-d | h:i:sa'),
             'ClasificacionesId' => $idclasi,
+            'FueraTono' => $fueratono,
             'UsuariosId' => 1
         );
         $this->db->insert('HistorialClasificacion', $datos);
@@ -372,19 +373,25 @@ class Modeloclasificador extends CI_Model {
     }
 
     public function ObtenerArea($categoria) {
-        $this->db->select("AreasId ");
-        $this->db->from("CategoriasDefectos ");
-        $this->db->where("IdCatDefectos ", $categoria);
-        return $this->db->get()->row()->AreasId;
+        $this->db->select("a.Nombre");
+        $this->db->from("CategoriasDefectos c");
+        $this->db->join("Areas a", "a.IdAreas=c.AreasId");
+        $this->db->where("c.IdCatDefectos", $categoria);
+        $fila = $this->db->get();
+        if ($fila->num_rows() > 0) {
+            return $fila->row()->Nombre;
+        } else {
+            return "";
+        }
     }
 
     public function BuscarClavePuesto($clave, $categoria) {
-
         $area = $this->ObtenerArea($categoria);
         $this->db->select("p.Nombre,p.APaterno,p.AMaterno,pu.IdPuestos");
         $this->db->from("Puestos pu ");
         $this->db->join("Personas p", "p.IdPersonas=pu.PersonasId");
-        $this->db->where("pu.AreasId", $area);
+        $this->db->join("Areas a", "a.IdAreas=pu.AreasId");
+        $this->db->where("a.Nombre", $area);
         $this->db->where("pu.Clave", $clave);
         //print($this->db->get_compiled_select());
         $fila = $this->db->get();
@@ -394,6 +401,13 @@ class Modeloclasificador extends CI_Model {
         } else {
             return "No se encontró trabajador";
         }
+    }
+
+    public function Producto($idprod) {
+        $this->db->select("*");
+        $this->db->from("Productos");
+        $this->db->where("IdProductos", $idprod);
+        return $this->db->get()->row();
     }
 
 }

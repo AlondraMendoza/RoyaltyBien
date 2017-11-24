@@ -36,7 +36,8 @@
         $("#divclasificacion").load("TablaProductos", {"fecha": d, "horno": horno, "cprod": cprod, "mod": mod, "color": color});
     }
     $(document).ready(function () {
-        CargarProductos();
+
+        CargarHornos('<?= $hoy ?>');
     });
 </script>
 
@@ -57,27 +58,7 @@
                             <button class="button" style="height: 80px"><span class="mif-calendar"></span></button>
                         </div>
                     </td>
-                    <td id="tdhornos" class="center">
-                        <b style="font-size: 1.3em" class="fg-darkEmerald">Selecciona el horno de quemado:</b><br>
-                        <div id="" class="input-control select full-size" style="height: 80px;">
-                            <select onchange="CargarProductos()" id="hornos">
-                                <?php
-                                $rhornos = $datos["hornos"];
-                                if ($rhornos->num_rows == 0) {
-                                    ?><option value="0" >No hay productos pendientes de clasificar</option><?php
-                                } else {
-                                    while ($fila = mysqli_fetch_assoc($rhornos)) {
-                                        $pendientes = Models\Hornos::ListaProductosDia($datos["hoyingles"], $fila["IdHornos"]);
-                                        $npen = $pendientes->num_rows;
-                                        ?>
-                                        <option value="<?php echo $fila["IdHornos"]; ?>"><?php echo "Horno " . $fila["NHorno"] . " - " . $npen . " prod. pendiente(s) de clasificar"; ?></option>
-                                        <?php
-                                    }
-                                }
-                                ?>
-                            </select>
-                        </div>
-                    </td>
+                    <td id="tdhornos" class="center"></td>
                 </tr>
             </table>
             <hr style="background-color: gray;height: 1px;">
@@ -88,3 +69,4 @@
     </div>
     <br><br><br><br><br><br>
 </center>
+<iframe src="" id="imprimeme" width="100%" height="100%" style="display:none"></iframe>

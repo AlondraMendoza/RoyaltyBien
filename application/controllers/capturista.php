@@ -116,5 +116,7 @@ class Capturista extends CI_Controller {
         $infocontent["lista"] = $this->modelocapturista->ListarAccesoriosGuardados($this->FechaIngles($fecha));
         $this->load->view('capturista/ResultadosAccesorios', $infocontent);
     }
+    
+    
 
 }

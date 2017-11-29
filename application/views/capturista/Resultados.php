@@ -1,4 +1,8 @@
-
+<script>
+    function Nuevo(){
+         location.reload(true);
+    }
+</script>
 <center>
     <div class="panel warning" data-role="panel">
         <div class="heading">
@@ -42,6 +46,13 @@
                         $date = date_create($prod->FechaQuemado);
                         ?>
                         <?= date_format($date,'d-M-Y'); ?>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="6"></td>
+                    <td class="center">
+                        <div class="input-control text big-input medium-size">
+                            <button class="button success" onclick="Nuevo()">Continuar</button></div>
                     </td>
                 </tr>
             </table>

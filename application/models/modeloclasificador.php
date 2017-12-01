@@ -1,5 +1,5 @@
 <?php
-
+//return str_pad((int) $number,$n,"0",STR_PAD_LEFT); Espero te sirva tania del futuro.
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 

@@ -52,11 +52,12 @@
         var piezas = $("#piezas").val();
         var fecha = $("#fecha").val();
         $("#Resultados").load("Resultados", {"carro": carro,"horno": horno,"prod": prod,"mod": mod,"col": col,"piezas": piezas,"fecha": fecha, "withouttem": 1});
+        $("#Botones").fadeOut();
     }
     
     function Cancelar()
     {
-        
+        location.reload(true);
     }
 
 </script>
@@ -152,7 +153,7 @@
                                 <button class="button"><span class="mif-calendar"></span></button>
                             </div>
                         </td>
-                        <td class="center"><br>
+                        <td class="center" id="Botones"><br>
                             <div class="input-control text big-input medium-size">
                             <button class="button primary" onclick="Siguiente()">Siguiente</button></div>
                             <div class="input-control text big-input medium-size">

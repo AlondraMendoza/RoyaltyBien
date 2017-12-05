@@ -3,12 +3,14 @@
     {
         var fecha = $("#fecha").val();
         $("#ResultadosAccesorios").load("ResultadosAccesorios", {"fecha": fecha, "withouttem": 1});
+        $("#Botones").fadeOut();
     }
     
     function Cancelar()
     {
-        
+        location.reload(true);
     }
+    
 </script>
 <h1><b> CAPTURA DE ACCESORIOS</b></h1><br>
 <center>
@@ -35,7 +37,7 @@
                                 <button class="button"><span class="mif-calendar"></span></button>
                             </div>
                         </td>
-                        <td class="center"><br><br><br><br><br><br>
+                        <td class="center" id="Botones"><br><br><br><br><br><br>
                             <div class="input-control text big-input medium-size">
                             <button class="button primary" onclick="Siguiente()">Siguiente</button></div>
                             <div class="input-control text big-input medium-size">

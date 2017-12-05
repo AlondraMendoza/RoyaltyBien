@@ -101,8 +101,7 @@ class Modelocapturista extends CI_Model {
             'Activo'=>1,
             'Clasificado'=>0,
             'ModelosId'=>$mod
-            );             
-            //falta repetir dependiendo de piezas
+            );
              $lista=array();
             for ($i = 0; $i < $piezas; $i++) {
                 $this->db->set('FechaCaptura', 'NOW()', FALSE);

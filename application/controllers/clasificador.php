@@ -15,6 +15,8 @@ class Clasificador extends CI_Controller {
         $infoheader["titulo"] = "Clasificador: Royalty Ceramic";
         $infocontent["Nombre"] = "Tania Torres";
         $infocontent["hoy"] = date("d/m/Y");
+        $infocontent["colores"] = $this->modeloclasificador->ListaTodosColores();
+        $infocontent["clasificaciones"] = $this->modeloclasificador->Clasificaciones();
         //$infocontent["hornos"] = $this->modeloclasificador->ListaHornos($this->FechaIngles(date("d/m/Y")));
         $this->load->view('template/headerd', $infoheader);
         $this->load->view('clasificador/index', $infocontent);
@@ -449,6 +451,21 @@ class Clasificador extends CI_Controller {
         //Open the print dialog
         $this->autoprint->AutoPrint();
         $this->autoprint->Output();
+    }
+
+    public function GuardarAccesorios() {
+        $fueratono = $this->input->post_get('fueratonoaccesorio', TRUE);
+        $iddefecto1 = $this->input->post_get('iddefecto1', TRUE);
+        $iddefecto2 = $this->input->post_get('iddefecto2', TRUE);
+        $colorseleccionado = $this->input->post_get('colorseleccionado', TRUE);
+        $clavepuesto1 = $this->input->post_get('clavepuesto1', TRUE);
+        $clavepuesto2 = $this->input->post_get('clavepuesto2', TRUE);
+        $idclasi = $this->input->post_get('clasificacionseleccionada', TRUE);
+        $this->load->model("modeloclasificador");
+        $idproducto = $this->modeloclasificador->GuardarAccesorio($colorseleccionado);
+        $idclasificacion = $this->modeloclasificador->GuardarClasificacion($idproducto, $idclasi, $fueratono);
+        $this->modeloclasificador->GuardarDefectos($iddefecto1, $clavepuesto1, $iddefecto2, $clavepuesto2, $idclasificacion);
+        print($idproducto);
     }
 
 }

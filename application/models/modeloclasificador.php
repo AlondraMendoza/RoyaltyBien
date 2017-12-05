@@ -196,26 +196,13 @@ class Modeloclasificador extends CI_Model {
         $this->db->group_by('c.IdColores');
         $query = $this->db->get();
         return $query;
-//        $con = new Conexion();
-//        $dia = $con->EscapaCaracteres($dia);
-//        $query = "SELECT c.Nombre,"
-//                . "c.Descripcion,"
-//                . "p.ModelosId,"
-//                . "p.CProductosId,"
-//                . "p.HornosId, "
-//                . "c.IdColores "
-//                . "FROM Productos p "
-//                . "JOIN Colores c on c.IdColores=p.ColoresId "
-//                . "WHERE DATE(p.FechaQuemado)='$dia' "
-//                . "AND p.Activo=1 "
-//                . "AND p.HornosId=$horno "
-//                . "AND p.CProductosId = $cprod "
-//                . "AND p.ModelosId = $mod "
-//                . "AND p.Clasificado = 0 "
-//                . "GROUP BY c.IdColores";
-//        $datos = $con->Consultar($query);
-//        $con->Cerrar();
-//        return $datos;
+    }
+
+    public function ListaTodosColores() {
+        $this->db->select('c.Nombre,c.Descripcion,c.IdColores');
+        $this->db->from('Colores c');
+        $query = $this->db->get();
+        return $query;
     }
 
     public function ProductosPendientesColores($dia, $horno, $cprod, $modelo, $color) {
@@ -408,6 +395,20 @@ class Modeloclasificador extends CI_Model {
         $this->db->from("Productos");
         $this->db->where("IdProductos", $idprod);
         return $this->db->get()->row();
+    }
+
+    public function GuardarAccesorio($colorseleccionado) {
+        $datos = array(
+            'CProductosId' => 7,
+            'ColoresId' => $colorseleccionado,
+            'UsuariosId' => 1,
+            'Activo' => 1,
+            'Clasificado' => 1,
+            'ModelosId' => 1,
+            'FechaCaptura' => date('Y-m-d | h:i:sa')
+        );
+        $this->db->insert("Productos", $datos);
+        return $this->db->insert_id();
     }
 
 }

@@ -58,7 +58,7 @@
                         <table class="table">
                             <tr>
                                 <td style="width: 50%" class="center">
-                                    <b style="font-size: 1.3em" class="fg-darkEmerald">Selecciona la fecha de captura:</b><br> 
+                                    <b style="font-size: 1.3em" class="fg-darkEmerald">Selecciona la fecha de quemado:</b><br> 
                                     <div class="input-control text full-size" style="height:80px;font-size: x-large" data-role="datepicker" data-locale="es" data-format="dd/mm/yyyy" id="datepicker" data-on-select="CargarHornos(d)">
                                         <input type="text" id="fecha" value="<?= $hoy ?>">
                                         <button class="button" style="height: 80px"><span class="mif-calendar"></span></button>
@@ -80,11 +80,11 @@
                         <span class="title">Captura de accesorios</span>
                     </div>
                     <div class="content">
-                        <table class="table hovered">
+                        <table class="table hovered bordered border">
                             <tr>
                                 <td class="center" colspan="2">
                                     <b style="font-size: 1.3em" class="fg-darkEmerald">Selecciona el color</b>
-                                    <table class="table bodered hovered">
+                                    <table class="table">
                                         <tr>
                                             <?php foreach ($colores->result() as $color): ?>
                                                 <td class="center">
@@ -94,14 +94,6 @@
                                             <?php endforeach; ?>    
                                         </tr>
                                     </table>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="center" colspan="2">
-                                    <b style="font-size: 1.3em" class="fg-darkEmerald">Teclea la cantidad de accesorios</b><br><br>
-                                    <div class="input-control text full-size">
-                                        <input type="number" style="height: 80px;font-size: 1.6em;text-align: center" id="cantidadacc">
-                                    </div>
                                 </td>
                             </tr>
                             <tr>
@@ -224,10 +216,15 @@
         $(".imgcolores").css("border", "none");
         $("#color-" + id).css("border", "2px black solid");
     }
+    function pad(n, length) {
+        var n = n.toString();
+        while (n.length < length)
+            n = "0" + n;
+        return n;
+    }
     function Guardar()
     {
         var fueratonoaccesorio = 0;
-        var cantidad = $("#cantidadacc").val();
         var iddefecto1 = $("#defectoacc1").val();
         var colorseleccionado = $("#colorseleccionado").val();
         var iddefecto2 = $("#defectoacc2").val();
@@ -238,13 +235,11 @@
         if ($('#fueratonoaccesorio').prop('checked')) {
             fueratonoaccesorio = 1;
         }
-        for (var i = 1; i <= cantidad; i++)
-        {
-            $.post("GuardarAccesorios", {"fueratono": fueratonoaccesorio, "iddefecto1": iddefecto1, "iddefecto2": iddefecto2, "clavepuesto1": clavepuesto1, "clavepuesto2": clavepuesto2, "colorseleccionado": colorseleccionado, "clasificacionseleccionada": clasi}, function (data) {
-                alert("se guardó el producto " + data);
-                $("#imprimeme").attr("src", "EnviarTicket?codigo=" + letraclasi + "712" + "-" + data);
-            });
-        }
+        $.post("GuardarAccesorios", {"fueratono": fueratonoaccesorio, "iddefecto1": iddefecto1, "iddefecto2": iddefecto2, "clavepuesto1": clavepuesto1, "clavepuesto2": clavepuesto2, "colorseleccionado": colorseleccionado, "clasificacionseleccionada": clasi}, function (data) {
+
+
+            $("#imprimeme").attr("src", "EnviarTicket?codigo=<?= date_format(date_create($hoyingles), 'dmY') . "-" ?>" + pad(data, 10));
+        });
     }
     function ApareceFormularioAcc(defecto)
     {

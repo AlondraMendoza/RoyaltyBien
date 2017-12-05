@@ -128,7 +128,7 @@ $cont = 1;
                     </tr>
                     <tr><td colspan="2">
                             <p style="text-align: right;margin-right: 10px;">
-                                <button id="botonsiguiente<?= $producto->IdProductos ?>" style="height: 80px;" class="button block-shadow-success text-shadow success big-button botonessiguiente" onclick="Siguiente(<?= $producto->IdProductos ?>, '<?= date_format(date_create($producto->FechaQuemado), 'dmY') ?>')"><span class="mif-arrow-right mif-ani-hover-horizontal"></span>
+                                <button id="botonsiguiente<?= $producto->IdProductos ?>" style="height: 80px;" class="button block-shadow-success text-shadow success big-button botonessiguiente" onclick="Siguiente(<?= $producto->IdProductos ?>, '<?= date_format(date_create($producto->FechaCaptura), 'dmY') ?>')"><span class="mif-arrow-right mif-ani-hover-horizontal"></span>
                                     <?php
                                     if ($cont == $productos->num_rows()) {
                                         echo ("<span id='spanbotonsiguiente" . $producto->IdProductos . "'>Finalizar clasificación</span>");
@@ -225,7 +225,7 @@ $cont = 1;
             if (data == "correcto")
             {
                 Notificacion("Correcto", "La Clasificación se guardó correctamente", "check", "success");
-                $("#imprimeme").attr("src", "EnviarTicket?codigo=" + letraclasi + "<?= $cprod . $mod . $color ?>" + fecha + "-" + idprod);
+                $("#imprimeme").attr("src", "EnviarTicket?codigo=" + fecha + "-" + pad(idprod, 10));
                 //document.getElementById("imprimeme").focus();
                 //document.getElementById("imprimeme").print();
                 //var w = window.open("EnviarTicket?codigo=<?= $cprod . $mod . $color ?>" + fecha + idprod, 'algo', 'width=300,height=400');

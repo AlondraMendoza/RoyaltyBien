@@ -15,6 +15,7 @@ class Clasificador extends CI_Controller {
         $infoheader["titulo"] = "Clasificador: Royalty Ceramic";
         $infocontent["Nombre"] = "Tania Torres";
         $infocontent["hoy"] = date("d/m/Y");
+        $infocontent["hoyingles"] = date("m/d/Y");
         $infocontent["colores"] = $this->modeloclasificador->ListaTodosColores();
         $infocontent["clasificaciones"] = $this->modeloclasificador->Clasificaciones();
         //$infocontent["hornos"] = $this->modeloclasificador->ListaHornos($this->FechaIngles(date("d/m/Y")));

@@ -14,6 +14,18 @@ class Capturista extends CI_Controller {
         $datos["apellido"] = "Cadena ejemplo 2";
         $this->load->view('capturista/index', $datos);
     }
+    
+    public function VerificarClave() {
+        $clave = $this->input->post_get('clave', TRUE);
+        $this->load->model("modelocapturista");
+        $fila = $this->modelocapturista->BuscarClave($clave);
+        $infocontent["nombrec"] = "No se encontró la persona";
+        if ($fila != "No se encontró el producto") {
+            $infocontent["nombrec"] = $fila->Nombre." ".$fila->APaterno." ".$fila->AMaterno;
+            $infocontent["idpu"] = $fila->IdPuestos;
+        }
+        print json_encode($infocontent);
+    }
 
     public function capturaCarro() {
         $infoheader["titulo"] = "Capturista: Royalty Ceramic";
@@ -104,8 +116,9 @@ class Capturista extends CI_Controller {
         $col = $this->input->post_get('col', TRUE);
         $piezas = $this->input->post_get('piezas', TRUE);
         $fecha = $this->input->post_get('fecha', TRUE);
+        $hornero = $this->input->post_get('hornero', TRUE);
         $this->load->model("modelocapturista");
-        $infocontent["lista"] = $this->modelocapturista->ListarProductosGuardados($carro,$horno,$prod,$mod,$col,$piezas,$this->FechaIngles($fecha));
+        $infocontent["lista"] = $this->modelocapturista->ListarProductosGuardados($carro,$horno,$prod,$mod,$col,$piezas,$this->FechaIngles($fecha),$hornero);
         //$infocontent["prod"] = $this->modelocapturista->ObtenerProductoId($infocontent["id"]);
         $this->load->view('capturista/Resultados', $infocontent);
     }

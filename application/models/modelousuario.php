@@ -9,6 +9,16 @@ class Modelousuario extends CI_Model {
         parent::__construct();
     }
 
+     public function usuario_por_nombre_contrasena($nombre, $contrasena){
+      $this->db->select('IdUsuarios, Nombre');
+      $this->db->from('Usuarios');
+      $this->db->where('Nombre', $nombre);
+      $this->db->where('Contrasena', $contrasena);
+      $consulta = $this->db->get();
+      $resultado = $consulta->row();
+      return $resultado;
+   }
+   
     public static function CategoriasDefectos() {
 //        $con = new Conexion();
 //        $query = "SELECT c.Nombre,"

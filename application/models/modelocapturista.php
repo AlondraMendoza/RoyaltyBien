@@ -22,6 +22,22 @@ class Modelocapturista extends CI_Model {
         $query = $this->db->get();
         return $query;
     }
+    
+    public function BuscarClave($clave){
+        $this->db->select("p.Nombre, p.APaterno, p.AMaterno, pu.IdPuestos");
+        $this->db->from("Personas p");
+        $this->db->join("Puestos pu", "p.IdPersonas=pu.PersonasId");
+        $this->db->where("p.Activo", 1);
+        $this->db->where("pu.AreasId", 2);
+        $this->db->where("pu.Nombre", "Hornero");
+        $this->db->where("pu.Clave", $clave);
+        $fila = $this->db->get();
+        if ($fila->num_rows() > 0) {
+            return $fila->row();
+        } else {
+            return "No se encontró la persona";
+        }
+    }
 
     public function ListarProductos() {
 //        $con = new Conexion();
@@ -88,7 +104,7 @@ class Modelocapturista extends CI_Model {
         return $query;
     }
     
-    public function ListarProductosGuardados($carro,$horno,$prod,$mod,$col,$piezas,$fecha){
+    public function ListarProductosGuardados($carro,$horno,$prod,$mod,$col,$piezas,$fecha,$hornero){
         //Guarda y despues lo muestra
         try {
              $datos = array(
@@ -100,7 +116,8 @@ class Modelocapturista extends CI_Model {
             'UsuariosId'=>1,
             'Activo'=>1,
             'Clasificado'=>0,
-            'ModelosId'=>$mod
+            'ModelosId'=>$mod,
+            'HorneroQuema'=>$hornero
             );
              $lista=array();
             for ($i = 0; $i < $piezas; $i++) {

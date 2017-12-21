@@ -469,4 +469,43 @@ class Clasificador extends CI_Controller {
         print($idproducto);
     }
 
+    public function EntradaProductos() {
+        $infoheader["titulo"] = "Clasificación: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $infocontent["Nombre"] = "Alondra Mendoza";
+        $this->load->model("modeloclasificador");
+        $this->load->view('clasificador/EntradaProductos', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+
+    public function VerificarClaveProd() {
+        $clave = $this->input->post_get('clave', TRUE);
+        $this->load->model("modeloclasificador");
+        $fila = $this->modeloclasificador->BuscarClaveProducto($clave);
+        $infocontent["nombre"] = "No se encontró el producto";
+        if ($fila != "No se encontró el producto") {
+            $infocontent["nombre"] = $fila->producto . "/" . $fila->modelo . "/" . $fila->color;
+            $infocontent["id"] = $fila->IdProductos;
+        }
+        print json_encode($infocontent);
+    }
+
+    public function GuardarTarima() {
+        $this->load->model("modeloclasificador");
+        $idtarima = $this->modeloclasificador->GuardarTarima();
+        print($idtarima);
+    }
+
+    public function GuardarDetalleTarima() {
+        $idproducto = $this->input->post_get('idproducto', TRUE);
+        $idtarima = $this->input->post_get('idtarima', TRUE);
+        $this->load->model("modeloclasificador");
+        $iddetalle = $this->modeloclasificador->GuardarDetalleTarima($idproducto, $idtarima);
+        if ($iddetalle == "existe") {
+            print("Existe");
+        } else if ($iddetalle != null) {
+            print("Correcto");
+        }
+    }
+
 }

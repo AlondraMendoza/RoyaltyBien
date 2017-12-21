@@ -301,6 +301,63 @@ class Modeloclasificador extends CI_Model {
         return $this->db->insert_id();
     }
 
+    public function BuscarClaveProducto($clave) {
+        $this->db->select("p.IdProductos, cp.Nombre as producto, c.Nombre as color, m.Nombre as modelo");
+        $this->db->from("Productos p");
+        $this->db->join("CProductos cp", "p.CProductosId=cp.IdCProductos");
+        $this->db->join("Colores c", "p.ColoresId=c.IdColores");
+        $this->db->join("Modelos m", "p.ModelosId=m.IdModelos");
+        $this->db->where("p.Activo", 1);
+        $this->db->where("p.IdProductos", $clave);
+        $fila = $this->db->get();
+        if ($fila->num_rows() > 0) {
+            return $fila->row();
+        } else {
+            return "No se encontró el producto";
+        }
+    }
+
+    public function GuardarTarima() {
+        $datos = array(
+            'UsuarioCapturaId' => 1,
+            'Activo' => 1,
+            'FechaCaptura' => date('Y-m-d | h:i:sa')
+        );
+        $this->db->insert("Tarimas", $datos);
+        return $this->db->insert_id();
+    }
+
+    public function GuardarDetalleTarima($idproducto, $idtarima) {
+        if ($this->VerificarProductoTarima($idproducto) == "no existe") {
+            $datos = array(
+                'ProductosId' => $idproducto,
+                'Activo' => 1,
+                'TarimasId' => $idtarima
+            );
+            $this->db->insert("DetalleTarimas", $datos);
+            return $this->db->insert_id();
+        } else {
+            return "existe";
+        }
+    }
+
+    public function VerificarProductoTarima($idproducto) {
+        $this->db->select("p.IdProductos");
+        $this->db->from("DetalleTarimas d");
+        $this->db->join("Tarimas t", "t.IdTarimas=d.TarimasId");
+        $this->db->join("Productos p", "p.IdProductos=d.ProductosId");
+        $this->db->where("d.Activo", 1);
+        $this->db->where("t.Activo", 1);
+        $this->db->where("p.IdProductos", $idproducto);
+        $this->db->where("t.FechaApertura", null);
+        $fila = $this->db->get();
+        if ($fila->num_rows() > 0) {
+            return "existe";
+        } else {
+            return "no existe";
+        }
+    }
+
 }
 
 ?>

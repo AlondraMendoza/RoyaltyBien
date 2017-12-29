@@ -24,8 +24,8 @@ class Usuario extends CI_Controller {
          $usuario = $this->modelousuario->usuario_por_nombre_contrasena($nombre, $contrasena);
          if ($usuario) {
             $usuario_data = array(
-               'id' => $usuario->id,
-               'nombre' => $usuario->nombre,
+               'id' => $usuario->IdUsuarios,
+               'nombre' => $usuario->Nombre,
                'logueado' => TRUE
             );
             $this->session->set_userdata($usuario_data);
@@ -41,11 +41,18 @@ class Usuario extends CI_Controller {
       if($this->session->userdata('logueado')){
          $data = array();
          $data['nombre'] = $this->session->userdata('nombre');
+         $infoheader["titulo"] = "Royalty Ceramic";
+         $this->load->view('template/headerd', $infoheader);
+         $id=$this->session->userdata('id');
+         $this->load->model('modelousuario');
+         $data['perfiles'] = $this->modelousuario->ObtenerPerfiles($id);
          $this->load->view('usuario/logueado', $data);
+         $this->load->view('template/footerd', '');
       }else{
          redirect('usuario/iniciar_sesion');
       }
    }
+   
    public function cerrar_sesion() {
       $usuario_data = array(
          'logueado' => FALSE
@@ -53,5 +60,21 @@ class Usuario extends CI_Controller {
       $this->session->set_userdata($usuario_data);
       redirect('usuario/iniciar_sesion');
    }
+   
+   //Verificar metodo
+   /*public function ObtenerUsuario() {
+        $usuario = new \Models\Usuarios();
+        $usuario->set("IdUsuarios", 1);
+        return $usuario;
+    }
+
+    public function index() {
+        $lista = $this->ObtenerUsuario()->ObtenerPerfiles();
+
+        $array = [
+            "listaperfiles" => $lista,
+            "otravariable" => 5,];
+        return $array;
+    }*/
 }
 

@@ -16,7 +16,7 @@
                         $("#tablareclasificar").load("TablaProductosReclasificar", {"producto": data.id});
                     } else
                     {
-                        $("#des").html("No se encontró producto en devoluciones");
+                        $("#des").html("No se encontró producto en devoluciones sin procesar");
                     }
                 });
             }

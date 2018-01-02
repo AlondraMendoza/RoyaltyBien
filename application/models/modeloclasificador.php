@@ -345,6 +345,7 @@ class Modeloclasificador extends CI_Model {
         $this->db->join("Modelos m", "p.ModelosId=m.IdModelos");
         $this->db->where("p.Activo", 1);
         $this->db->where("p.IdProductos", $clave);
+        $this->db->where("dd.Procesado", 0);
         $fila = $this->db->get();
         if ($fila->num_rows() > 0) {
             return $fila->row();

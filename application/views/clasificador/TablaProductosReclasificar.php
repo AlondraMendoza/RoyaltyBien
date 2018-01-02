@@ -212,7 +212,7 @@ $cont++;
                 $("#claveProd").val("");
                 $("#des").html("");
                 $.post("GuardarProcesado", {"producto": idprod});
-                $("#imprimeme").attr("src", "EnviarTicket?codigo=" + fecha + "-" + pad(idprod, 10));
+
             } else
             {
                 Notificacion("Error", "Ocurrió un error al guardar la clasificación", "cancel", "alert");

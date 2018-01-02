@@ -508,4 +508,25 @@ class Clasificador extends CI_Controller {
         }
     }
 
+    public function Reclasificar() {
+        $infoheader["titulo"] = "Reclasificar: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $infocontent["Nombre"] = "Alondra Mendoza";
+        $this->load->model("modeloclasificador");
+        $this->load->view('clasificador/Reclasificar', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+
+    public function VerificarClaveProdDevoluciones() {
+        $clave = $this->input->post_get('clave', TRUE);
+        $this->load->model("modeloclasificador");
+        $fila = $this->modeloclasificador->BuscarClaveProductoDevoluciones($clave);
+        $infocontent["nombre"] = "No se encontró el producto en devoluciones";
+        if ($fila != "No se encontró el producto en devoluciones") {
+            $infocontent["nombre"] = $fila->producto . "/" . $fila->modelo . "/" . $fila->color;
+            $infocontent["id"] = $fila->IdProductos;
+        }
+        print json_encode($infocontent);
+    }
+
 }

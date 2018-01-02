@@ -18,7 +18,6 @@ class Modelosclasificador extends CI_Model {
             'Responsable' => $responsable,
             'UsuarioCapturaId' => 1,
             'Activo' => 1,
-            'Procesado' => 0,
             'FechaCaptura' => date('Y-m-d | h:i:sa')
         );
         $this->db->insert("Devoluciones", $datos);
@@ -30,6 +29,7 @@ class Modelosclasificador extends CI_Model {
             $datos = array(
                 'ProductosId' => $idproducto,
                 'Activo' => 1,
+                'Procesado' => 0,
                 'DevolucionesId' => $iddevolucion
             );
             $this->db->insert("DetalleDevoluciones", $datos);
@@ -64,7 +64,7 @@ class Modelosclasificador extends CI_Model {
         $this->db->where("d.Activo", 1);
         $this->db->where("t.Activo", 1);
         $this->db->where("p.IdProductos", $idproducto);
-        $this->db->where("t.Procesado", 0);
+        $this->db->where("d.Procesado", 0);
         $fila = $this->db->get();
         if ($fila->num_rows() > 0) {
             return "existe";

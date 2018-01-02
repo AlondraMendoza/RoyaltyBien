@@ -9,8 +9,8 @@
         $ci = &get_instance();
         $ci->load->model("modelocapturista"); 
         //$npen = $ci->modelocapturista->ListarModelos($prod->IdCProductos);?>
-        <button class="button" style='width: 210px; height: 210px;' onclick="VerOtros(<?= $col->IdColores?>)">
-        <input type="image" src="http://localhost/RoyaltyBien/public/colores/<?= $col->Descripcion ?>" height="190px;" width="190px;" title="<?= $col->Nombre ?>"/><b>
+        <button class="button" id="color<?= $col->IdColores?>" style='width: 210px; height: 210px;' onclick="VerOtros(<?= $col->IdColores?>)">
+        <input type="image" src="<?php echo base_url() ?>public/colores/<?= $col->Descripcion ?>" height="190px;" width="190px;" title="<?= $col->Nombre ?>"/><b>
         <?= $col->Nombre ?></b></button>
         <?php endforeach; ?>
         <?php } ?>

@@ -26,7 +26,7 @@
                             <b style="font-size: 1.3em" class="fg-darkEmerald">Producto:</b><br> 
                             <div data-role="group" data-group-type="one-state">   
                             <button class="button" style='width: 210px; height: 210px;'>
-                            <input type="image" src="http://localhost/RoyaltyBien/public/imagenes/Accesorios.jpg" height="190px;" width="190px;" title="Accesorios"/><b>
+                            <input type="image" src="<?php echo base_url() ?>public/imagenes/Accesorios.jpg" height="190px;" width="190px;" title="Accesorios"/><b>
                                 Accesorios</b></button>
                             </div>
                         </td>

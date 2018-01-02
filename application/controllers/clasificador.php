@@ -154,6 +154,20 @@ class Clasificador extends CI_Controller {
         $this->load->view('clasificador/TablaProductos', $infocontent);
     }
 
+    public function TablaProductosReclasificar() {
+        $producto = $this->input->post_get('producto', TRUE);
+        $this->load->model("modeloclasificador");
+        $infocontent["clasificaciones"] = $this->modeloclasificador->Clasificaciones();
+        $infocontent["producto"] = $this->modeloclasificador->ProductosSeleccionReclasificar($producto);
+        $this->load->view('clasificador/TablaProductosReclasificar', $infocontent);
+    }
+
+    public function GuardarProcesado() {
+        $producto = $this->input->post_get('producto', TRUE);
+        $this->load->model("modeloclasificador");
+        $this->modeloclasificador->GuardarProcesado($producto);
+    }
+
     public function CargarDefectos() {
         $idcat = $this->input->post_get('cat_id', TRUE);
         $idprod = $this->input->post_get('idprod', TRUE);

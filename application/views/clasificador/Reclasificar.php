@@ -9,17 +9,11 @@
                 $("#des").html("Verificando clave...");
                 $.getJSON("VerificarClaveProdDevoluciones", {"clave": clave}, function (data) {
                     if (data.id != null) {
-                        $("#des").html("Producto encontrado");
-                        var input = '<tr><td class="center">' + data.id + '</td><td class="center">';
-                        input += '<b style="font-size: 1.3em" class="fg-darkEmerald">Descripción:</b><br>';
-                        input += data.nombre;
-                        input += '</td>';
-                        input += '</tr>';
-                        $("#tablaproductos").append(input);
-                        $("#claveProd").val("");
-                        $("#des").html("");
-                        $("#informacionadicional").fadeIn();
-                        $("#ResultadosReclasificar").fadeIn();
+                        $("#des").html("Producto encontrado en devoluciones");
+                        $("#panelbusqueda").fadeOut();
+                        $("#tablareclasificar").fadeIn();
+                        $("#tablareclasificar").fadeIn();
+                        $("#tablareclasificar").load("TablaProductosReclasificar", {"producto": data.id});
                     } else
                     {
                         $("#des").html("No se encontró producto en devoluciones");
@@ -28,56 +22,13 @@
             }
         }
     }
-    var guardado = 0;
-    function Guardar() {
-        /*
-         * 
-         * if ( $("#undiv").length ) {
-         */
-        if (guardado == 0) {
-            $.post("GuardarTarima", function (data) {
-                var idtarima = data;
-                $("input[name='IDS[]']:checked").each(function () {
-                    var id = $(this).val();
-
-                    $.post("GuardarDetalleTarima", {"idproducto": $(this).val(), "idtarima": idtarima}, function (data) {
-                        if (data == "Correcto")
-                        {
-                            $("#td" + id).html('<span class="mif-checkmark fg-green"></span> Producto Guardado');
-//                        $.Notify({
-//                            caption: 'Correcto',
-//                            content: 'Los productos se guardarón correctamente',
-//                            type: 'success'
-//                        });
-                        } else if (data == "Existe")
-                        {
-                            $("#td" + id).html("<span class='mif-cancel fg-red'></span> El producto ya se encuentra guardado<br> en alguna tarima cerrada");
-                        } else
-                        {
-                            $.Notify({
-                                caption: 'Error',
-                                content: 'Ocurrió un error al guardar el producto',
-                                type: 'alert'
-                            });
-                        }
-                    });
-
-                });
-            });
-            guardado = 1;
-            $("#botonguardar").fadeOut();
-            $("#nuevatarima").fadeIn();
-        }
-        //$("#tablaproductos").empty();
-    }
-
     function Cancelar() {
         location.reload(true);
     }
 </script>
-<h1><b> RECLASIFICAR</b></h1><br>
+<h1 class="light text-shadow">RECLASIFICAR</h1><br>
 <center>
-    <div class="panel warning" data-role="panel">
+    <div class="panel warning" data-role="panel" id="panelbusqueda">
         <div class="heading">
             <span class="icon mif-stack fg-white bg-darkOrange"></span>
             <span class="title">Ingresar Código de Barras</span>
@@ -97,27 +48,9 @@
             </table>
         </div>
     </div>
-    <div id="ResultadosReclasificar" style="display: none">
-        <center>
-            <div class="panel primary" data-role="panel">
-                <div class="heading">
-                    <span class="icon mif-stack fg-white bg-darkBlue"></span>
-                    <span class="title">Detalle de Productos agregados</span>
-                </div>
-                <div class="content" id="Resultados">
-                    <table class="table bordered border hovered" id="tablaproductos">
-                        <thead>
-                            <tr>
-                                <th>Clave</th>
-                                <th>Descripción</th>
-                            </tr>
-                        </thead>
-                    </table>
-
-                </div>
-            </div>
-        </center>
-    </div>
+    <center>
+        <div id="tablareclasificar" style="display:none"></div>
+    </center>
 </center><br><br><br>
 
 

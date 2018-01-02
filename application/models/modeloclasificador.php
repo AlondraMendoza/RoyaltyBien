@@ -187,6 +187,19 @@ class Modeloclasificador extends CI_Model {
         return $query;
     }
 
+    public function ProductosSeleccionReclasificar($producto) {
+
+        $this->db->select('c.Descripcion,cp.Nombre as NombreProducto,p.ModelosId,p.CProductosId,p.HornosId,c.IdColores,c.Nombre as NombreColor,m.Nombre as NombreModelo,p.IdProductos,p.FechaCaptura', FALSE);
+        $this->db->from('Productos p');
+        $this->db->join('Modelos m', "m.IdModelos=p.ModelosId");
+        $this->db->join('CProductos cp', "cp.IdCProductos=p.CProductosId");
+        $this->db->join('Colores c', "c.IdColores=p.ColoresId");
+        $this->db->where('p.Activo', 1);
+        $this->db->where('p.IdProductos', $producto);
+        $query = $this->db->get()->row();
+        return $query;
+    }
+
     public function CategoriasDefectos() {
         $this->db->select('c.Nombre,c.IdCatDefectos');
         $this->db->from('CategoriasDefectos c');
@@ -210,6 +223,12 @@ class Modeloclasificador extends CI_Model {
         $this->db->from("Clasificaciones c");
         $this->db->where("Activo=", 1);
         return $this->db->get();
+    }
+
+    public function GuardarProcesado($producto) {
+        $this->db->set("Procesado", 1);
+        $this->db->where("ProductosId", $producto);
+        $this->db->update("DetalleDevoluciones");
     }
 
     public function GuardarClasificacion($idprod, $idclasi, $fueratono) {

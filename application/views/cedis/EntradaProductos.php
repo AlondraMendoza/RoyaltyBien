@@ -126,7 +126,7 @@
                 $.post("GuardarProductoCedis", {"idproducto": $(this).val()}, function (data) {
                     if (data == "Correcto")
                     {
-                        $("#td" + id).html('<span class="mif-checkmark fg-green"></span> Producto Guardada');
+                        $("#td" + id).html('<span class="mif-checkmark fg-green"></span> Producto Guardado');
                     } else if (data == "Existe")
                     {
                         $("#td" + id).html("<span class='mif-cancel fg-red'></span> El producto ya se encuentra <br>en el CEDIS");

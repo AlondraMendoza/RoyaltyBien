@@ -48,6 +48,16 @@
     {
         $("#tdhorno").html($('#SHorno option:selected').text());
     }
+    
+    function Notificacion(titulo, texto, icono, color)
+    {
+        $.Notify({
+            caption: titulo,
+            content: texto,
+            icon: "<span class='mif-" + icono + "'></span>",
+            type: color
+        });
+    }
 
     function Siguiente()
     {
@@ -59,6 +69,26 @@
         var piezas = $("#piezas").val();
         var fecha = $("#fecha").val();
         var hornero = $("#idpu").val();
+        if(carro ==0){
+            Notificacion("Error", "Selecciona el carro antes de continuar", "cancel", "alert");
+            return(0);
+        }
+        if(horno ==0){
+            Notificacion("Error", "Selecciona el horno antes de continuar", "cancel", "alert");
+            return(0);
+        }
+        if(piezas == ""){
+            Notificacion("Error", "Captura el número de piezas antes de continuar", "cancel", "alert");
+            return(0);
+        }
+        if(fecha == ""){
+            Notificacion("Error", "Selecciona la fecha antes de continuar", "cancel", "alert");
+            return(0);
+        }
+        if(hornero == ""){
+            Notificacion("Error", "Captura el número de hornero antes de continuar", "cancel", "alert");
+            return(0);
+        }
         $.get("Resultados", {"carro": carro, "horno": horno, "prod": prod, "mod": mod, "col": col, "piezas": piezas, "fecha": fecha, "hornero": hornero, "withouttem": 1},function(){
             $("#Lista").fadeIn();
             $("#ListaTabla").append("<tr>"+$("#trprevia").html()+"</tr>");
@@ -69,17 +99,32 @@
             $("#tdhorno").html("");
             $("#tdcolor").html("");
             $("#tdcantidad").html("");
-            $("#tdfecha").html("");
-           
-            
+            $("#tdfecha").html(""); 
         });
+        $("#carro").val("");
+        $('#SHorno').val("");
+        Producto="";
+        Modelo="";
+        Color="";
+        $("#piezas").val("");
+        $("#fecha").val("");
+        $("#clave").val("");
+        $("#idpu").val("");
+        $("#NombreC").val("");
         
-        //$("#Botones").fadeOut();
     }
 
-    function Cancelar()
-    {
-        
+    function Cancelar(){
+    $("#carro").val("");
+        $('#SHorno').val("");
+        Producto="";
+        Modelo="";
+        Color="";
+        $("#piezas").val("");
+        $("#fecha").val("");
+        $("#clave").val("");
+        $("#idpu").val("");
+        $("#NombreC").val("");
     }
 
     function VerificarClave() {
@@ -145,7 +190,7 @@
                 <tr>
                     <td style="width:20%" class="center">
                         <b style="font-size: 1.3em" class="fg-darkEmerald">N° de Hornero de quema:</b><br>
-                        <div class="input-control text full-size" style="height:80px;font-size: x-large">
+                        <div class="input-control text full-size"  style="height:80px;font-size: x-large">
                             <input type="text" id="clave" onkeyup="VerificarClave()">
                             <input type="hidden" id="idpu">
                         </div>
@@ -204,11 +249,10 @@
                     </tr>
                     <tr><td><br><br></td></tr>
                     <tr>
+                        <td></td>
                         <td class="center" id="Botones"><br>
                             <div class="input-control text big-input medium-size">
-                                <button class="button primary" onclick="Siguiente()">Siguiente</button></div>
-                        </td>
-                        <td>
+                                <button class="button success" onclick="Siguiente()">Siguiente</button></div>
                             <div class="input-control text big-input medium-size">
                                 <button class="button danger" onclick="Cancelar()">Cancelar</button></div>
                         </td>
@@ -218,9 +262,9 @@
             </div>
         </div>
     </div><br><br>
-    <div class="panel warning" data-role="panel" id="" style="z-index: 1">
+    <div class="panel primary" data-role="panel" id="" style="z-index: 1">
         <div class="heading" style="position:relative;z-index: 1">
-            <span class="icon mif-stack fg-white bg-darkOrange"></span>
+            <span class="icon mif-stack fg-white bg-darkBlue"></span>
             <span class="title">Detalle de Carro</span>
         </div>
         <div class="content" id="">
@@ -256,14 +300,25 @@
         </div>
     </div>
     <br>
-    <div class="panel warning" data-role="panel" style="display: none;" id="Lista">
+    <div class="panel success" data-role="panel" style="display: none;" id="Lista">
         <div class="heading">
-            <span class="icon mif-stack fg-white bg-darkOrange"></span>
+            <span class="icon mif-stack fg-white bg-darkGreen"></span>
             <span class="title">Detalle de capturas</span>
         </div>
         <div class="content" id="">
             <table class="table" id="ListaTabla">
-
+                <thead>
+                        <tr>
+                            <th>Carro:</th>
+                            <th>Horno:</th>
+                            <th>Hornero:</th>
+                            <th>Producto:</th>
+                            <th>Modelo:</th>
+                            <th>Color:</th>
+                            <th>Cantidad:</th>
+                            <th>Fecha Quemado:</th>
+                        </tr>
+                    </thead>
             </table>
         </div>
     </div>

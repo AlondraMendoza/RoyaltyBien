@@ -46,6 +46,7 @@ class Usuario extends CI_Controller {
          $id=$this->session->userdata('id');
          $this->load->model('modelousuario');
          $data['perfiles'] = $this->modelousuario->ObtenerPerfiles($id);
+         //$data['menu'] = $this->modelousuario->ObtenerMenu($p);
          $this->load->view('usuario/logueado', $data);
          $this->load->view('template/footerd', '');
       }else{

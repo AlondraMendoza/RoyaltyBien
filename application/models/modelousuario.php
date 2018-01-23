@@ -20,7 +20,7 @@ class Modelousuario extends CI_Model {
    }
    
    public function ObtenerPerfiles($id){
-       $this->db->select('p.Nombre');
+       $this->db->select('p.Nombre, p.IdPerfiles');
        $this->db->from('Perfiles p');
        $this->db->join('PerfilesUsuarios pu', 'p.IdPerfiles= pu.PerfilesId');
        $this->db->where('pu.UsuariosId', $id);
@@ -28,6 +28,24 @@ class Modelousuario extends CI_Model {
        $this->db->where('pu.Activo',1);
        $consulta = $this->db->get();
        return $consulta;
+   }
+    
+   public function ObtenerMenu($id){
+       $this->db->select('*');
+       $this->db->from('Menus');
+       $this->db->where('PerfilesId', $id);
+       $this->db->where('Tipo', 'Función');
+       $arreglo = $this->db->get();
+       return $arreglo;
+   }
+   
+   public function ObtenerReportes($id){
+       $this->db->select('*');
+       $this->db->from('Menus');
+       $this->db->where('PerfilesId', $id);
+       $this->db->where('Tipo', 'Reporte');
+       $arreglo = $this->db->get();
+       return $arreglo;
    }
    
     public static function CategoriasDefectos() {

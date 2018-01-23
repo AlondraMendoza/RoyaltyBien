@@ -70,6 +70,92 @@ class Modeloalmacenista extends CI_Model {
         }
     }
     
+    public function BuscarClaveTarima($clave) {
+        $this->db->select("t.IdTarimas");
+        $this->db->from("Tarimas t");
+        $this->db->where("t.Activo", 1);
+        $this->db->where("t.IdTarimas", $clave);
+        $fila = $this->db->get();
+        if ($fila->num_rows() > 0) {
+            return $fila->row();
+        } else {
+            return "No se encontró la tarima";
+        }
+    }
+    
+    public function BuscarClaveTarima2($clave) {
+        $this->db->select("t.IdTarimas");
+        $this->db->from("Tarimas t");
+        $this->db->where("t.Activo", 1);
+        $this->db->where("t.IdTarimas", $clave);
+        $fila = $this->db->get();
+        if ($fila->num_rows() > 0) {
+            return $fila->row();
+        } else {
+            return "No se encontró la tarima";
+        }
+    }
+    
+    public function GuardarProductosTarima($idtarima) {
+        $existe = false;
+        if ($this->ProductoEnAlmacen($idtarima)) {
+            $existe = true;
+            return "Existe";
+        }
+        else{
+            $this->GuardarProductoAlmacen($idtarima);
+        return "correcto";
+        }
+    }
+    
+    public function SalirTarima($idtarima) {
+       $id= $this->BuscarEnAlmacen($idtarima);
+            return $id;
+    }
+    
+    public function ProductoEnAlmacen($idtarima) {
+        $this->db->select("i.IdInventariosAlmacen");
+        $this->db->from("InventariosAlmacen i");
+        $this->db->where("i.TarimasId", $idtarima);
+        $this->db->where("i.FechaSalida", null);
+        $fila = $this->db->get();
+        if ($fila->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function BuscarEnAlmacen($idtarima) {
+        $this->db->select("i.IdInventariosAlmacen");
+        $this->db->from("InventariosAlmacen i");
+        $this->db->where("i.TarimasId", $idtarima);
+        $this->db->where("i.FechaSalida", null);
+        $fila = $this->db->get()->row()->IdInventariosAlmacen;
+        return $fila;
+    }
+
+    
+    public function GuardarProductoAlmacen($idtarima) {
+        $datos = array(
+            'AlmacenesId' => 1,
+            'TarimasId' => $idtarima,
+            'UsuariosIdEntrada' => 1,
+        );
+        $this->db->set('FechaEntrada', 'NOW()', FALSE);
+        $this->db->insert('InventariosAlmacen', $datos);
+    }
+    
+    public function SalirProductoAlmacen($fila) {
+        $datos = array(
+            'FechaSalida'=> date('Y-m-d | h:i:sa'),
+            'UsuariosIdSalida' => 1,
+        );
+        $this->db->where('IdInventariosAlmacen', $fila);
+        $this->db->update('InventariosAlmacen', $datos);
+        return "correcto";
+    }
+    
     public function VerificarProd($id){
         $this->db->select("*");
         $this->db->from("InventariosAlmacen");

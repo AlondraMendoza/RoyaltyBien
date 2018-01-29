@@ -135,7 +135,10 @@
                         </table>
                     </div>
                     <br><br><br>
+                    <br><br><br>
                 </div>
+                <br><br><br>
+                <br><br><br>
             </div>
             <div class="frame" id="productos">
                 <div class="panel warning" data-role="panel">

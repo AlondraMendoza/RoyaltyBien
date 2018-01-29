@@ -30,7 +30,7 @@
                             input += '<span class="check"></span>';
                             input += '</label></td></tr>';
                             $("#tablaproductos").append(input);
-                            $("#claveProd").val("");
+                            $("#claveProd2").val("");
                             $("#des").html("");
                             $("#resultadosproductos").fadeIn();
                         }
@@ -71,7 +71,7 @@
                             input += '<span class="check"></span>';
                             input += '</label></td></tr>';
                             $("#tablatarimas").append(input);
-                            $("#claveProd2").val("");
+                            $("#claveProd").val("");
                             $("#des2").html("");
                             $("#resultadostarimas").fadeIn();
                         }

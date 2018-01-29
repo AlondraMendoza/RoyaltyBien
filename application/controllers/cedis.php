@@ -77,4 +77,61 @@ class Cedis extends CI_Controller {
         }
     }
 
+    public function CapturaPedidos() {
+        $infoheader["titulo"] = "Captura Pedidos: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $infocontent["Nombre"] = "Alondra Mendoza";
+        $this->load->model("modelocedis");
+        $infocontent["ListaPedidos"] = $this->modelocedis->ListaCompletaPedidos();
+        $this->load->view('cedis/CapturaPedidos', $infocontent);
+
+        $this->load->view('template/footerd', '');
+    }
+
+    public function VerificarProductoCedis() {
+        $clave = $this->input->post_get('clave', TRUE);
+        $this->load->model("modelocedis");
+        $fila = $this->modelocedis->BuscarProductoCedis($clave);
+        $infocontent["nombre"] = $fila;
+        if ($fila != "No se encontró el producto" && $fila != "No está en cedis" && $fila != "El producto ya se encuentra en un pedido") {
+            $infocontent["nombre"] = $fila->producto . "/" . $fila->modelo . "/" . $fila->color;
+            $infocontent["id"] = $fila->IdProductos;
+        }
+        print json_encode($infocontent);
+    }
+
+    public function GuardarPedidoCedis() {
+        $cliente = $this->input->post_get('cliente', TRUE);
+        $this->load->model("modelocedis");
+        $idpedido = $this->modelocedis->GuardarPedido($cliente);
+        print($idpedido);
+    }
+
+    public function GuardarDetallePedidoCedis() {
+        $idproducto = $this->input->post_get('idproducto', TRUE);
+        $idpedido = $this->input->post_get('idpedido', TRUE);
+        $this->load->model("modelocedis");
+        $iddetalle = $this->modelocedis->GuardarDetallePedido($idproducto, $idpedido);
+        if ($iddetalle == "En pedido") {
+            print("En pedido");
+        } else {
+            print("Correcto");
+        }
+    }
+
+    public function AbrirPedido() {
+        $pedidoid = $this->input->post_get('pedidoid', TRUE);
+        $this->load->model("modelocedis");
+        $infocontent["ListaProductos"] = $this->modelocedis->ProductosPedido($pedidoid);
+        $this->load->view('cedis/AbrirPedido', $infocontent);
+    }
+
 }
+
+//Guardar fecha de presalida
+//Capturar el cliente al guardar pedido
+//Marcar de abierta la tarima al guardar detalle de pedidos
+//Eliminar tabla de detallepedidos
+//Probar que al querer guardar un producto en un pedido ya se encuentre configurado en alguno
+
+//Listar pedidos capturados

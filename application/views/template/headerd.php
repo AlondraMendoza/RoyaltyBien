@@ -6,6 +6,7 @@
         <script src="<?= base_url() ?>public/js/jquery.js"></script>
         <link href="<?= base_url() ?>public/css/metro-icons.min.css" rel="stylesheet">
         <script src="<?= base_url() ?>public/js/metro.js"></script>
+        <script src="<?= base_url() ?>public/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript">
         </script>
         <title><?= $titulo ?></title>

@@ -123,6 +123,7 @@ class Cedis extends CI_Controller {
         $pedidoid = $this->input->post_get('pedidoid', TRUE);
         $this->load->model("modelocedis");
         $infocontent["ListaProductos"] = $this->modelocedis->ProductosPedido($pedidoid);
+        $infocontent["pedidoid"] = $pedidoid;
         $this->load->view('cedis/AbrirPedido', $infocontent);
     }
 

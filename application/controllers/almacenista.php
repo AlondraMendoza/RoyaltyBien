@@ -179,7 +179,9 @@ class Almacenista extends CI_Controller {
         $clave = $this->input->post_get('clave', TRUE);
         $this->load->model("modeloalmacenista");
         $fila = $this->modeloalmacenista->BuscarClaveTarimaP($clave);
+        $infocontent["nombre"] = "No se encontró el producto";
         if ($fila != "No se encontró el producto") {
+            $infocontent["nombre"] = $fila->producto . "/" . $fila->modelo . "/" . $fila->color;
             $infocontent["id"] = $fila->IdProductos;
         }
         print json_encode($infocontent);

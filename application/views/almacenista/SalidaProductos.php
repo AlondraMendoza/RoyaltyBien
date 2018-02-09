@@ -170,6 +170,7 @@ var guardado = 0;
             <thead>
              <tr>
                 <th>Clave</th>
+                <th>Descripción</th>
                 <th>Seleccion/Acción</th>
              </tr>
            </thead>
@@ -213,7 +214,9 @@ var guardado = 0;
                             $("#des2P").html("");
                         } else {
                             //metodo para Abrir tabla y agregar datos
-                            var input = '<tr><td class="center">' + data.id + '</td>';
+                            var input = '<tr><td class="center">' + data.id + '</td><td class="center">';
+                            input += '<b style="font-size: 1.3em" class="fg-darkEmerald">Descripción:</b><br>';
+                            input += data.nombre;
                             input += '</td>';
                             input += '<td class="center" id="td2' + data.id + '"><label class="input-control checkbox">';
                             input += '<input type="checkbox" name="IDS2P[]" value="' + data.id + '" checked>';

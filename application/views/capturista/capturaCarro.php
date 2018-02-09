@@ -110,7 +110,7 @@
         $("#fecha").val("");
         $("#clave").val("");
         $("#idpu").val("");
-        $("#NombreC").val("");
+        $("#NombreC").html("");
         
     }
 
@@ -124,7 +124,7 @@
         $("#fecha").val("");
         $("#clave").val("");
         $("#idpu").val("");
-        $("#NombreC").val("");
+        $("#NombreC").html("");
     }
 
     function VerificarClave() {

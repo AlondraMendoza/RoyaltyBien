@@ -127,6 +127,13 @@ class Cedis extends CI_Controller {
         $this->load->view('cedis/AbrirPedido', $infocontent);
     }
 
+    public function SalidaCedis() {
+        $pedidoid = $this->input->post_get('pedidoid', TRUE);
+        $this->load->model("modelocedis");
+        $this->modelocedis->SalidaPedido($pedidoid);
+        print("correcto");
+    }
+
 }
 
 //Guardar fecha de presalida

@@ -31,6 +31,52 @@ class Modeloalmacenista extends CI_Model {
         }
     }
     
+    public function Existencias($id){
+        $Entradas= $this->Entradas($id);
+        $Salidas = $this->Salidas($id);
+        $Data= $Entradas - $Salidas;
+        return $Data;
+    }
+    
+    public function Entradas($id){
+        $this->db->select("sum(cantidad) as entradas");
+        $this->db->from("AlmacenGriferia a");
+        $this->db->where("a.Activo", 1);
+        $this->db->where("a.CGriferiaId", $id);
+        $this->db->where("a.FechaSalida IS null");
+        $fila = $this->db->get();
+        if ($fila->num_rows() > 0) {
+            return $fila->row()->entradas;
+        } else {
+            return 0;
+        }
+    }
+    public function Salidas($id){
+        $this->db->select("sum(cantidad) as salidas");
+        $this->db->from("AlmacenGriferia a");
+        $this->db->where("a.Activo", 1);
+        $this->db->where("a.CGriferiaId", $id);
+        $this->db->where("a.FechaEntrada IS null");
+        $fila = $this->db->get();
+        if ($fila->num_rows() > 0) {
+            return $fila->row()->salidas;
+        } else {
+            return 0;
+        }
+    }
+    
+    public function SalidaGrif($id, $cantidad){
+             $datos = array(
+            'CGriferiaId'=> $id,
+            'Cantidad'=> $cantidad,
+            'UsuariosId'=>1,
+            'Activo'=>1,
+            );             
+            $this->db->set('FechaSalida', 'NOW()', FALSE);
+            $this->db->insert('AlmacenGriferia', $datos);  
+            return "correcto";
+    }
+    
     public function ListarGriferiaGuardada($id, $cantidad){
        try {
              $datos = array(

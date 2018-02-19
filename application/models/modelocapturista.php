@@ -124,6 +124,13 @@ class Modelocapturista extends CI_Model {
                 $this->db->set('FechaCaptura', 'NOW()', FALSE);
                 $this->db->insert('Productos', $datos);  
                 $id=$this->db->insert_id();
+                $HistorialQuemado=array( 'Fecha'=>$fecha, 'UsuariosId'=>1, 'MovimientosProductosId'=>1,
+                    'Activo'=>1, 'ProductosId'=>$id);
+                $this->db->insert('HistorialProducto', $HistorialQuemado);
+                $HistorialCaptura= array('UsuariosId'=>1, 'MovimientosProductosId'=>2,
+                    'Activo'=>1, 'ProductosId'=>$id);
+                $this->db->set('Fecha', 'NOW()', FALSE);
+                $this->db->insert('HistorialProducto', $HistorialCaptura);
                 array_push($lista, $id);
             }
             return $lista;

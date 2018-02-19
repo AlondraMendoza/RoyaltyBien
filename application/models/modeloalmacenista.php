@@ -246,6 +246,10 @@ class Modeloalmacenista extends CI_Model {
         );
         $this->db->set('FechaEntrada', 'NOW()', FALSE);
         $this->db->insert('InventariosAlmacen', $datos);
+        $HistorialEntrada= array('UsuariosId'=>1, 'MovimientosTarimasId'=>2,
+                    'Activo'=>1, 'TarimasId'=>$idtarima);
+        $this->db->set('Fecha', 'NOW()', FALSE);
+        $this->db->insert('HistorialTarima', $HistorialEntrada);
     }
     
     //Por producto
@@ -257,6 +261,11 @@ class Modeloalmacenista extends CI_Model {
         );
         $this->db->set('FechaEntrada', 'NOW()', FALSE);
         $this->db->insert('InventariosAlmacen', $datos);
+        //Historial
+        $HistorialEntrada= array('UsuariosId'=>1, 'MovimientosProductosId'=>5,
+                    'Activo'=>1, 'ProductosId'=>$idProducto);
+        $this->db->set('Fecha', 'NOW()', FALSE);
+        $this->db->insert('HistorialProducto', $HistorialEntrada);  
     }
     
     public function SalirProductoAlmacen($fila) {
@@ -266,6 +275,14 @@ class Modeloalmacenista extends CI_Model {
         );
         $this->db->where('IdInventariosAlmacen', $fila);
         $this->db->update('InventariosAlmacen', $datos);
+        $this->db->select("TarimasId");
+        $this->db->from("InventariosAlmacen");
+        $this->db->where("IdInventariosAlmacen", $fila);
+        $id = $this->db->get()->row()->TarimasId;
+        $HistorialSalida= array('UsuariosId'=>1, 'MovimientosTarimasId'=>3,
+                    'Activo'=>1, 'TarimasId'=>$id);
+        $this->db->set('Fecha', 'NOW()', FALSE);
+        $this->db->insert('HistorialTarima', $HistorialSalida);
         return "correcto";
     }
     
@@ -276,6 +293,14 @@ class Modeloalmacenista extends CI_Model {
         );
         $this->db->where('IdInventariosAlmacen', $fila);
         $this->db->update('InventariosAlmacen', $datos);
+        $this->db->select("ProductosId");
+        $this->db->from("InventariosAlmacen");
+        $this->db->where("IdInventariosAlmacen", $fila);
+        $id = $this->db->get()->row()->ProductosId;
+        $HistorialSalida= array('UsuariosId'=>1, 'MovimientosProductosId'=>7,
+                    'Activo'=>1, 'ProductosId'=>$id);
+        $this->db->set('Fecha', 'NOW()', FALSE);
+        $this->db->insert('HistorialProducto', $HistorialSalida);
         return "correcto";
     }
     

@@ -203,7 +203,7 @@ var guardado = 0;
                 $("#des2P").html("Verificando clave de producto...");
                 $.getJSON("VerificarClaveTarimaP", {"clave": clave}, function (data) {
                     if (data.id != null) {
-                        $("#des2P").html("Tarima encontrada");
+                        $("#des2P").html("Producto encontrado");
                         if ($("#td2" + data.id).length)
                         {
                             $.Notify({

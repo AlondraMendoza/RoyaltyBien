@@ -58,8 +58,8 @@
                         <table class="table">
                             <tr>
                                 <td style="width: 50%" class="center">
-                                    <b style="font-size: 1.3em" class="fg-darkEmerald">Selecciona la fecha de quemado:</b><br> 
-                                    <div class="input-control text full-size" style="height:80px;font-size: x-large" data-role="datepicker" data-locale="es" data-format="dd/mm/yyyy" id="datepicker" data-on-select="CargarHornos(d)">
+                                    <b style="" class="fg-darkEmerald">Selecciona la fecha de quemado:</b><br> 
+                                    <div class="input-control text full-size" style="height:80px;" data-role="datepicker" data-locale="es" data-format="dd/mm/yyyy" id="datepicker" data-on-select="CargarHornos(d)">
                                         <input type="text" id="fecha" value="<?= $hoy ?>">
                                         <button class="button" style="height: 80px"><span class="mif-calendar"></span></button>
                                     </div>
@@ -236,9 +236,7 @@
             fueratonoaccesorio = 1;
         }
         $.post("GuardarAccesorios", {"fueratono": fueratonoaccesorio, "iddefecto1": iddefecto1, "iddefecto2": iddefecto2, "clavepuesto1": clavepuesto1, "clavepuesto2": clavepuesto2, "colorseleccionado": colorseleccionado, "clasificacionseleccionada": clasi}, function (data) {
-
-
-            $("#imprimeme").attr("src", "EnviarTicket?codigo=<?= date_format(date_create($hoyingles), 'dmY') . "-" ?>" + pad(data, 10));
+            $("#imprimeme").attr("src", "EnviarTicket?codigo=<?= date_format(date_create($hoyingles), 'dmY') . "-" ?>" + pad(data, 10) + "&producto_id=" + data);
         });
     }
     function ApareceFormularioAcc(defecto)

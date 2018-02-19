@@ -225,7 +225,7 @@ $cont = 1;
             if (data == "correcto")
             {
                 Notificacion("Correcto", "La Clasificación se guardó correctamente", "check", "success");
-                $("#imprimeme").attr("src", "EnviarTicket?codigo=" + fecha + "-" + pad(idprod, 10));
+                $("#imprimeme").attr("src", "EnviarTicket?codigo=" + fecha + "-" + pad(idprod, 10) + "&producto_id=" + idprod);
                 //document.getElementById("imprimeme").focus();
                 //document.getElementById("imprimeme").print();
                 //var w = window.open("EnviarTicket?codigo=<?= $cprod . $mod . $color ?>" + fecha + idprod, 'algo', 'width=300,height=400');

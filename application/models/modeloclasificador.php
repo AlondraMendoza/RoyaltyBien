@@ -241,7 +241,8 @@ class Modeloclasificador extends CI_Model {
             'FechaClasificacion' => date('Y-m-d | h:i:sa'),
             'ClasificacionesId' => $idclasi,
             'FueraTono' => $fueratono,
-            'UsuariosId' => 1
+            'UsuariosId' => 1,
+            'Activo' => 1
         );
         $this->db->insert('HistorialClasificacion', $datos);
         return $this->db->insert_id();
@@ -303,6 +304,13 @@ class Modeloclasificador extends CI_Model {
         $this->db->select("*");
         $this->db->from("Productos");
         $this->db->where("IdProductos", $idprod);
+        return $this->db->get()->row();
+    }
+
+    public function Tarima($idtarima) {
+        $this->db->select("*");
+        $this->db->from("Tarimas");
+        $this->db->where("IdTarimas", $idtarima);
         return $this->db->get()->row();
     }
 
@@ -369,7 +377,8 @@ class Modeloclasificador extends CI_Model {
             $datos = array(
                 'ProductosId' => $idproducto,
                 'Activo' => 1,
-                'TarimasId' => $idtarima
+                'TarimasId' => $idtarima,
+                'UsuariosId' => 1
             );
             $this->db->insert("DetalleTarimas", $datos);
             return $this->db->insert_id();
@@ -392,6 +401,155 @@ class Modeloclasificador extends CI_Model {
             return "existe";
         } else {
             return "no existe";
+        }
+    }
+
+    public function ObtenerProducto($producto_id) {
+        $this->db->select("p.*,cpm.Imagen as foto,cp.Nombre as NombreProducto,c.Nombre as Color,m.Nombre as Modelo");
+        $this->db->from("Productos p");
+        $this->db->join("CProductosModelos cpm", "p.ModelosId=cpm.ModelosId AND p.CProductosId=cpm.CProductosId");
+        $this->db->join("CProductos cp", "p.CProductosId=cp.IdCProductos");
+        $this->db->join("Colores c", "p.ColoresId=c.IdColores");
+        $this->db->join("Modelos m", "p.ModelosId=m.IdModelos");
+        $this->db->where("p.IdProductos", $producto_id);
+        // print($this->db->get_compiled_select());
+        $fila = $this->db->get()->row();
+        //print($producto_id);
+        return $fila;
+    }
+
+    public function HistorialMovimientosProducto($producto_id) {
+        $this->db->select("p.*,h.*,mp.Nombre as Movimiento,CONCAT(per.Nombre,per.APaterno) as Persona");
+        $this->db->from("HistorialProducto h");
+        $this->db->join("MovimientosProductos mp", "mp.IdMovimientosProductos=h.MovimientosProductosId");
+        $this->db->join("Usuarios u", "u.IdUsuarios=h.UsuariosId");
+        $this->db->join("Personas per", "per.IdPersonas=u.PersonasId");
+        $this->db->join("Productos p", "p.IdProductos=h.ProductosId");
+        $this->db->where("p.IdProductos", $producto_id);
+        $this->db->where("h.Activo", 1);
+        $fila = $this->db->get();
+        return $fila;
+    }
+
+    public function ClasificacionesProducto($producto_id) {
+        $this->db->select("h.*,c.*,CONCAT(per.Nombre,per.APaterno) as Persona");
+        $this->db->from("HistorialClasificacion h");
+        $this->db->join("Clasificaciones c", "c.IdClasificaciones=h.ClasificacionesId");
+        $this->db->join("Usuarios u", "u.IdUsuarios=h.UsuariosId");
+        $this->db->join("Personas per", "per.IdPersonas=u.PersonasId");
+        $this->db->join("Productos p", "p.IdProductos=h.ProductosId");
+        $this->db->where("p.IdProductos", $producto_id);
+        $this->db->where("h.Activo", 1);
+        $this->db->Order_by("h.IdHistorialClasificacion", "desc");
+        $fila = $this->db->get();
+        return $fila;
+    }
+
+    public function EntarimadosProducto($producto_id) {
+        $this->db->select("h.*,t.*,CONCAT(per.Nombre,per.APaterno) as Persona");
+        $this->db->from("DetalleTarimas h");
+        $this->db->join("Tarimas t", "t.IdTarimas=h.TarimasId");
+        $this->db->join("Usuarios u", "u.IdUsuarios=h.UsuariosId");
+        $this->db->join("Personas per", "per.IdPersonas=u.PersonasId");
+        $this->db->where("h.ProductosId", $producto_id);
+        $this->db->where("h.Activo", 1);
+        $this->db->group_by('t.IdTarimas');
+        $this->db->Order_by("t.FechaCaptura", "desc");
+        //print($this->db->get_compiled_select());
+        $fila = $this->db->get();
+        return $fila;
+    }
+
+    public function Ubicacion($producto_id) {
+        $this->db->select("mp.Lugar");
+        $this->db->from("HistorialProducto h");
+        $this->db->join("MovimientosProductos mp", "mp.IdMovimientosProductos=h.MovimientosProductosId");
+        $this->db->where("h.ProductosId", $producto_id);
+        $this->db->where("h.Activo", 1);
+        $this->db->Order_by("h.IdHistorialProducto", "desc");
+        $fila = $this->db->get()->row();
+        if ($fila != null) {
+            return $fila->Lugar;
+        } else {
+            return "";
+        }
+        return $fila;
+    }
+
+    public function Clasificacion($producto_id) {
+        $this->db->select("c.Letra,c.Color");
+        $this->db->from("HistorialClasificacion h");
+        $this->db->join("Clasificaciones c", "c.IdClasificaciones=h.ClasificacionesId");
+        $this->db->where("h.ProductosId", $producto_id);
+        $this->db->where("h.Activo", 1);
+        $this->db->Order_by("h.IdHistorialClasificacion", "desc");
+        $fila = $this->db->get()->row();
+        if ($fila != null) {
+            return $fila;
+        } else {
+            return "";
+        }
+    }
+
+    public function CodigoBarrasTexto($producto_id) {
+        $producto = $this->Producto($producto_id);
+        $fecha = date_format(date_create($producto->FechaCaptura), 'dmY');
+        $codigo = $fecha . "-" . str_pad($producto->IdProductos, 10);
+        return $codigo;
+    }
+
+    public function CodigoBarrasTarimaTexto($tarima_id) {
+        $tarima = $this->Tarima($tarima_id);
+        $fecha = date_format(date_create($tarima->FechaCaptura), 'dmY');
+        $codigo = $fecha . "_" . str_pad($tarima->IdTarimas, 10);
+        return $codigo;
+    }
+
+    public function EstatusTarima($producto_id) {
+        $this->db->select("t.IdTarimas");
+        $this->db->from("DetalleTarimas d");
+        $this->db->join("Tarimas t", "t.IdTarimas=d.TarimasId");
+        $this->db->where("d.Activo", 1);
+        $this->db->where("t.Activo", 1);
+        $this->db->where("d.ProductosId", $producto_id);
+        $this->db->where("t.FechaApertura", null);
+        $fila = $this->db->get();
+        if ($fila->num_rows() > 0) {
+            return "Empaquetado en tarima ";
+        } else {
+            return "No se encuentra en tarima";
+        }
+    }
+
+    public function EstatusTarimaId($producto_id) {
+        $this->db->select("t.IdTarimas");
+        $this->db->from("DetalleTarimas d");
+        $this->db->join("Tarimas t", "t.IdTarimas=d.TarimasId");
+        $this->db->where("d.Activo", 1);
+        $this->db->where("t.Activo", 1);
+        $this->db->where("d.ProductosId", $producto_id);
+        $this->db->where("t.FechaApertura", null);
+        $fila = $this->db->get();
+        if ($fila->num_rows() > 0) {
+            return $fila->row()->IdTarimas;
+        } else {
+            return 0;
+        }
+    }
+
+    public function EstatusPedido($producto_id) {
+        $this->db->select("i.PedidosId");
+        $this->db->from("InventariosCedis i");
+        $this->db->where("i.Activo", 1);
+        $this->db->where("i.PedidosId IS NOT null", null);
+        $this->db->where("i.FechaSalida", null);
+        $this->db->where("i.ProductosId", $producto_id);
+        //print($this->db->get_compiled_select());
+        $fila = $this->db->get();
+        if ($fila->num_rows() > 0) {
+            return "En pedido: " . $fila->row()->PedidosId;
+        } else {
+            return "No se encuentra en pedido";
         }
     }
 

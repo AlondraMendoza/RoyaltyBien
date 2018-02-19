@@ -13,7 +13,7 @@
                 <tr>
                     <td class="center" rowspan="2" style="width: 30%">
                         <img src="<?= base_url() ?>public/imagenes/<?= $producto->foto; ?>" height="190px;" width="190px;" title="<?= $producto->NombreProducto; ?>">        
-                        <br><br><br><br>
+                        <br><br>
                         <img src="barcodevista?text=<?= $codigo ?>"><br>
                         <?= $codigo; ?>
                     </td> 

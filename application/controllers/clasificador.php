@@ -456,13 +456,14 @@ class Clasificador extends CI_Controller {
 
     public function EnviarTicket() {
         $codigo = $this->input->post_get('codigo', TRUE);
+        $producto_id = $this->input->post_get('producto_id', TRUE);
         $this->load->library('AutoPrint');
         $this->autoprint = new AutoPrint();
         $this->autoprint->AddPage();
         $this->autoprint->SetFont('Arial', '', 20);
-        $this->barcode('codigos/codigo.png', $codigo, 20, 'horizontal', 'code128', true);
+        $this->barcode('codigos/codigo' . $producto_id . '.png', $codigo, 20, 'horizontal', 'code128', true);
         //$this->autoprint->Cell(25, 7, 'GRADO', 'TB', 0, 'L', '1');
-        $this->autoprint->Image("codigos/codigo.png", 83, 8, 30);
+        $this->autoprint->Image("codigos/codigo" . $producto_id . ".png", 83, 8, 30);
         //Open the print dialog
         $this->autoprint->AutoPrint();
         $this->autoprint->Output();
@@ -541,6 +542,35 @@ class Clasificador extends CI_Controller {
             $infocontent["id"] = $fila->IdProductos;
         }
         print json_encode($infocontent);
+    }
+
+    public function ExpedienteProducto() {
+        $infoheader["titulo"] = "Reclasificar: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $producto_id = $this->input->post_get('producto_id', TRUE);
+        $infocontent["Nombre"] = "Alondra Mendoza";
+        $this->load->model("modeloclasificador");
+        $infocontent["producto"] = $this->modeloclasificador->ObtenerProducto($producto_id);
+        $infocontent["historiales"] = $this->modeloclasificador->HistorialMovimientosProducto($producto_id);
+        $infocontent["ubicacion"] = $this->modeloclasificador->Ubicacion($producto_id);
+        $infocontent["clasificacion"] = $this->modeloclasificador->Clasificacion($producto_id);
+        $infocontent["tarima"] = $this->modeloclasificador->EstatusTarima($producto_id);
+        $infocontent["tarimaid"] = $this->modeloclasificador->EstatusTarimaId($producto_id);
+        $infocontent["pedido"] = $this->modeloclasificador->EstatusPedido($producto_id);
+        $infocontent["clasificaciones"] = $this->modeloclasificador->ClasificacionesProducto($producto_id);
+        $infocontent["entarimados"] = $this->modeloclasificador->EntarimadosProducto($producto_id);
+        $infocontent["codigo"] = $this->modeloclasificador->CodigoBarrasTexto($producto_id);
+        $this->load->view('clasificador/ExpedienteProducto', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+
+    public function BusquedaProductos() {
+        $infoheader["titulo"] = "Clasificación: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $infocontent["Nombre"] = "Alondra Mendoza";
+        $this->load->model("modeloclasificador");
+        $this->load->view('clasificador/BusquedaProducto', $infocontent);
+        $this->load->view('template/footerd', '');
     }
 
 }

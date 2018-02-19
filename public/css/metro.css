@@ -66,9 +66,9 @@ textarea {
     font-family: "Segoe UI",sans-serif, serif;
 }
 select{
-    font-size: 1.6em;
+    font-size: 1.1em;
     height: 80px;
-    font-family: "Segoe UI",sans-serif, serif;
+    font-family: "Quicksand","Segoe UI",sans-serif, serif;
 }
 button,
 input {
@@ -2096,6 +2096,7 @@ a.tag {
 .table {
     width: 100%;
     margin: .625rem 0;
+    font-size: 1.2rem;
 }
 .table th,
 .table td {
@@ -2149,7 +2150,7 @@ a.tag {
     top: 50%;
     margin-top: -0.5rem;
     color: inherit;
-    font-size: 1rem;
+    font-size: 1rem !important;
     line-height: 1;
 }
 .table .sortable-column.sort-asc,

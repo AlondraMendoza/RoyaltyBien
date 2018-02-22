@@ -1,6 +1,8 @@
 <?php
 
-//return str_pad((int) $number,$n,"0",STR_PAD_LEFT); Espero te sirva Tania del futuro, Gracias Tania del pasado.
+//return str_pad((int) $number,$n,"0",STR_PAD_LEFT); 
+//Saludos de Alondra del pasado a Tania del Futuro; jaajaja
+//Espero te sirva Tania del futuro, Gracias Tania del pasado.
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
@@ -236,6 +238,16 @@ class Modeloclasificador extends CI_Model {
         $this->db->where("IdProductos", $idprod);
         $this->db->update("Productos");
 
+        //Guardar historial producto
+        $Historial= array(
+            'UsuariosId'=>1,
+            'MovimientosProductosId'=>3,
+            'Activo'=>1,
+            'ProductosId'=>$idprod );
+        $this->db->set('Fecha', 'NOW()', FALSE);
+        $this->db->insert('HistorialProducto', $Historial);
+        //fin historial
+        
         $datos = array(
             'ProductosId' => $idprod,
             'FechaClasificacion' => date('Y-m-d | h:i:sa'),
@@ -245,6 +257,7 @@ class Modeloclasificador extends CI_Model {
             'Activo' => 1
         );
         $this->db->insert('HistorialClasificacion', $datos);
+        
         return $this->db->insert_id();
     }
 
@@ -374,6 +387,15 @@ class Modeloclasificador extends CI_Model {
 
     public function GuardarDetalleTarima($idproducto, $idtarima) {
         if ($this->VerificarProductoTarima($idproducto) == "no existe") {
+            //Guardar historial producto
+            $Historial= array(
+                'UsuariosId'=>1,
+                'MovimientosProductosId'=>4,
+                'Activo'=>1,
+                'ProductosId'=>$idproducto);
+            $this->db->set('Fecha', 'NOW()', FALSE);
+            $this->db->insert('HistorialProducto', $Historial);
+            //Fin y ahora si entarimas 
             $datos = array(
                 'ProductosId' => $idproducto,
                 'Activo' => 1,

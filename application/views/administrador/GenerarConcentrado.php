@@ -4,10 +4,11 @@
     $(document).ready(function () {
     });
 </script>
+<br>
 <table class="table">
     <thead>
         <tr>
-            <th colspan="2">RESULTADOS</th>
+            <th colspan="2" class="fg-darkBlue">RESULTADOS</th>
         </tr>
         <tr>
             <th>Filtro</th>

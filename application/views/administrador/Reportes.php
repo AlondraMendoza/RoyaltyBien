@@ -22,6 +22,7 @@
     }
     function Detalle()
     {
+        $("#grafica").html("");
         var fechainicio = $("#fechainicio").val();
         var fechafin = $("#fechafin").val();
         var clasificacion = $("#clasificacion").val();
@@ -158,47 +159,52 @@
             </tr>
         </table>
 
-    </div>
-    <div id="detalle" class="shadow"></div><br>
-    <canvas id="myChart" width="300" height="100" class="shadow"></canvas>
-    <script>
-        function Grafica(etiquetas, valores) {
-            var ctx = document.getElementById("myChart");
-            var myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: etiquetas,
-                    datasets: [{
-                            label: "Productos",
-                            data: valores,
-                            backgroundColor: [
-                                'rgba(255, 99, 132, 0.2)',
-                                'rgba(54, 162, 235, 0.2)',
-                                'rgba(255, 206, 86, 0.2)',
-                                'rgba(75, 192, 192, 0.2)',
-                                'rgba(153, 102, 255, 0.2)',
-                                'rgba(255, 159, 64, 0.2)'
-                            ],
-                            borderColor: [
-                                'rgba(255,99,132,1)',
-                                'rgba(54, 162, 235, 1)',
-                                'rgba(255, 206, 86, 1)',
-                                'rgba(75, 192, 192, 1)',
-                                'rgba(153, 102, 255, 1)',
-                                'rgba(255, 159, 64, 1)'
-                            ],
-                            borderWidth: 1
-                        }]
-                },
-                options: {
-                    scales: {
-                        yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
+
+        <div id="detalle" class="shadow" ></div><br>
+        <div id='grafica'>
+            <canvas id="myChart" width="300" height="100" class="shadow"></canvas>
+        </div>
+        <script>
+            function Grafica(etiquetas, valores) {
+
+                $("#grafica").html('<canvas id="myChart" width="300" height="100" class="shadow"></canvas>');
+                var ctx = document.getElementById("myChart");
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: etiquetas,
+                        datasets: [{
+                                label: "Productos",
+                                data: valores,
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(255, 206, 86, 0.2)',
+                                    'rgba(75, 192, 192, 0.2)',
+                                    'rgba(153, 102, 255, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)'
+                                ],
+                                borderColor: [
+                                    'rgba(255,99,132,1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)'
+                                ],
+                                borderWidth: 1
                             }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                        }
                     }
-                }
-            });
-        }
-    </script>
+                });
+            }
+        </script>
+    </div>

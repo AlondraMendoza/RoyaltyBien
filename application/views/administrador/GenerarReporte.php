@@ -1,5 +1,9 @@
-<table class="table">
+<br>
+<table class="table shadow">
     <thead>
+        <tr>
+            <th colspan="6" class="fg-darkBlue">RESULTADOS</th>
+        </tr>
         <tr>
             <th>No.</th>
             <th>Código</th>

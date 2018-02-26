@@ -135,13 +135,12 @@
                 </tr>
                 <tr>
                     <th>Lista Detalle</th>
-                    <th>Concentrado Por:</th>
-                    <th>Graficado Por:</th>
+                    <th>Concentrado y Graficado Por:</th>
                 </tr>
             </thead>
             <tr>
                 <td class="center">
-                    <br>
+                    <i>Se mostrarán los productos a detalle</i><br>
                     <button id="" style="" class="button block-shadow-info text-shadow primary big-button" onclick="Detalle()"><span class="mif-arrow-right mif-ani-hover-horizontal"></span> Consultar</button>
                 </td>
                 <td class="center">
@@ -156,34 +155,22 @@
                     <br>
                     <button id="" style="" class="button block-shadow-warning text-shadow warning big-button" onclick="Concentrado()"><span class="mif-arrow-right mif-ani-hover-horizontal"></span> Consultar</button>
                 </td>
-                <td colspan="2" class="center">
-                    <div class="input-control select full-size">
-                        <select id="graficadox">
-                            <option value="Clasificacion(p.IdProductos)">Clasificación</option>
-                            <option value="cp.IdCproductos">Producto</option>
-                            <option value="m.IdModelos">Modelo</option>
-                            <option value="co.IdColores">Color</option>
-                        </select>
-                    </div>
-                    <br>
-                    <button id="" style="" class="button block-shadow-success text-shadow success big-button" onclick="Guardar()"><span class="mif-arrow-right mif-ani-hover-horizontal"></span> Consultar</button>
-                </td>
             </tr>
         </table>
 
     </div>
-    <div id="detalle"></div>
-    <canvas id="myChart" width="300" height="100"></canvas>
+    <div id="detalle" class="shadow"></div><br>
+    <canvas id="myChart" width="300" height="100" class="shadow"></canvas>
     <script>
-        function Grafica(etiqueta) {
+        function Grafica(etiquetas, valores) {
             var ctx = document.getElementById("myChart");
             var myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+                    labels: etiquetas,
                     datasets: [{
-                            label: etiqueta,
-                            data: [12, 19, 3, 5, 2, 3],
+                            label: "Productos",
+                            data: valores,
                             backgroundColor: [
                                 'rgba(255, 99, 132, 0.2)',
                                 'rgba(54, 162, 235, 0.2)',

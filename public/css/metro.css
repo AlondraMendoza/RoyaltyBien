@@ -2103,15 +2103,15 @@ a.tag {
     padding: 0.625rem;
 }
 .table thead {
-    border-bottom: 4px solid #999999;
+    border-bottom: #005696 solid 2px;
 }
 .table thead th,
 .table thead td {
     cursor: default;
-    color: brown;
+    color: black;
     background-color:#eaeaea;
     border-color: transparent;
-    text-align: left;
+    text-align: center;
     font-style: normal;
     font-weight: 700;
     line-height: 100%;

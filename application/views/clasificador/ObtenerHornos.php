@@ -1,4 +1,4 @@
-<strong style="font-size: 1.3em" class="fg-darkEmerald">Selecciona el horno de quemado:</strong><br>
+<strong style="" class="fg-darkEmerald">Selecciona el horno de quemado:</strong><br>
 <div id="" class="input-control select full-size" style="height: 80px;">
     <select onselect= "CargarProductos()" id="hornos" onchange="CargarProductos()">
         <?php if ($hornos->num_rows() == 0) { ?>

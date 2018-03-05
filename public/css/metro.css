@@ -66,9 +66,9 @@ textarea {
     font-family: "Segoe UI",sans-serif, serif;
 }
 select{
-    font-size: 1.6em;
+    font-size: 1.1em;
     height: 80px;
-    font-family: "Segoe UI",sans-serif, serif;
+    font-family: "Quicksand","Segoe UI",sans-serif, serif;
 }
 button,
 input {
@@ -2096,21 +2096,22 @@ a.tag {
 .table {
     width: 100%;
     margin: .625rem 0;
+    font-size: 1.2rem;
 }
 .table th,
 .table td {
     padding: 0.625rem;
 }
 .table thead {
-    border-bottom: 4px solid #999999;
+    border-bottom: #005696 solid 2px;
 }
 .table thead th,
 .table thead td {
     cursor: default;
-    color: brown;
+    color: black;
     background-color:#eaeaea;
     border-color: transparent;
-    text-align: left;
+    text-align: center;
     font-style: normal;
     font-weight: 700;
     line-height: 100%;
@@ -2149,7 +2150,7 @@ a.tag {
     top: 50%;
     margin-top: -0.5rem;
     color: inherit;
-    font-size: 1rem;
+    font-size: 1rem !important;
     line-height: 1;
 }
 .table .sortable-column.sort-asc,

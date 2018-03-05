@@ -168,7 +168,7 @@ class Modelocedis extends CI_Model {
         $this->db->select("p.*");
         $this->db->from("Pedidos p");
         $this->db->where("p.Activo", 1);
-        $this->db->where("p.FechaCompletado", null);
+        $this->db->where("p.FechaSalida", null);
         $fila = $this->db->get();
         return $fila;
     }
@@ -184,6 +184,40 @@ class Modelocedis extends CI_Model {
         $this->db->where("i.PedidosId", $pedidoid);
         $fila = $this->db->get();
         return $fila;
+    }
+
+    public function ResumenProductosPedido($pedidoid) {
+        /*
+          SELECT count(*),cp.Nombre,m.Nombre FROM `InventariosCedis` i
+          join Productos p on p.IdProductos=i.ProductosId
+          join CProductos cp on p.CProductosId=cp.IdCProductos
+          join Modelos m on p.ModelosId=m.IdModelos
+          where PedidosId=14
+          GROUP BY p.CProductosId,p.ModelosId
+         * $this->db->group_by('h.IdHornos');
+         */
+        $this->db->select("count(*) as cantidad, cp.Nombre as producto, m.Nombre as modelo");
+        $this->db->from("InventariosCedis i");
+        $this->db->join("Productos p", "p.IdProductos=i.ProductosId");
+        $this->db->join("CProductos cp", "p.CProductosId=cp.IdCProductos");
+        $this->db->join("Modelos m", "p.ModelosId=m.IdModelos");
+        $this->db->where("i.Activo", 1);
+        $this->db->where("i.PedidosId", $pedidoid);
+        $this->db->group_by('p.CProductosId');
+        $this->db->group_by('p.ModelosId');
+        $fila = $this->db->get();
+        return $fila;
+    }
+
+    public function SalidaPedido($pedidoid) {
+        foreach ($this->ProductosPedido($pedidoid)->result() as $row) {
+            $this->db->set("FechaSalida", date('Y-m-d | h:i:sa'));
+            $this->db->where("ProductosId", $row->IdProductos);
+            $this->db->update("InventariosCedis");
+        }
+        $this->db->set("FechaSalida", date('Y-m-d | h:i:sa'));
+        $this->db->where("IdPedidos", $pedidoid);
+        $this->db->update("Pedidos");
     }
 
 }

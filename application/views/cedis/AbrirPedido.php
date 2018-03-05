@@ -65,6 +65,27 @@
     function Cancelar() {
         location.reload(true);
     }
+    function MarcarSalidaProducto()
+    {
+        $.post("SalidaCedis", {"pedidoid": "<?= $pedidoid ?>"}, function (data) {
+            if (data == "correcto")
+            {
+                $.Notify({
+                    caption: 'Correcto',
+                    content: 'Se guardó la salida del pedido.',
+                    type: 'success'
+                });
+                location.reload(true);
+            } else
+            {
+                $.Notify({
+                    caption: 'Error',
+                    content: 'Ocurrió un error al marcar la salida del pedido.',
+                    type: 'alert'
+                });
+            }
+        });
+    }
 </script>
 <div class="panel  fg-white" data-role="panel">
     <div class="heading bg-green">

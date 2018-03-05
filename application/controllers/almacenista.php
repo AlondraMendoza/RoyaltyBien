@@ -18,6 +18,16 @@ class Almacenista extends CI_Controller {
         $this->load->view('almacenista/capturaGriferia', $infocontent);
         $this->load->view('template/footerd', '');
     }
+    
+    public function SalidaGriferia() {
+        $infoheader["titulo"] = "Almacén: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $infocontent["Nombre"] = "Alondra Mendoza";
+        $this->load->model("modeloalmacenista");
+        $infocontent["griferia"] = $this->modeloalmacenista->ListarGriferia();
+        $this->load->view('almacenista/SalidaGriferia', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
 
     public function VerificarClave() {
         $clave = $this->input->post_get('clave', TRUE);
@@ -31,12 +41,38 @@ class Almacenista extends CI_Controller {
         print json_encode($infocontent);
     }
     
+    public function VerificarClaveExistencia() {
+        $clave = $this->input->post_get('clave', TRUE);
+        $this->load->model("modeloalmacenista");
+        $fila = $this->modeloalmacenista->BuscarClave($clave);
+        $infocontent["nombre"] = "No se encontró el producto";
+        if ($fila != "No se encontró el producto") {
+            $infocontent["nombre"] = $fila->Descripcion;
+            $infocontent["id"] = $fila->IdCGriferia;
+            $data =$this->modeloalmacenista->Existencias($fila->IdCGriferia);
+            $infocontent["existencia"] = $data;
+        }
+        print json_encode($infocontent);
+    }
+    
     public function ResultadosGriferia() {
         $id = $this->input->post_get('id', TRUE);
         $cantidad = $this->input->post_get('cantidad', TRUE);
         $this->load->model("modeloalmacenista");
         $infocontent["lista"] = $this->modeloalmacenista->ListarGriferiaGuardada($id,$cantidad);
         $this->load->view('almacenista/ResultadosGriferia', $infocontent);
+    }
+    
+    public function ResultadosGriferiaSalida() {
+        $id = $this->input->post_get('id', TRUE);
+        $cantidad = $this->input->post_get('cantidad', TRUE);
+        $this->load->model("modeloalmacenista");
+        $resp = $this->modeloalmacenista->SalidaGrif($id, $cantidad);
+        if ($resp == "correcto") {
+            print("Correcto");
+        } else {
+            print("Error");
+        }
     }
 
     public function EntradaProductos() {
@@ -79,6 +115,19 @@ class Almacenista extends CI_Controller {
         print json_encode($infocontent);
     }
     
+    //por producto
+     public function VerificarClaveTarimaP() {
+        $clave = $this->input->post_get('clave', TRUE);
+        $this->load->model("modeloalmacenista");
+        $fila = $this->modeloalmacenista->BuscarClaveTarimaP($clave);
+        $infocontent["nombre"] = "No se encontró el producto";
+        if ($fila != "No se encontró el producto") {
+            $infocontent["nombre"] = $fila->producto . "/" . $fila->modelo . "/" . $fila->color;
+            $infocontent["id"] = $fila->IdProductos;
+        }
+        print json_encode($infocontent);
+    }
+    
     public function GuardarTarimasAlmacen() {
         $idtarima = $this->input->post_get('idtarima', TRUE);
         $this->load->model("modeloalmacenista");
@@ -92,15 +141,51 @@ class Almacenista extends CI_Controller {
         }
     }
     
+    //Por producto
+    public function GuardarTarimasAlmacenP() {
+        $idProducto = $this->input->post_get('idProducto', TRUE);
+        $this->load->model("modeloalmacenista");
+        $resp = $this->modeloalmacenista->GuardarProductosTarimaP($idProducto);
+        if ($resp == "Existe") {
+            print("Existe");
+        } else if ($resp == "correcto") {
+            print("Correcto");
+        } else {
+            print("Error");
+        }
+    }
+    
     public function SalirTarimasAlmacen() {
         $idtarima = $this->input->post_get('idtarima', TRUE);
         $this->load->model("modeloalmacenista");
         $resp = $this->modeloalmacenista->SalirTarima($idtarima);
-        $query = $this->modeloalmacenista->SalirProductoAlmacen($resp);
+        if($resp != null){
+            $query = $this->modeloalmacenista->SalirProductoAlmacen($resp);
         if ($query == "correcto") {
             print("Correcto");
-        } else {
+        }
+        else {
             print("Error");
+        }
+        }else {
+            print ("NoExiste");
+        }
+    }
+    //Por producto
+    public function SalirTarimasAlmacenP() {
+        $idproducto = $this->input->post_get('idtarima', TRUE);
+        $this->load->model("modeloalmacenista");
+        $resp = $this->modeloalmacenista->SalirTarimaP($idproducto);
+        if($resp != null){
+            $query = $this->modeloalmacenista->SalirProductoAlmacenP($resp);
+        if ($query == "correcto") {
+            print("Correcto");
+        }
+        else {
+            print("Error");
+        }
+        }else {
+            print ("NoExiste");
         }
     }
     
@@ -122,6 +207,18 @@ class Almacenista extends CI_Controller {
         $fila = $this->modeloalmacenista->BuscarClaveTarima2($clave);
         if ($fila != "No se encontró la tarima") {
             $infocontent["id"] = $fila->IdTarimas;
+        }
+        print json_encode($infocontent);
+    }
+    //Por producto
+    public function VerificarClaveTarimaAlmacenP() {
+        $clave = $this->input->post_get('clave', TRUE);
+        $this->load->model("modeloalmacenista");
+        $fila = $this->modeloalmacenista->BuscarClaveTarimaP($clave);
+        $infocontent["nombre"] = "No se encontró el producto";
+        if ($fila != "No se encontró el producto") {
+            $infocontent["nombre"] = $fila->producto . "/" . $fila->modelo . "/" . $fila->color;
+            $infocontent["id"] = $fila->IdProductos;
         }
         print json_encode($infocontent);
     }

@@ -117,6 +117,7 @@
                                     <th>Clave</th> 
                                     <th>Fecha registro</th> 
                                     <th>Cliente</th> 
+                                    <th>Resumen</th> 
                                     <th style="width: 15%">Acción</th> 
                                 </tr>
                             </thead>
@@ -125,6 +126,20 @@
                                     <td><?= $pedido->IdPedidos ?></td>
                                     <td><?= $pedido->FechaRegistro ?></td>
                                     <td><?= $pedido->Cliente ?></td>
+                                    <td>
+                                        <?php
+                                        $ci = &get_instance();
+                                        $ci->load->model("modelocedis");
+                                        $resumen = $ci->modelocedis->ResumenProductosPedido($pedido->IdPedidos);
+                                        ?>
+                                        <?php foreach ($resumen->result() as $r): ?>
+                                            <?= $r->cantidad ?> 
+                                            <?= $r->producto ?> 
+                                            <?= $r->modelo ?>
+                                            <br>
+                                        <?php endforeach; ?>            
+
+                                    </td>
                                     <td class="center">
                                         <div class="input-control text big-input medium-size">
                                             <button class="button success" onclick="AbrirPedido(<?= $pedido->IdPedidos ?>)">Abrir Pedido</button>

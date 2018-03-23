@@ -16,11 +16,12 @@
         <div class="app-bar" data-role="appbar" style="background-color: #5a0303;padding-right: 20px;">
             <a class="app-bar-element" href="<?= base_url() ?>inicio/index"><img src="<?= base_url() ?>public/img/logo.png" style="height: 45px;width: 180px"></a>
             <ul class="app-bar-menu">
-                <li><a href="">Inicio</a></li>
+                <li><a href="<?php echo base_url() ?>usuario/logueado">Inicio</a></li>
                 <li><a href="">Cuenta</a></li>
                 <li><a href="">Contacto</a></li>
                 <ul class="app-bar-menu">
                     <li><a href="">Soporte</a></li>
+                    <li><a href="<?php echo base_url() ?>usuario/logueado">Menú</a></li>
                     <li>
                         <a href="" class="dropdown-toggle">Productos</a>
                         <ul class="d-menu" data-role="dropdown">
@@ -43,20 +44,35 @@
                 </ul>
             </ul>
             <div class="app-bar-element place-right">
-                <a class="dropdown-toggle fg-white"> <img src="<?= base_url() ?>public/img/user.png" width="35px;" style="border-radius: 50%"> &nbsp;&nbsp;Alondra Mendoza</a>
+                <a class="dropdown-toggle fg-white"> <img src="<?= base_url() ?>public/img/user.png" width="35px;" style="border-radius: 50%"> &nbsp;&nbsp;<?= $this->session->userdata('nombre'); ?></a>
                 <div class="app-bar-drop-container bg-white fg-dark place-right"
                      data-role="dropdown" data-no-close="true">
                     <div class="padding10" style="width: 200px;">
                         <center>
                             <img src="<?= base_url() ?>public/img/user.png" style="width: 100px;">
                             <br>
-                            <b id="nomper"></b><br>
-                            Gerencia<br>
-                            <i>Gerente</i>
-                            <br><button class="text-shadow block-shadow-success button success" onclick="window.location = 'usuario/Salir'">Salir</button>
+                            <b id="nomper"><?= $this->session->userdata('persona'); ?></b><br>
+                            <?php
+                            $id = $this->session->userdata('id');
+                            ?>
+                            <?php
+                            $ci = &get_instance();
+                            $ci->load->model("modelousuario");
+                            $perfiles = $ci->modelousuario->ObtenerPerfiles($id);
+                            ?>
+                        </center>
+                        <ul class="simple-list large-bullet blue-bullet">
+
+                            <?php foreach ($perfiles->result() as $perfil): ?>
+                                <li><?= $perfil->Nombre ?><br></li>
+                            <?php endforeach; ?>
+                        </ul>
+                        <center>
+                            <button class="text-shadow block-shadow-success button success" onclick="window.location = '<?php echo base_url() ?>usuario/cerrar_sesion'">Salir</button>
                         </center>
                     </div>
                 </div>
             </div>
         </div>
+        <a href="<?php echo base_url() ?>usuario/logueado"><i class="mif-home mif-4x fg-darkBlue" style="position: fixed;right:40px;top: 70px"></i></a>
         <div class="contenido" style="padding-left: 30px;padding-right: 30px"><br><br>

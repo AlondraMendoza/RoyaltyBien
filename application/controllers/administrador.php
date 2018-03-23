@@ -7,6 +7,14 @@ class Administrador extends CI_Controller {
 
     function __construct() {
         parent::__construct();
+        $this->load->model("modelousuario");
+        if (!EstaLogueado()) {
+            redirect('usuario/iniciar_sesion');
+        }
+        $id = $this->session->userdata('id');
+        if (!$this->modelousuario->TienePerfil($id, 3)) {
+            redirect('usuario/logueado');
+        }
     }
 
     public function Reportes() {

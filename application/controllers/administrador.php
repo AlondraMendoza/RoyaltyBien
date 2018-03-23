@@ -24,6 +24,8 @@ class Administrador extends CI_Controller {
         $infocontent["hoy"] = date("d/m/Y");
         $infocontent["clasificaciones"] = $this->modeloadministrador->Clasificaciones();
         $infocontent["productos"] = $this->modeloadministrador->Productos();
+        $infocontent["modelos"] = $this->modeloadministrador->Modelos(0);
+        $infocontent["colores"] = $this->modeloadministrador->Colores(0);
         $this->load->view('template/headerd', $infoheader);
         $this->load->view('administrador/Reportes', $infocontent);
         $this->load->view('template/footerd', '');
@@ -47,11 +49,16 @@ class Administrador extends CI_Controller {
         $fechainicio = $this->input->post_get('fechainicio', TRUE);
         $fechafin = $this->input->post_get('fechafin', TRUE);
         $clasificacion = $this->input->post_get('clasificacion', TRUE);
+        $aclasificacion = json_decode($clasificacion);
+
         $producto = $this->input->post_get('producto', TRUE);
+        $aproducto = json_decode($producto);
         $modelo = $this->input->post_get('modelo', TRUE);
+        $amodelo = json_decode($modelo);
         $color = $this->input->post_get('color', TRUE);
+        $acolor = json_decode($color);
         $this->load->model("modeloadministrador");
-        $infocontent["productos"] = $this->modeloadministrador->GenerarReporte($fechainicio, $fechafin, $clasificacion, $producto, $modelo, $color);
+        $infocontent["productos"] = $this->modeloadministrador->GenerarReporte($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor);
         $this->load->view('administrador/GenerarReporte', $infocontent);
     }
 

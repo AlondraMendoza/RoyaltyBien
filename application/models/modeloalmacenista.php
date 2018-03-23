@@ -246,12 +246,28 @@ class Modeloalmacenista extends CI_Model {
         );
         $this->db->set('FechaEntrada', 'NOW()', FALSE);
         $this->db->insert('InventariosAlmacen', $datos);
+        //Historial tarima
         $HistorialEntrada= array('UsuariosId'=>1, 'MovimientosTarimasId'=>2,
                     'Activo'=>1, 'TarimasId'=>$idtarima);
         $this->db->set('Fecha', 'NOW()', FALSE);
         $this->db->insert('HistorialTarima', $HistorialEntrada);
+        //Historial producto--- Para Inspeccionar con Tania
+        $this->db->select("ProductosId");
+        $this->db->from("DetalleTarimas");
+        $this->db->where("TarimasId", $idtarima);
+        $this->db->where("Activo", 1);
+        $fila = $this->db->get();
+        //if($fila->num_rows != 0) {
+            foreach($fila->result() as $row) {
+                $Id = $row->ProductosId;
+                $HistorialEntradaProd = array('UsuariosId'=>1, 'MovimientosProductosId'=>5,
+                    'Activo'=>1, 'ProductosId'=>$Id);
+                $this->db->set('Fecha', 'NOW()', FALSE);
+                $this->db->insert('HistorialProducto', $HistorialEntradaProd);
+            }
+        //} 
+        
     }
-    
     //Por producto
     public function GuardarProductoAlmacenP($idProducto) {
         $datos = array(
@@ -332,5 +348,82 @@ class Modeloalmacenista extends CI_Model {
             $this->db->set('FechaEntrada', 'NOW()', FALSE);
             $this->db->insert('InventariosAlmacen', $datos);  
     }
+    
+    //Expedientes tarimas
+    public function BuscarClaveTarimaExp($clave) {
+        $this->db->select("t.IdTarimas, count(d.ProductosId) as Productos");
+        $this->db->from("Tarimas t");
+        $this->db->join("DetalleTarimas d","t.IdTarimas=d.TarimasId");
+        $this->db->where("t.Activo", 1);
+        $this->db->where("t.IdTarimas", $clave);
+        $fila = $this->db->get();
+        if ($fila->num_rows() > 0) {
+            return $fila->row();
+        } else {
+            return "No se encontró la tarima";
+        }
+    }
+    
+    public function ObtenerProducto($tarima_id){
+        $this->db->select("t.IdTarimas, d.ProductosId as clave, cp.Nombre, m.Nombre as modelo, c.Nombre as color, cl.Letra, cl.Color as Color1");
+        $this->db->from("Tarimas t");
+        $this->db->join("DetalleTarimas d", "t.IdTarimas=d.TarimasId");
+        $this->db->join("Productos p","d.ProductosId=p.IdProductos");
+        $this->db->join("CProductos cp","p.CProductosId=cp.IdCProductos");
+        $this->db->join("Modelos m", "p.ModelosId=m.IdModelos");
+        $this->db->join("Colores c","p.ColoresId=c.IdColores");
+        $this->db->join("HistorialClasificacion h", "h.ProductosId=p.IdProductos");
+        $this->db->join("Clasificaciones cl", "h.ClasificacionesId=cl.IdClasificaciones");
+        $this->db->where("t.Activo", 1);
+        $this->db->where("t.IdTarimas", $tarima_id);
+        $this->db->Order_by("h.IdHistorialClasificacion", "desc");
+        //print($this->db->get_compiled_select());
+        $fila = $this->db->get();
+        return $fila;
+    }
+    
+    public function HistorialMovimientosTarima($tarima_id){
+        $this->db->select("t.*,h.*,mt.Nombre as Movimiento,CONCAT(per.Nombre,per.APaterno) as Persona");
+        $this->db->from("HistorialTarima h");
+        $this->db->join("MovimientosTarimas mt", "mt.IdMovimientosTarimas=h.MovimientosTarimasId");
+        $this->db->join("Usuarios u", "u.IdUsuarios=h.UsuariosId");
+        $this->db->join("Personas per", "per.IdPersonas=u.PersonasId");
+        $this->db->join("Tarimas t", "t.IdTarimas=h.TarimasId");
+        $this->db->where("t.IdTarimas", $tarima_id);
+        $this->db->where("h.Activo", 1);
+        $fila = $this->db->get();
+        return $fila;
+    }
+    
+     public function Tarima($idtarima) {
+        $this->db->select("*");
+        $this->db->from("Tarimas");
+        $this->db->where("IdTarimas", $idtarima);
+        return $this->db->get()->row();
+    }
+    
+    public function CodigoBarrasTarimaTexto($tarima_id) {
+        $tarima = $this->Tarima($tarima_id);
+        $fecha = date_format(date_create($tarima->FechaCaptura), 'dmY');
+        $codigo = $fecha . "_" . str_pad($tarima->IdTarimas, 10);
+        return $codigo;
+    }
+    
+    public function Ubicacion($tarima_id) {
+        $this->db->select("mt.Lugar");
+        $this->db->from("HistorialTarima h");
+        $this->db->join("MovimientosTarimas mt", "mt.IdMovimientosTarimas=h.MovimientosTarimasId");
+        $this->db->where("h.TarimasId", $tarima_id);
+        $this->db->where("h.Activo", 1);
+        $this->db->Order_by("h.IdHistorialTarima", "desc");
+        $fila = $this->db->get()->row();
+        if ($fila != null) {
+            return $fila->Lugar;
+        } else {
+            return "";
+        }
+        return $fila;
+    }
+    
 }
 ?>

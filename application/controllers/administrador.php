@@ -66,13 +66,17 @@ class Administrador extends CI_Controller {
         $fechainicio = $this->input->post_get('fechainicio', TRUE);
         $fechafin = $this->input->post_get('fechafin', TRUE);
         $clasificacion = $this->input->post_get('clasificacion', TRUE);
+        $aclasificacion = json_decode($clasificacion);
         $producto = $this->input->post_get('producto', TRUE);
+        $aproducto = json_decode($producto);
         $modelo = $this->input->post_get('modelo', TRUE);
+        $amodelo = json_decode($modelo);
         $color = $this->input->post_get('color', TRUE);
+        $acolor = json_decode($color);
         $por = $this->input->post_get('por', TRUE);
         $this->load->model("modeloadministrador");
         $infocontent["por"] = $por;
-        $infocontent["productos"] = $this->modeloadministrador->GenerarConcentrado($fechainicio, $fechafin, $clasificacion, $producto, $modelo, $color, $por);
+        $infocontent["productos"] = $this->modeloadministrador->GenerarConcentrado($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $por);
         $this->load->view('administrador/GenerarConcentrado', $infocontent);
     }
 

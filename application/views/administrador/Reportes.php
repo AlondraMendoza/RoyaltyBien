@@ -54,12 +54,6 @@
             colores.push(parseInt($(this).val()));
         });
         var colorescadena = JSON.stringify(colores);
-
-
-        var clasificacion = $("#clasificacion").val();
-        var producto = $("#producto").val();
-        var modelo = $("#modelo").val();
-        var color = $("#color").val();
         $("#detalle").html("Cargando Información");
         $("#detalle").load("GenerarReporte", {"fechainicio": fechainicio, "fechafin": fechafin, "clasificacion": clasificacionescadena, "producto": productoscadena, "modelo": modeloscadena, "color": colorescadena})
     }
@@ -73,9 +67,36 @@
         var producto = $("#producto").val();
         var modelo = $("#modelo").val();
         var color = $("#color").val();
+        var clasificaciones = [];
+        $(".clasificaciones:checked").each(function ()
+        {
+            clasificaciones.push(parseInt($(this).val()));
+        });
+        var clasificacionescadena = JSON.stringify(clasificaciones);
+
+        var productos = [];
+        $(".productos:checked").each(function ()
+        {
+            productos.push(parseInt($(this).val()));
+        });
+        var productoscadena = JSON.stringify(productos);
+
+        var modelos = [];
+        $(".modelos:checked").each(function ()
+        {
+            modelos.push(parseInt($(this).val()));
+        });
+        var modeloscadena = JSON.stringify(modelos);
+
+        var colores = [];
+        $(".colores:checked").each(function ()
+        {
+            colores.push(parseInt($(this).val()));
+        });
+        var colorescadena = JSON.stringify(colores);
         var por = $("#concentradox").val();
         $("#detalle").html("Cargando Información");
-        $("#detalle").load("GenerarConcentrado", {"fechainicio": fechainicio, "fechafin": fechafin, "clasificacion": clasificacion, "producto": producto, "modelo": modelo, "color": color, "por": por});
+        $("#detalle").load("GenerarConcentrado", {"fechainicio": fechainicio, "fechafin": fechafin, "clasificacion": clasificacionescadena, "producto": productoscadena, "modelo": modeloscadena, "color": colorescadena, "por": por});
     }
     function Paso(paso)
     {

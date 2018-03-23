@@ -7,6 +7,14 @@ class Capturista extends CI_Controller {
 
     function __construct() {
         parent::__construct();
+        $this->load->model("modelousuario");
+        if (!EstaLogueado()) {
+            redirect('usuario/iniciar_sesion');
+        }
+        $id = $this->session->userdata('id');
+        if (!$this->modelousuario->TienePerfil($id, 3)) {
+            redirect('usuario/logueado');
+        }
     }
 
     public function index() {
@@ -14,14 +22,14 @@ class Capturista extends CI_Controller {
         $datos["apellido"] = "Cadena ejemplo 2";
         $this->load->view('capturista/index', $datos);
     }
-    
+
     public function VerificarClave() {
         $clave = $this->input->post_get('clave', TRUE);
         $this->load->model("modelocapturista");
         $fila = $this->modelocapturista->BuscarClave($clave);
         $infocontent["nombrec"] = "No se encontró la persona";
         if ($fila != "No se encontró el producto") {
-            $infocontent["nombrec"] = $fila->Nombre." ".$fila->APaterno." ".$fila->AMaterno;
+            $infocontent["nombrec"] = $fila->Nombre . " " . $fila->APaterno . " " . $fila->AMaterno;
             $infocontent["idpu"] = $fila->IdPuestos;
         }
         print json_encode($infocontent);
@@ -46,8 +54,8 @@ class Capturista extends CI_Controller {
 //            "carros" => $c,];
 //        return $array;
     }
-    
-    public function capturaAccesorios(){
+
+    public function capturaAccesorios() {
         $infoheader["titulo"] = "Capturista: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $infocontent["Nombre"] = "Alondra Mendoza";
@@ -79,7 +87,8 @@ class Capturista extends CI_Controller {
 //            "color" => $c,];
 //        return $array;
     }
-        public static function FechaIngles($date) {
+
+    public static function FechaIngles($date) {
         if ($date) {
             $fecha = $date;
             $hora = "";
@@ -107,7 +116,7 @@ class Capturista extends CI_Controller {
         }
         return "";
     }
-    
+
     public function Resultados() {
         $carro = $this->input->post_get('carro', TRUE);
         $horno = $this->input->post_get('horno', TRUE);
@@ -118,18 +127,16 @@ class Capturista extends CI_Controller {
         $fecha = $this->input->post_get('fecha', TRUE);
         $hornero = $this->input->post_get('hornero', TRUE);
         $this->load->model("modelocapturista");
-        $infocontent["lista"] = $this->modelocapturista->ListarProductosGuardados($carro,$horno,$prod,$mod,$col,$piezas,$this->FechaIngles($fecha),$hornero);
+        $infocontent["lista"] = $this->modelocapturista->ListarProductosGuardados($carro, $horno, $prod, $mod, $col, $piezas, $this->FechaIngles($fecha), $hornero);
         //$infocontent["prod"] = $this->modelocapturista->ObtenerProductoId($infocontent["id"]);
         $this->load->view('capturista/Resultados', $infocontent);
     }
-    
-    public function ResultadosAccesorios(){
+
+    public function ResultadosAccesorios() {
         $fecha = $this->input->post_get('fecha', TRUE);
         $this->load->model("modelocapturista");
         $infocontent["lista"] = $this->modelocapturista->ListarAccesoriosGuardados($this->FechaIngles($fecha));
         $this->load->view('capturista/ResultadosAccesorios', $infocontent);
     }
-    
-    
 
 }

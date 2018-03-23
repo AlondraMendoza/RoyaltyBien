@@ -22,41 +22,106 @@
     }
     function Detalle()
     {
+        var pb = $("#pb2").data('progress');
+        pb.set(100);
         $("#grafica").html("");
         var fechainicio = $("#fechainicio").val();
         var fechafin = $("#fechafin").val();
-        var clasificacion = $("#clasificacion").val();
-        var producto = $("#producto").val();
-        var modelo = $("#modelo").val();
-        var color = $("#color").val();
+        var clasificaciones = [];
+        $(".clasificaciones:checked").each(function ()
+        {
+            clasificaciones.push(parseInt($(this).val()));
+        });
+        var clasificacionescadena = JSON.stringify(clasificaciones);
+
+        var productos = [];
+        $(".productos:checked").each(function ()
+        {
+            productos.push(parseInt($(this).val()));
+        });
+        var productoscadena = JSON.stringify(productos);
+
+        var modelos = [];
+        $(".modelos:checked").each(function ()
+        {
+            modelos.push(parseInt($(this).val()));
+        });
+        var modeloscadena = JSON.stringify(modelos);
+
+        var colores = [];
+        $(".colores:checked").each(function ()
+        {
+            colores.push(parseInt($(this).val()));
+        });
+        var colorescadena = JSON.stringify(colores);
         $("#detalle").html("Cargando Información");
-        $("#detalle").load("GenerarReporte", {"fechainicio": fechainicio, "fechafin": fechafin, "clasificacion": clasificacion, "producto": producto, "modelo": modelo, "color": color})
+        $("#detalle").load("GenerarReporte", {"fechainicio": fechainicio, "fechafin": fechafin, "clasificacion": clasificacionescadena, "producto": productoscadena, "modelo": modeloscadena, "color": colorescadena})
     }
     function Concentrado()
     {
+        var pb = $("#pb2").data('progress');
+        pb.set(100);
         var fechainicio = $("#fechainicio").val();
         var fechafin = $("#fechafin").val();
         var clasificacion = $("#clasificacion").val();
         var producto = $("#producto").val();
         var modelo = $("#modelo").val();
         var color = $("#color").val();
+        var clasificaciones = [];
+        $(".clasificaciones:checked").each(function ()
+        {
+            clasificaciones.push(parseInt($(this).val()));
+        });
+        var clasificacionescadena = JSON.stringify(clasificaciones);
+
+        var productos = [];
+        $(".productos:checked").each(function ()
+        {
+            productos.push(parseInt($(this).val()));
+        });
+        var productoscadena = JSON.stringify(productos);
+
+        var modelos = [];
+        $(".modelos:checked").each(function ()
+        {
+            modelos.push(parseInt($(this).val()));
+        });
+        var modeloscadena = JSON.stringify(modelos);
+
+        var colores = [];
+        $(".colores:checked").each(function ()
+        {
+            colores.push(parseInt($(this).val()));
+        });
+        var colorescadena = JSON.stringify(colores);
         var por = $("#concentradox").val();
         $("#detalle").html("Cargando Información");
-        $("#detalle").load("GenerarConcentrado", {"fechainicio": fechainicio, "fechafin": fechafin, "clasificacion": clasificacion, "producto": producto, "modelo": modelo, "color": color, "por": por});
+        $("#detalle").load("GenerarConcentrado", {"fechainicio": fechainicio, "fechafin": fechafin, "clasificacion": clasificacionescadena, "producto": productoscadena, "modelo": modeloscadena, "color": colorescadena, "por": por});
+    }
+    function Paso(paso)
+    {
+        $("#paso1").fadeOut();
+        $("#paso2").fadeOut();
+        $("#paso3").fadeOut();
+        $("#paso4").fadeOut();
+        $("#paso5").fadeOut();
+        $("#paso6").fadeOut();
+        var pb = $("#pb2").data('progress');
+        pb.set(paso * 15);
+        $("#paso" + paso).fadeIn();
     }
 </script>
 <h1 class="light text-shadow">REPORTES</h1><br>
-<div class="panel warning" data-role="panel">
+<div class="progress large" id="pb2" data-parts="true" data-role="progress" data-value="0" data-colors="{&quot;bg-red&quot;: 33, &quot;bg-yellow&quot;: 66, &quot;bg-cyan&quot;: 90, &quot;bg-green&quot;: 100}"><div class="bar bg-green" style="width: 100%;height: 30px"></div></div>
+<hr>
+<div class="panel warning" data-role="panel" id="paso1">
     <div class="heading">
         <span class="icon mif-stack fg-white bg-darkOrange"></span>
-        <span class="title">Información para generar reporte</span>
+        <span class="title">Paso 1: Periodo de tiempo</span>
     </div>
     <div class="content">
-        <table class="table shadow">
+        <table class="table shadow" >
             <thead>
-                <tr>
-                    <th class="align-center fg-darkBlue" colspan="2">PERIODO DE TIEMPO</th>
-                </tr>
                 <tr>
                     <th class="align-center">Fecha Inicio</th>
                     <th class="center">Fecha Fin</th>
@@ -78,56 +143,113 @@
             </tr>
         </table>
         <br>
-        <table class="table shadow">
-            <thead>
-                <tr>
-                    <th class="align-center fg-darkBlue" colspan="4">FILTROS</th>
-                </tr>
-                <tr>
-                    <th class="center" >Clasificación</th>
-                    <th class="center">Producto</th>
-                    <th class="center">Modelo</th>
-                    <th class="center">Color</th>
-                </tr>
-            </thead>
-            <tr>
-                <td class="center" >
-                    <div class="input-control select center full-size">
-                        <select id="clasificacion">
-                            <option value="0">Todas</option>
-                            <?php foreach ($clasificaciones->result() as $clasificacion): ?>
-                                <option value="<?= $clasificacion->IdClasificaciones; ?>"><?= $clasificacion->Letra; ?></option>
-                            <?php endforeach; ?>
-                            <option value="100">Sin Clasificar</option>
-                        </select>
-                    </div>
-                </td>
-                <td class="center bordered">
-                    <div class="input-control select center full-size">
-                        <select id="producto" onchange="ObtenerModelos()">
-                            <option value="0">Todos</option>
-                            <?php foreach ($productos->result() as $producto): ?>
-                                <option value="<?= $producto->IdCProductos; ?>"><?= $producto->Nombre; ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
-                </td>
-                <td id="tdmodelo" class="center">
-                    <div class="input-control select center full-size">
-                        <select id="modelo" onchange="ObtenerColores()">
-                            <option value="0">Cargando...</option>
-                        </select>
-                    </div>
-                </td>
-                <td id="tdcolor" class="center">
-                    <div class="input-control select center full-size">
-                        <select id="color">
-                            <option value="0">Cargando...</option>
-                        </select>
-                    </div>
-                </td>
-            </tr> 
-        </table>
+        <center><button onclick="Paso(2)" class="button block-shadow-info text-shadow primary big-button">Siguiente</button></center>
+        <br>
+        <br>
+
+    </div>
+</div>
+
+<div class="panel warning" data-role="panel" id="paso2" style="display: none">
+    <div class="heading">
+        <span class="icon mif-stack fg-white bg-darkOrange"></span>
+        <span class="title">Paso 2: Clasificaciones</span>
+    </div>
+    <div class="content">
+        <br>
+        <center>
+            <?php foreach ($clasificaciones->result() as $clasificacion): ?>
+                <label class="input-control checkbox">
+                    <input type="checkbox" value="<?= $clasificacion->IdClasificaciones; ?>" name="clasificaciones" class="clasificaciones">
+                    <span class="check"></span>
+                    <span class="caption"><b><?= $clasificacion->Letra; ?></b></span>
+                </label>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <?php endforeach; ?>
+            <br><br><br>
+            <button onclick="Paso(1)" class="button block-shadow-alert text-shadow alert big-button">Atrás</button>
+            <button onclick="Paso(3)" class="button block-shadow-info text-shadow primary big-button">Siguiente</button>
+        </center>
+    </div>
+</div>
+
+<div class="panel warning" data-role="panel" id="paso3" style="display: none">
+    <div class="heading">
+        <span class="icon mif-stack fg-white bg-darkOrange"></span>
+        <span class="title">Paso 3: Productos</span>
+    </div>
+    <div class="content">
+        <br>
+        <center>
+            <?php foreach ($productos->result() as $producto): ?>
+                <label class="input-control checkbox">
+                    <input type="checkbox" value="<?= $producto->IdCProductos; ?>" name="productos" class="productos">
+                    <span class="check"></span>
+                    <span class="caption"><b><?= $producto->Nombre; ?></b></span>
+                </label>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <?php endforeach; ?>
+            <br><br>
+            <button onclick="Paso(2)" class="button block-shadow-alert text-shadow alert big-button">Atrás</button>
+            <button onclick="Paso(4)" class="button block-shadow-info text-shadow primary big-button">Siguiente</button>
+        </center>
+    </div>
+</div>
+
+<div class="panel warning" data-role="panel" id="paso4" style="display: none">
+    <div class="heading">
+        <span class="icon mif-stack fg-white bg-darkOrange"></span>
+        <span class="title">Paso 4: Modelos</span>
+    </div>
+    <div class="content">
+        <br>
+        <center>
+            <?php foreach ($modelos->result() as $modelo): ?>
+                <label class="input-control checkbox">
+                    <input type="checkbox" value="<?= $modelo->IdModelos; ?>" name="modelos" class="modelos">
+                    <span class="check"></span>
+                    <span class="caption"><b><?= $modelo->Nombre; ?></b></span>
+                </label>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <?php endforeach; ?>
+            <br><br>
+            <button onclick="Paso(3)" class="button block-shadow-alert text-shadow alert big-button">Atrás</button>
+            <button onclick="Paso(5)" class="button block-shadow-info text-shadow primary big-button">Siguiente</button>
+        </center>
+    </div>
+</div>
+
+<div class="panel warning" data-role="panel" id="paso5" style="display: none">
+    <div class="heading">
+        <span class="icon mif-stack fg-white bg-darkOrange"></span>
+        <span class="title">Paso 5: Colores</span>
+    </div>
+    <div class="content">
+        <br>
+
+        <center>
+            <?php foreach ($colores->result() as $color): ?>
+                <label class="input-control checkbox">
+                    <input type="checkbox" value="<?= $color->IdColores; ?>" name="colores" class="colores">
+                    <img style="border-radius: 100%" src="<?= base_url() ?>public/colores/<?= $color->Descripcion ?>" height="25px;" width="25px" title="<?= $color->Nombre ?>">
+                    <span class="check" style="background-image: url(<?= base_url() ?>public/colores/<?= $color->Descripcion ?>)"></span>
+                    <span class="caption"><b><?= $color->Nombre; ?></b></span>
+                </label>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <?php endforeach; ?>
+            <br><br>
+            <button onclick="Paso(4)" class="button block-shadow-alert text-shadow alert big-button">Atrás</button>
+            <button onclick="Paso(6)" class="button block-shadow-info text-shadow primary big-button">Siguiente</button>
+        </center>
+    </div>
+</div>
+
+<div class="panel warning" data-role="panel" id="paso6" style="display: none">
+    <div class="heading">
+        <span class="icon mif-stack fg-white bg-darkOrange"></span>
+        <span class="title">Paso 6: Tipo de Reporte</span>
+    </div>
+    <div class="content">
         <br>
         <table class="table shadow">
             <thead>
@@ -158,8 +280,9 @@
                 </td>
             </tr>
         </table>
-
-
+        <center>
+            <button onclick="Paso(5)" class="button block-shadow-alert text-shadow alert big-button">Atrás</button>
+        </center>
         <div id="detalle" class="shadow" ></div><br>
         <div id='grafica'>
             <canvas id="myChart" width="300" height="100" class="shadow"></canvas>
@@ -208,3 +331,4 @@
             }
         </script>
     </div>
+</div>

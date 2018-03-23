@@ -7,6 +7,14 @@ class Almacenista extends CI_Controller {
 
     function __construct() {
         parent::__construct();
+        $this->load->model("modelousuario");
+        if (!EstaLogueado()) {
+            redirect('usuario/iniciar_sesion');
+        }
+        $id = $this->session->userdata('id');
+        if (!$this->modelousuario->TienePerfil($id, 3)) {
+            redirect('usuario/logueado');
+        }
     }
 
     public function capturaGriferia() {
@@ -18,6 +26,7 @@ class Almacenista extends CI_Controller {
         $this->load->view('almacenista/capturaGriferia', $infocontent);
         $this->load->view('template/footerd', '');
     }
+<<<<<<< HEAD
      public function barcodevista($filepath = "", $text = "", $size = "20", $orientation = "horizontal", $code_type = "code128", $print = false, $SizeFactor = 1) {
         $text = $this->input->post_get('text', TRUE);
         $code_string = "";
@@ -148,6 +157,8 @@ class Almacenista extends CI_Controller {
             imagedestroy($image);
         }
     }
+=======
+>>>>>>> 8ed3baf00bb72e3dcbb43d114dc6f7cdaeb387c7
 
     public function SalidaGriferia() {
         $infoheader["titulo"] = "Almacén: Royalty Ceramic";
@@ -170,7 +181,7 @@ class Almacenista extends CI_Controller {
         }
         print json_encode($infocontent);
     }
-    
+
     public function VerificarClaveExistencia() {
         $clave = $this->input->post_get('clave', TRUE);
         $this->load->model("modeloalmacenista");
@@ -179,20 +190,20 @@ class Almacenista extends CI_Controller {
         if ($fila != "No se encontró el producto") {
             $infocontent["nombre"] = $fila->Descripcion;
             $infocontent["id"] = $fila->IdCGriferia;
-            $data =$this->modeloalmacenista->Existencias($fila->IdCGriferia);
+            $data = $this->modeloalmacenista->Existencias($fila->IdCGriferia);
             $infocontent["existencia"] = $data;
         }
         print json_encode($infocontent);
     }
-    
+
     public function ResultadosGriferia() {
         $id = $this->input->post_get('id', TRUE);
         $cantidad = $this->input->post_get('cantidad', TRUE);
         $this->load->model("modeloalmacenista");
-        $infocontent["lista"] = $this->modeloalmacenista->ListarGriferiaGuardada($id,$cantidad);
+        $infocontent["lista"] = $this->modeloalmacenista->ListarGriferiaGuardada($id, $cantidad);
         $this->load->view('almacenista/ResultadosGriferia', $infocontent);
     }
-    
+
     public function ResultadosGriferiaSalida() {
         $id = $this->input->post_get('id', TRUE);
         $cantidad = $this->input->post_get('cantidad', TRUE);
@@ -213,8 +224,8 @@ class Almacenista extends CI_Controller {
         $this->load->view('almacenista/EntradaProductos', $infocontent);
         $this->load->view('template/footerd', '');
     }
-    
-     public function SalidaProductos() {
+
+    public function SalidaProductos() {
         $infoheader["titulo"] = "Almacén: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $infocontent["Nombre"] = "Alondra Mendoza";
@@ -222,19 +233,19 @@ class Almacenista extends CI_Controller {
         $this->load->view('almacenista/SalidaProductos', $infocontent);
         $this->load->view('template/footerd', '');
     }
-    
+
     public function VerificarClaveProd() {
         $clave = $this->input->post_get('clave', TRUE);
         $this->load->model("modeloalmacenista");
         $fila = $this->modeloalmacenista->BuscarClaveProd($clave);
         $infocontent["nombre"] = "No se encontró el producto";
         if ($fila != "No se encontró el producto") {
-            $infocontent["nombre"] = $fila->producto."/".$fila->modelo."/".$fila->color;
+            $infocontent["nombre"] = $fila->producto . "/" . $fila->modelo . "/" . $fila->color;
             $infocontent["id"] = $fila->IdProductos;
         }
         print json_encode($infocontent);
     }
-    
+
     public function VerificarClaveTarima() {
         $clave = $this->input->post_get('clave', TRUE);
         $this->load->model("modeloalmacenista");
@@ -244,9 +255,9 @@ class Almacenista extends CI_Controller {
         }
         print json_encode($infocontent);
     }
-    
+
     //por producto
-     public function VerificarClaveTarimaP() {
+    public function VerificarClaveTarimaP() {
         $clave = $this->input->post_get('clave', TRUE);
         $this->load->model("modeloalmacenista");
         $fila = $this->modeloalmacenista->BuscarClaveTarimaP($clave);
@@ -257,7 +268,7 @@ class Almacenista extends CI_Controller {
         }
         print json_encode($infocontent);
     }
-    
+
     public function GuardarTarimasAlmacen() {
         $idtarima = $this->input->post_get('idtarima', TRUE);
         $this->load->model("modeloalmacenista");
@@ -270,7 +281,7 @@ class Almacenista extends CI_Controller {
             print("Error");
         }
     }
-    
+
     //Por producto
     public function GuardarTarimasAlmacenP() {
         $idProducto = $this->input->post_get('idProducto', TRUE);
@@ -284,54 +295,53 @@ class Almacenista extends CI_Controller {
             print("Error");
         }
     }
-    
+
     public function SalirTarimasAlmacen() {
         $idtarima = $this->input->post_get('idtarima', TRUE);
         $this->load->model("modeloalmacenista");
         $resp = $this->modeloalmacenista->SalirTarima($idtarima);
-        if($resp != null){
+        if ($resp != null) {
             $query = $this->modeloalmacenista->SalirProductoAlmacen($resp);
-        if ($query == "correcto") {
-            print("Correcto");
-        }
-        else {
-            print("Error");
-        }
-        }else {
+            if ($query == "correcto") {
+                print("Correcto");
+            } else {
+                print("Error");
+            }
+        } else {
             print ("NoExiste");
         }
     }
+
     //Por producto
     public function SalirTarimasAlmacenP() {
         $idproducto = $this->input->post_get('idtarima', TRUE);
         $this->load->model("modeloalmacenista");
         $resp = $this->modeloalmacenista->SalirTarimaP($idproducto);
-        if($resp != null){
+        if ($resp != null) {
             $query = $this->modeloalmacenista->SalirProductoAlmacenP($resp);
-        if ($query == "correcto") {
-            print("Correcto");
-        }
-        else {
-            print("Error");
-        }
-        }else {
+            if ($query == "correcto") {
+                print("Correcto");
+            } else {
+                print("Error");
+            }
+        } else {
             print ("NoExiste");
         }
     }
-    
-    public function GuardarAlmacen(){
+
+    public function GuardarAlmacen() {
         $id = $this->input->post_get('id', TRUE);
         $this->load->model("modeloalmacenista");
         //Verifica q no exista
         $verificador = $this->modeloalmacenista->VerificarProd($id);
-        if($verificador == "bien"){
+        if ($verificador == "bien") {
             //Guarda el producto
-        $fila = $this->modeloalmacenista->GuardarEntradaAlmacen($id);
-        print("bien");
+            $fila = $this->modeloalmacenista->GuardarEntradaAlmacen($id);
+            print("bien");
         }
     }
-    
-   public function VerificarClaveTarimaAlmacen() {
+
+    public function VerificarClaveTarimaAlmacen() {
         $clave = $this->input->post_get('clave', TRUE);
         $this->load->model("modeloalmacenista");
         $fila = $this->modeloalmacenista->BuscarClaveTarima2($clave);
@@ -340,6 +350,7 @@ class Almacenista extends CI_Controller {
         }
         print json_encode($infocontent);
     }
+
     //Por producto
     public function VerificarClaveTarimaAlmacenP() {
         $clave = $this->input->post_get('clave', TRUE);
@@ -352,6 +363,7 @@ class Almacenista extends CI_Controller {
         }
         print json_encode($infocontent);
     }
+<<<<<<< HEAD
     
     public function BusquedaTarimas() {
         $infoheader["titulo"] = "Almacén: Royalty Ceramic";
@@ -393,4 +405,7 @@ class Almacenista extends CI_Controller {
         $this->load->view('template/footerd', '');
     }
     
+=======
+
+>>>>>>> 8ed3baf00bb72e3dcbb43d114dc6f7cdaeb387c7
 }

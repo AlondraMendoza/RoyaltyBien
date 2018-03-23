@@ -78,47 +78,127 @@ class Modeloadministrador extends CI_Model {
         return "";
     }
 
-    public function GenerarReporte($fechainicio, $fechafin, $clasificacion, $producto, $modelo, $color) {
+    public function GenerarReporte($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor) {
         $fechainicio = $this->FechaIngles($fechainicio);
         $fechafin = $this->FechaIngles($fechafin);
         $parteclasificacion = "";
         $parteproducto = "";
         $partemodelo = "";
         $partecolor = "";
-        if ($clasificacion > 0) {
-            $parteclasificacion = " AND Clasificacion(p.IdProductos) =" . $clasificacion;
+        if (count($aclasificacion) > 0) {
+            $parteclasificacion = " AND ";
+            $contclasi = 1;
+            $parteclasificacion .= " ( ";
+            foreach ($aclasificacion as $ac) {
+                if ($contclasi > 1) {
+                    $parteclasificacion .= " OR ";
+                }
+                $parteclasificacion .= " Clasificacion(p.IdProductos) =" . $ac;
+                $contclasi++;
+            }
+            $parteclasificacion .= " ) ";
         }
-        if ($producto > 0) {
-            $parteproducto = " AND p.CProductosId =" . $producto;
+        if (count($aproducto) > 0) {
+            $parteproducto = " AND ";
+            $contprod = 1;
+            $parteproducto .= " ( ";
+            foreach ($aproducto as $ap) {
+                if ($contprod > 1) {
+                    $parteproducto .= " OR ";
+                }
+                $parteproducto .= " p.CProductosId =" . $ap;
+                $contprod++;
+            }
+            $parteproducto .= " ) ";
         }
-        if ($modelo > 0) {
-            $partemodelo = " AND p.ModelosId =" . $modelo;
+        if (count($amodelo) > 0) {
+            $partemodelo = " AND ";
+            $contmod = 1;
+            $partemodelo .= " ( ";
+            foreach ($amodelo as $am) {
+                if ($contmod > 1) {
+                    $partemodelo .= " OR ";
+                }
+                $partemodelo .= " p.ModelosId =" . $am;
+                $contmod++;
+            }
+            $partemodelo .= " ) ";
         }
-        if ($color > 0) {
-            $partecolor = " AND p.ColoresId =" . $color;
+        if (count($acolor) > 0) {
+            $partecolor = " AND ";
+            $contcol = 1;
+            $partecolor .= " ( ";
+            foreach ($acolor as $acol) {
+                if ($contcol > 1) {
+                    $partecolor .= " OR ";
+                }
+                $partecolor .= " p.ColoresId =" . $acol;
+                $contcol++;
+            }
+            $partecolor .= " ) ";
         }
         $query = $this->db->query("select p.IdProductos,cp.Nombre as producto,m.Nombre as modelo,co.Nombre as color from Productos p left join CProductos cp on cp.IdCProductos=p.CProductosId left join Modelos m on m.IdModelos=p.ModelosId left join Colores co on co.IdColores=p.ColoresId where  date(FechaCaptura) BETWEEN $fechainicio AND $fechafin" . $parteclasificacion . $parteproducto . $partemodelo . $partecolor);
         return $query;
     }
 
-    public function GenerarConcentrado($fechainicio, $fechafin, $clasificacion, $producto, $modelo, $color, $por) {
+    public function GenerarConcentrado($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $por) {
         $fechainicio = $this->FechaIngles($fechainicio);
         $fechafin = $this->FechaIngles($fechafin);
         $parteclasificacion = "";
         $parteproducto = "";
         $partemodelo = "";
         $partecolor = "";
-        if ($clasificacion > 0) {
-            $parteclasificacion = " AND Clasificacion(p.IdProductos) =" . $clasificacion;
+        if (count($aclasificacion) > 0) {
+            $parteclasificacion = " AND ";
+            $contclasi = 1;
+            $parteclasificacion .= " ( ";
+            foreach ($aclasificacion as $ac) {
+                if ($contclasi > 1) {
+                    $parteclasificacion .= " OR ";
+                }
+                $parteclasificacion .= " Clasificacion(p.IdProductos) =" . $ac;
+                $contclasi++;
+            }
+            $parteclasificacion .= " ) ";
         }
-        if ($producto > 0) {
-            $parteproducto = " AND p.CProductosId =" . $producto;
+        if (count($aproducto) > 0) {
+            $parteproducto = " AND ";
+            $contprod = 1;
+            $parteproducto .= " ( ";
+            foreach ($aproducto as $ap) {
+                if ($contprod > 1) {
+                    $parteproducto .= " OR ";
+                }
+                $parteproducto .= " p.CProductosId =" . $ap;
+                $contprod++;
+            }
+            $parteproducto .= " ) ";
         }
-        if ($modelo > 0) {
-            $partemodelo = " AND p.ModelosId =" . $modelo;
+        if (count($amodelo) > 0) {
+            $partemodelo = " AND ";
+            $contmod = 1;
+            $partemodelo .= " ( ";
+            foreach ($amodelo as $am) {
+                if ($contmod > 1) {
+                    $partemodelo .= " OR ";
+                }
+                $partemodelo .= " p.ModelosId =" . $am;
+                $contmod++;
+            }
+            $partemodelo .= " ) ";
         }
-        if ($color > 0) {
-            $partecolor = " AND p.ColoresId =" . $color;
+        if (count($acolor) > 0) {
+            $partecolor = " AND ";
+            $contcol = 1;
+            $partecolor .= " ( ";
+            foreach ($acolor as $acol) {
+                if ($contcol > 1) {
+                    $partecolor .= " OR ";
+                }
+                $partecolor .= " p.ColoresId =" . $acol;
+                $contcol++;
+            }
+            $partecolor .= " ) ";
         }
         $campo = "";
         switch ($por) {

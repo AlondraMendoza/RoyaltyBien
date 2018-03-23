@@ -12,7 +12,7 @@ class Capturista extends CI_Controller {
             redirect('usuario/iniciar_sesion');
         }
         $id = $this->session->userdata('id');
-        if (!$this->modelousuario->TienePerfil($id, 3)) {
+        if (!$this->modelousuario->TienePerfil($id, 2)) {
             redirect('usuario/logueado');
         }
     }

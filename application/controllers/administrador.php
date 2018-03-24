@@ -80,4 +80,14 @@ class Administrador extends CI_Controller {
         $this->load->view('administrador/GenerarConcentrado', $infocontent);
     }
 
+    public function CapturaPerfiles() {
+        $this->load->model("modeloadministrador");
+        $infoheader["titulo"] = "Administrador: Royalty Ceramic";
+        $infocontent["usuarios"] = $this->modeloadministrador->Usuarios();
+        $infocontent["perfiles"] = $this->modeloadministrador->Perfiles();
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->view('administrador/CapturaPerfiles', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+
 }

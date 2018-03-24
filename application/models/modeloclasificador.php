@@ -239,15 +239,15 @@ class Modeloclasificador extends CI_Model {
         $this->db->update("Productos");
 
         //Guardar historial producto
-        $Historial= array(
-            'UsuariosId'=>1,
-            'MovimientosProductosId'=>3,
-            'Activo'=>1,
-            'ProductosId'=>$idprod );
+        $Historial = array(
+            'UsuariosId' => 1,
+            'MovimientosProductosId' => 3,
+            'Activo' => 1,
+            'ProductosId' => $idprod);
         $this->db->set('Fecha', 'NOW()', FALSE);
         $this->db->insert('HistorialProducto', $Historial);
         //fin historial
-        
+
         $datos = array(
             'ProductosId' => $idprod,
             'FechaClasificacion' => date('Y-m-d | h:i:sa'),
@@ -257,7 +257,7 @@ class Modeloclasificador extends CI_Model {
             'Activo' => 1
         );
         $this->db->insert('HistorialClasificacion', $datos);
-        
+
         return $this->db->insert_id();
     }
 
@@ -388,11 +388,11 @@ class Modeloclasificador extends CI_Model {
     public function GuardarDetalleTarima($idproducto, $idtarima) {
         if ($this->VerificarProductoTarima($idproducto) == "no existe") {
             //Guardar historial producto
-            $Historial= array(
-                'UsuariosId'=>1,
-                'MovimientosProductosId'=>4,
-                'Activo'=>1,
-                'ProductosId'=>$idproducto);
+            $Historial = array(
+                'UsuariosId' => 1,
+                'MovimientosProductosId' => 4,
+                'Activo' => 1,
+                'ProductosId' => $idproducto);
             $this->db->set('Fecha', 'NOW()', FALSE);
             $this->db->insert('HistorialProducto', $Historial);
             //Fin y ahora si entarimas 
@@ -499,7 +499,7 @@ class Modeloclasificador extends CI_Model {
     }
 
     public function Clasificacion($producto_id) {
-        $this->db->select("c.Letra,c.Color");
+        $this->db->select("c.Letra,c.Color,h.FueraTono");
         $this->db->from("HistorialClasificacion h");
         $this->db->join("Clasificaciones c", "c.IdClasificaciones=h.ClasificacionesId");
         $this->db->where("h.ProductosId", $producto_id);

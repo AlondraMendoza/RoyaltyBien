@@ -246,6 +246,23 @@ class Modeloadministrador extends CI_Model {
         }
     }
 
+    public function Usuarios() {
+        $this->db->select("u.IdUsuarios, u.Nombre,concat(p.Nombre,' ',p.APaterno)as NombreCompleto");
+        $this->db->from('Usuarios u');
+        $this->db->join('Personas p', 'p.IdPersonas= u.PersonasId');
+        $this->db->where('u.Activo', 1);
+        $consulta = $this->db->get();
+        return $consulta;
+    }
+
+    public function Perfiles() {
+        $this->db->select('p.Nombre, p.IdPerfiles');
+        $this->db->from('Perfiles p');
+        $this->db->where('p.Activo', 1);
+        $consulta = $this->db->get();
+        return $consulta;
+    }
+
 }
 ?>
 

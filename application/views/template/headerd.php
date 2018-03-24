@@ -13,7 +13,7 @@
         <title><?= $titulo ?></title>
     </head>
     <body>
-        <div class="app-bar" data-role="appbar" style="background-color: #5a0303;padding-right: 20px;">
+        <div class="app-bar" data-role="appbar" style="position: fixed;z-index: 999999;background-color: #5a0303;padding-right: 20px;">
             <a class="app-bar-element" href="<?= base_url() ?>inicio/index"><img src="<?= base_url() ?>public/img/logo.png" style="height: 45px;width: 180px"></a>
             <ul class="app-bar-menu">
                 <li><a href="<?php echo base_url() ?>usuario/logueado">Inicio</a></li>
@@ -74,5 +74,5 @@
                 </div>
             </div>
         </div>
-        <a href="<?php echo base_url() ?>usuario/logueado"><i class="mif-home mif-4x fg-darkBlue" style="position: fixed;right:40px;top: 70px"></i></a>
-        <div class="contenido" style="padding-left: 30px;padding-right: 30px"><br><br>
+        <div style="z-index: 999999;width: 40px;height: 40px;position: fixed;right:0px;top:50px;background-color: #5a0303;color:white;text-align: center"><a id="menu" href="<?php echo base_url() ?>usuario/logueado"><i class="mif-home mif-2x fg-white" ></i></a></div>
+        <div class="contenido" style="padding-left: 30px;padding-right: 30px"><br><br><br><br>

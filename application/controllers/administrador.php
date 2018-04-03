@@ -96,6 +96,8 @@ class Administrador extends CI_Controller {
         $usuario = $this->input->post_get('usuario', TRUE);
         $infocontent["usuario"] = $this->modeloadministrador->Usuario($usuario);
         $infocontent["perfiles"] = $this->modeloadministrador->PerfilesUsuario($usuario);
+        $infocontent["ultimopuesto"] = $this->modeloadministrador->UltimoPuesto($usuario);
+        $infocontent["ultimoperfil"] = $this->modeloadministrador->UltimoPerfil($usuario);
         $this->load->view('template/headerd', $infoheader);
         $this->load->view('administrador/ExpedienteUsuario', $infocontent);
         $this->load->view('template/footerd', '');

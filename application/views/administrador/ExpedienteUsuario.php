@@ -23,7 +23,7 @@
             <table class="table">
                 <tr>
                     <td class="center" rowspan="2" style="width: 30%">
-                        <img src="<?= base_url() ?>public/imagenes/fotos/<?= $usuario->IdUsuarios ?>.jpg" height="250px;" width="250px;" title="<?= $usuario->NombreCompleto; ?>">        
+                        <img class="block-shadow-warning" src="<?= base_url() ?>public/imagenes/fotos/<?= $usuario->IdUsuarios ?>.jpg" height="250px;" width="250px;" title="<?= $usuario->NombreCompleto; ?>">        
                         <br><br>
                     </td> 
                 </tr>
@@ -53,16 +53,28 @@
                     <td class="center">
                         <b>Estatus de Usuario</b>
                         <br>
-
+                        <?php
+                        if ($usuario->Activo == 1) {
+                            echo "Activo";
+                        } else {
+                            echo "Inactivo";
+                        }
+                        ?>
                     </td>
                     <td class="center">
                         <b>Último Puesto</b>
                         <br>
-                        <br><br>
+                        <?= $ultimopuesto->Nombre ?>
+                    </td>
+                    <td class="center">
+                        <b>Última Área</b>
+                        <br>
+                        <?= $ultimopuesto->Area ?>
                     </td>
                     <td class="center">
                         <b>Último Perfil asignado</b>
-                        <br><br>
+                        <br>
+                        <?= $ultimoperfil->Nombre ?>
                     </td>
                 </tr>
             </table>

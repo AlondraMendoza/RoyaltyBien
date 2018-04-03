@@ -49,7 +49,7 @@
                         $ci->load->model("modeloadministrador");
                         ?>
                         <?php
-                        if ($ci->modeloadministrador->TienePuesto($usuario->IdUsuarios, $puesto->IdPuestos) == false) {
+                        if ($ci->modeloadministrador->TienePuesto($usuario->IdUsuarios, $puesto->Nombre) == false) {
                             $cuantos++;
                             ?>
                             <option value="<?= $puesto->Nombre ?>"><?= $puesto->Nombre ?></option>

@@ -264,7 +264,7 @@ class Modeloadministrador extends CI_Model {
     }
 
     public function Usuario($usuario_id) {
-        $this->db->select("u.IdUsuarios, u.Nombre,concat(p.Nombre,' ',p.APaterno,' ',p.AMaterno)as NombreCompleto,p.AMaterno,p.APaterno,p.Nombre as NombrePersona");
+        $this->db->select("u.IdUsuarios, u.Nombre,concat(p.Nombre,' ',p.APaterno,' ',p.AMaterno)as NombreCompleto,p.AMaterno,p.APaterno,p.Nombre as NombrePersona,u.Activo");
         $this->db->from('Usuarios u');
         $this->db->join('Personas p', 'p.IdPersonas= u.PersonasId');
         $this->db->where('u.IdUsuarios', $usuario_id);
@@ -280,6 +280,30 @@ class Modeloadministrador extends CI_Model {
         $this->db->join('Areas a', 'a.IdAreas= pu.AreasId');
         $this->db->where('u.IdUsuarios', $usuario_id);
         $consulta = $this->db->get();
+        return $consulta;
+    }
+
+    public function UltimoPuesto($usuario_id) {
+        $this->db->select("u.IdUsuarios, pu.Nombre,pu.FechaInicio,pu.FechaFin,a.Nombre as Area,pu.IdPuestos,pu.Activo,pu.Clave");
+        $this->db->from('Usuarios u');
+        $this->db->join('Personas p', 'p.IdPersonas= u.PersonasId');
+        $this->db->join('Puestos pu', 'p.IdPersonas= pu.PersonasId');
+        $this->db->join('Areas a', 'a.IdAreas= pu.AreasId');
+        $this->db->where('u.IdUsuarios', $usuario_id);
+        $this->db->where('pu.Activo', 1);
+        $this->db->Order_by("pu.FechaInicio", "desc");
+        $consulta = $this->db->get()->row();
+        return $consulta;
+    }
+
+    public function UltimoPerfil($usuario_id) {
+        $this->db->select('per.Nombre, per.IdPerfiles,p.FechaInicio,p.FechaFin, p.IdPerfilesUsuarios');
+        $this->db->from('PerfilesUsuarios p');
+        $this->db->join('Perfiles per', 'per.IdPerfiles= p.PerfilesId');
+        $this->db->where('p.UsuariosId', $usuario_id);
+        $this->db->where('p.Activo', 1);
+        $this->db->Order_by("p.FechaInicio", "desc");
+        $consulta = $this->db->get()->row();
         return $consulta;
     }
 

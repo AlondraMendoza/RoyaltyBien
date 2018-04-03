@@ -12983,10 +12983,10 @@ input[type="submit"].link:active {
 }
 .notify-container {
     position: fixed;
-    top: 0;
-    right: 0;
+    top: 45px;
+    right: 35px;
     width: auto;
-    z-index: 1061;
+    z-index: 99961;
 }
 .notify-container:before,
 .notify-container:after {

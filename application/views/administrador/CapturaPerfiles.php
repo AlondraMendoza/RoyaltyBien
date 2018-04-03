@@ -1,4 +1,4 @@
-<h1><b> Configuración de accesos</b></h1><br>
+<h1><b> Usuarios</b></h1><br>
 <center>
     <div class="panel warning" data-role="panel">
         <div class="heading">
@@ -6,41 +6,26 @@
             <span class="title">Información Básica</span>
         </div>
         <div class="content">
-            <table class="table  ">
+            <table class="table">
                 <thead>
-                <th>Usuarios</th>
-                <th colspan="<?= $perfiles->num_rows() ?>">Perfiles</th>
+                    <tr>
+                        <th>Usuarios</th>
+                        <th>Acción</th>
+                    </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="bordered">
-                            <div id="" class="input-control select full-size" style="height: 40px;">
-                                <select onselect= "CargarProductos()" id="hornos" onchange="CargarPerfiles()">
-                                    <?php foreach ($usuarios->result() as $usuario): ?>
-                                        <option value="<?= $usuario->IdUsuarios ?>"><?= $usuario->NombreCompleto ?></option>
-                                    <?php endforeach; ?>
-                                </select>
-                            </div>
-                        </td>
-                        <?php foreach ($perfiles->result() as $perfil): ?>
-                            <th>
-                                <?= $perfil->Nombre; ?>
-                            </th>
-                        <?php endforeach; ?>
-
-                    </tr>
-                    <tr class="bordered">
-                        <?php foreach ($perfiles->result() as $perfil): ?>
-                            <td class="center bordered">
-                                <label class="input-control checkbox">
-                                    <input type="checkbox" value="<?= $perfil->IdPerfiles; ?>" name="perfiles" class="perfiles">
-                                    <span class="check"></span>
-                                    <span class="caption"><b></b></span>
-                                </label>
+                    <?php foreach ($usuarios->result() as $usuario): ?>
+                        <tr>
+                            <td class="bordered">
+                                <?= $usuario->NombreCompleto ?>
                             </td>
-                        <?php endforeach; ?>
-                    </tr>
+                            <td class="center">
+                                <a class="button block-shadow-info text-shadow primary" href="ExpedienteUsuario?usuario=<?= $usuario->IdUsuarios ?>">Abril Expediente</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
     </div>
+</center>

@@ -7,6 +7,7 @@
         <link href="<?= base_url() ?>public/css/metro-icons.min.css" rel="stylesheet">
         <script src="<?= base_url() ?>public/js/metro.js"></script>
         <script src="<?= base_url() ?>public/js/chart.min.js"></script>
+        <script src="<?= base_url() ?>public/js/Funciones.js"></script>
         <script src="<?= base_url() ?>public/js/jquery.dataTables.min.js"></script>
         <script type="text/javascript">
         </script>
@@ -49,7 +50,7 @@
                      data-role="dropdown" data-no-close="true">
                     <div class="padding10" style="width: 200px;">
                         <center>
-                            <img src="<?= base_url() ?>public/img/user.png" style="width: 100px;">
+                            <img src="<?= base_url() ?>public/imagenes/fotos/<?= IdUsuario() ?>.jpg" height="250px;" width="250px;" title="<?= NombreUsuario() ?>">        
                             <br>
                             <b id="nomper"><?= $this->session->userdata('persona'); ?></b><br>
                             <?php

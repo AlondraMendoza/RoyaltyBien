@@ -84,10 +84,78 @@ class Administrador extends CI_Controller {
         $this->load->model("modeloadministrador");
         $infoheader["titulo"] = "Administrador: Royalty Ceramic";
         $infocontent["usuarios"] = $this->modeloadministrador->Usuarios();
-        $infocontent["perfiles"] = $this->modeloadministrador->Perfiles();
+
         $this->load->view('template/headerd', $infoheader);
         $this->load->view('administrador/CapturaPerfiles', $infocontent);
         $this->load->view('template/footerd', '');
+    }
+
+    public function ExpedienteUsuario() {
+        $this->load->model("modeloadministrador");
+        $infoheader["titulo"] = "Administrador: Royalty Ceramic";
+        $usuario = $this->input->post_get('usuario', TRUE);
+        $infocontent["usuario"] = $this->modeloadministrador->Usuario($usuario);
+        $infocontent["perfiles"] = $this->modeloadministrador->PerfilesUsuario($usuario);
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->view('administrador/ExpedienteUsuario', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+
+    public function CargaPerfilesUsuario() {
+        $this->load->model("modeloadministrador");
+        $usuario = $this->input->post_get('usuario', TRUE);
+        $infocontent["usuario"] = $this->modeloadministrador->Usuario($usuario);
+        $infocontent["perfiles"] = $this->modeloadministrador->PerfilesUsuario($usuario);
+        $infocontent["perfilestodos"] = $this->modeloadministrador->Perfiles();
+        $this->load->view('administrador/CargaPerfilesUsuario', $infocontent);
+    }
+
+    public function CargaPuestosUsuario() {
+        $this->load->model("modeloadministrador");
+        $usuario = $this->input->post_get('usuario', TRUE);
+        $infocontent["usuario"] = $this->modeloadministrador->Usuario($usuario);
+        $infocontent["puestos"] = $this->modeloadministrador->PuestosUsuario($usuario);
+        $infocontent["puestostodos"] = $this->modeloadministrador->Puestos();
+        $infocontent["areas"] = $this->modeloadministrador->Areas();
+        $this->load->view('administrador/CargaPuestosUsuario', $infocontent);
+    }
+
+    public function AgregarPerfil() {
+        $this->load->model("modeloadministrador");
+        $usuario = $this->input->post_get('usuario', TRUE);
+        $perfil = $this->input->post_get('perfil', TRUE);
+        $id = $this->modeloadministrador->AgregarPerfil($usuario, $perfil);
+        if ($id != null) {
+            print_r("correcto");
+        }
+    }
+
+    public function AgregarPuesto() {
+        $this->load->model("modeloadministrador");
+        $usuario = $this->input->post_get('usuario', TRUE);
+        $puesto = $this->input->post_get('puesto', TRUE);
+        $clave = $this->input->post_get('clave', TRUE);
+        $area = $this->input->post_get('area', TRUE);
+        $id = $this->modeloadministrador->AgregarPuesto($usuario, $puesto, $area, $clave);
+        if ($id != null) {
+            print_r("correcto");
+        }
+    }
+
+    public function EliminarPerfil() {
+        $this->load->model("modeloadministrador");
+        $usuario = $this->input->post_get('usuario', TRUE);
+        $perfil = $this->input->post_get('perfil', TRUE);
+        $this->modeloadministrador->EliminarPerfil($usuario, $perfil);
+        print_r("correcto");
+    }
+
+    public function EliminarPuesto() {
+        $this->load->model("modeloadministrador");
+        $usuario = $this->input->post_get('usuario', TRUE);
+        $puesto = $this->input->post_get('puesto', TRUE);
+        $this->modeloadministrador->EliminarPuesto($usuario, $puesto);
+        print_r("correcto");
     }
 
 }

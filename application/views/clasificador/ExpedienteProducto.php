@@ -61,16 +61,13 @@
                             echo "No";
                         }
                         ?>
-
-
                         <br>
-
-<?php
-$ci = &get_instance();
-$ci->load->model("modeloclasificador");
-if ($tarimaid > 0) {
-    $codigotarima = $ci->modeloclasificador->CodigoBarrasTarimaTexto($tarimaid);
-    ?>
+                        <?php
+                        $ci = &get_instance();
+                        $ci->load->model("modeloclasificador");
+                        if ($tarimaid > 0) {
+                            $codigotarima = $ci->modeloclasificador->CodigoBarrasTarimaTexto($tarimaid);
+                            ?>
                             <img src="barcodevista?text=<?= $codigotarima ?>"><br>
                             <?= $codigotarima; ?>
                             <?php
@@ -80,7 +77,7 @@ if ($tarimaid > 0) {
                     <td class="center">
                         <b>Tarima</b>
                         <br>
-<?= $tarima ?><br>
+                        <?= $tarima ?><br>
 
                         <?php
                         $ci = &get_instance();
@@ -97,7 +94,7 @@ if ($tarimaid > 0) {
                     <td class="center">
                         <b>Pedido</b>
                         <br>
-<?= $pedido; ?>
+                        <?= $pedido; ?>
                         <br><br>
                     </td>
                 </tr>
@@ -130,13 +127,13 @@ if ($tarimaid > 0) {
                                             <th>Movimiento</th>
                                             <th>Usuario</th>
                                         </tr>
-<?php foreach ($historiales->result() as $historial): ?>
+                                        <?php foreach ($historiales->result() as $historial): ?>
                                             <tr>
                                                 <td class="center"><?= $historial->Fecha ?></td>
                                                 <td class="center"><?= $historial->Movimiento ?></td>
                                                 <td class="center"><?= $historial->Persona ?></td>
                                             </tr>    
-<?php endforeach; ?>
+                                        <?php endforeach; ?>
                                     </table>
                                 </div>
                             </div>
@@ -147,13 +144,13 @@ if ($tarimaid > 0) {
                                         <th>Letra</th>
                                         <th>Usuario</th>
                                     </tr>
-<?php foreach ($clasificaciones->result() as $clasificacion): ?>
+                                    <?php foreach ($clasificaciones->result() as $clasificacion): ?>
                                         <tr>
                                             <td class="center"><?= $clasificacion->FechaClasificacion ?></td>
                                             <td class="center"><?= $clasificacion->Letra ?></td>
                                             <td class="center"><?= $clasificacion->Persona ?></td>
                                         </tr>    
-<?php endforeach; ?>
+                                    <?php endforeach; ?>
                                 </table>
                             </div>
                             <div class="frame" id="entarimado">
@@ -163,18 +160,18 @@ if ($tarimaid > 0) {
                                         <th>Tarima</th>
                                         <th>Usuario</th>
                                     </tr>
-<?php foreach ($entarimados->result() as $entarimado): ?>
+                                    <?php foreach ($entarimados->result() as $entarimado): ?>
                                         <tr>
-                                        <?php
-                                        $ci = &get_instance();
-                                        $ci->load->model("modeloclasificador");
-                                        $codigotarima = $ci->modeloclasificador->CodigoBarrasTarimaTexto($entarimado->IdTarimas);
-                                        ?>
+                                            <?php
+                                            $ci = &get_instance();
+                                            $ci->load->model("modeloclasificador");
+                                            $codigotarima = $ci->modeloclasificador->CodigoBarrasTarimaTexto($entarimado->IdTarimas);
+                                            ?>
                                             <td class="center"><?= $entarimado->FechaCaptura ?></td>
                                             <td class="center"><?= $codigotarima ?></td>
                                             <td class="center"><?= $entarimado->Persona ?></td>
                                         </tr>    
-<?php endforeach; ?>
+                                    <?php endforeach; ?>
                                 </table>
                             </div>
                             <div class="frame" id="reparaciones">
@@ -182,7 +179,6 @@ if ($tarimaid > 0) {
                                     <tr></tr>
                                 </table>
                             </div>
-
                         </div>
                     </div>
                 </div>

@@ -247,7 +247,7 @@ class Modeloadministrador extends CI_Model {
     }
 
     public function Usuarios() {
-        $this->db->select("u.IdUsuarios, u.Nombre,concat(p.Nombre,' ',p.APaterno)as NombreCompleto");
+        $this->db->select("u.IdUsuarios, u.Nombre,concat(p.Nombre,' ',p.APaterno,' ',p.AMaterno)as NombreCompleto");
         $this->db->from('Usuarios u');
         $this->db->join('Personas p', 'p.IdPersonas= u.PersonasId');
         $this->db->where('u.Activo', 1);
@@ -261,6 +261,129 @@ class Modeloadministrador extends CI_Model {
         $this->db->where('p.Activo', 1);
         $consulta = $this->db->get();
         return $consulta;
+    }
+
+    public function Usuario($usuario_id) {
+        $this->db->select("u.IdUsuarios, u.Nombre,concat(p.Nombre,' ',p.APaterno,' ',p.AMaterno)as NombreCompleto,p.AMaterno,p.APaterno,p.Nombre as NombrePersona");
+        $this->db->from('Usuarios u');
+        $this->db->join('Personas p', 'p.IdPersonas= u.PersonasId');
+        $this->db->where('u.IdUsuarios', $usuario_id);
+        $consulta = $this->db->get()->row();
+        return $consulta;
+    }
+
+    public function PuestosUsuario($usuario_id) {
+        $this->db->select("u.IdUsuarios, pu.Nombre,pu.FechaInicio,pu.FechaFin,a.Nombre as Area,pu.IdPuestos,pu.Activo,pu.Clave");
+        $this->db->from('Usuarios u');
+        $this->db->join('Personas p', 'p.IdPersonas= u.PersonasId');
+        $this->db->join('Puestos pu', 'p.IdPersonas= pu.PersonasId');
+        $this->db->join('Areas a', 'a.IdAreas= pu.AreasId');
+        $this->db->where('u.IdUsuarios', $usuario_id);
+        $consulta = $this->db->get();
+        return $consulta;
+    }
+
+    public function Puestos() {
+        $this->db->select("p.IdPuestos, p.Nombre");
+        $this->db->from('Puestos p');
+        $this->db->group_by('p.Nombre');
+        $consulta = $this->db->get();
+        return $consulta;
+    }
+
+    public function Areas() {
+        $this->db->select("a.Nombre,a.IdAreas");
+        $this->db->from('Areas a');
+        $consulta = $this->db->get();
+        return $consulta;
+    }
+
+    public function PerfilesUsuario($usuario_id) {
+        $this->db->select('per.Nombre, per.IdPerfiles,p.FechaInicio,p.FechaFin, p.IdPerfilesUsuarios');
+        $this->db->from('PerfilesUsuarios p');
+        $this->db->join('Perfiles per', 'per.IdPerfiles= p.PerfilesId');
+        $this->db->where('p.UsuariosId', $usuario_id);
+        $this->db->where('p.Activo', 1);
+        $consulta = $this->db->get();
+        return $consulta;
+    }
+
+    public function TienePerfil($id, $perfil) {
+        $this->db->select('p.Nombre, p.IdPerfiles');
+        $this->db->from('Perfiles p');
+        $this->db->join('PerfilesUsuarios pu', 'p.IdPerfiles= pu.PerfilesId');
+        $this->db->where('pu.UsuariosId', $id);
+        $this->db->where('p.Activo', 1);
+        $this->db->where('pu.Activo', 1);
+        $this->db->where('p.IdPerfiles', $perfil);
+        $consulta = $this->db->get();
+        if ($consulta->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function TienePuesto($usuario_id, $puesto) {
+        $this->db->select("u.IdUsuarios, pu.Nombre,pu.FechaInicio,pu.FechaFin");
+        $this->db->from('Usuarios u');
+        $this->db->join('Personas p', 'p.IdPersonas= u.PersonasId');
+        $this->db->join('Puestos pu', 'p.IdPersonas= pu.PersonasId');
+        $this->db->where('u.IdUsuarios', $usuario_id);
+        $this->db->where('pu.Nombre', $puesto);
+        $consulta = $this->db->get();
+        if ($consulta->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function AgregarPerfil($usuario, $perfil) {
+        $Historial = array(
+            'UsuariosId' => $usuario,
+            'UsuarioAsignaId' => IdUsuario(),
+            'PerfilesId' => $perfil,
+            'Activo' => 1,
+            'FechaInicio' => date('Y-m-d | h:i:sa')
+        );
+        $this->db->insert('PerfilesUsuarios', $Historial);
+        return $this->db->insert_id();
+    }
+
+    public function EliminarPerfil($usuario, $perfil) {
+        $this->db->set("Activo", 0);
+        $this->db->set("FechaFin", date('Y-m-d | h:i:sa'));
+        $this->db->where("IdPerfilesUsuarios", $perfil);
+        $this->db->update("PerfilesUsuarios");
+    }
+
+    public function Persona($usuario) {
+        $this->db->select('u.PersonasId');
+        $this->db->from("Usuarios u");
+        $this->db->where("IdUsuarios", $usuario);
+        return $this->db->get()->row();
+    }
+
+    public function AgregarPuesto($usuario, $puesto, $area, $clave) {
+        $Historial = array(
+            'Nombre' => $puesto,
+            'AreasId' => $area,
+            'PersonasId' => $this->Persona($usuario)->PersonasId,
+            'Activo' => 1,
+            'Clave' => $clave,
+            'UsuarioAsignaId' => IdUsuario(),
+            'FechaInicio' => date('Y-m-d | h:i:sa')
+        );
+        $this->db->insert('Puestos', $Historial);
+        return $this->db->insert_id();
+    }
+
+    public function EliminarPuesto($usuario, $puesto) {
+        $this->db->set("Activo", 0);
+        $this->db->set("FechaFin", date('Y-m-d | h:i:sa'));
+        $this->db->where("IdPuestos", $puesto);
+        $this->db->update("Puestos");
     }
 
 }

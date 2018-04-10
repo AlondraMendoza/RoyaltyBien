@@ -220,6 +220,59 @@ class Modelocedis extends CI_Model {
         $this->db->update("Pedidos");
     }
 
+    public function ListaModelos() {
+        $this->db->select("*");
+        $this->db->from("Modelos");
+        $this->db->where("Activo", 1);
+        $fila = $this->db->get();
+        return $fila;
+    }
+
+    public function ListaProductos($modelo) {
+        $this->db->select("p.*");
+        $this->db->from("CProductosModelos cp");
+        $this->db->join("CProductos p", "p.IdCProductos=cp.CProductosId");
+        $this->db->where("cp.Activo", 1);
+        $this->db->where("p.Activo", 1);
+        $this->db->where("ModelosId", $modelo);
+        $fila = $this->db->get();
+        return $fila;
+    }
+
+    public function ListaColores($modelo) {
+        $this->db->select("c.*");
+        $this->db->from("ModelosColores mc");
+        $this->db->join("Colores c", "c.IdColores=mc.ColoresId");
+        $this->db->where("c.Activo", 1);
+        $this->db->where("ModelosId", $modelo);
+        $fila = $this->db->get();
+        return $fila;
+    }
+
+    public function ProductosCedis($modelo, $color, $clasificacion, $producto) {
+        //print("SELECT count(*) as cuantos from InventariosCedis ic JOIN Productos p on p.IdProductos=ic.ProductosId JOIN CProductos cp on cp.IdCProductos=p.CProductosId where cp.IdCProductos= " . $producto . " AND Clasificacion(p.IdProductos)=" . $clasificacion . " AND ic.FechaSalida is null AND p.ModelosId= " . $modelo . " AND p.ColoresId= " . $color . " GROUP BY p.IdProductos");
+        $query = $this->db->query("SELECT count(*) as cuantos from InventariosCedis ic JOIN Productos p on p.IdProductos=ic.ProductosId JOIN CProductos cp on cp.IdCProductos=p.CProductosId where cp.IdCProductos= " . $producto . " AND Clasificacion(p.IdProductos)=" . $clasificacion . " AND ic.FechaSalida is null AND p.ModelosId= " . $modelo . " AND p.ColoresId= " . $color . " ");
+        $row = $query->row();
+        if (isset($row)) {
+            return $row->cuantos;
+        }
+    }
+
+    public function Clasificacion($producto_id) {
+        $this->db->select("c.Letra,c.Color,h.FueraTono");
+        $this->db->from("HistorialClasificacion h");
+        $this->db->join("Clasificaciones c", "c.IdClasificaciones=h.ClasificacionesId");
+        $this->db->where("h.ProductosId", $producto_id);
+        $this->db->where("h.Activo", 1);
+        $this->db->Order_by("h.IdHistorialClasificacion", "desc");
+        $fila = $this->db->get()->row();
+        if ($fila != null) {
+            return $fila;
+        } else {
+            return "";
+        }
+    }
+
 }
 
 ?>

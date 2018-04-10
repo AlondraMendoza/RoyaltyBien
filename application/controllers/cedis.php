@@ -142,6 +142,16 @@ class Cedis extends CI_Controller {
         print("correcto");
     }
 
+    public function MaximosMinimos() {
+        $infoheader["titulo"] = "Máximos y Mínimos: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->model("modelocedis");
+        $infocontent["modelos"] = $this->modelocedis->ListaModelos();
+        $this->load->view('cedis/MaximosMinimos', $infocontent);
+
+        $this->load->view('template/footerd', '');
+    }
+
 }
 
 //Guardar fecha de presalida

@@ -2096,7 +2096,7 @@ a.tag {
 .table {
     width: 100%;
     margin: .625rem 0;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 }
 .table th,
 .table td {
@@ -10008,7 +10008,7 @@ input[type="submit"].link:active {
     float: left;
     padding: 8px 24px;
     color: #1d1d1d;
-    font-size: .6875rem;
+    font-size: .875rem;
     font-weight: bold;
     text-transform: uppercase;
     position: relative;

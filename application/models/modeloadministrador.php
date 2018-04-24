@@ -287,12 +287,12 @@ class Modeloadministrador extends CI_Model {
         }
         //$query = $this->db->query("select p.IdProductos,cp.Nombre as producto,m.Nombre as modelo,co.Nombre as color from Productos p left join CProductos cp on cp.IdCProductos=p.CProductosId left join Modelos m on m.IdModelos=p.ModelosId left join Colores co on co.IdColores=p.ColoresId where  date(FechaQuemado) BETWEEN $fechainicio AND $fechafin" . $parteclasificacion . $parteproducto . $partemodelo . $partecolor);
         //Agregar count y group
-        $query=$this->db->query("select count(*) as cuantos, h.NHorno as horno, cp.Nombre as producto,m.Nombre as modelo,co.Nombre as color from "
-                . "Productos p left join CProductos cp on cp.IdCProductos=p.CProductosId "
-                . "left join Modelos m on m.IdModelos=p.ModelosId left join Colores co on co.IdColores=p.ColoresId left join Hornos"
-                . " h on p.HornosId=h.IdHornos where  date(FechaQuemado) "
-                . "BETWEEN $fechainicio AND $fechafin" . $parteclasificacion . $parteproducto . $partemodelo . $partecolor ." group by horno");
-        print_r($this->db->get_compiled_select());
+       // $query=$this->db->query("select count(*) as cuantos, h.NHorno as horno, cp.Nombre as producto,m.Nombre as modelo,co.Nombre as color from "
+//                . "Productos p left join CProductos cp on cp.IdCProductos=p.CProductosId "
+//                . "left join Modelos m on m.IdModelos=p.ModelosId left join Colores co on co.IdColores=p.ColoresId left join Hornos"
+//                . " h on p.HornosId=h.IdHornos where  date(FechaQuemado) "
+//                . "BETWEEN $fechainicio AND $fechafin" . $parteclasificacion . $parteproducto . $partemodelo . $partecolor ." group by horno");
+        //print_r($this->db->get_compiled_select());
         return $query;
     }
 

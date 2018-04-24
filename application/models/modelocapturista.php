@@ -113,7 +113,7 @@ class Modelocapturista extends CI_Model {
             'CarrosId'=>$carro,
             'HornosId'=>$horno,
             'FechaQuemado'=> $fecha,
-            'UsuariosId'=>1,
+            'UsuariosId'=>IdUsuario(),
             'Activo'=>1,
             'Clasificado'=>0,
             'ModelosId'=>$mod,
@@ -159,7 +159,7 @@ class Modelocapturista extends CI_Model {
              $datos = array(
             'CProductosId'=> 7,
             'FechaQuemado'=> $fecha,
-            'UsuariosId'=>1,
+            'UsuariosId'=>IdUsuario(),
             );             
             $this->db->set('FechaCaptura', 'NOW()', FALSE);
             $this->db->insert('CarrosAccesorios', $datos);  

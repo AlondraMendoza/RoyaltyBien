@@ -20,7 +20,7 @@
                                 <?= $usuario->NombreCompleto ?>
                             </td>
                             <td class="center">
-                                <a class="button block-shadow-info text-shadow primary" href="ExpedienteUsuario?usuario=<?= $usuario->IdUsuarios ?>">Abril Expediente</a>
+                                <a class="button block-shadow-info text-shadow primary" href="ExpedienteUsuario?usuario=<?= $usuario->IdUsuarios ?>">Abrir Expediente</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

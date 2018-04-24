@@ -30,6 +30,20 @@ class Administrador extends CI_Controller {
         $this->load->view('administrador/Reportes', $infocontent);
         $this->load->view('template/footerd', '');
     }
+    
+    public function ReporteQuemado() {
+        $this->load->model("modeloadministrador");
+        $infoheader["titulo"] = "Administrador: Royalty Ceramic";
+        $infocontent["Nombre"] = "Alondra Mendoza";
+        $infocontent["hoy"] = date("d/m/Y");
+        $infocontent["hornos"] = $this->modeloadministrador->Hornos();
+        $infocontent["productos"] = $this->modeloadministrador->Productos();
+        $infocontent["modelos"] = $this->modeloadministrador->Modelos(0);
+        $infocontent["colores"] = $this->modeloadministrador->Colores(0);
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->view('administrador/ReporteQuemado', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
 
     public function ObtenerModelos() {
         $producto = $this->input->post_get('producto', TRUE);
@@ -78,6 +92,41 @@ class Administrador extends CI_Controller {
         $infocontent["por"] = $por;
         $infocontent["productos"] = $this->modeloadministrador->GenerarConcentrado($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $por);
         $this->load->view('administrador/GenerarConcentrado', $infocontent);
+    }
+    
+    public function GenerarReporteQ() {
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $hornos = $this->input->post_get('hornos', TRUE);
+        $ahornos = json_decode($hornos);
+
+        $producto = $this->input->post_get('producto', TRUE);
+        $aproducto = json_decode($producto);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $amodelo = json_decode($modelo);
+        $color = $this->input->post_get('color', TRUE);
+        $acolor = json_decode($color);
+        $this->load->model("modeloadministrador");
+        $infocontent["productos"] = $this->modeloadministrador->GenerarReporteQ($fechainicio, $fechafin, $ahornos, $aproducto, $amodelo, $acolor);
+        $this->load->view('administrador/GenerarReporteQ', $infocontent);
+    }
+
+    public function GenerarConcentradoQ() {
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $hornos = $this->input->post_get('hornos', TRUE);
+        $ahornos = json_decode($hornos);
+        $producto = $this->input->post_get('producto', TRUE);
+        $aproducto = json_decode($producto);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $amodelo = json_decode($modelo);
+        $color = $this->input->post_get('color', TRUE);
+        $acolor = json_decode($color);
+        $por = $this->input->post_get('por', TRUE);
+        $this->load->model("modeloadministrador");
+        $infocontent["por"] = $por;
+        $infocontent["productos"] = $this->modeloadministrador->GenerarConcentradoQ($fechainicio, $fechafin, $ahornos, $aproducto, $amodelo, $acolor, $por);
+        $this->load->view('administrador/GenerarConcentradoQ', $infocontent);
     }
 
     public function CapturaPerfiles() {

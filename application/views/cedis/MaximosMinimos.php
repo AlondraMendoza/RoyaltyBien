@@ -1,3 +1,4 @@
+<h1 class="light text-shadow">MÁXIMOS Y MÍNIMOS</h1><br>
 <div class="tabcontrol" data-role="tabcontrol" data-save-state="true" id='tabs'>
     <ul class="tabs">
         <?php foreach ($modelos->result() as $modelo): ?>
@@ -30,8 +31,8 @@
                             <tr>
                                 <td class="center"></td>
                                 <?php foreach ($productos->result() as $producto): ?>
-                                    <td class="center">A</td>
-                                    <td class="center">B</td>
+                                    <td class="center" style="border: 1px #000 solid"><b>A</b></td>
+                                    <td class="center" style="border: 1px #000 solid"><b>B</b></td>
                                 <?php endforeach ?>
                             </tr>
                             <?php
@@ -42,17 +43,39 @@
                                     <td>
                                         <?= $color->Nombre ?>
                                     </td>
-                                    <?php foreach ($productos->result() as $producto): ?>
+                                    <?php
+                                    foreach ($productos->result() as $producto):
+                                        $proda = $ci->modelocedis->ProductosCedis($modelo->IdModelos, $color->IdColores, 1, $producto->IdCProductos);
+                                        $prodb = $ci->modelocedis->ProductosCedis($modelo->IdModelos, $color->IdColores, 2, $producto->IdCProductos);
+                                        $maximominimoa = $ci->modelocedis->MaximoMinimo($modelo->IdModelos, $color->IdColores, 1, $producto->IdCProductos, $proda);
+                                        $maximominimob = $ci->modelocedis->MaximoMinimo($modelo->IdModelos, $color->IdColores, 2, $producto->IdCProductos, $prodb);
+                                        $semaforoa = "gray";
+                                        $semaforob = "gray";
+                                        $maximoa = "--";
+                                        $minimoa = "--";
+                                        $maximob = "--";
+                                        $minimob = "--";
+
+                                        if ($maximominimoa != null) {
+                                            $semaforoa = $ci->modelocedis->ColorMaximosMinimos($proda, $maximominimoa->Maximo, $maximominimoa->Minimo);
+                                            $maximoa = $maximominimoa->Maximo;
+                                            $minimoa = $maximominimoa->Minimo;
+                                        }
+                                        if ($maximominimob != null) {
+                                            $semaforob = $ci->modelocedis->ColorMaximosMinimos($prodb, $maximominimob->Maximo, $maximominimob->Minimo);
+                                            $maximob = $maximominimob->Maximo;
+                                            $minimob = $maximominimob->Minimo;
+                                        }
+                                        ?>
                                         <td class="center">
-                                            <?= $ci->modelocedis->ProductosCedis($modelo->IdModelos, $color->IdColores, 1, $producto->IdCProductos); ?>
+                                            <button title="Mínimo:<?= $minimoa ?>  Máximo:<?= $maximoa ?>" class="button cycle-button bg-<?= $semaforoa ?>"></button><br><?= $proda ?>
                                         </td>
                                         <td class="center">
-                                            <?= $ci->modelocedis->ProductosCedis($modelo->IdModelos, $color->IdColores, 2, $producto->IdCProductos); ?>
+                                            <button title="Mínimo:<?= $minimob ?>  Máximo:<?= $maximob ?>" class="button cycle-button bg-<?= $semaforob ?>"></button><br><?= $prodb ?>
                                         </td>
                                     <?php endforeach ?>
                                     <td class="center">
-                                        <?php
-                                        ?>
+                                        <?php ?>
                                     </td>
                                 </tr>
                             <?php endforeach ?>

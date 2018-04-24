@@ -251,10 +251,36 @@ class Modelocedis extends CI_Model {
 
     public function ProductosCedis($modelo, $color, $clasificacion, $producto) {
         //print("SELECT count(*) as cuantos from InventariosCedis ic JOIN Productos p on p.IdProductos=ic.ProductosId JOIN CProductos cp on cp.IdCProductos=p.CProductosId where cp.IdCProductos= " . $producto . " AND Clasificacion(p.IdProductos)=" . $clasificacion . " AND ic.FechaSalida is null AND p.ModelosId= " . $modelo . " AND p.ColoresId= " . $color . " GROUP BY p.IdProductos");
-        $query = $this->db->query("SELECT count(*) as cuantos from InventariosCedis ic JOIN Productos p on p.IdProductos=ic.ProductosId JOIN CProductos cp on cp.IdCProductos=p.CProductosId where cp.IdCProductos= " . $producto . " AND Clasificacion(p.IdProductos)=" . $clasificacion . " AND ic.FechaSalida is null AND p.ModelosId= " . $modelo . " AND p.ColoresId= " . $color . " ");
+        $query = $this->db->query("SELECT count(*) as cuantos from InventariosCedis ic JOIN Productos p on p.IdProductos=ic.ProductosId JOIN CProductos cp on cp.IdCProductos=p.CProductosId where cp.IdCProductos= " . $producto . " AND Clasificacion(p.IdProductos)=" . $clasificacion . " AND ic.FechaSalida is null AND p.ModelosId= " . $modelo . " AND ic.Activo=1 AND p.ColoresId= " . $color . " ");
         $row = $query->row();
         if (isset($row)) {
             return $row->cuantos;
+        }
+    }
+
+    public function ColorMaximosMinimos($productos, $maximo, $minimo) {
+        //$query = $this->db->query("SELECT Maximo,Minimo from MaximosMinimos mm where mm.CProductosId= " . $producto . " AND ClasificacionesId=" . $clasificacion . " AND mm.ModelosId= " . $modelo . " AND mm.Activo=1 AND mm.ColoresId= " . $color . " order by IdMaximosMinimos desc");
+        //$row = $query->row();
+        if ($maximo != "--" && $minimo != "--") {
+            if ($productos <= $minimo) {
+                return "red";
+            } else if ($productos > $minimo && $productos < $maximo) {
+                return "green";
+            } else {
+                return "blue";
+            }
+        } else {
+            return "gray";
+        }
+    }
+
+    public function MaximoMinimo($modelo, $color, $clasificacion, $producto) {
+        $query = $this->db->query("SELECT Maximo,Minimo from MaximosMinimos mm where mm.CProductosId= " . $producto . " AND ClasificacionesId=" . $clasificacion . " AND mm.ModelosId= " . $modelo . " AND mm.Activo=1 AND mm.ColoresId= " . $color . " order by IdMaximosMinimos desc");
+        $row = $query->row();
+        if (isset($row)) {
+            return $row;
+        } else {
+            return null;
         }
     }
 

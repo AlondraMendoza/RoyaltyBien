@@ -99,7 +99,6 @@ class Administrador extends CI_Controller {
         $fechafin = $this->input->post_get('fechafin', TRUE);
         $hornos = $this->input->post_get('hornos', TRUE);
         $ahornos = json_decode($hornos);
-
         $producto = $this->input->post_get('producto', TRUE);
         $aproducto = json_decode($producto);
         $modelo = $this->input->post_get('modelo', TRUE);

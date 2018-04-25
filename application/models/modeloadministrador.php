@@ -291,7 +291,8 @@ class Modeloadministrador extends CI_Model {
                 . "Productos p left join CProductos cp on cp.IdCProductos=p.CProductosId "
                 . "left join Modelos m on m.IdModelos=p.ModelosId left join Colores co on co.IdColores=p.ColoresId left join Hornos"
                 . " h on p.HornosId=h.IdHornos where  date(FechaQuemado) "
-                . "BETWEEN $fechainicio AND $fechafin" . $parteclasificacion . $parteproducto . $partemodelo . $partecolor ." group by horno");
+                . "BETWEEN $fechainicio AND $fechafin" . $parteclasificacion . $parteproducto . $partemodelo . $partecolor ." group by horno ,m.IdModelos, cp.IdCProductos, co.IdColores");
+        
         //print_r($this->db->get_compiled_select());
         return $query;
     }
@@ -311,7 +312,7 @@ class Modeloadministrador extends CI_Model {
                 if ($contclasi > 1) {
                     $parteclasificacion .= " OR ";
                 }
-                $parteclasificacion .= " Horno(p.IdProductos) =" . $ac;
+                $parteclasificacion .= " p.HornosId =" . $ac;
                 $contclasi++;
             }
             $parteclasificacion .= " ) ";
@@ -357,8 +358,8 @@ class Modeloadministrador extends CI_Model {
         }
         $campo = "";
         switch ($por) {
-            case "Horno(p.IdProductos)":
-                $campo = "Horno(p.IdProductos) as Nombre";
+            case "p.HornosId":
+                $campo = "p.HornosId as Nombre";
                 break;
             case "cp.IdCproductos":
                 $campo = "cp.Nombre";
@@ -370,6 +371,7 @@ class Modeloadministrador extends CI_Model {
                 $campo = "co.Nombre";
                 break;
         }
+
         $query = $this->db->query("select count(*) as cuantos, $campo from Productos p left join CProductos cp on cp.IdCProductos=p.CProductosId left join Modelos m on m.IdModelos=p.ModelosId left join Colores co on co.IdColores=p.ColoresId where  date(FechaQuemado) BETWEEN $fechainicio AND $fechafin" . $parteclasificacion . $parteproducto . $partemodelo . $partecolor . " group by " . $por);
         return $query;
     }

@@ -26,7 +26,7 @@ class Almacenista extends CI_Controller {
         $this->load->view('almacenista/capturaGriferia', $infocontent);
         $this->load->view('template/footerd', '');
     }
-<<<<<<< HEAD
+
      public function barcodevista($filepath = "", $text = "", $size = "20", $orientation = "horizontal", $code_type = "code128", $print = false, $SizeFactor = 1) {
         $text = $this->input->post_get('text', TRUE);
         $code_string = "";
@@ -157,8 +157,6 @@ class Almacenista extends CI_Controller {
             imagedestroy($image);
         }
     }
-=======
->>>>>>> 8ed3baf00bb72e3dcbb43d114dc6f7cdaeb387c7
 
     public function SalidaGriferia() {
         $infoheader["titulo"] = "Almacén: Royalty Ceramic";
@@ -363,7 +361,6 @@ class Almacenista extends CI_Controller {
         }
         print json_encode($infocontent);
     }
-<<<<<<< HEAD
     
     public function BusquedaTarimas() {
         $infoheader["titulo"] = "Almacén: Royalty Ceramic";
@@ -404,8 +401,4 @@ class Almacenista extends CI_Controller {
         $this->load->view('almacenista/ExpedienteTarima', $infocontent);
         $this->load->view('template/footerd', '');
     }
-    
-=======
-
->>>>>>> 8ed3baf00bb72e3dcbb43d114dc6f7cdaeb387c7
 }

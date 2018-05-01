@@ -152,6 +152,38 @@ class Cedis extends CI_Controller {
         $this->load->view('template/footerd', '');
     }
 
+    public function ConfiguracionMaximosMinimos() {
+        $infoheader["titulo"] = "Configuración Máximos y Mínimos: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->model("modelocedis");
+        $infocontent["modelos"] = $this->modelocedis->ListaModelos();
+        $this->load->view('cedis/ConfiguracionMaximosMinimos', $infocontent);
+
+        $this->load->view('template/footerd', '');
+    }
+
+    public function GuardarMaximo() {
+        $cproducto = $this->input->post_get('cproducto', TRUE);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $color = $this->input->post_get('color', TRUE);
+        $clasificacion = $this->input->post_get('clasificacion', TRUE);
+        $valor = $this->input->post_get('valor', TRUE);
+        $this->load->model("modelocedis");
+        $this->modelocedis->GuardarMaximo($cproducto, $modelo, $color, $clasificacion, $valor);
+        print("correcto");
+    }
+
+    public function GuardarMinimo() {
+        $cproducto = $this->input->post_get('cproducto', TRUE);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $color = $this->input->post_get('color', TRUE);
+        $clasificacion = $this->input->post_get('clasificacion', TRUE);
+        $valor = $this->input->post_get('valor', TRUE);
+        $this->load->model("modelocedis");
+        $this->modelocedis->GuardarMinimo($cproducto, $modelo, $color, $clasificacion, $valor);
+        print("correcto");
+    }
+
 }
 
 //Guardar fecha de presalida

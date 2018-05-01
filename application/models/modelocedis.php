@@ -275,7 +275,7 @@ class Modelocedis extends CI_Model {
     }
 
     public function MaximoMinimo($modelo, $color, $clasificacion, $producto) {
-        $query = $this->db->query("SELECT Maximo,Minimo from MaximosMinimos mm where mm.CProductosId= " . $producto . " AND ClasificacionesId=" . $clasificacion . " AND mm.ModelosId= " . $modelo . " AND mm.Activo=1 AND mm.ColoresId= " . $color . " order by IdMaximosMinimos desc");
+        $query = $this->db->query("SELECT Maximo,Minimo from MaximosMinimos mm where mm.CProductosId= " . $producto . " AND ClasificacionesId=" . $clasificacion . " AND mm.ModelosId= " . $modelo . " AND mm.Activo=1 AND Tipo='CEDIS' AND mm.ColoresId= " . $color . " order by IdMaximosMinimos desc");
         $row = $query->row();
         if (isset($row)) {
             return $row;
@@ -296,6 +296,62 @@ class Modelocedis extends CI_Model {
             return $fila;
         } else {
             return "";
+        }
+    }
+
+    public function GuardarMaximo($cproducto, $modelo, $color, $clasificacion, $valor) {
+        $maximominimo = $this->MaximoMinimo($modelo, $color, $clasificacion, $cproducto);
+        if ($maximominimo == null) {
+            $datos = array(
+                'ModelosId' => $modelo,
+                'Fecha' => date('Y-m-d | h:i:sa'),
+                'Maximo' => $valor,
+                'ColoresId' => $color,
+                'ClasificacionesId' => $clasificacion,
+                'CProductosId' => $cproducto,
+                'UsuariosId' => IdUsuario(),
+                'Tipo' => "CEDIS",
+                'Activo' => 1
+            );
+            $this->db->insert('MaximosMinimos', $datos);
+        } else {
+            $this->db->set("Maximo", $valor);
+            $this->db->set("Fecha", date('Y-m-d | h:i:sa'));
+            $this->db->set("UsuariosId", IdUsuario());
+            $this->db->where("ModelosId", $modelo);
+            $this->db->where("CProductosId", $cproducto);
+            $this->db->where("ColoresId", $color);
+            $this->db->where("ClasificacionesId", $clasificacion);
+            $this->db->where("Tipo", "CEDIS");
+            $this->db->update("MaximosMinimos");
+        }
+    }
+
+    public function GuardarMinimo($cproducto, $modelo, $color, $clasificacion, $valor) {
+        $maximominimo = $this->MaximoMinimo($modelo, $color, $clasificacion, $cproducto);
+        if ($maximominimo == null) {
+            $datos = array(
+                'ModelosId' => $modelo,
+                'Fecha' => date('Y-m-d | h:i:sa'),
+                'Minimo' => $valor,
+                'ColoresId' => $color,
+                'ClasificacionesId' => $clasificacion,
+                'CProductosId' => $cproducto,
+                'UsuariosId' => IdUsuario(),
+                'Tipo' => "CEDIS",
+                'Activo' => 1
+            );
+            $this->db->insert('MaximosMinimos', $datos);
+        } else {
+            $this->db->set("Minimo", $valor);
+            $this->db->set("Fecha", date('Y-m-d | h:i:sa'));
+            $this->db->set("UsuariosId", IdUsuario());
+            $this->db->where("ModelosId", $modelo);
+            $this->db->where("CProductosId", $cproducto);
+            $this->db->where("ColoresId", $color);
+            $this->db->where("ClasificacionesId", $clasificacion);
+            $this->db->where("Tipo", "CEDIS");
+            $this->db->update("MaximosMinimos");
         }
     }
 

@@ -208,4 +208,68 @@ class Administrador extends CI_Controller {
         print_r("correcto");
     }
 
+    public function Productos() {
+        $this->load->model("modeloadministrador");
+        $infoheader["titulo"] = "Administrador: Royalty Ceramic";
+        $infocontent["productos"] = $this->modeloadministrador->ProductosT();
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->view('administrador/Productos', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+    
+    public function DetalleProd() {
+       $this->load->model("modeloadministrador");
+        $infoheader["titulo"] = "Administrador: Royalty Ceramic";
+        $producto = $this->input->post_get('producto', TRUE);
+        $infocontent["producto"] = $this->modeloadministrador->ProductosT($producto);
+        $infocontent["modelos"] = $this->modeloadministrador->ObtenerModelos($producto);
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->view('administrador/DetalleProd', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+    
+    public function DetalleMod() {
+       $this->load->model("modeloadministrador");
+        $infoheader["titulo"] = "Administrador: Royalty Ceramic";
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $infocontent["colores"] = $this->modeloadministrador->ObtenerColores($modelo);
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->view('administrador/DetalleMod', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+    
+    public function DesactivarProducto() {
+        $this->load->model("modeloadministrador");
+        $producto = $this->input->post_get('producto', TRUE);
+        $this->modeloadministrador->DesactivarProducto($producto);
+        print_r("correcto");
+    }
+    
+    public function ActivarProducto() {
+        $this->load->model("modeloadministrador");
+        $producto = $this->input->post_get('producto', TRUE);
+        $this->modeloadministrador->ActivarProducto($producto);
+        print_r("correcto");
+    }
+    
+    public function NuevoProducto(){
+        $this->load->model("modeloadministrador");
+        $nombre = $this->input->post_get('nombre', TRUE);
+        $this->modeloadministrador->NuevoProducto($nombre);
+        print_r("correcto");
+    }
+    
+     public function DesactivarModelo() {
+        $this->load->model("modeloadministrador");
+        $codigo = $this->input->post_get('codigo', TRUE);
+        $this->modeloadministrador->DesactivarModelo($codigo);
+        print_r("correcto");
+    }
+    
+    public function ActivarModelo() {
+        $this->load->model("modeloadministrador");
+        $codigo = $this->input->post_get('codigo', TRUE);
+        $this->modeloadministrador->ActivarModelo($codigo);
+        print_r("correcto");
+    }
 }

@@ -268,7 +268,7 @@
                 <td class="center">
                     <div class="input-control select full-size">
                         <select id="concentradox">
-                            <option value="p.HornosId">Hornos</option>
+                            <option value="h.IdHornos">Hornos</option>
                             <option value="">Horneros</option>
                             <option value="cp.IdCproductos">Producto</option>
                             <option value="m.IdModelos">Modelo</option>

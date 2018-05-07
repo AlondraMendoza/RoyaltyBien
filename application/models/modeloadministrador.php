@@ -358,8 +358,8 @@ class Modeloadministrador extends CI_Model {
         }
         $campo = "";
         switch ($por) {
-            case "p.HornosId":
-                $campo = "p.HornosId as Nombre";
+            case "h.IdHornos":
+                $campo = "h.NHorno as Nombre";
                 break;
             case "cp.IdCproductos":
                 $campo = "cp.Nombre";
@@ -372,7 +372,7 @@ class Modeloadministrador extends CI_Model {
                 break;
         }
 
-        $query = $this->db->query("select count(*) as cuantos, $campo from Productos p left join CProductos cp on cp.IdCProductos=p.CProductosId left join Modelos m on m.IdModelos=p.ModelosId left join Colores co on co.IdColores=p.ColoresId where  date(FechaQuemado) BETWEEN $fechainicio AND $fechafin" . $parteclasificacion . $parteproducto . $partemodelo . $partecolor . " group by " . $por);
+        $query = $this->db->query("select count(*) as cuantos, $campo from Productos p left join CProductos cp on cp.IdCProductos=p.CProductosId left join Modelos m on m.IdModelos=p.ModelosId left join Colores co on co.IdColores=p.ColoresId left join Hornos h on h.IdHornos=p.HornosId where  date(FechaQuemado) BETWEEN $fechainicio AND $fechafin" . $parteclasificacion . $parteproducto . $partemodelo . $partecolor . " group by " . $por);
         return $query;
     }
     
@@ -581,7 +581,68 @@ class Modeloadministrador extends CI_Model {
         $this->db->where("IdPuestos", $puesto);
         $this->db->update("Puestos");
     }
+    
+    public function ProductosT() {
+        $this->db->select('*');
+        $this->db->from("CProductos");
+        return $this->db->get();
+    }
+    
+    public function ObtenerModelos($producto) {
+        $this->db->select('m.*, cm.Imagen as Imagen, cm.Activo as Activocm, cm.IdCProductosModelos as codigo');
+        $this->db->from("CProductosModelos cm");
+        $this->db->join("Modelos m", "m.IdModelos=cm.ModelosId");
+        $this->db->where("CProductosId=", $producto);
+        //$this->db->where("cm.Activo=", 1);
+        return $this->db->get(); 
+    }
+    
+    public function ObtenerColores($modelo) {
+        $this->db->select('c.*');
+        $this->db->from("ModelosColores mc");
+        $this->db->join("Colores c", "c.IdColores=mc.ColoresId");
+        $this->db->where("ModelosId=", $modelo);
+        $this->db->where("c.Activo=", 1);
+        return $this->db->get();
+    }
+    
+    public function DesactivarProducto($producto){
+        $this->db->set("Activo", 0);
+        $this->db->set("UsuariosId",IdUsuario());
+        $this->db->where("IdCProductos", $producto);
+        $this->db->update("CProductos");
+    }
+    
+    public function ActivarProducto($producto){
+        $this->db->set("Activo", 1);
+        $this->db->set("UsuariosId",IdUsuario());
+        $this->db->where("IdCProductos", $producto);
+        $this->db->update("CProductos");
+    }
 
+    public function NuevoProducto($nombre){
+        $datos = array(
+            'Nombre'=> $nombre,
+            'Imagen'=> null,
+            'Activo'=> 1,
+            'UsuariosId'=>IdUsuario(),
+        );             
+        $this->db->insert('CProductos', $datos);
+    }
+    
+    public function DesactivarModelo($codigo){
+        $this->db->set("Activo", 0);
+        $this->db->set("UsuariosId",IdUsuario());
+        $this->db->where("IdCProductosModelos", $codigo);
+        $this->db->update("CProductosModelos");
+    }
+    
+    public function ActivarModelo($codigo){
+        $this->db->set("Activo", 1);
+        $this->db->set("UsuariosId",IdUsuario());
+        $this->db->where("IdCProductosModelos", $codigo);
+        $this->db->update("CProductosModelos");
+    }
 }
 ?>
 

@@ -643,6 +643,85 @@ class Modeloadministrador extends CI_Model {
         $this->db->where("IdCProductosModelos", $codigo);
         $this->db->update("CProductosModelos");
     }
+    
+    public function TodosModelos(){
+        $this->db->select('m.*');
+        $this->db->from("Modelos m");
+        $this->db->where("m.Activo=", 1);
+        return $this->db->get();
+    }
+    
+    public function SeleccionModelo($nombre, $producto){
+        $datos = array(
+            'CProductosId'=> $producto,
+            'ModelosId'=>$nombre,
+            'Imagen'=> null,
+            'Activo'=> 1,
+            'UsuariosId'=>IdUsuario(),
+        );             
+        $this->db->insert('CProductosModelos', $datos);
+    }
+    //volver a verificar el id y el if
+    public function NuevoModelo($nombre, $producto){
+        $datos = array(
+            'Nombre'=> $nombre,
+            'Activo'=> 1,
+            'UsuariosId'=>IdUsuario(),
+        );             
+        $this->db->insert('Modelos', $datos);
+        $id=$this->db->insert_id();
+        if($id != 0){
+        $datosCPM = array(
+            'CProductosId'=> $producto,
+            'ModelosId'=>$id,
+            'Imagen'=> null,
+            'Activo'=> 1,
+            'UsuariosId'=>IdUsuario(),
+        );             
+        $this->db->insert('CProductosModelos', $datosCPM);
+        }
+    }
+    
+    public function DesactivarColor($color, $modelo) {
+        $this->db->where("ModelosId=", $modelo);
+        $this->db->where("ColoresId=", $color);
+        $this->db->delete("ModelosColores");
+    }
+    
+     public function TodosColores(){
+        $this->db->select('c.*');
+        $this->db->from("Colores c");
+        $this->db->where("c.Activo=", 1);
+        return $this->db->get();
+    }
+    
+    public function SeleccionColor($color, $modelo){
+        $datos= array(
+            'ModelosId'=>$modelo,
+            'ColoresId'=>$color,
+            'UsuariosId'=>IdUsuario(),
+        );
+        $this->db->insert('ModelosColores', $datos);
+    }
+    
+    public function NuevoColor($color, $modelo){
+        $datos = array(
+            'Nombre'=> $color,
+            'Descripcion'=>null,
+            'Activo'=> 1,
+            'UsuariosId'=>IdUsuario(),
+        );             
+        $this->db->insert('Colores', $datos);
+        $id=$this->db->insert_id();
+        if($id != 0){
+        $datosCPM = array(
+            'ModelosId'=>$modelo,
+            'ColoresId'=> $id,
+            'UsuariosId'=>IdUsuario(),
+        );             
+        $this->db->insert('ModelosColores', $datosCPM);
+        }
+    }
 }
 ?>
 

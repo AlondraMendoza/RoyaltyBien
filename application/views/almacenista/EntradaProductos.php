@@ -104,7 +104,7 @@ var guardado = 0;
                 </table>
             </div>
         </div>
-    <div id="resultadostarimas">
+    <div id="resultadostarimas" style="display: none">
         <center>
     <div class="panel primary" data-role="panel">
         <div class="heading">
@@ -158,7 +158,7 @@ var guardado = 0;
                 </table>
             </div>
         </div>
-    <div id="resultadostarimasP">
+    <div id="resultadostarimasP" style="display: none">
         <center>
     <div class="panel primary" data-role="panel">
         <div class="heading">

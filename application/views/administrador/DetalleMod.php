@@ -16,6 +16,29 @@
                 </thead>
                 <tbody>
                     <label id="mod" style="display:none;"><?=$modelo ?></label>
+                    <?php if($modelo==12){ ?>
+                    <?php
+                    $ci = &get_instance();
+                    $ci->load->model("modeloadministrador"); 
+                    $npen = $ci->modeloadministrador->TodosColores();?>
+                     <?php foreach ($npen->result() as $c): ?>
+                        <tr>
+                            <td class="bordered">
+                                <?= $c->Nombre ?>
+                            </td>
+                            <td class="center" rowspan="1" style="width: 30%">
+                                <img class="block-shadow-warning" src="<?= base_url() ?>public/colores/<?= $c->Descripcion ?>" height="100px;" width="100px;">
+                                <form enctype="multipart/form-data" action="uploader.php" method="POST">
+                                <input name="uploadedfile" type="file" />
+                                <input type="submit" value="Subir archivo" />
+                                </form>
+                            </td> 
+                            <td class="center">
+                                <a class="button block-shadow-info text-shadow alert" onclick="Desactivar(<?= $c->IdColores ?>)">Desactivar</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    <?php } else { ?>
                     <?php foreach ($colores->result() as $col): ?>
                         <tr>
                             <td class="bordered">
@@ -33,6 +56,7 @@
                             </td>
                         </tr>
                     <?php endforeach; ?>
+                    <?php } ?>
                         <tr>
                             <label id="col" style="display:none;"></label>
                             <td>

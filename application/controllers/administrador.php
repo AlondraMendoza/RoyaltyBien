@@ -37,11 +37,21 @@ class Administrador extends CI_Controller {
         $infocontent["Nombre"] = "Alondra Mendoza";
         $infocontent["hoy"] = date("d/m/Y");
         $infocontent["hornos"] = $this->modeloadministrador->Hornos();
-        $infocontent["productos"] = $this->modeloadministrador->Productos();
-        $infocontent["modelos"] = $this->modeloadministrador->Modelos(0);
+        $infocontent["productos"] = $this->modeloadministrador->ProductosQuemado();
+        $infocontent["modelos"] = $this->modeloadministrador->ModelosQuemado(0);
         $infocontent["colores"] = $this->modeloadministrador->Colores(0);
         $this->load->view('template/headerd', $infoheader);
         $this->load->view('administrador/ReporteQuemado', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+    
+    public function ReporteQAcc() {
+        $this->load->model("modeloadministrador");
+        $infoheader["titulo"] = "Administrador: Royalty Ceramic";
+        $infocontent["Nombre"] = "Alondra Mendoza";
+        $infocontent["hoy"] = date("d/m/Y");
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->view('administrador/ReporteQAcc', $infocontent);
         $this->load->view('template/footerd', '');
     }
 
@@ -74,6 +84,14 @@ class Administrador extends CI_Controller {
         $this->load->model("modeloadministrador");
         $infocontent["productos"] = $this->modeloadministrador->GenerarReporte($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor);
         $this->load->view('administrador/GenerarReporte', $infocontent);
+    }
+    
+    public function GenerarReporteQAcc() {
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $this->load->model("modeloadministrador");
+        $infocontent["productos"] = $this->modeloadministrador->GenerarReporteQAcc($fechainicio, $fechafin);
+        $this->load->view('administrador/GenerarReporteQAcc', $infocontent);
     }
 
     public function GenerarConcentrado() {

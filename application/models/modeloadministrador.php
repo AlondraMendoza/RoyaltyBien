@@ -16,6 +16,14 @@ class Modeloadministrador extends CI_Model {
         $this->db->where("Activo=", 1);
         return $this->db->get();
     }
+    
+    public function ProductosQuemado() {
+        $this->db->select('*');
+        $this->db->from("CProductos");
+        $this->db->where("Activo=", 1);
+        $this->db->where("IdCProductos!=", 7);
+        return $this->db->get();
+    }
 
     public function Clasificaciones() {
         $this->db->select('c.Letra,c.Color,c.IdClasificaciones');
@@ -40,6 +48,20 @@ class Modeloadministrador extends CI_Model {
             $this->db->where("CProductosId=", $producto);
         }
         $this->db->where("cm.Activo=", 1);
+        $this->db->group_by('m.IdModelos');
+        return $this->db->get();
+    }
+    
+    public function ModelosQuemado($producto) {
+
+        $this->db->select('m.*');
+        $this->db->from("CProductosModelos cm");
+        $this->db->join("Modelos m", "m.IdModelos=cm.ModelosId");
+        if ($producto > 0) { //Si producto=0 significa que seleccionó Todos por lo que se deben devolver todos los modelos
+            $this->db->where("CProductosId=", $producto);
+        }
+        $this->db->where("cm.Activo=", 1);
+        $this->db->where("m.IdModelos!=", 12);
         $this->db->group_by('m.IdModelos');
         return $this->db->get();
     }
@@ -297,6 +319,18 @@ class Modeloadministrador extends CI_Model {
         return $query;
     }
 
+    public function GenerarReporteQAcc($fechainicio, $fechafin) {
+        $fechainicio = $this->FechaIngles($fechainicio);
+        $fechafin = $this->FechaIngles($fechafin);
+        $query=$this->db->query("select count(*) as cuantos, cp.Nombre as producto, FechaQuemado "
+                . "from CarrosAccesorios ca left join CProductos cp on cp.IdCProductos=ca.CProductosId "
+                . "where ca.CProductosId=7 and date(FechaQuemado) "
+                . "BETWEEN $fechainicio AND $fechafin" ." group by FechaQuemado");
+        
+        //print_r($this->db->get_compiled_select());
+        return $query;
+    }
+    
     public function GenerarConcentradoQ($fechainicio, $fechafin, $ahornos, $aproducto, $amodelo, $acolor, $por) {
         $fechainicio = $this->FechaIngles($fechainicio);
         $fechafin = $this->FechaIngles($fechafin);
@@ -722,6 +756,7 @@ class Modeloadministrador extends CI_Model {
         $this->db->insert('ModelosColores', $datosCPM);
         }
     }
+
 }
 ?>
 

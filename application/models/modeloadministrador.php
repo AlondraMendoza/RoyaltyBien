@@ -16,6 +16,14 @@ class Modeloadministrador extends CI_Model {
         $this->db->where("Activo=", 1);
         return $this->db->get();
     }
+    
+    public function ProductosQuemado() {
+        $this->db->select('*');
+        $this->db->from("CProductos");
+        $this->db->where("Activo=", 1);
+        $this->db->where("IdCProductos!=", 7);
+        return $this->db->get();
+    }
 
     public function Clasificaciones() {
         $this->db->select('c.Letra,c.Color,c.IdClasificaciones');
@@ -40,6 +48,20 @@ class Modeloadministrador extends CI_Model {
             $this->db->where("CProductosId=", $producto);
         }
         $this->db->where("cm.Activo=", 1);
+        $this->db->group_by('m.IdModelos');
+        return $this->db->get();
+    }
+    
+    public function ModelosQuemado($producto) {
+
+        $this->db->select('m.*');
+        $this->db->from("CProductosModelos cm");
+        $this->db->join("Modelos m", "m.IdModelos=cm.ModelosId");
+        if ($producto > 0) { //Si producto=0 significa que seleccionó Todos por lo que se deben devolver todos los modelos
+            $this->db->where("CProductosId=", $producto);
+        }
+        $this->db->where("cm.Activo=", 1);
+        $this->db->where("m.IdModelos!=", 12);
         $this->db->group_by('m.IdModelos');
         return $this->db->get();
     }
@@ -297,6 +319,18 @@ class Modeloadministrador extends CI_Model {
         return $query;
     }
 
+    public function GenerarReporteQAcc($fechainicio, $fechafin) {
+        $fechainicio = $this->FechaIngles($fechainicio);
+        $fechafin = $this->FechaIngles($fechafin);
+        $query=$this->db->query("select count(*) as cuantos, cp.Nombre as producto, FechaQuemado "
+                . "from CarrosAccesorios ca left join CProductos cp on cp.IdCProductos=ca.CProductosId "
+                . "where ca.CProductosId=7 and date(FechaQuemado) "
+                . "BETWEEN $fechainicio AND $fechafin" ." group by FechaQuemado");
+        
+        //print_r($this->db->get_compiled_select());
+        return $query;
+    }
+    
     public function GenerarConcentradoQ($fechainicio, $fechafin, $ahornos, $aproducto, $amodelo, $acolor, $por) {
         $fechainicio = $this->FechaIngles($fechainicio);
         $fechafin = $this->FechaIngles($fechafin);
@@ -647,43 +681,83 @@ class Modeloadministrador extends CI_Model {
         $this->db->where("IdCProductosModelos", $codigo);
         $this->db->update("CProductosModelos");
     }
-
-    public function GuardarEmpleado($nombre, $apellidop, $apellidom, $nempleado) {
-        $datos = array(
-            'Nombre' => $nombre,
-            'APaterno' => $apellidop,
-            'AMaterno' => $apellidom,
-            'NEmpleado' => $nempleado,
-            'Activo' => 1,
-            'UsuariosId' => IdUsuario(),
-            'FechaRegistro' => date('Y-m-d | h:i:sa')
-        );
-        $this->db->insert('Personas', $datos);
+    
+    public function TodosModelos(){
+        $this->db->select('m.*');
+        $this->db->from("Modelos m");
+        $this->db->where("m.Activo=", 1);
+        return $this->db->get();
     }
-
-    public function TienePuestoPersona($persona_id, $puesto) {
-        $this->db->select("p.IdPersonas, pu.Nombre,pu.FechaInicio,pu.FechaFin");
-        $this->db->from('Personas p');
-        $this->db->join('Puestos pu', 'p.IdPersonas= pu.PersonasId');
-        $this->db->where('pu.Nombre', $puesto);
-        $this->db->where('p.IdPersonas', $persona_id);
-        $consulta = $this->db->get();
-        if ($consulta->num_rows() > 0) {
-            return true;
-        } else {
-            return false;
+    
+    public function SeleccionModelo($nombre, $producto){
+        $datos = array(
+            'CProductosId'=> $producto,
+            'ModelosId'=>$nombre,
+            'Imagen'=> null,
+            'Activo'=> 1,
+            'UsuariosId'=>IdUsuario(),
+        );             
+        $this->db->insert('CProductosModelos', $datos);
+    }
+    //volver a verificar el id y el if
+    public function NuevoModelo($nombre, $producto){
+        $datos = array(
+            'Nombre'=> $nombre,
+            'Activo'=> 1,
+            'UsuariosId'=>IdUsuario(),
+        );             
+        $this->db->insert('Modelos', $datos);
+        $id=$this->db->insert_id();
+        if($id != 0){
+        $datosCPM = array(
+            'CProductosId'=> $producto,
+            'ModelosId'=>$id,
+            'Imagen'=> null,
+            'Activo'=> 1,
+            'UsuariosId'=>IdUsuario(),
+        );             
+        $this->db->insert('CProductosModelos', $datosCPM);
         }
     }
-
-    public function TieneUsuario($persona_id) {
-        $this->db->select("u.IdUsuarios");
-        $this->db->from('Usuarios u');
-        $this->db->where('u.PersonasId', $persona_id);
-        $consulta = $this->db->get();
-        if ($consulta->num_rows() > 0) {
-            return true;
-        } else {
-            return false;
+    
+    public function DesactivarColor($color, $modelo) {
+        $this->db->where("ModelosId=", $modelo);
+        $this->db->where("ColoresId=", $color);
+        $this->db->delete("ModelosColores");
+    }
+    
+     public function TodosColores(){
+        $this->db->select('c.*');
+        $this->db->from("Colores c");
+        $this->db->where("c.Activo=", 1);
+        return $this->db->get();
+    }
+    
+    public function SeleccionColor($color, $modelo){
+        $datos= array(
+            'ModelosId'=>$modelo,
+            'ColoresId'=>$color,
+            'UsuariosId'=>IdUsuario(),
+        );
+        $this->db->insert('ModelosColores', $datos);
+    }
+    
+    public function NuevoColor($color, $modelo){
+        $datos = array(
+            'Nombre'=> $color,
+            'Descripcion'=>null,
+            'Activo'=> 1,
+            'UsuariosId'=>IdUsuario(),
+        );             
+        $this->db->insert('Colores', $datos);
+        $id=$this->db->insert_id();
+        if($id != 0){
+        $datosCPM = array(
+            'ModelosId'=>$modelo,
+            'ColoresId'=> $id,
+            'UsuariosId'=>IdUsuario(),
+        );             
+        $this->db->insert('ModelosColores', $datosCPM);
         }
     }
 

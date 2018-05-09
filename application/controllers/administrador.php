@@ -37,11 +37,21 @@ class Administrador extends CI_Controller {
         $infocontent["Nombre"] = "Alondra Mendoza";
         $infocontent["hoy"] = date("d/m/Y");
         $infocontent["hornos"] = $this->modeloadministrador->Hornos();
-        $infocontent["productos"] = $this->modeloadministrador->Productos();
-        $infocontent["modelos"] = $this->modeloadministrador->Modelos(0);
+        $infocontent["productos"] = $this->modeloadministrador->ProductosQuemado();
+        $infocontent["modelos"] = $this->modeloadministrador->ModelosQuemado(0);
         $infocontent["colores"] = $this->modeloadministrador->Colores(0);
         $this->load->view('template/headerd', $infoheader);
         $this->load->view('administrador/ReporteQuemado', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+
+    public function ReporteQAcc() {
+        $this->load->model("modeloadministrador");
+        $infoheader["titulo"] = "Administrador: Royalty Ceramic";
+        $infocontent["Nombre"] = "Alondra Mendoza";
+        $infocontent["hoy"] = date("d/m/Y");
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->view('administrador/ReporteQAcc', $infocontent);
         $this->load->view('template/footerd', '');
     }
 
@@ -74,6 +84,14 @@ class Administrador extends CI_Controller {
         $this->load->model("modeloadministrador");
         $infocontent["productos"] = $this->modeloadministrador->GenerarReporte($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor);
         $this->load->view('administrador/GenerarReporte', $infocontent);
+    }
+
+    public function GenerarReporteQAcc() {
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $this->load->model("modeloadministrador");
+        $infocontent["productos"] = $this->modeloadministrador->GenerarReporteQAcc($fechainicio, $fechafin);
+        $this->load->view('administrador/GenerarReporteQAcc', $infocontent);
     }
 
     public function GenerarConcentrado() {
@@ -229,8 +247,10 @@ class Administrador extends CI_Controller {
         $this->load->model("modeloadministrador");
         $infoheader["titulo"] = "Administrador: Royalty Ceramic";
         $producto = $this->input->post_get('producto', TRUE);
-        $infocontent["producto"] = $this->modeloadministrador->ProductosT($producto);
+        $infocontent["producto"] = $producto;
+        //$infocontent["producto"] = $this->modeloadministrador->ProductosT($producto);
         $infocontent["modelos"] = $this->modeloadministrador->ObtenerModelos($producto);
+        $infocontent["todos"] = $this->modeloadministrador->TodosModelos();
         $this->load->view('template/headerd', $infoheader);
         $this->load->view('administrador/DetalleProd', $infocontent);
         $this->load->view('template/footerd', '');
@@ -240,7 +260,9 @@ class Administrador extends CI_Controller {
         $this->load->model("modeloadministrador");
         $infoheader["titulo"] = "Administrador: Royalty Ceramic";
         $modelo = $this->input->post_get('modelo', TRUE);
+        $infocontent["modelo"] = $modelo;
         $infocontent["colores"] = $this->modeloadministrador->ObtenerColores($modelo);
+        $infocontent["todos"] = $this->modeloadministrador->TodosColores();
         $this->load->view('template/headerd', $infoheader);
         $this->load->view('administrador/DetalleMod', $infocontent);
         $this->load->view('template/footerd', '');
@@ -278,6 +300,46 @@ class Administrador extends CI_Controller {
         $this->load->model("modeloadministrador");
         $codigo = $this->input->post_get('codigo', TRUE);
         $this->modeloadministrador->ActivarModelo($codigo);
+        print_r("correcto");
+    }
+
+    public function SeleccionModelo() {
+        $this->load->model("modeloadministrador");
+        $nombre = $this->input->post_get('nombre', TRUE);
+        $producto = $this->input->post_get('producto', TRUE);
+        $this->modeloadministrador->SeleccionModelo($nombre, $producto);
+        print_r("correcto");
+    }
+
+    public function NuevoModelo() {
+        $this->load->model("modeloadministrador");
+        $nombre = $this->input->post_get('nombre', TRUE);
+        $producto = $this->input->post_get('producto', TRUE);
+        $this->modeloadministrador->NuevoModelo($nombre, $producto);
+        print_r("correcto");
+    }
+
+    public function DesactivarColor() {
+        $this->load->model("modeloadministrador");
+        $color = $this->input->post_get('color', TRUE);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $this->modeloadministrador->DesactivarColor($color, $modelo);
+        print_r("correcto");
+    }
+
+    public function SeleccionColor() {
+        $this->load->model("modeloadministrador");
+        $color = $this->input->post_get('color', TRUE);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $this->modeloadministrador->SeleccionColor($color, $modelo);
+        print_r("correcto");
+    }
+
+    public function NuevoColor() {
+        $this->load->model("modeloadministrador");
+        $color = $this->input->post_get('color', TRUE);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $this->modeloadministrador->NuevoColor($color, $modelo);
         print_r("correcto");
     }
 

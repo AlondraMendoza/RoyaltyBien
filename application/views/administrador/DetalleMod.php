@@ -15,6 +15,30 @@
                     </tr>
                 </thead>
                 <tbody>
+                    <label id="mod" style="display:none;"><?=$modelo ?></label>
+                    <?php if($modelo==12){ ?>
+                    <?php
+                    $ci = &get_instance();
+                    $ci->load->model("modeloadministrador"); 
+                    $npen = $ci->modeloadministrador->TodosColores();?>
+                     <?php foreach ($npen->result() as $c): ?>
+                        <tr>
+                            <td class="bordered">
+                                <?= $c->Nombre ?>
+                            </td>
+                            <td class="center" rowspan="1" style="width: 30%">
+                                <img class="block-shadow-warning" src="<?= base_url() ?>public/colores/<?= $c->Descripcion ?>" height="100px;" width="100px;">
+                                <form enctype="multipart/form-data" action="uploader.php" method="POST">
+                                <input name="uploadedfile" type="file" />
+                                <input type="submit" value="Subir archivo" />
+                                </form>
+                            </td> 
+                            <td class="center">
+                                <a class="button block-shadow-info text-shadow alert" onclick="Desactivar(<?= $c->IdColores ?>)">Desactivar</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                    <?php } else { ?>
                     <?php foreach ($colores->result() as $col): ?>
                         <tr>
                             <td class="bordered">
@@ -28,14 +52,102 @@
                                 </form>
                             </td> 
                             <td class="center">
-                                <a class="button block-shadow-info text-shadow alert">Desactivar</a>
+                                <a class="button block-shadow-info text-shadow alert" onclick="Desactivar(<?= $col->IdColores ?>)">Desactivar</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
+                    <?php } ?>
+                        <tr>
+                            <label id="col" style="display:none;"></label>
+                            <td>
+                                <b style="font-size: 1.3em" class="fg-darkEmerald"> Colores existentes:</b><br>
+                                <div class="input-control select">   
+                                    <select id="todo">                                    
+                                        <option value="0">Selecciona el color</option>
+                                            <?php foreach ($todos->result() as $todo): ?>
+                                            <option value="<?= $todo->IdColores ?>"><?= $todo->Nombre ; ?></option>
+                                            <?php endforeach; ?>
+                                    </select>
+                                </div>
+                            </td>
+                            <td class="center" rowspan="1" style="width: 30%">
+                            </td> 
+                            <td class="center">
+                                <a class="button block-shadow-info text-shadow success" onclick="GuardarC()">Guardar Color</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="bordered">
+                                <b style="font-size: 1.3em" class="fg-darkEmerald"> Nuevo color:</b><br>
+                                <div class="input-control text" >
+                                    <input type="text" id="nombreC" placeholder="Nombre color">
+                                </div>
+                            </td>
+                            <td class="center" rowspan="1" style="width: 30%">
+                                <img class="block-shadow-warning" src="<?= base_url() ?>public/imagenes/SinImagen.png" height="100px;" width="100px;">
+                                <form enctype="multipart/form-data" action="uploader.php" method="POST">
+                                <input name="uploadedfile" type="file" />
+                                <input type="submit" value="Subir archivo" />
+                                </form>
+                            </td> 
+                            <td class="center">
+                                <a class="button block-shadow-info text-shadow success" onclick="GuardarNC()">Guardar Color</a>
+                            </td>
+                        </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </center>
-
-
+<script>
+    function Desactivar(color){
+        
+        var modelo =  $("#mod").text();
+        $.post("DesactivarColor", {"color": color, "modelo":modelo}, function (data) {
+            if ($.trim(data) === "correcto")
+            {
+                MsjCorrecto("El color se desactivo correctamente");
+                location.reload();
+            } else
+            {
+                MsjError("Ocurrió un error al desactivar el color");
+            }
+        });
+    }
+    
+    function GuardarC(){
+        var color = $("#todo").val();
+        var modelo =  $("#mod").text();
+        if(color ==0){
+            Notificacion("Error", "Selecciona el color antes de continuar", "cancel", "alert");
+            return(0);
+        }
+        //falta imagen
+        $.post("SeleccionColor", {"color": color, "modelo":  modelo}, function (data) {
+            if ($.trim(data) === "correcto")
+            {
+                MsjCorrecto("El color se guardó correctamente");
+                location.reload();
+            } else
+            {
+                MsjError("Ocurrió un error al guardar el color");
+            }
+        });
+    }
+    
+    function GuardarNC(){
+        var color = $("#nombreC").val();
+        var modelo =  $("#mod").text();
+        //falta imagen
+        $.post("NuevoColor", {"color": color, "modelo": modelo}, function (data) {
+            if ($.trim(data) === "correcto")
+            {
+                MsjCorrecto("El color se guardó correctamente");
+                location.reload();
+            } else
+            {
+                MsjError("Ocurrió un error al guardar el color");
+            }
+        });
+    }
+</script>

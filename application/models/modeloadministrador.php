@@ -23,7 +23,7 @@ class Modeloadministrador extends CI_Model {
         $this->db->where("Activo=", 1);
         return $this->db->get();
     }
-    
+
     public function Hornos() {
         $this->db->select('h.NHorno, h.IdHornos');
         $this->db->from("Hornos h");
@@ -287,12 +287,12 @@ class Modeloadministrador extends CI_Model {
         }
         //$query = $this->db->query("select p.IdProductos,cp.Nombre as producto,m.Nombre as modelo,co.Nombre as color from Productos p left join CProductos cp on cp.IdCProductos=p.CProductosId left join Modelos m on m.IdModelos=p.ModelosId left join Colores co on co.IdColores=p.ColoresId where  date(FechaQuemado) BETWEEN $fechainicio AND $fechafin" . $parteclasificacion . $parteproducto . $partemodelo . $partecolor);
         //Agregar count y group
-        $query=$this->db->query("select count(*) as cuantos, h.NHorno as horno, cp.Nombre as producto,m.Nombre as modelo,co.Nombre as color from "
+        $query = $this->db->query("select count(*) as cuantos, h.NHorno as horno, cp.Nombre as producto,m.Nombre as modelo,co.Nombre as color from "
                 . "Productos p left join CProductos cp on cp.IdCProductos=p.CProductosId "
                 . "left join Modelos m on m.IdModelos=p.ModelosId left join Colores co on co.IdColores=p.ColoresId left join Hornos"
                 . " h on p.HornosId=h.IdHornos where  date(FechaQuemado) "
-                . "BETWEEN $fechainicio AND $fechafin" . $parteclasificacion . $parteproducto . $partemodelo . $partecolor ." group by horno ,m.IdModelos, cp.IdCProductos, co.IdColores");
-        
+                . "BETWEEN $fechainicio AND $fechafin" . $parteclasificacion . $parteproducto . $partemodelo . $partecolor . " group by horno ,m.IdModelos, cp.IdCProductos, co.IdColores");
+
         //print_r($this->db->get_compiled_select());
         return $query;
     }
@@ -375,7 +375,7 @@ class Modeloadministrador extends CI_Model {
         $query = $this->db->query("select count(*) as cuantos, $campo from Productos p left join CProductos cp on cp.IdCProductos=p.CProductosId left join Modelos m on m.IdModelos=p.ModelosId left join Colores co on co.IdColores=p.ColoresId left join Hornos h on h.IdHornos=p.HornosId where  date(FechaQuemado) BETWEEN $fechainicio AND $fechafin" . $parteclasificacion . $parteproducto . $partemodelo . $partecolor . " group by " . $por);
         return $query;
     }
-    
+
     public function Clasificacion($producto_id) {
         $this->db->select("c.Letra,c.Color");
         $this->db->from("HistorialClasificacion h");
@@ -390,11 +390,11 @@ class Modeloadministrador extends CI_Model {
             return "";
         }
     }
-    
+
     public function Horno($producto_id) {
         $this->db->select("h.NHorno");
         $this->db->from("Hornos h");
-        $this->db->join("Productos p","p.HornosId=h.IdHornos");
+        $this->db->join("Productos p", "p.HornosId=h.IdHornos");
         $this->db->where("p.IdProductos", $producto_id);
         $this->db->where("p.Activo", 1);
         $this->db->where("h.Activo", 1);
@@ -419,10 +419,9 @@ class Modeloadministrador extends CI_Model {
     }
 
     public function Usuarios() {
-        $this->db->select("u.IdUsuarios, u.Nombre,concat(p.Nombre,' ',p.APaterno,' ',p.AMaterno)as NombreCompleto");
-        $this->db->from('Usuarios u');
-        $this->db->join('Personas p', 'p.IdPersonas= u.PersonasId');
-        $this->db->where('u.Activo', 1);
+        $this->db->select("p.IdPersonas,concat(p.Nombre,' ',p.APaterno,' ',p.AMaterno)as NombreCompleto");
+        $this->db->from('Personas p');
+        $this->db->where('p.Activo', 1);
         $consulta = $this->db->get();
         return $consulta;
     }
@@ -435,33 +434,39 @@ class Modeloadministrador extends CI_Model {
         return $consulta;
     }
 
-    public function Usuario($usuario_id) {
+    public function Usuario($persona_id) {
         $this->db->select("u.IdUsuarios, u.Nombre,concat(p.Nombre,' ',p.APaterno,' ',p.AMaterno)as NombreCompleto,p.AMaterno,p.APaterno,p.Nombre as NombrePersona,u.Activo");
         $this->db->from('Usuarios u');
         $this->db->join('Personas p', 'p.IdPersonas= u.PersonasId');
-        $this->db->where('u.IdUsuarios', $usuario_id);
+        $this->db->where('p.IdPersonas', $persona_id);
         $consulta = $this->db->get()->row();
         return $consulta;
     }
 
-    public function PuestosUsuario($usuario_id) {
-        $this->db->select("u.IdUsuarios, pu.Nombre,pu.FechaInicio,pu.FechaFin,a.Nombre as Area,pu.IdPuestos,pu.Activo,pu.Clave");
-        $this->db->from('Usuarios u');
-        $this->db->join('Personas p', 'p.IdPersonas= u.PersonasId');
+    public function ObtenerPersona($persona_id) {
+        $this->db->select("p.IdPersonas,concat(p.Nombre,' ',p.APaterno,' ',p.AMaterno)as NombreCompleto,p.AMaterno,p.APaterno,p.Nombre as NombrePersona");
+        $this->db->from('Personas p');
+        $this->db->where('p.IdPersonas', $persona_id);
+        $consulta = $this->db->get()->row();
+        return $consulta;
+    }
+
+    public function PuestosUsuario($persona_id) {
+        $this->db->select("pu.Nombre,pu.FechaInicio,pu.FechaFin,a.Nombre as Area,pu.IdPuestos,pu.Activo,pu.Clave");
+        $this->db->from('Personas p');
         $this->db->join('Puestos pu', 'p.IdPersonas= pu.PersonasId');
         $this->db->join('Areas a', 'a.IdAreas= pu.AreasId');
-        $this->db->where('u.IdUsuarios', $usuario_id);
+        $this->db->where('p.IdPersonas', $persona_id);
         $consulta = $this->db->get();
         return $consulta;
     }
 
-    public function UltimoPuesto($usuario_id) {
-        $this->db->select("u.IdUsuarios, pu.Nombre,pu.FechaInicio,pu.FechaFin,a.Nombre as Area,pu.IdPuestos,pu.Activo,pu.Clave");
-        $this->db->from('Usuarios u');
-        $this->db->join('Personas p', 'p.IdPersonas= u.PersonasId');
+    public function UltimoPuesto($persona_id) {
+        $this->db->select("p.IdPersonas, pu.Nombre,pu.FechaInicio,pu.FechaFin,a.Nombre as Area,pu.IdPuestos,pu.Activo,pu.Clave");
+        $this->db->from('Personas p');
         $this->db->join('Puestos pu', 'p.IdPersonas= pu.PersonasId');
         $this->db->join('Areas a', 'a.IdAreas= pu.AreasId');
-        $this->db->where('u.IdUsuarios', $usuario_id);
+        $this->db->where('p.IdPersonas', $persona_id);
         $this->db->where('pu.Activo', 1);
         $this->db->Order_by("pu.FechaInicio", "desc");
         $consulta = $this->db->get()->row();
@@ -520,12 +525,11 @@ class Modeloadministrador extends CI_Model {
         }
     }
 
-    public function TienePuesto($usuario_id, $puesto) {
-        $this->db->select("u.IdUsuarios, pu.Nombre,pu.FechaInicio,pu.FechaFin");
-        $this->db->from('Usuarios u');
-        $this->db->join('Personas p', 'p.IdPersonas= u.PersonasId');
+    public function TienePuesto($persona_id, $puesto) {
+        $this->db->select("p.IdPersonas, pu.Nombre,pu.FechaInicio,pu.FechaFin");
+        $this->db->from('Personas p');
         $this->db->join('Puestos pu', 'p.IdPersonas= pu.PersonasId');
-        $this->db->where('u.IdUsuarios', $usuario_id);
+        $this->db->where('p.IdPersonas', $persona_id);
         $this->db->where('pu.Nombre', $puesto);
         $consulta = $this->db->get();
         if ($consulta->num_rows() > 0) {
@@ -561,11 +565,11 @@ class Modeloadministrador extends CI_Model {
         return $this->db->get()->row();
     }
 
-    public function AgregarPuesto($usuario, $puesto, $area, $clave) {
+    public function AgregarPuesto($persona, $puesto, $area, $clave) {
         $Historial = array(
             'Nombre' => $puesto,
             'AreasId' => $area,
-            'PersonasId' => $this->Persona($usuario)->PersonasId,
+            'PersonasId' => $persona,
             'Activo' => 1,
             'Clave' => $clave,
             'UsuarioAsignaId' => IdUsuario(),
@@ -575,28 +579,28 @@ class Modeloadministrador extends CI_Model {
         return $this->db->insert_id();
     }
 
-    public function EliminarPuesto($usuario, $puesto) {
+    public function EliminarPuesto($persona, $puesto) {
         $this->db->set("Activo", 0);
         $this->db->set("FechaFin", date('Y-m-d | h:i:sa'));
         $this->db->where("IdPuestos", $puesto);
         $this->db->update("Puestos");
     }
-    
+
     public function ProductosT() {
         $this->db->select('*');
         $this->db->from("CProductos");
         return $this->db->get();
     }
-    
+
     public function ObtenerModelos($producto) {
         $this->db->select('m.*, cm.Imagen as Imagen, cm.Activo as Activocm, cm.IdCProductosModelos as codigo');
         $this->db->from("CProductosModelos cm");
         $this->db->join("Modelos m", "m.IdModelos=cm.ModelosId");
         $this->db->where("CProductosId=", $producto);
         //$this->db->where("cm.Activo=", 1);
-        return $this->db->get(); 
+        return $this->db->get();
     }
-    
+
     public function ObtenerColores($modelo) {
         $this->db->select('c.*');
         $this->db->from("ModelosColores mc");
@@ -605,44 +609,84 @@ class Modeloadministrador extends CI_Model {
         $this->db->where("c.Activo=", 1);
         return $this->db->get();
     }
-    
-    public function DesactivarProducto($producto){
+
+    public function DesactivarProducto($producto) {
         $this->db->set("Activo", 0);
-        $this->db->set("UsuariosId",IdUsuario());
-        $this->db->where("IdCProductos", $producto);
-        $this->db->update("CProductos");
-    }
-    
-    public function ActivarProducto($producto){
-        $this->db->set("Activo", 1);
-        $this->db->set("UsuariosId",IdUsuario());
+        $this->db->set("UsuariosId", IdUsuario());
         $this->db->where("IdCProductos", $producto);
         $this->db->update("CProductos");
     }
 
-    public function NuevoProducto($nombre){
+    public function ActivarProducto($producto) {
+        $this->db->set("Activo", 1);
+        $this->db->set("UsuariosId", IdUsuario());
+        $this->db->where("IdCProductos", $producto);
+        $this->db->update("CProductos");
+    }
+
+    public function NuevoProducto($nombre) {
         $datos = array(
-            'Nombre'=> $nombre,
-            'Imagen'=> null,
-            'Activo'=> 1,
-            'UsuariosId'=>IdUsuario(),
-        );             
+            'Nombre' => $nombre,
+            'Imagen' => null,
+            'Activo' => 1,
+            'UsuariosId' => IdUsuario(),
+        );
         $this->db->insert('CProductos', $datos);
     }
-    
-    public function DesactivarModelo($codigo){
+
+    public function DesactivarModelo($codigo) {
         $this->db->set("Activo", 0);
-        $this->db->set("UsuariosId",IdUsuario());
+        $this->db->set("UsuariosId", IdUsuario());
         $this->db->where("IdCProductosModelos", $codigo);
         $this->db->update("CProductosModelos");
     }
-    
-    public function ActivarModelo($codigo){
+
+    public function ActivarModelo($codigo) {
         $this->db->set("Activo", 1);
-        $this->db->set("UsuariosId",IdUsuario());
+        $this->db->set("UsuariosId", IdUsuario());
         $this->db->where("IdCProductosModelos", $codigo);
         $this->db->update("CProductosModelos");
     }
+
+    public function GuardarEmpleado($nombre, $apellidop, $apellidom, $nempleado) {
+        $datos = array(
+            'Nombre' => $nombre,
+            'APaterno' => $apellidop,
+            'AMaterno' => $apellidom,
+            'NEmpleado' => $nempleado,
+            'Activo' => 1,
+            'UsuariosId' => IdUsuario(),
+            'FechaRegistro' => date('Y-m-d | h:i:sa')
+        );
+        $this->db->insert('Personas', $datos);
+    }
+
+    public function TienePuestoPersona($persona_id, $puesto) {
+        $this->db->select("p.IdPersonas, pu.Nombre,pu.FechaInicio,pu.FechaFin");
+        $this->db->from('Personas p');
+        $this->db->join('Puestos pu', 'p.IdPersonas= pu.PersonasId');
+        $this->db->where('pu.Nombre', $puesto);
+        $this->db->where('p.IdPersonas', $persona_id);
+        $consulta = $this->db->get();
+        if ($consulta->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function TieneUsuario($persona_id) {
+        $this->db->select("u.IdUsuarios");
+        $this->db->from('Usuarios u');
+        $this->db->where('u.PersonasId', $persona_id);
+        $consulta = $this->db->get();
+        if ($consulta->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
 ?>
 

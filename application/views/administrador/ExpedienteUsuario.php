@@ -1,18 +1,22 @@
 <script>
     $(document).ready(function () {
+        /*<?php if ($tieneusuario) { ?>*/
         CargaPerfiles();
+        /*<?php } ?>*/
         CargaPuestos();
     });
+    /*<?php if ($tieneusuario) { ?>*/
     function CargaPerfiles()
     {
         $("#PerfilesUsuario").load("CargaPerfilesUsuario", {"usuario": "<?= $usuario->IdUsuarios ?>"});
     }
+    /*<?php } ?>*/
     function CargaPuestos()
     {
-        $("#PuestosUsuario").load("CargaPuestosUsuario", {"usuario": "<?= $usuario->IdUsuarios ?>"});
+        $("#PuestosUsuario").load("CargaPuestosUsuario", {"persona": "<?= $persona->IdPersonas ?>"});
     }
 </script>
-<h1><b> EXPEDIENTE USUARIO</b></h1><br>
+<h1><b> EXPEDIENTE EMPLEADO</b></h1><br>
 <center>
     <div class="panel warning" data-role="panel">
         <div class="heading">
@@ -23,17 +27,19 @@
             <table class="table">
                 <tr>
                     <td class="center" rowspan="2" style="width: 30%">
-                        <img class="block-shadow-warning" src="<?= base_url() ?>public/imagenes/fotos/<?= $usuario->IdUsuarios ?>.jpg" height="250px;" width="250px;" title="<?= $usuario->NombreCompleto; ?>">        
+
+                        <img onerror="this.src='<?= base_url() ?>public/imagenes/fotos/1.jpg'" class="block-shadow-warning" src="<?= base_url() ?>public/imagenes/fotos/<?= $persona->IdPersonas ?>.jpg" height="250px;" width="250px;" title="<?= $persona->NombreCompleto; ?>">        
+
                         <br><br>
                     </td> 
                 </tr>
                 <tr>
                     <td>
-                        <b>Nombre:</b><br><br><?= $usuario->NombrePersona; ?>
+                        <b>Nombre:</b><br><br><?= $persona->NombrePersona; ?>
                         <hr>
-                        <b>Apellido Paterno:</b><br><br><?= $usuario->APaterno; ?>
+                        <b>Apellido Paterno:</b><br><br><?= $persona->APaterno; ?>
                         <hr>
-                        <b>Apellido Materno:</b><br><br><?= $usuario->AMaterno; ?>
+                        <b>Apellido Materno:</b><br><br><?= $persona->AMaterno; ?>
                         <hr>
                     </td>
                 </tr>
@@ -54,27 +60,41 @@
                         <b>Estatus de Usuario</b>
                         <br>
                         <?php
-                        if ($usuario->Activo == 1) {
-                            echo "Activo";
+                        if ($tieneusuario) {
+                            if ($usuario->Activo == 1) {
+                                echo "Activo";
+                            } else {
+                                echo "Inactivo";
+                            }
                         } else {
-                            echo "Inactivo";
+                            echo "No existe Usuario";
                         }
                         ?>
                     </td>
                     <td class="center">
                         <b>Último Puesto</b>
                         <br>
-                        <?= $ultimopuesto->Nombre ?>
+                        <?php if ($ultimopuesto != null) { ?>
+                            <?= $ultimopuesto->Nombre ?>
+                        <?php } ?>
                     </td>
                     <td class="center">
                         <b>Última Área</b>
                         <br>
-                        <?= $ultimopuesto->Area ?>
+                        <?php if ($ultimopuesto != null) { ?>
+                            <?= $ultimopuesto->Area ?>
+                        <?php } ?>
                     </td>
                     <td class="center">
                         <b>Último Perfil asignado</b>
                         <br>
-                        <?= $ultimoperfil->Nombre ?>
+                        <?php if ($ultimoperfil != null) { ?>
+                            <?php if ($tieneusuario) { ?>
+                                <?= $ultimoperfil->Nombre ?>
+                            <?php } else { ?>
+                                <?= $ultimoperfil ?>
+                            <?php } ?>
+                        <?php } ?>
                     </td>
                 </tr>
             </table>

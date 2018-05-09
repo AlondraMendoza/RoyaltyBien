@@ -30,7 +30,7 @@ class Administrador extends CI_Controller {
         $this->load->view('administrador/Reportes', $infocontent);
         $this->load->view('template/footerd', '');
     }
-    
+
     public function ReporteQuemado() {
         $this->load->model("modeloadministrador");
         $infoheader["titulo"] = "Administrador: Royalty Ceramic";
@@ -93,7 +93,7 @@ class Administrador extends CI_Controller {
         $infocontent["productos"] = $this->modeloadministrador->GenerarConcentrado($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $por);
         $this->load->view('administrador/GenerarConcentrado', $infocontent);
     }
-    
+
     public function GenerarReporteQ() {
         $fechainicio = $this->input->post_get('fechainicio', TRUE);
         $fechafin = $this->input->post_get('fechafin', TRUE);
@@ -141,11 +141,19 @@ class Administrador extends CI_Controller {
     public function ExpedienteUsuario() {
         $this->load->model("modeloadministrador");
         $infoheader["titulo"] = "Administrador: Royalty Ceramic";
-        $usuario = $this->input->post_get('usuario', TRUE);
-        $infocontent["usuario"] = $this->modeloadministrador->Usuario($usuario);
-        $infocontent["perfiles"] = $this->modeloadministrador->PerfilesUsuario($usuario);
-        $infocontent["ultimopuesto"] = $this->modeloadministrador->UltimoPuesto($usuario);
-        $infocontent["ultimoperfil"] = $this->modeloadministrador->UltimoPerfil($usuario);
+        $persona = $this->input->post_get('persona', TRUE);
+        $usuario = $this->modeloadministrador->Usuario($persona);
+        $infocontent["persona"] = $this->modeloadministrador->ObtenerPersona($persona);
+        $infocontent["usuario"] = $usuario;
+        $infocontent["ultimopuesto"] = $this->modeloadministrador->UltimoPuesto($persona);
+        $ultimoperfil = "";
+        if ($usuario != null) {
+            $ultimoperfil = $this->modeloadministrador->UltimoPerfil($usuario->IdUsuarios);
+        } else {
+            $ultimoperfil = "No existe Usuario";
+        }
+        $infocontent["ultimoperfil"] = $ultimoperfil;
+        $infocontent["tieneusuario"] = $this->modeloadministrador->TieneUsuario($persona);
         $this->load->view('template/headerd', $infoheader);
         $this->load->view('administrador/ExpedienteUsuario', $infocontent);
         $this->load->view('template/footerd', '');
@@ -162,9 +170,9 @@ class Administrador extends CI_Controller {
 
     public function CargaPuestosUsuario() {
         $this->load->model("modeloadministrador");
-        $usuario = $this->input->post_get('usuario', TRUE);
-        $infocontent["usuario"] = $this->modeloadministrador->Usuario($usuario);
-        $infocontent["puestos"] = $this->modeloadministrador->PuestosUsuario($usuario);
+        $persona = $this->input->post_get('persona', TRUE);
+        $infocontent["persona"] = $this->modeloadministrador->ObtenerPersona($persona);
+        $infocontent["puestos"] = $this->modeloadministrador->PuestosUsuario($persona);
         $infocontent["puestostodos"] = $this->modeloadministrador->Puestos();
         $infocontent["areas"] = $this->modeloadministrador->Areas();
         $this->load->view('administrador/CargaPuestosUsuario', $infocontent);
@@ -182,11 +190,11 @@ class Administrador extends CI_Controller {
 
     public function AgregarPuesto() {
         $this->load->model("modeloadministrador");
-        $usuario = $this->input->post_get('usuario', TRUE);
+        $persona = $this->input->post_get('persona', TRUE);
         $puesto = $this->input->post_get('puesto', TRUE);
         $clave = $this->input->post_get('clave', TRUE);
         $area = $this->input->post_get('area', TRUE);
-        $id = $this->modeloadministrador->AgregarPuesto($usuario, $puesto, $area, $clave);
+        $id = $this->modeloadministrador->AgregarPuesto($persona, $puesto, $area, $clave);
         if ($id != null) {
             print_r("correcto");
         }
@@ -202,9 +210,9 @@ class Administrador extends CI_Controller {
 
     public function EliminarPuesto() {
         $this->load->model("modeloadministrador");
-        $usuario = $this->input->post_get('usuario', TRUE);
+        $persona = $this->input->post_get('persona', TRUE);
         $puesto = $this->input->post_get('puesto', TRUE);
-        $this->modeloadministrador->EliminarPuesto($usuario, $puesto);
+        $this->modeloadministrador->EliminarPuesto($persona, $puesto);
         print_r("correcto");
     }
 
@@ -216,9 +224,9 @@ class Administrador extends CI_Controller {
         $this->load->view('administrador/Productos', $infocontent);
         $this->load->view('template/footerd', '');
     }
-    
+
     public function DetalleProd() {
-       $this->load->model("modeloadministrador");
+        $this->load->model("modeloadministrador");
         $infoheader["titulo"] = "Administrador: Royalty Ceramic";
         $producto = $this->input->post_get('producto', TRUE);
         $infocontent["producto"] = $this->modeloadministrador->ProductosT($producto);
@@ -227,9 +235,9 @@ class Administrador extends CI_Controller {
         $this->load->view('administrador/DetalleProd', $infocontent);
         $this->load->view('template/footerd', '');
     }
-    
+
     public function DetalleMod() {
-       $this->load->model("modeloadministrador");
+        $this->load->model("modeloadministrador");
         $infoheader["titulo"] = "Administrador: Royalty Ceramic";
         $modelo = $this->input->post_get('modelo', TRUE);
         $infocontent["colores"] = $this->modeloadministrador->ObtenerColores($modelo);
@@ -237,39 +245,50 @@ class Administrador extends CI_Controller {
         $this->load->view('administrador/DetalleMod', $infocontent);
         $this->load->view('template/footerd', '');
     }
-    
+
     public function DesactivarProducto() {
         $this->load->model("modeloadministrador");
         $producto = $this->input->post_get('producto', TRUE);
         $this->modeloadministrador->DesactivarProducto($producto);
         print_r("correcto");
     }
-    
+
     public function ActivarProducto() {
         $this->load->model("modeloadministrador");
         $producto = $this->input->post_get('producto', TRUE);
         $this->modeloadministrador->ActivarProducto($producto);
         print_r("correcto");
     }
-    
-    public function NuevoProducto(){
+
+    public function NuevoProducto() {
         $this->load->model("modeloadministrador");
         $nombre = $this->input->post_get('nombre', TRUE);
         $this->modeloadministrador->NuevoProducto($nombre);
         print_r("correcto");
     }
-    
-     public function DesactivarModelo() {
+
+    public function DesactivarModelo() {
         $this->load->model("modeloadministrador");
         $codigo = $this->input->post_get('codigo', TRUE);
         $this->modeloadministrador->DesactivarModelo($codigo);
         print_r("correcto");
     }
-    
+
     public function ActivarModelo() {
         $this->load->model("modeloadministrador");
         $codigo = $this->input->post_get('codigo', TRUE);
         $this->modeloadministrador->ActivarModelo($codigo);
         print_r("correcto");
     }
+
+    public function GuardarEmpleado() {
+        $nombre = $this->input->post_get('nombre', TRUE);
+        $apellidop = $this->input->post_get('apellidop', TRUE);
+        $apellidom = $this->input->post_get('apellidom', TRUE);
+        $nempleado = $this->input->post_get('nempleado', TRUE);
+        $this->load->model("modeloadministrador");
+        $this->modeloadministrador->GuardarEmpleado($nombre, $apellidop, $apellidom, $nempleado);
+        redirect('administrador/CapturaPerfiles');
+    }
+
 }

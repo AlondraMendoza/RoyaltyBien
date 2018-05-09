@@ -5,7 +5,7 @@
         var area = $("#areanuevo").val();
         var clave = $("#clave").val();
 
-        $.post("AgregarPuesto", {"usuario": "<?= $usuario->IdUsuarios ?>", "puesto": puesto, "area": area, "clave": clave}, function (data) {
+        $.post("AgregarPuesto", {"persona": "<?= $persona->IdPersonas ?>", "puesto": puesto, "area": area, "clave": clave}, function (data) {
             if ($.trim(data) === "correcto")
             {
                 MsjCorrecto("El puesto se agregó correctamente");
@@ -18,7 +18,7 @@
     }
     function EliminarPuesto(puesto)
     {
-        $.post("EliminarPuesto", {"usuario": "<?= $usuario->IdUsuarios ?>", "puesto": puesto}, function (data) {
+        $.post("EliminarPuesto", {"persona": "<?= $persona->IdPersonas ?>", "puesto": puesto}, function (data) {
             if ($.trim(data) === "correcto")
             {
                 MsjCorrecto("El puesto se finalizó correctamente");
@@ -39,7 +39,7 @@
     <tbody>
         <tr>
             <td class="center">
-                <select style="height: 51px" id="puestonuevo" class="block-shadow-info">
+                <select style="height: 51px" id="puestonuevo" class="block-shadow-info full-size">
                     <?php
                     $cuantos = 0;
                     foreach ($puestostodos->result() as $puesto):
@@ -49,7 +49,7 @@
                         $ci->load->model("modeloadministrador");
                         ?>
                         <?php
-                        if ($ci->modeloadministrador->TienePuesto($usuario->IdUsuarios, $puesto->Nombre) == false) {
+                        if ($ci->modeloadministrador->TienePuesto($persona->IdPersonas, $puesto->Nombre) == false) {
                             $cuantos++;
                             ?>
                             <option value="<?= $puesto->Nombre ?>"><?= $puesto->Nombre ?></option>
@@ -65,7 +65,7 @@
                 </select>  
             </td>
             <td class="center">
-                <select style="height: 51px" id="areanuevo" class="block-shadow-info">
+                <select style="height: 51px" id="areanuevo" class="block-shadow-info full-size">
                     <?php
                     foreach ($areas->result() as $area):
                         ?>
@@ -80,13 +80,13 @@
                 </select>
             </td>
             <td class="center">
-                <div class="input-control text"><input id="clave" type="text" placeholder="" style="height: 50px" class="block-shadow-info"></div>
+                <div class="input-control text"><input id="clave" type="text" placeholder="" style="height: 51px" class="block-shadow-info full-size"></div>
             </td>
             <td class="center">
                 <?php
                 if ($cuantos > 0) {
                     ?>
-                    <button  id="botonagregarp" class="button block-shadow-info text-shadow primary big-button" onclick="AgregarPuesto()">Agregar</button>
+                    <button  id="botonagregarp" class="button block-shadow-info text-shadow primary big-button full-size" onclick="AgregarPuesto()">Agregar</button>
                 <?php } ?>
             </td>
         </tr>

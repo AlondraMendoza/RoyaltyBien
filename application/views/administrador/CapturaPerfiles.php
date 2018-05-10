@@ -9,7 +9,9 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Usuarios</th>
+                        <th>Nombre</th>
+                        <th>Puesto</th>
+                        <th>Usuario</th>
                         <th>Acción</th>
                     </tr>
                 </thead>
@@ -17,7 +19,18 @@
                     <?php foreach ($usuarios->result() as $usuario): ?>
                         <tr>
                             <td class="bordered">
-                                <?= $usuario->NombreCompleto ?>
+                                <?= strtoupper($usuario->NombreCompleto) ?>
+                            </td>
+                            <td class="bordered">
+                                <?php
+                                $ci = &get_instance();
+                                $ci->load->model("modeloadministrador");
+                                $puesto = $ci->modeloadministrador->UltimoPuesto($usuario->IdUsuarios);
+                                ?>
+                                <?= $puesto ?>
+                            </td>
+                            <td class="bordered">
+                                <?= strtoupper($usuario->NombreCompleto) ?>
                             </td>
                             <td class="center">
                                 <a class="button block-shadow-info text-shadow primary" href="ExpedienteUsuario?usuario=<?= $usuario->IdUsuarios ?>">Abrir Expediente</a>

@@ -353,4 +353,11 @@ class Administrador extends CI_Controller {
         redirect('administrador/CapturaPerfiles');
     }
 
+    public function CrearUsuario() {
+        $persona = $this->input->post_get('persona_id', TRUE);
+        $this->load->model("modeloadministrador");
+        $this->modeloadministrador->CrearUsuario($persona);
+        redirect('administrador/ExpedienteUsuario?persona=' . $persona);
+    }
+
 }

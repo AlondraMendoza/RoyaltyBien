@@ -41,6 +41,17 @@
                         <hr>
                         <b>Apellido Materno:</b><br><br><?= $persona->AMaterno; ?>
                         <hr>
+                        <b>Usuario:</b><br><br>
+                        <?php
+                        if ($tieneusuario) {
+                            echo $usuario->Nombre;
+                            //$usuarissos = substr($persona->NombrePersona, 0, 1) . $persona->APaterno;
+                            //echo $usuarissos;
+                        } else {
+                            echo "No Existe Usuario";
+                        }
+                        ?>
+                        <hr>
                     </td>
                 </tr>
                 <br><br>
@@ -67,9 +78,13 @@
                                 echo "Inactivo";
                             }
                         } else {
-                            echo "No existe Usuario";
-                        }
-                        ?>
+                            ?>
+                            No existe Usuario
+                            <form action="CrearUsuario">
+                                <input type="submit" class="warning" value="Crear Usuario">
+                                <input type="hidden" name="persona_id" value="<?= $persona->IdPersonas ?>">
+                            </form>
+                        <?php } ?>
                     </td>
                     <td class="center">
                         <b>Último Puesto</b>

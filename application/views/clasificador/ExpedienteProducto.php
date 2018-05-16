@@ -44,7 +44,9 @@
                     <td class="center">
                         <b>Clasificación</b>
                         <br>
-                        <span class="<?= $clasificacion->Color; ?> cycle-button" style="font-size: 1.5rem;width: 40px;height: 40px "><?= $clasificacion->Letra ?></span>
+                        <?php if ($clasificacion != null): ?>
+                            <span class="<?= $clasificacion->Color; ?> cycle-button" style="font-size: 1.5rem;width: 40px;height: 40px "><?= $clasificacion->Letra ?></span>
+                        <?php endif; ?>
                     </td>
                     <td class="center">
                         <b>Ubicación</b>
@@ -54,13 +56,15 @@
                     <td class="center">
                         <b>Fuera de Tono</b>
                         <br>
-                        <?php
-                        if ($clasificacion->FueraTono == 1) {
-                            echo "Si";
-                        } else {
-                            echo "No";
-                        }
-                        ?>
+                        <?php if ($clasificacion != null): ?>
+                            <?php
+                            if ($clasificacion->FueraTono == 1) {
+                                echo "Si";
+                            } else {
+                                echo "No";
+                            }
+                            ?>
+                        <?php endif; ?>
                         <br>
                         <?php
                         $ci = &get_instance();
@@ -98,9 +102,18 @@
                     </td>
                     <td>
                         <b>Defectos</b><br>
-                        <?php foreach ($defectos->result() as $defecto): ?>
-                            <?= $defecto->Nombre ?><br>
-                        <?php endforeach; ?>
+                        <?php
+                        if ($defectos != null) {
+                            foreach ($defectos->result() as $defecto):
+                                ?>
+                                <?= $defecto->Nombre ?><br>
+                                <?php
+                            endforeach;
+                        }
+                        else {
+                            echo "Sin defectos Registrados";
+                        }
+                        ?>
                         <br>
                     </td>
                 </tr>

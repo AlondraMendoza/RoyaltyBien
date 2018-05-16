@@ -104,15 +104,19 @@ class Modelousuario extends CI_Model {
 
     public function ObtenerDefectos($producto_id) {
         $ultimaclasificacion = $this->Clasificacion($producto_id);
-        $this->db->select("d.Nombre, hc.FueraTono");
-        $this->db->from("HistorialClasificacionDefectos hcd");
-        $this->db->join("Defectos d", "d.IdDefectos=hcd.DefectosId");
-        $this->db->join("HistorialClasificacion hc", "hcd.HistorialClasificacionId= hc.IdHistorialClasificacion");
-        $this->db->where("hc.ProductosId", $producto_id);
-        $this->db->where("hc.IdHistorialClasificacion", $ultimaclasificacion->IdHistorialClasificacion);
-        //$this->db->order_by("hc.IdHistorialClasificacion", "desc");
-        $fila = $this->db->get();
-        return $fila;
+        if ($ultimaclasificacion != null) {
+            $this->db->select("d.Nombre, hc.FueraTono");
+            $this->db->from("HistorialClasificacionDefectos hcd");
+            $this->db->join("Defectos d", "d.IdDefectos=hcd.DefectosId");
+            $this->db->join("HistorialClasificacion hc", "hcd.HistorialClasificacionId= hc.IdHistorialClasificacion");
+            $this->db->where("hc.ProductosId", $producto_id);
+            $this->db->where("hc.IdHistorialClasificacion", $ultimaclasificacion->IdHistorialClasificacion);
+            //$this->db->order_by("hc.IdHistorialClasificacion", "desc");
+            $fila = $this->db->get();
+            return $fila;
+        } else {
+            return null;
+        }
     }
 
 }

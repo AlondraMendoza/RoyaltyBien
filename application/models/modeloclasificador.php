@@ -331,10 +331,10 @@ class Modeloclasificador extends CI_Model {
         $datos = array(
             'CProductosId' => 7,
             'ColoresId' => $colorseleccionado,
-            'UsuariosId' => 1,
+            'UsuariosId' => IdUsuario(),
             'Activo' => 1,
             'Clasificado' => 1,
-            'ModelosId' => 1,
+            'ModelosId' => 12,
             'FechaCaptura' => date('Y-m-d | h:i:sa')
         );
         $this->db->insert("Productos", $datos);

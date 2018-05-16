@@ -27,6 +27,7 @@
         });
     }
 </script>
+
 <select style="width: 50%;height: 51px" id="perfilnuevo" class="block-shadow-info">
     <?php
     $cuantos = 0;

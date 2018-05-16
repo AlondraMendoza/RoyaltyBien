@@ -17,6 +17,14 @@ class Modeloadministrador extends CI_Model {
         return $this->db->get();
     }
 
+    public function ProductosQuemado() {
+        $this->db->select('*');
+        $this->db->from("CProductos");
+        $this->db->where("Activo=", 1);
+        $this->db->where("IdCProductos!=", 7);
+        return $this->db->get();
+    }
+
     public function Clasificaciones() {
         $this->db->select('c.Letra,c.Color,c.IdClasificaciones');
         $this->db->from("Clasificaciones c");
@@ -40,6 +48,20 @@ class Modeloadministrador extends CI_Model {
             $this->db->where("CProductosId=", $producto);
         }
         $this->db->where("cm.Activo=", 1);
+        $this->db->group_by('m.IdModelos');
+        return $this->db->get();
+    }
+
+    public function ModelosQuemado($producto) {
+
+        $this->db->select('m.*');
+        $this->db->from("CProductosModelos cm");
+        $this->db->join("Modelos m", "m.IdModelos=cm.ModelosId");
+        if ($producto > 0) { //Si producto=0 significa que seleccionó Todos por lo que se deben devolver todos los modelos
+            $this->db->where("CProductosId=", $producto);
+        }
+        $this->db->where("cm.Activo=", 1);
+        $this->db->where("m.IdModelos!=", 12);
         $this->db->group_by('m.IdModelos');
         return $this->db->get();
     }
@@ -296,6 +318,18 @@ class Modeloadministrador extends CI_Model {
         return $query;
     }
 
+    public function GenerarReporteQAcc($fechainicio, $fechafin) {
+        $fechainicio = $this->FechaIngles($fechainicio);
+        $fechafin = $this->FechaIngles($fechafin);
+        $query = $this->db->query("select count(*) as cuantos, cp.Nombre as producto, FechaQuemado "
+                . "from CarrosAccesorios ca left join CProductos cp on cp.IdCProductos=ca.CProductosId "
+                . "where ca.CProductosId=7 and date(FechaQuemado) "
+                . "BETWEEN $fechainicio AND $fechafin" . " group by FechaQuemado");
+
+        //print_r($this->db->get_compiled_select());
+        return $query;
+    }
+
     public function GenerarConcentradoQ($fechainicio, $fechafin, $ahornos, $aproducto, $amodelo, $acolor, $por) {
         $fechainicio = $this->FechaIngles($fechainicio);
         $fechafin = $this->FechaIngles($fechafin);
@@ -418,10 +452,9 @@ class Modeloadministrador extends CI_Model {
     }
 
     public function Usuarios() {
-        $this->db->select("u.IdUsuarios, u.Nombre,concat(p.Nombre,' ',p.APaterno,' ',p.AMaterno)as NombreCompleto");
-        $this->db->from('Usuarios u');
-        $this->db->join('Personas p', 'p.IdPersonas= u.PersonasId');
-        $this->db->where('u.Activo', 1);
+        $this->db->select("p.IdPersonas,concat(p.Nombre,' ',p.APaterno,' ',p.AMaterno)as NombreCompleto");
+        $this->db->from('Personas p');
+        $this->db->where('p.Activo', 1);
         $consulta = $this->db->get();
         return $consulta;
     }
@@ -434,7 +467,16 @@ class Modeloadministrador extends CI_Model {
         return $consulta;
     }
 
-    public function Usuario($usuario_id) {
+    public function Usuario($persona_id) {
+        $this->db->select("u.IdUsuarios, u.Nombre,concat(p.Nombre,' ',p.APaterno,' ',p.AMaterno)as NombreCompleto,p.AMaterno,p.APaterno,p.Nombre as NombrePersona,u.Activo");
+        $this->db->from('Usuarios u');
+        $this->db->join('Personas p', 'p.IdPersonas= u.PersonasId');
+        $this->db->where('p.IdPersonas', $persona_id);
+        $consulta = $this->db->get()->row();
+        return $consulta;
+    }
+
+    public function GetUsuario($usuario_id) {
         $this->db->select("u.IdUsuarios, u.Nombre,concat(p.Nombre,' ',p.APaterno,' ',p.AMaterno)as NombreCompleto,p.AMaterno,p.APaterno,p.Nombre as NombrePersona,u.Activo");
         $this->db->from('Usuarios u');
         $this->db->join('Personas p', 'p.IdPersonas= u.PersonasId');
@@ -443,24 +485,30 @@ class Modeloadministrador extends CI_Model {
         return $consulta;
     }
 
-    public function PuestosUsuario($usuario_id) {
-        $this->db->select("u.IdUsuarios, pu.Nombre,pu.FechaInicio,pu.FechaFin,a.Nombre as Area,pu.IdPuestos,pu.Activo,pu.Clave");
-        $this->db->from('Usuarios u');
-        $this->db->join('Personas p', 'p.IdPersonas= u.PersonasId');
+    public function ObtenerPersona($persona_id) {
+        $this->db->select("p.IdPersonas,concat(p.Nombre,' ',p.APaterno,' ',p.AMaterno)as NombreCompleto,p.AMaterno,p.APaterno,p.Nombre as NombrePersona");
+        $this->db->from('Personas p');
+        $this->db->where('p.IdPersonas', $persona_id);
+        $consulta = $this->db->get()->row();
+        return $consulta;
+    }
+
+    public function PuestosUsuario($persona_id) {
+        $this->db->select("pu.Nombre,pu.FechaInicio,pu.FechaFin,a.Nombre as Area,pu.IdPuestos,pu.Activo,pu.Clave");
+        $this->db->from('Personas p');
         $this->db->join('Puestos pu', 'p.IdPersonas= pu.PersonasId');
         $this->db->join('Areas a', 'a.IdAreas= pu.AreasId');
-        $this->db->where('u.IdUsuarios', $usuario_id);
+        $this->db->where('p.IdPersonas', $persona_id);
         $consulta = $this->db->get();
         return $consulta;
     }
 
-    public function UltimoPuesto($usuario_id) {
-        $this->db->select("u.IdUsuarios, pu.Nombre,pu.FechaInicio,pu.FechaFin,a.Nombre as Area,pu.IdPuestos,pu.Activo,pu.Clave");
-        $this->db->from('Usuarios u');
-        $this->db->join('Personas p', 'p.IdPersonas= u.PersonasId');
+    public function UltimoPuesto($persona_id) {
+        $this->db->select("p.IdPersonas, pu.Nombre,pu.FechaInicio,pu.FechaFin,a.Nombre as Area,pu.IdPuestos,pu.Activo,pu.Clave");
+        $this->db->from('Personas p');
         $this->db->join('Puestos pu', 'p.IdPersonas= pu.PersonasId');
         $this->db->join('Areas a', 'a.IdAreas= pu.AreasId');
-        $this->db->where('u.IdUsuarios', $usuario_id);
+        $this->db->where('p.IdPersonas', $persona_id);
         $this->db->where('pu.Activo', 1);
         $this->db->Order_by("pu.FechaInicio", "desc");
         $consulta = $this->db->get()->row();
@@ -519,12 +567,24 @@ class Modeloadministrador extends CI_Model {
         }
     }
 
-    public function TienePuesto($usuario_id, $puesto) {
-        $this->db->select("u.IdUsuarios, pu.Nombre,pu.FechaInicio,pu.FechaFin");
+    public function TieneUsuario($persona) {
+        $this->db->select('u.IdUsuarios');
         $this->db->from('Usuarios u');
-        $this->db->join('Personas p', 'p.IdPersonas= u.PersonasId');
+        //$this->db->where('u.Activo', 1); No verifica activo porque se debe obtener aunque sea cancelado para mostrar el estatus
+        $this->db->where('u.PersonasId', $persona);
+        $consulta = $this->db->get();
+        if ($consulta->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function TienePuesto($persona_id, $puesto) {
+        $this->db->select("p.IdPersonas, pu.Nombre,pu.FechaInicio,pu.FechaFin");
+        $this->db->from('Personas p');
         $this->db->join('Puestos pu', 'p.IdPersonas= pu.PersonasId');
-        $this->db->where('u.IdUsuarios', $usuario_id);
+        $this->db->where('p.IdPersonas', $persona_id);
         $this->db->where('pu.Nombre', $puesto);
         $consulta = $this->db->get();
         if ($consulta->num_rows() > 0) {
@@ -560,11 +620,11 @@ class Modeloadministrador extends CI_Model {
         return $this->db->get()->row();
     }
 
-    public function AgregarPuesto($usuario, $puesto, $area, $clave) {
+    public function AgregarPuesto($persona, $puesto, $area, $clave) {
         $Historial = array(
             'Nombre' => $puesto,
             'AreasId' => $area,
-            'PersonasId' => $this->Persona($usuario)->PersonasId,
+            'PersonasId' => $persona,
             'Activo' => 1,
             'Clave' => $clave,
             'UsuarioAsignaId' => IdUsuario(),
@@ -574,7 +634,7 @@ class Modeloadministrador extends CI_Model {
         return $this->db->insert_id();
     }
 
-    public function EliminarPuesto($usuario, $puesto) {
+    public function EliminarPuesto($persona, $puesto) {
         $this->db->set("Activo", 0);
         $this->db->set("FechaFin", date('Y-m-d | h:i:sa'));
         $this->db->where("IdPuestos", $puesto);
@@ -721,6 +781,63 @@ class Modeloadministrador extends CI_Model {
             );
             $this->db->insert('ModelosColores', $datosCPM);
         }
+    }
+
+    public function GuardarEmpleado($nombre, $apellidop, $apellidom, $nempleado) {
+        $datos = array(
+            'APaterno' => $apellidop,
+            'AMaterno' => $apellidom,
+            'Nombre' => $nombre,
+            'UsuariosId' => IdUsuario(),
+            'FechaRegistro' => date('Y-m-d | h:i:sa'),
+            'Activo' => 1,
+            'NEmpleado' => $nempleado
+        );
+        $this->db->insert('Personas', $datos);
+    }
+
+    public function ExisteUsuario($usuario) {
+        $this->db->select('u.IdUsuarios');
+        $this->db->from('Usuarios u');
+        $this->db->where('u.Nombre', $usuario);
+        $consulta = $this->db->get();
+        if ($consulta->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function GenerarUsuario($persona, $cont) {
+        $personaobj = $this->ObtenerPersona($persona);
+        $nombre = $personaobj->NombrePersona;
+        $apaterno = $personaobj->APaterno;
+        $usuarionombre = substr($nombre, 0, $cont) . $apaterno;
+        if ($this->ExisteUsuario($usuarionombre)) {
+            $this->GenerarUsuario($persona, $cont++);
+        } else {
+            return $this->Normaliza($usuarionombre);
+        }
+    }
+
+    public function Normaliza($cadena) {
+        $originales = 'ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõöøùúûýýþÿŔŕ';
+        $modificadas = 'aaaaaaaceeeeiiiidnoooooouuuuybsaaaaaaaceeeeiiiidnoooooouuuyybyRr';
+        $cadena = utf8_decode($cadena);
+        $cadena = strtr($cadena, utf8_decode($originales), $modificadas);
+        $cadena = strtolower($cadena);
+        return utf8_encode($cadena);
+    }
+
+    public function CrearUsuario($persona) {
+        $usuario = $this->GenerarUsuario($persona, 1);
+        $datos = array(
+            'Nombre' => $usuario,
+            'Contrasena' => 'RoyaltyCeramic',
+            'PersonasId' => $persona,
+            'Activo' => 1,
+        );
+        $this->db->insert('Usuarios', $datos);
     }
 
 }

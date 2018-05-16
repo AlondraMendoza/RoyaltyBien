@@ -1,6 +1,3 @@
-<script>
-
-</script>
 <h1><b> EXPEDIENTE PRODUCTO</b></h1><br>
 <center>
     <div class="panel warning" data-role="panel">
@@ -10,6 +7,9 @@
         </div>
         <div class="content">
             <table class="table">
+                <?php if($producto==null){ ?>
+                <?= "El producto no esta clasificado para reparar"?>
+                <?php } else{ ?>
                 <tr>
                     <td class="center" rowspan="2" style="width: 30%">
                         <img src="<?= base_url() ?>public/imagenes/<?= $producto->foto; ?>" height="190px;" width="190px;" title="<?= $producto->NombreProducto; ?>">        
@@ -43,22 +43,24 @@
                 <tr>
                     <td class="center">
                         <b>Defectos</b>
-                        <br>
+                        <br><br>
                         <?php foreach ($defecto->result() as $d): ?>
                         <?= $d->Nombre ?><br>
                         <?php endforeach; ?>
                         <br><br>
                     </td>
-                    <td>
+                    <td class="center">
                         <b>Acciones</b>
-                        <br>
+                        <br><br>
                         <a class="button block-shadow-info text-shadow primary" href="CapturaReparacion?producto=<?= $producto->IdProductos ?>">Reparar</a>
                         <a class="button block-shadow-info text-shadow alert" onclick="Desactivar(<?= $producto->IdProductos ?>)">Cancelar</a>
                     </td>
                 </tr>
+                <?php } ?>
             </table>
         </div>
     </div>
+    
     </center><br><br><br>
 
 

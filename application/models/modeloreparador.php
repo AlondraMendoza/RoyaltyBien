@@ -17,7 +17,9 @@ class Modeloreparador extends CI_Model {
         $this->db->join("CProductos cp", "p.CProductosId=cp.IdCProductos");
         $this->db->join("Colores c", "p.ColoresId=c.IdColores");
         $this->db->join("Modelos m", "p.ModelosId=m.IdModelos");
+        $this->db->join("HistorialClasificacion hc","p.IdProductos=hc.ProductosId");
         $this->db->where("p.IdProductos", $producto_id);
+        $this->db->where("hc.ClasificacionesId", 5);
         // print($this->db->get_compiled_select());
         $fila = $this->db->get()->row();
         //print($producto_id);
@@ -30,10 +32,39 @@ class Modeloreparador extends CI_Model {
         $this->db->join("HistorialClasificacionDefectos hcd","d.IdDefectos=hcd.DefectosId");
         $this->db->join("HistorialClasificacion hc","hcd.HistorialClasificacionId= hc.IdHistorialClasificacion");
         $this->db->where("hc.ProductosId",$producto_id);
+        $this->db->order_by("hc.IdHistorialClasificacion","desc");
         $fila = $this->db->get();
         return $fila;
-       
-        
+    }
+    
+    public function BuscarClaveProducto($clave) {
+        $this->db->select("p.IdProductos, cp.Nombre as producto, c.Nombre as color, m.Nombre as modelo");
+        $this->db->from("Productos p");
+        $this->db->join("CProductos cp", "p.CProductosId=cp.IdCProductos");
+        $this->db->join("Colores c", "p.ColoresId=c.IdColores");
+        $this->db->join("Modelos m", "p.ModelosId=m.IdModelos");
+        $this->db->where("p.Activo", 1);
+        $this->db->where("p.IdProductos", $clave);
+        $fila = $this->db->get();
+        if ($fila->num_rows() > 0) {
+            return $fila->row();
+        } else {
+            return "No se encontró el producto";
+        }
+    }
+    
+    public function CodigoBarrasTexto($producto_id) {
+        $producto = $this->Producto($producto_id);
+        $fecha = date_format(date_create($producto->FechaCaptura), 'dmY');
+        $codigo = $fecha . "-" . str_pad($producto->IdProductos, 10);
+        return $codigo;
+    }
+    
+    public function Producto($idprod) {
+        $this->db->select("*");
+        $this->db->from("Productos");
+        $this->db->where("IdProductos", $idprod);
+        return $this->db->get()->row();
     }
     
 }

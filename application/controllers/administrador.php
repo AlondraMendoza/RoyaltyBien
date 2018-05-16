@@ -373,4 +373,14 @@ class Administrador extends CI_Controller {
         redirect('administrador/ExpedienteUsuario?persona=' . $persona);
     }
 
+    public function ConfiguracionMaximosMinimos() {
+        $infoheader["titulo"] = "Configuración Máximos y Mínimos: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->model("modelocedis");
+        $infocontent["modelos"] = $this->modelocedis->ListaModelos();
+        $this->load->view('administrador/ConfiguracionMaximosMinimos', $infocontent);
+
+        $this->load->view('template/footerd', '');
+    }
+
 }

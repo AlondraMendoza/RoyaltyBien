@@ -36,9 +36,20 @@
 
 <div class="tabcontrol" data-role="tabcontrol" data-save-state="true" id='tabs'>
     <ul class="tabs">
-        <?php foreach ($modelos->result() as $modelo): ?>
-            <li class="active"><a href="#<?= $modelo->IdModelos ?>"><?= $modelo->Nombre ?></a></li>
-        <?php endforeach; ?>
+
+        <?php
+        $cont = 1;
+        foreach ($modelos->result() as $modelo):
+            $activo = "";
+            if ($cont == 1) {
+                $activo = "active";
+            }
+            ?>
+            <li class="<?= $activo ?>"><a href="#<?= $modelo->IdModelos ?>"><?= $modelo->Nombre ?></a></li>
+            <?php
+            $cont++;
+        endforeach;
+        ?>
     </ul>
     <div class="frames">
         <?php foreach ($modelos->result() as $modelo): ?>  

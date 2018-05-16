@@ -87,6 +87,34 @@ class Modelousuario extends CI_Model {
         }
     }
 
+    public function Clasificacion($producto_id) {
+        $this->db->select("c.Letra,c.Color,h.FueraTono,h.IdHistorialClasificacion");
+        $this->db->from("HistorialClasificacion h");
+        $this->db->join("Clasificaciones c", "c.IdClasificaciones=h.ClasificacionesId");
+        $this->db->where("h.ProductosId", $producto_id);
+        $this->db->where("h.Activo", 1);
+        $this->db->Order_by("h.IdHistorialClasificacion", "desc");
+        $fila = $this->db->get()->row();
+        if ($fila != null) {
+            return $fila;
+        } else {
+            return "";
+        }
+    }
+
+    public function ObtenerDefectos($producto_id) {
+        $ultimaclasificacion = $this->Clasificacion($producto_id);
+        $this->db->select("d.Nombre, hc.FueraTono");
+        $this->db->from("HistorialClasificacionDefectos hcd");
+        $this->db->join("Defectos d", "d.IdDefectos=hcd.DefectosId");
+        $this->db->join("HistorialClasificacion hc", "hcd.HistorialClasificacionId= hc.IdHistorialClasificacion");
+        $this->db->where("hc.ProductosId", $producto_id);
+        $this->db->where("hc.IdHistorialClasificacion", $ultimaclasificacion->IdHistorialClasificacion);
+        //$this->db->order_by("hc.IdHistorialClasificacion", "desc");
+        $fila = $this->db->get();
+        return $fila;
+    }
+
 }
 
 ?>

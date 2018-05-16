@@ -557,6 +557,7 @@ class Clasificador extends CI_Controller {
         $producto_id = $this->input->post_get('producto_id', TRUE);
         $infocontent["Nombre"] = "Alondra Mendoza";
         $this->load->model("modeloclasificador");
+        $this->load->model("modelousuario");
         $infocontent["producto"] = $this->modeloclasificador->ObtenerProducto($producto_id);
         $infocontent["historiales"] = $this->modeloclasificador->HistorialMovimientosProducto($producto_id);
         $infocontent["ubicacion"] = $this->modeloclasificador->Ubicacion($producto_id);
@@ -564,6 +565,7 @@ class Clasificador extends CI_Controller {
         $infocontent["tarima"] = $this->modeloclasificador->EstatusTarima($producto_id);
         $infocontent["tarimaid"] = $this->modeloclasificador->EstatusTarimaId($producto_id);
         $infocontent["pedido"] = $this->modeloclasificador->EstatusPedido($producto_id);
+        $infocontent["defectos"] = $this->modelousuario->ObtenerDefectos($producto_id);
         $infocontent["clasificaciones"] = $this->modeloclasificador->ClasificacionesProducto($producto_id);
         $infocontent["entarimados"] = $this->modeloclasificador->EntarimadosProducto($producto_id);
         $infocontent["codigo"] = $this->modeloclasificador->CodigoBarrasTexto($producto_id);

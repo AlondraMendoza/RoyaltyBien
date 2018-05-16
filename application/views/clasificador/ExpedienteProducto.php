@@ -78,7 +78,6 @@
                         <b>Tarima</b>
                         <br>
                         <?= $tarima ?><br>
-
                         <?php
                         $ci = &get_instance();
                         $ci->load->model("modeloclasificador");
@@ -96,6 +95,13 @@
                         <br>
                         <?= $pedido; ?>
                         <br><br>
+                    </td>
+                    <td>
+                        <b>Defectos</b><br>
+                        <?php foreach ($defectos->result() as $defecto): ?>
+                            <?= $defecto->Nombre ?><br>
+                        <?php endforeach; ?>
+                        <br>
                     </td>
                 </tr>
             </table>

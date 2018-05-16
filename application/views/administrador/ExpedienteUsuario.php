@@ -66,12 +66,11 @@
             <table class="table">
                 <tr>
                     <td class="center">
-                        <b>Estatus de Usuario</b>
-                        <br>
+                        <br><b>Estatus de Usuario</b><br>
                         <?php
                         if ($tieneusuario) {
                             if ($usuario->Activo == 1) {
-                                echo "Activo";
+                                echo "<b class='fg-green'>Activo</b><br><br>";
                                 ?>
                                 <form action = "CancelarUsuario">
                                     <input type = "submit" class = "danger" value = "Desactivar Usuario">
@@ -79,7 +78,13 @@
                                 </form>
                                 <?php
                             } else {
-                                echo "Inactivo";
+                                echo "<b class='fg-red'>Inactivo</b><br><br>";
+                                ?>
+                                <form action = "ActivarUsuario">
+                                    <input type = "submit" class = "success" value = "Activar Usuario">
+                                    <input type = "hidden" name = "persona_id" value = "<?= $persona->IdPersonas ?>">
+                                </form>
+                                <?php
                             }
                         } else {
                             ?>

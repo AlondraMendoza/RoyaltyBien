@@ -452,7 +452,7 @@ class Modeloadministrador extends CI_Model {
     }
 
     public function Usuarios() {
-        $this->db->select("p.IdPersonas,concat(p.Nombre,' ',p.APaterno,' ',p.AMaterno)as NombreCompleto");
+        $this->db->select("p.IdPersonas,concat(IFNULL(p.Nombre,'') ,' ',IFNULL(p.APaterno,''),' ',IFNULL(p.AMaterno,''))as NombreCompleto");
         $this->db->from('Personas p');
         $this->db->where('p.Activo', 1);
         $consulta = $this->db->get();
@@ -838,6 +838,20 @@ class Modeloadministrador extends CI_Model {
             'Activo' => 1,
         );
         $this->db->insert('Usuarios', $datos);
+    }
+
+    public function CancelarUsuario($persona) {
+        $usuario = $this->Usuario($persona);
+        $this->db->set("Activo", 0);
+        $this->db->where("IdUsuarios", $usuario->IdUsuarios);
+        $this->db->update("Usuarios");
+    }
+
+    public function ActivarUsuario($persona) {
+        $usuario = $this->Usuario($persona);
+        $this->db->set("Activo", 1);
+        $this->db->where("IdUsuarios", $usuario->IdUsuarios);
+        $this->db->update("Usuarios");
     }
 
 }

@@ -362,7 +362,14 @@ class Administrador extends CI_Controller {
     public function CancelarUsuario() {
         $persona = $this->input->post_get('persona_id', TRUE);
         $this->load->model("modeloadministrador");
-        $this->modeloadministrador->CrearUsuario($persona);
+        $this->modeloadministrador->CancelarUsuario($persona);
+        redirect('administrador/ExpedienteUsuario?persona=' . $persona);
+    }
+
+    public function ActivarUsuario() {
+        $persona = $this->input->post_get('persona_id', TRUE);
+        $this->load->model("modeloadministrador");
+        $this->modeloadministrador->ActivarUsuario($persona);
         redirect('administrador/ExpedienteUsuario?persona=' . $persona);
     }
 

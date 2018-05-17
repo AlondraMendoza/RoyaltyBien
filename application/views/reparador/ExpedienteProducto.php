@@ -44,9 +44,17 @@
                     <td class="center">
                         <b>Defectos</b>
                         <br><br>
-                        <?php foreach ($defecto->result() as $d): ?>
-                        <?= $d->Nombre ?><br>
-                        <?php endforeach; ?>
+                        <?php
+                        if ($defectos != null) {
+                            foreach ($defectos->result() as $defecto):
+                                ?>
+                                <?= $defecto->Nombre ?><br>
+                                <?php
+                            endforeach;
+                        } else {
+                            echo "Sin defectos Registrados";
+                        }
+                        ?>
                         <br><br>
                     </td>
                     <td class="center">

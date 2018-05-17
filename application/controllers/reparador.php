@@ -22,8 +22,10 @@ class Reparador extends CI_Controller {
         $this->load->view('template/headerd', $infoheader);
         $producto_id = $this->input->post_get('producto_id', TRUE);
         $this->load->model("modeloreparador");
+        $this->load->model("modelousuario");
         $infocontent["producto"] = $this->modeloreparador->ObtenerProducto($producto_id);
-        $infocontent["defecto"] = $this->modeloreparador->ObtenerDefectos($producto_id);
+        //$infocontent["defecto"] = $this->modeloreparador->ObtenerDefectos($producto_id);
+        $infocontent["defectos"] = $this->modelousuario->ObtenerDefectos($producto_id);
         $infocontent["codigo"] = $this->modeloreparador->CodigoBarrasTexto($producto_id);
         $this->load->view('reparador/ExpedienteProducto', $infocontent);
         $this->load->view('template/footerd', '');

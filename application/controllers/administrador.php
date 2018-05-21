@@ -20,7 +20,6 @@ class Administrador extends CI_Controller {
     public function Reportes() {
         $this->load->model("modeloadministrador");
         $infoheader["titulo"] = "Administrador: Royalty Ceramic";
-        $infocontent["Nombre"] = "Alondra Mendoza";
         $infocontent["hoy"] = date("d/m/Y");
         $infocontent["clasificaciones"] = $this->modeloadministrador->Clasificaciones();
         $infocontent["productos"] = $this->modeloadministrador->Productos();
@@ -74,7 +73,6 @@ class Administrador extends CI_Controller {
         $fechafin = $this->input->post_get('fechafin', TRUE);
         $clasificacion = $this->input->post_get('clasificacion', TRUE);
         $aclasificacion = json_decode($clasificacion);
-
         $producto = $this->input->post_get('producto', TRUE);
         $aproducto = json_decode($producto);
         $modelo = $this->input->post_get('modelo', TRUE);
@@ -84,6 +82,24 @@ class Administrador extends CI_Controller {
         $this->load->model("modeloadministrador");
         $infocontent["productos"] = $this->modeloadministrador->GenerarReporte($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor);
         $this->load->view('administrador/GenerarReporte', $infocontent);
+    }
+
+    public function GenerarDetalleSeleccionado() {
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $nombre = $this->input->post_get('nombre', TRUE);
+        $clasificacion = $this->input->post_get('clasificacion', TRUE);
+        $aclasificacion = json_decode($clasificacion);
+        $producto = $this->input->post_get('producto', TRUE);
+        $por = $this->input->post_get('por', TRUE);
+        $aproducto = json_decode($producto);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $amodelo = json_decode($modelo);
+        $color = $this->input->post_get('color', TRUE);
+        $acolor = json_decode($color);
+        $this->load->model("modeloadministrador");
+        $infocontent["productos"] = $this->modeloadministrador->GenerarDetalleSeleccionado($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $por, $nombre);
+        $this->load->view('administrador/GenerarDetalleSeleccionado', $infocontent);
     }
 
     public function GenerarReporteQAcc() {

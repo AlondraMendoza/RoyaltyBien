@@ -128,6 +128,58 @@ class Administrador extends CI_Controller {
         $this->load->view('administrador/GenerarConcentrado', $infocontent);
     }
 
+    public function GenerarConcentradoDefectos() {
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $clasificacion = $this->input->post_get('clasificacion', TRUE);
+        $aclasificacion = json_decode($clasificacion);
+        $producto = $this->input->post_get('producto', TRUE);
+        $aproducto = json_decode($producto);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $amodelo = json_decode($modelo);
+        $color = $this->input->post_get('color', TRUE);
+        $acolor = json_decode($color);
+        $por = $this->input->post_get('por', TRUE);
+        $this->load->model("modeloadministrador");
+        $infocontent["por"] = $por;
+        $infocontent["productos"] = $this->modeloadministrador->GenerarConcentrado($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $por);
+        $this->load->view('administrador/GenerarConcentrado', $infocontent);
+    }
+
+    public function GenerarReporteDefectos() {
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $clasificacion = $this->input->post_get('clasificacion', TRUE);
+        $aclasificacion = json_decode($clasificacion);
+        $producto = $this->input->post_get('producto', TRUE);
+        $aproducto = json_decode($producto);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $amodelo = json_decode($modelo);
+        $color = $this->input->post_get('color', TRUE);
+        $acolor = json_decode($color);
+        $this->load->model("modeloadministrador");
+        $infocontent["productos"] = $this->modeloadministrador->GenerarReporte($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor);
+        $this->load->view('administrador/GenerarReporte', $infocontent);
+    }
+
+    public function GenerarDetalleSeleccionadoDefectos() {
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $nombre = $this->input->post_get('nombre', TRUE);
+        $clasificacion = $this->input->post_get('clasificacion', TRUE);
+        $aclasificacion = json_decode($clasificacion);
+        $producto = $this->input->post_get('producto', TRUE);
+        $por = $this->input->post_get('por', TRUE);
+        $aproducto = json_decode($producto);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $amodelo = json_decode($modelo);
+        $color = $this->input->post_get('color', TRUE);
+        $acolor = json_decode($color);
+        $this->load->model("modeloadministrador");
+        $infocontent["productos"] = $this->modeloadministrador->GenerarDetalleSeleccionado($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $por, $nombre);
+        $this->load->view('administrador/GenerarDetalleSeleccionado', $infocontent);
+    }
+
     public function GenerarReporteQ() {
         $fechainicio = $this->input->post_get('fechainicio', TRUE);
         $fechafin = $this->input->post_get('fechafin', TRUE);

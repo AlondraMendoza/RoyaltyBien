@@ -1,5 +1,15 @@
+<script>
+    function RegresoCriterios()
+    {
+        $("#divtiporeporte").show();
+        $("#detalle").hide();
+        $("#grafica").html("");
+        $("#detalleseleccionado").html("");
+    }
+</script>
+<center><button onclick="RegresoCriterios()" class="button block-shadow-info text-shadow primary big-button">Regresar a Criterios de Selección</button></center>
 <br>
-<table class="table shadow">
+<table class="table shadow" data-role="datatable">
     <thead>
         <tr>
             <th colspan="6" class="fg-darkBlue">RESULTADOS</th>
@@ -33,3 +43,5 @@
     </tbody>
 </table>
 
+<br><br>
+<center><button onclick="RegresoCriterios()" class="button block-shadow-info text-shadow primary big-button">Regresar a Criterios de Selección</button></center>

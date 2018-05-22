@@ -2,6 +2,21 @@
     $(document).ready(function () {
         ObtenerModelos();
     });
+    
+    function Todos(clasedestino, claseorigen)
+    {
+        if ($("#" + claseorigen).prop('checked')) {
+            $('.' + clasedestino).each(function () {
+                this.checked = true;
+            });
+        } else {
+            $('.' + clasedestino).each(function () {
+                this.checked = false;
+            });
+        }
+
+    }
+    
     function ObtenerModelos()
     {
         $("#modelo").html("<option>Cargando...</option>");
@@ -18,6 +33,41 @@
         $.get("ObtenerColores", {"modelo": modelo}, function (data) {
             $("#color").html(data);
         });
+    }
+    
+    function DetalleSeleccionado(nombre)
+    {
+        var fechainicio = $("#fechainicio").val();
+        var fechafin = $("#fechafin").val();
+        var hornos = [];
+        $(".hornos:checked").each(function ()
+        {
+            hornos.push(parseInt($(this).val()));
+        });
+        var hornoscadena = JSON.stringify(hornos);
+
+        var productos = [];
+        $(".productos:checked").each(function ()
+        {
+            productos.push(parseInt($(this).val()));
+        });
+        var productoscadena = JSON.stringify(productos);
+        var modelos = [];
+        $(".modelos:checked").each(function ()
+        {
+            modelos.push(parseInt($(this).val()));
+        });
+        var modeloscadena = JSON.stringify(modelos);
+        var colores = [];
+        $(".colores:checked").each(function ()
+        {
+            colores.push(parseInt($(this).val()));
+        });
+        var colorescadena = JSON.stringify(colores);
+        var por = $("#concentradox").val();
+        $("#detalleseleccionado").fadeIn();
+        $("#detalleseleccionado").html("<center style='font-size:1.2em'><b>Consultando Información...</b></center><br><br>");
+        $("#detalleseleccionado").load("GenerarDetalleSeleccionadoQ", {"fechainicio": fechainicio, "fechafin": fechafin, "hornos": hornoscadena, "producto": productoscadena, "modelo": modeloscadena, "color": colorescadena, 'por': por, 'nombre': nombre})
     }
     function Detalle()
     {
@@ -53,8 +103,12 @@
             colores.push(parseInt($(this).val()));
         });
         var colorescadena = JSON.stringify(colores);
-        $("#detalle").html("Cargando Información");
-        $("#detalle").load("GenerarReporteQ", {"fechainicio": fechainicio, "fechafin": fechafin, "hornos": hornoscadena, "producto": productoscadena, "modelo": modeloscadena, "color": colorescadena})
+        $("#detalle").show();
+         $("#detalle").html("<center style='font-size:1.2em'><b>Consultando Información...</b></center><br><br>");
+        $("#grafica").html("");
+        $("#detalleseleccionado").hide();
+        $("#divtiporeporte").hide();
+        $("#detalle").load("GenerarReporteQ", {"fechainicio": fechainicio, "fechafin": fechafin, "hornos": hornoscadena, "producto": productoscadena, "modelo": modeloscadena, "color": colorescadena});
     }
     function Concentrado()
     {
@@ -94,20 +148,26 @@
         });
         var colorescadena = JSON.stringify(colores);
         var por = $("#concentradox").val();
-        $("#detalle").html("Cargando Información");
+        $("#detalle").show();
+        $("#detalle").html("<center style='font-size:1.2em'><b>Consultando Información...</b></center><br><br>");
+        $("#grafica").html("");
+        $("#detalleseleccionado").hide();
+        $("#divtiporeporte").hide();
         $("#detalle").load("GenerarConcentradoQ", {"fechainicio": fechainicio, "fechafin": fechafin, "hornos": hornoscadena, "producto": productoscadena, "modelo": modeloscadena, "color": colorescadena, "por": por});
     }
     function Paso(paso)
     {
-        $("#paso1").fadeOut();
-        $("#paso2").fadeOut();
-        $("#paso3").fadeOut();
-        $("#paso4").fadeOut();
-        $("#paso5").fadeOut();
-        $("#paso6").fadeOut();
+        $("#paso1").hide();
+        $("#paso2").hide();
+        $("#paso3").hide();
+        $("#paso4").hide();
+        $("#paso5").hide();
+        $("#paso6").hide();
         var pb = $("#pb2").data('progress');
-        pb.set(paso * 15);
-        $("#paso" + paso).fadeIn();
+        var porc = paso * 15;
+        pb.set(porc);
+        $("#porc").html(porc + "%");
+        $("#paso" + paso).show();
     }
 </script>
 <h1 class="light text-shadow">REPORTE DE HORNOS</h1><br>
@@ -165,6 +225,11 @@
                 </label>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <?php endforeach; ?>
+              <label class="input-control checkbox">
+                <input type="checkbox" value="todo" name="hornostodo" id="hornostodo" onclick="Todos('hornos', 'hornostodo')">
+                <span class="check"></span>
+                <span class="caption"><b class="fg-darkCobalt">Todas</b></span>
+            </label>
             <br><br><br>
             <button onclick="Paso(1)" class="button block-shadow-alert text-shadow alert big-button">Atrás</button>
             <button onclick="Paso(3)" class="button block-shadow-info text-shadow primary big-button">Siguiente</button>
@@ -188,6 +253,11 @@
                 </label>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <?php endforeach; ?>
+                  <label class="input-control checkbox">
+                            <input type="checkbox" value="todo" name="productostodo" id="productostodo" onclick="Todos('productos', 'productostodo')">
+                            <span class="check"></span>
+                            <span class="caption"><b class="fg-darkCobalt">Todos</b></span>
+                </label>
             <br><br>
             <button onclick="Paso(2)" class="button block-shadow-alert text-shadow alert big-button">Atrás</button>
             <button onclick="Paso(4)" class="button block-shadow-info text-shadow primary big-button">Siguiente</button>
@@ -211,6 +281,11 @@
                 </label>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <?php endforeach; ?>
+                <label class="input-control checkbox">
+                            <input type="checkbox" value="todo" name="modelostodo" id="modelostodo" onclick="Todos('modelos', 'modelostodo')">
+                            <span class="check"></span>
+                            <span class="caption"><b class="fg-darkCobalt">Todos</b></span>
+                        </label>
             <br><br>
             <button onclick="Paso(3)" class="button block-shadow-alert text-shadow alert big-button">Atrás</button>
             <button onclick="Paso(5)" class="button block-shadow-info text-shadow primary big-button">Siguiente</button>
@@ -236,6 +311,11 @@
                 </label>
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <?php endforeach; ?>
+                <label class="input-control checkbox">
+                            <input type="checkbox" value="todo" name="colorestodo" id="colorestodo" onclick="Todos('colores', 'colorestodo')">
+                            <span class="check"></span>
+                            <span class="caption"><b class="fg-darkCobalt">Todos</b></span>
+                        </label>
             <br><br>
             <button onclick="Paso(4)" class="button block-shadow-alert text-shadow alert big-button">Atrás</button>
             <button onclick="Paso(6)" class="button block-shadow-info text-shadow primary big-button">Siguiente</button>
@@ -250,6 +330,7 @@
     </div>
     <div class="content">
         <br>
+        <div id="divtiporeporte">
         <table class="table shadow">
             <thead>
                 <tr>
@@ -283,10 +364,12 @@
         <center>
             <button onclick="Paso(5)" class="button block-shadow-alert text-shadow alert big-button">Atrás</button>
         </center>
-        <div id="detalle" class="shadow" ></div><br>
+        </div>
+        <div id="detalle" class="shadow" ></div><br><br><div id="texto"></div>
         <div id='grafica'>
             <canvas id="myChart" width="300" height="100" class="shadow"></canvas>
         </div>
+        <div id="detalleseleccionado"> </div>
         <script>
             function Grafica(etiquetas, valores) {
 
@@ -328,6 +411,18 @@
                         }
                     }
                 });
+                document.getElementById("myChart").onclick = function (evt) {
+                    var activePoints = myChart.getElementAtEvent(evt);
+                    // var theElement = myChart.config.data.datasets[activePoints[0]._datasetIndex].data[activePoints[0]._index];
+
+                    //alert(etiquetas[activePoints[0]._index]);
+                    //alert(valores[activePoints[0]._index]);
+                    DetalleSeleccionado(etiquetas[activePoints[0]._index]);
+//                    console.log(theElement);
+//                    console.log(myChart.config.data.datakeys[activePoints[0]._index]);
+                    // document.getElementById("texto").innerText = myChart.config.da [activePoints[0]._index];
+//                    console.log(myChart.config.type);
+                }
             }
         </script>
     </div>

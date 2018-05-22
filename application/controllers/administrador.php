@@ -101,6 +101,24 @@ class Administrador extends CI_Controller {
         $infocontent["productos"] = $this->modeloadministrador->GenerarDetalleSeleccionado($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $por, $nombre);
         $this->load->view('administrador/GenerarDetalleSeleccionado', $infocontent);
     }
+    
+    public function GenerarDetalleSeleccionadoQ() {
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $nombre = $this->input->post_get('nombre', TRUE);
+        $hornos = $this->input->post_get('hornos', TRUE);
+        $ahornos = json_decode($hornos);
+        $producto = $this->input->post_get('producto', TRUE);
+        $por = $this->input->post_get('por', TRUE);
+        $aproducto = json_decode($producto);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $amodelo = json_decode($modelo);
+        $color = $this->input->post_get('color', TRUE);
+        $acolor = json_decode($color);
+        $this->load->model("modeloadministrador");
+        $infocontent["productos"] = $this->modeloadministrador->GenerarDetalleSeleccionadoQ($fechainicio, $fechafin, $ahornos, $aproducto, $amodelo, $acolor, $por, $nombre);
+        $this->load->view('administrador/GenerarDetalleSeleccionadoQ', $infocontent);
+    }
 
     public function GenerarReporteQAcc() {
         $fechainicio = $this->input->post_get('fechainicio', TRUE);

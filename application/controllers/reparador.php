@@ -27,6 +27,7 @@ class Reparador extends CI_Controller {
         //$infocontent["defecto"] = $this->modeloreparador->ObtenerDefectos($producto_id);
         $infocontent["defectos"] = $this->modelousuario->ObtenerDefectos($producto_id);
         $infocontent["codigo"] = $this->modeloreparador->CodigoBarrasTexto($producto_id);
+        $infocontent["diagnostico"] = $this->modeloreparador->ObtenerDiagnosticos();
         $this->load->view('reparador/ExpedienteProducto', $infocontent);
         $this->load->view('template/footerd', '');
     }
@@ -191,6 +192,15 @@ class Reparador extends CI_Controller {
         $infocontent["ProductoId"]=$producto_id;
         $this->load->view('reparador/CapturaReparacion', $infocontent);
         $this->load->view('template/footerd', '');
+    }
+    
+     public function GuardarReparacion() {
+        $this->load->model("modeloreparador");
+        $producto = $this->input->post_get('producto', TRUE);
+        $diagnostico = $this->input->post_get('diagnostico', TRUE);
+        $solucion = $this->input->post_get('solucion', TRUE);
+        $this->modeloreparador->GuardarReparacion($producto, $diagnostico, $solucion);
+        print_r("correcto");
     }
 
 }

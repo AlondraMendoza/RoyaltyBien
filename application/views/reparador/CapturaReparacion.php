@@ -10,14 +10,14 @@
                 <tr>
                     <td class="center">
                         <b>Diagnóstico:</b><br><br>
-                        <textarea id="Diagnostico" data-role="textarea" data-auto-size="true" data-max-height="500"></textarea>
+                        <textarea id="diagnostico" data-role="textarea" data-auto-size="true" data-max-height="200"></textarea>
                     </td> 
                     <td class="center">
                         <b>Solución:</b><br><br>
-                        <textarea id="Solucion" data-role="textarea" data-auto-size="true" data-max-height="500"></textarea>
-                    </td>
+                        <textarea id="solucion" data-role="textarea" data-auto-size="true" data-max-height="200"></textarea>
+                        </td>
                     <td class="center"><br><br>
-                        <a class="button block-shadow-info text-shadow success" onclick="Guardar(<?= $ProductoId ?>)" >Guardar</a>
+                        <a class="button block-shadow-info text-shadow success" onclick="Guardar(<?=$ProductoId ?>)" >Guardar</a>
                         <a class="button block-shadow-info text-shadow alert" onclick="Cancelar()">Cancelar</a>
                     </td>
                 </tr>
@@ -27,5 +27,18 @@
     </div>
 </center>
 <script>
-    
+    function Guardar(producto){
+        var diagnostico =  $("#diagnostico").val();
+        var solucion =  $("#solucion").val();
+        $.post("GuardarReparacion", {"producto": producto, "diagnostico":diagnostico, "solucion":solucion}, function (data) {
+            if ($.trim(data) === "correcto")
+            {
+                MsjCorrecto("Los datos se guardarón correctamente");
+                location.reload();
+            } else
+            {
+                MsjError("Ocurrió un error al guardar los datos");
+            }
+        });
+    }
 </script>

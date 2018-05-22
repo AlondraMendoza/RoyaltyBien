@@ -67,5 +67,33 @@ class Modeloreparador extends CI_Model {
         return $this->db->get()->row();
     }
     
+    public function ObtenerDiagnosticos() {
+        $this->db->select("*");
+        $this->db->from("CReparaciones");
+        $this->db->where("Activo", true);
+        return $this->db->get();
+        
+    }
+    
+    public function GuardarReparacion($producto, $diagnostico, $solucion) {
+        $reparacion = array(
+            'ProductosId' => $producto,
+            'Fecha' => date('Y-m-d | h:i:sa'),
+            'CReparacionesId' => $diagnostico,
+            'Solucion' => $solucion,
+            'UsuariosId' => IdUsuario()
+        );
+        $this->db->insert('Reparaciones', $reparacion);
+        $Historial= array(
+            'UsuariosId'=>IdUsuario(),
+            'MovimientosProductosId'=>9,
+            'Activo'=>1,
+            'ProductosId'=>$producto
+        );
+        $this->db->set('Fecha', 'NOW()', FALSE);
+        $this->db->insert('HistorialProducto', $Historial);
+    }
+    
+    
 }
 ?>

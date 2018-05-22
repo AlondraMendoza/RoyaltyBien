@@ -195,7 +195,20 @@
                             </div>
                             <div class="frame" id="reparaciones">
                                 <table class="table">
-                                    <tr></tr>
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Diagnóstico</th>
+                                        <th>Solución</th>
+                                        <th>Usuario</th>
+                                    </tr>
+                                    <?php foreach ($reparacion->result() as $r): ?>
+                                        <tr>
+                                            <td class="center"><?= $r->Fecha ?></td>
+                                            <td class="center"><?= $r->Diagnostico ?></td>
+                                            <td class="center"><?php if($r->Solucion==1){ echo 'Si';}else{    echo 'No';} ?></td>
+                                            <td class="center"><?= $r->Persona ?></td>
+                                        </tr>    
+                                    <?php endforeach; ?>
                                 </table>
                             </div>
                         </div>

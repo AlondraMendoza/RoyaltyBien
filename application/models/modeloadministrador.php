@@ -399,7 +399,7 @@ class Modeloadministrador extends CI_Model {
                 $campo = "co.Nombre";
                 break;
         }
-        $query = $this->db->query("select p.IdProductos,cp.Nombre as producto,m.Nombre as modelo,co.Nombre as color,h.* from Productos p left join CProductos cp on cp.IdCProductos=p.CProductosId left join Modelos m on m.IdModelos=p.ModelosId left join Colores co on co.IdColores=p.ColoresId left join Hornos h on h.IdHornos=p.HornosId where  date(FechaCaptura) BETWEEN $fechainicio AND $fechafin" . $parteclasificacion . $parteproducto . $partemodelo . $partecolor . " AND convert(" . $campo . " , char(2))=" . "'" . $nombre . "'");
+        $query = $this->db->query("select p.IdProductos,cp.Nombre as producto,m.Nombre as modelo,co.Nombre as color,h.* from Productos p left join CProductos cp on cp.IdCProductos=p.CProductosId left join Modelos m on m.IdModelos=p.ModelosId left join Colores co on co.IdColores=p.ColoresId left join Hornos h on h.IdHornos=p.HornosId where  date(FechaCaptura) BETWEEN $fechainicio AND $fechafin" . $parteclasificacion . $parteproducto . $partemodelo . $partecolor . " AND convert(" . $campo . " , char(30))=" . "'" . $nombre . "'");
 
         return $query;
     }

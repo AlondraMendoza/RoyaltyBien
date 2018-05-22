@@ -574,6 +574,21 @@ class Modeloclasificador extends CI_Model {
             return "No se encuentra en pedido";
         }
     }
+    
+    public function ObtenerReparaciones($producto_id) {
+        $this->db->select("r.*,cr.Nombre as Diagnostico,CONCAT(per.Nombre,per.APaterno) as Persona");
+        $this->db->from("Reparaciones r");
+        $this->db->join("CReparaciones cr", "cr.IdCReparaciones=r.CReparacionesId");
+        $this->db->join("Productos p", "r.ProductosId=p.IdProductos");
+        $this->db->join("Usuarios u", "u.IdUsuarios=r.UsuariosId");
+        $this->db->join("Personas per", "per.IdPersonas=u.PersonasId");
+        $this->db->where("r.ProductosId", $producto_id);
+        $this->db->where("p.Activo", 1);
+        $this->db->Order_by("r.Fecha", "desc");
+        $fila = $this->db->get();
+        return $fila;
+    }
+    
 
 }
 

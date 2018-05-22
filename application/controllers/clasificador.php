@@ -569,6 +569,7 @@ class Clasificador extends CI_Controller {
         $infocontent["clasificaciones"] = $this->modeloclasificador->ClasificacionesProducto($producto_id);
         $infocontent["entarimados"] = $this->modeloclasificador->EntarimadosProducto($producto_id);
         $infocontent["codigo"] = $this->modeloclasificador->CodigoBarrasTexto($producto_id);
+        $infocontent["reparacion"] = $this->modeloclasificador->ObtenerReparaciones($producto_id);
         $this->load->view('clasificador/ExpedienteProducto', $infocontent);
         $this->load->view('template/footerd', '');
     }

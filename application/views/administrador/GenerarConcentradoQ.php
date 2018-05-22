@@ -3,7 +3,16 @@
     var valores = new Array();
     $(document).ready(function () {
     });
+    function RegresoCriterios()
+    {
+        $("#divtiporeporte").show();
+        $("#detalle").hide();
+        $("#grafica").html("");
+        $("#detalleseleccionado").html("");
+    }
 </script>
+<br>
+<center><button onclick="RegresoCriterios()" class="button block-shadow-info text-shadow primary big-button">Regresar a Criterios de Selección</button></center>
 <br>
 <table class="table">
     <thead>
@@ -27,7 +36,7 @@
             ?>
             <tr>
                 <td class="center"><?= $texto ?></td>
-                <td class="center"><?= $producto->cuantos ?></td>
+                <td class="center" onclick="DetalleSeleccionado('<?= $texto ?>')"><?= $producto->cuantos ?></td>
             </tr>
         <script>
             etiquetas[<?= $cont ?>] = "<?= $texto ?>";
@@ -37,8 +46,17 @@
         $cont++;
         ?>
     <?php endforeach; ?>
-    <script>
-        Grafica(etiquetas, valores);
-    </script>
 </tbody>
 </table>
+<table class="table">
+    <thead>
+        <tr>
+            <th colspan="2" class="fg-darkBlue">GRÁFICA</th>
+        </tr>
+    </thead>
+</table>
+<script>
+    Grafica(etiquetas, valores);
+</script>
+<br><br>
+

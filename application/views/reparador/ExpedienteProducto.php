@@ -55,13 +55,32 @@
                             echo "Sin defectos Registrados";
                         }
                         ?>
-                        <br><br>
+                    </td>
+                    <td class="center">
+                        <b>Diagnóstico :</b><br><br>
+                        <div class="input-control select" >   
+                            <select id="diagnostico" onchange="Seleccion()">                                    
+                                <option value="0">Selecciona el diagnóstico</option>
+                                    <?php foreach ($diagnostico->result() as $d): ?>
+                                        <option value="<?= $d->IdCReparaciones ?>"><?= $d->Nombre . ""; ?></option>
+                                    <?php endforeach; ?>
+                            </select>
+                        </div>
+                    </td>
+                    <td class="center">
+                        <b>Solución :</b><br><br>
+                        <div class="input-control select" >   
+                            <select id="solucion" onchange="SeleccionS()">                                    
+                                <option value="1">Si</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
                     </td>
                     <td class="center">
                         <b>Acciones</b>
                         <br><br>
-                        <a class="button block-shadow-info text-shadow primary" href="CapturaReparacion?producto=<?= $producto->IdProductos ?>">Reparar</a>
-                        <a class="button block-shadow-info text-shadow alert" onclick="Desactivar(<?= $producto->IdProductos ?>)">Cancelar</a>
+                        <a class="button block-shadow-info text-shadow primary" onclick="Guardar(<?= $producto->IdProductos ?>)">Reparar</a>
+                        <a class="button block-shadow-info text-shadow alert" onclick="Cancelar()">Cancelar</a>
                     </td>
                 </tr>
                 <?php } ?>
@@ -71,4 +90,30 @@
     
     </center><br><br><br>
 
+<script>
+    
+    function Seleccion()
+    {
+        $("#tddiagnostico").html($("#diagnostico option:selected").text());
+    }
+    
+    function SeleccionS()
+    {
+        $("#tdsolucion").html($("#solucion option:selected").text());
+    }
+    
+    function Guardar(producto){
+        var diagnostico =  $("#diagnostico").val();
+        var solucion =  $("#solucion").val();
+        $.post("GuardarReparacion", {"producto": producto, "diagnostico":diagnostico, "solucion":solucion}, function (data) {
+            if ($.trim(data) === "correcto")
+            {
+                MsjCorrecto("Los datos se guardarón correctamente");
+            } else
+            {
+                MsjError("Ocurrió un error al guardar los datos");
+            }
+        });
+    }
+</script>
 

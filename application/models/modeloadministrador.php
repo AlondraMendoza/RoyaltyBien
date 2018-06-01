@@ -52,6 +52,13 @@ class Modeloadministrador extends CI_Model {
         return $this->db->get();
     }
 
+    public function Defectos() {
+        $this->db->select('d.*');
+        $this->db->from("Defectos d");
+        $this->db->where("d.Activo=", 1);
+        return $this->db->get();
+    }
+
     public function ModelosQuemado($producto) {
 
         $this->db->select('m.*');
@@ -1011,12 +1018,13 @@ class Modeloadministrador extends CI_Model {
         $this->db->update("Usuarios");
     }
 
-    public function GenerarReporteDefectos($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $adefectos) {
+    public function GenerarReporteDefectos($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $adefecto) {
         $fechainicio = $this->FechaIngles($fechainicio);
         $fechafin = $this->FechaIngles($fechafin);
         $parteclasificacion = "";
         $parteproducto = "";
         $partemodelo = "";
+        $partedefectos = "";
         $partecolor = "";
         if (count($aclasificacion) > 0) {
             $parteclasificacion = " AND ";
@@ -1070,28 +1078,43 @@ class Modeloadministrador extends CI_Model {
             }
             $partecolor .= " ) ";
         }
-        if (count($adefectos) > 0) {
-            $partecolor = " AND ";
-            $contcol = 1;
-            $partecolor .= " ( ";
-            foreach ($acolor as $acol) {
-                if ($contcol > 1) {
-                    $partecolor .= " OR ";
+        if (count($adefecto) > 0) {
+            $partedefectos = " AND ";
+            $contdef = 1;
+            $partedefectos .= " ( ";
+            foreach ($adefecto as $adef) {
+                if ($contdef > 1) {
+                    $partedefectos .= " OR ";
                 }
-                $partecolor .= " p.ColoresId =" . $acol;
-                $contcol++;
+                $partedefectos .= " d.IdDefectos =" . $adef;
+                $contdef++;
             }
-            $partecolor .= " ) ";
+            $partedefectos .= " ) ";
         }
-        $query = $this->db->query("select count(*) as cuantos,p.IdProductos,cp.Nombre as producto,m.Nombre as modelo,co.Nombre as color from Productos p left join CProductos cp on cp.IdCProductos=p.CProductosId left join Modelos m on m.IdModelos=p.ModelosId left join Colores co on co.IdColores=p.ColoresId join HistorialClasificacion hc on hc.ProductosId=p.IdProductos join HistorialClasificacionDefectos hcd on hcd.HistorialClasificacionId=hc.IdHistorialClasificacion where date(FechaCaptura) BETWEEN $fechainicio AND $fechafin" . $parteclasificacion . $parteproducto . $partemodelo . $partecolor . "GROUP BY cp.IdCProductos, m.IdModelos");
+        $query = $this->db->query("select count(*) as cuantos,"
+                . "cp.Nombre as producto,m.Nombre as modelo,co.Nombre as color, d.Nombre as defecto,p.IdProductos "
+                . "from HistorialClasificacionDefectos hcd "
+                . "join HistorialClasificacion hc on hc.IdHistorialClasificacion=hcd.HistorialClasificacionId "
+                . "join Productos p on hc.ProductosId=p.IdProductos "
+                . "join CProductos cp on cp.IdCProductos=p.CProductosId "
+                . "join Modelos m on m.IdModelos=p.ModelosId "
+                . "join Colores co on co.IdColores=p.ColoresId "
+                . "join Defectos d on d.IdDefectos=hcd.DefectosId "
+                . "where date(FechaCaptura) "
+                . "BETWEEN $fechainicio "
+                . "AND $fechafin "
+                . "AND hcd.Activo=1 "
+                . "" . $parteclasificacion . $parteproducto . $partedefectos . $partemodelo . $partecolor . ""
+                . "GROUP BY m.IdModelos,d.IdDefectos,Clasificacion(p.IdProductos)");
         return $query;
     }
 
-    public function GenerarConcentradoDefectos($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $por) {
+    public function GenerarConcentradoDefectos($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $adefecto, $por) {
         $fechainicio = $this->FechaIngles($fechainicio);
         $fechafin = $this->FechaIngles($fechafin);
         $parteclasificacion = "";
         $parteproducto = "";
+        $partedefectos = "";
         $partemodelo = "";
         $partecolor = "";
         if (count($aclasificacion) > 0) {
@@ -1145,6 +1168,19 @@ class Modeloadministrador extends CI_Model {
                 $contcol++;
             }
             $partecolor .= " ) ";
+        }
+        if (count($adefecto) > 0) {
+            $partedefectos = " AND ";
+            $contdef = 1;
+            $partedefectos .= " ( ";
+            foreach ($adefecto as $adef) {
+                if ($contdef > 1) {
+                    $partedefectos .= " OR ";
+                }
+                $partedefectos .= " d.IdDefectos =" . $adef;
+                $contdef++;
+            }
+            $partedefectos .= " ) ";
         }
         $campo = "";
         switch ($por) {
@@ -1160,18 +1196,36 @@ class Modeloadministrador extends CI_Model {
             case "co.IdColores":
                 $campo = "co.Nombre";
                 break;
+            case "d.IdDefectos":
+                $campo = "d.Nombre";
+                break;
         }
-        $query = $this->db->query("select count(*) as cuantos, $campo from Productos p left join CProductos cp on cp.IdCProductos=p.CProductosId left join Modelos m on m.IdModelos=p.ModelosId left join Colores co on co.IdColores=p.ColoresId where  date(FechaCaptura) BETWEEN $fechainicio AND $fechafin" . $parteclasificacion . $parteproducto . $partemodelo . $partecolor . " group by " . $por);
+        $query = $this->db->query("select count(*) as cuantos,"
+                . "$campo "
+                . "from HistorialClasificacionDefectos hcd "
+                . "join HistorialClasificacion hc on hc.IdHistorialClasificacion=hcd.HistorialClasificacionId "
+                . "join Productos p on hc.ProductosId=p.IdProductos "
+                . "join CProductos cp on cp.IdCProductos=p.CProductosId "
+                . "join Modelos m on m.IdModelos=p.ModelosId "
+                . "join Colores co on co.IdColores=p.ColoresId "
+                . "join Defectos d on d.IdDefectos=hcd.DefectosId "
+                . "where date(FechaCaptura) "
+                . "BETWEEN $fechainicio "
+                . "AND $fechafin "
+                . "AND hcd.Activo=1 "
+                . "" . $parteclasificacion . $parteproducto . $partedefectos . $partemodelo . $partecolor . ""
+                . "GROUP BY $por");
         return $query;
     }
 
-    public function GenerarDetalleSeleccionadoDefectos($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $por, $nombre) {
+    public function GenerarDetalleSeleccionadoDefectos($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $adefecto, $por, $nombre) {
         $fechainicio = $this->FechaIngles($fechainicio);
         $fechafin = $this->FechaIngles($fechafin);
         $parteclasificacion = "";
         $parteproducto = "";
         $partemodelo = "";
         $partecolor = "";
+        $partedefectos = "";
         if (count($aclasificacion) > 0) {
             $parteclasificacion = " AND ";
             $contclasi = 1;
@@ -1224,10 +1278,23 @@ class Modeloadministrador extends CI_Model {
             }
             $partecolor .= " ) ";
         }
+        if (count($adefecto) > 0) {
+            $partedefectos = " AND ";
+            $contdef = 1;
+            $partedefectos .= " ( ";
+            foreach ($adefecto as $adef) {
+                if ($contdef > 1) {
+                    $partedefectos .= " OR ";
+                }
+                $partedefectos .= " d.IdDefectos =" . $adef;
+                $contdef++;
+            }
+            $partedefectos .= " ) ";
+        }
         $campo = "";
         switch ($por) {
             case "Clasificacion(p.IdProductos)":
-                $campo = "ClasificacionL(p.IdProductos)";
+                $campo = "ClasificacionL(p.IdProductos) as Nombre";
                 break;
             case "cp.IdCproductos":
                 $campo = "cp.Nombre";
@@ -1238,8 +1305,69 @@ class Modeloadministrador extends CI_Model {
             case "co.IdColores":
                 $campo = "co.Nombre";
                 break;
+            case "d.IdDefectos":
+                $campo = "d.Nombre";
+                break;
         }
-        $query = $this->db->query("select p.IdProductos,cp.Nombre as producto,m.Nombre as modelo,co.Nombre as color from Productos p left join CProductos cp on cp.IdCProductos=p.CProductosId left join Modelos m on m.IdModelos=p.ModelosId left join Colores co on co.IdColores=p.ColoresId where  date(FechaCaptura) BETWEEN $fechainicio AND $fechafin" . $parteclasificacion . $parteproducto . $partemodelo . $partecolor . " AND " . $campo . "=" . "'" . $nombre . "'");
+        //$query = $this->db->query("select p.IdProductos,cp.Nombre as producto,m.Nombre as modelo,co.Nombre as color from Productos p left join CProductos cp on cp.IdCProductos=p.CProductosId left join Modelos m on m.IdModelos=p.ModelosId left join Colores co on co.IdColores=p.ColoresId where  date(FechaCaptura) BETWEEN $fechainicio AND $fechafin" . $parteclasificacion . $parteproducto . $partemodelo . $partecolor . " AND " . $campo . "=" . "'" . $nombre . "'");
+        $query = $this->db->query("select "
+                . "p.IdProductos,cp.Nombre as producto,m.Nombre as modelo,co.Nombre as color "
+                . "from HistorialClasificacionDefectos hcd "
+                . "join HistorialClasificacion hc on hc.IdHistorialClasificacion=hcd.HistorialClasificacionId "
+                . "join Productos p on hc.ProductosId=p.IdProductos "
+                . "join CProductos cp on cp.IdCProductos=p.CProductosId "
+                . "join Modelos m on m.IdModelos=p.ModelosId "
+                . "join Colores co on co.IdColores=p.ColoresId "
+                . "join Defectos d on d.IdDefectos=hcd.DefectosId "
+                . "where date(FechaCaptura) "
+                . "BETWEEN $fechainicio "
+                . "AND $fechafin "
+                . "AND hcd.Activo=1 "
+                . "" . $parteclasificacion . $parteproducto . $partedefectos . $partemodelo . $partecolor . " "
+                . " AND " . $campo . "=" . "'" . $nombre . "'");
+        return $query;
+    }
+
+    public function CategoriaDefecto($id) {
+        $query = $this->db->query("select c.Nombre from Defectos d join CategoriasDefectos c on c.IdCatDefectos=d.CatDefectosId where d.IdDefectos=$id");
+        return $query;
+    }
+
+    public function ObtenerModelo($id) {
+        $query = $this->db->query("select * from Modelos where IdModelos=$id");
+        return $query->row();
+    }
+
+    public function ObtenerTarimasCedis() {
+        $query = $this->db->query("select ta.IdTarimas "
+                . "from InventariosCedis i "
+                . "join Productos p on p.IdProductos=i.ProductosId "
+                . "join DetalleTarimas dt on dt.ProductosId=i.ProductosId "
+                . "join Tarimas ta on ta.IdTarimas=dt.TarimasId "
+                . "where i.FechaSalida is NULL "
+                . "and ta.FechaApertura is null "
+                . "GROUP BY ta.IdTarimas");
+        return $query;
+    }
+
+    public function ObtenerProdSinTarimaCedis() {
+        $query = $this->db->query("select p.IdProductos,cp.Nombre "
+                . "from InventariosCedis i "
+                . "left join Productos p on p.IdProductos = i.ProductosId "
+                . "left join CProductos cp on p.CProductosId = cp.IdCProductos "
+                . "left join DetalleTarimas dt on dt.ProductosId = i.ProductosId "
+                . "where i.FechaSalida is NULL "
+                . "and (dt.TarimasId is null) "
+                . "UNION "
+                . "select p.IdProductos,cp.Nombre  "
+                . "from InventariosCedis i "
+                . "left join Productos p on p.IdProductos = i.ProductosId "
+                . "left join CProductos cp on p.CProductosId = cp.IdCProductos "
+                . "left join DetalleTarimas dt on dt.ProductosId = i.ProductosId "
+                . "left join Tarimas ta on ta.IdTarimas = dt.TarimasId "
+                . "where i.FechaSalida is NULL "
+                . " and dt.TarimasId is not null AND ta.FechaApertura is not null "
+        );
         return $query;
     }
 

@@ -61,10 +61,16 @@
             colores.push(parseInt($(this).val()));
         });
         var colorescadena = JSON.stringify(colores);
+        var defectos = [];
+        $(".defectos:checked").each(function ()
+        {
+            defectos.push(parseInt($(this).val()));
+        });
+        var defectoscadena = JSON.stringify(defectos);
         var por = $("#concentradox").val();
         $("#detalleseleccionado").fadeIn();
         $("#detalleseleccionado").html("<center style='font-size:1.2em'><b>Consultando Información...</b></center><br><br>");
-        $("#detalleseleccionado").load("GenerarDetalleSeleccionadoDefectos", {"fechainicio": fechainicio, "fechafin": fechafin, "clasificacion": clasificacionescadena, "producto": productoscadena, "modelo": modeloscadena, "color": colorescadena, 'por': por, 'nombre': nombre})
+        $("#detalleseleccionado").load("GenerarDetalleSeleccionadoDefectos", {"fechainicio": fechainicio, "fechafin": fechafin, "clasificacion": clasificacionescadena, "producto": productoscadena, "modelo": modeloscadena, "color": colorescadena, "defecto": defectoscadena, 'por': por, 'nombre': nombre});
     }
     function Detalle()
     {
@@ -98,12 +104,18 @@
             colores.push(parseInt($(this).val()));
         });
         var colorescadena = JSON.stringify(colores);
+        var defectos = [];
+        $(".defectos:checked").each(function ()
+        {
+            defectos.push(parseInt($(this).val()));
+        });
+        var defectoscadena = JSON.stringify(defectos);
         $("#detalle").show();
         $("#detalle").html("<center style='font-size:1.2em'><b>Consultando Información...</b></center><br><br>");
         $("#grafica").html("");
         $("#detalleseleccionado").hide();
         $("#divtiporeporte").hide();
-        $("#detalle").load("GenerarReporteDefectos", {"fechainicio": fechainicio, "fechafin": fechafin, "clasificacion": clasificacionescadena, "producto": productoscadena, "modelo": modeloscadena, "color": colorescadena})
+        $("#detalle").load("GenerarReporteDefectos", {"fechainicio": fechainicio, "fechafin": fechafin, "clasificacion": clasificacionescadena, "producto": productoscadena, "modelo": modeloscadena, "color": colorescadena, "defecto": defectoscadena});
     }
     function Concentrado()
     {
@@ -140,13 +152,19 @@
             colores.push(parseInt($(this).val()));
         });
         var colorescadena = JSON.stringify(colores);
+        var defectos = [];
+        $(".defectos:checked").each(function ()
+        {
+            defectos.push(parseInt($(this).val()));
+        });
+        var defectoscadena = JSON.stringify(defectos);
         var por = $("#concentradox").val();
         $("#detalle").show();
         $("#detalle").html("<center style='font-size:1.2em'><b>Consultando Información...</b></center><br><br>");
         $("#grafica").html("");
         $("#detalleseleccionado").hide();
         $("#divtiporeporte").hide();
-        $("#detalle").load("GenerarConcentradoDefectos", {"fechainicio": fechainicio, "fechafin": fechafin, "clasificacion": clasificacionescadena, "producto": productoscadena, "modelo": modeloscadena, "color": colorescadena, "por": por});
+        $("#detalle").load("GenerarConcentradoDefectos", {"fechainicio": fechainicio, "fechafin": fechafin, "clasificacion": clasificacionescadena, "producto": productoscadena, "modelo": modeloscadena, "color": colorescadena, "defecto": defectoscadena, "por": por});
     }
     function Paso(paso)
     {
@@ -156,14 +174,15 @@
         $("#paso4").hide();
         $("#paso5").hide();
         $("#paso6").hide();
+        $("#paso7").hide();
         var pb = $("#pb2").data('progress');
-        var porc = paso * 15;
+        var porc = paso * 14;
         pb.set(porc);
         $("#porc").html(porc + "%");
         $("#paso" + paso).show();
     }
 </script>
-<h1 class="light text-shadow">REPORTES</h1><br>
+<h1 class="light text-shadow">REPORTE DEFECTOS</h1><br>
 <div class="progress large" id="pb2" data-parts="true" data-role="progress" data-value="0" data-colors="{&quot;bg-darkCobalt&quot;: 33, &quot;bg-darkCobalt&quot;: 66, &quot;bg-darkCobalt&quot;: 90, &quot;bg-darkCobalt&quot;: 100}"><div class="bar bg-green padding10" style="width: 100%;height: 35px;vertical-align: middle"><b class="fg-white" id="porc">0%</b></div></div>
 <hr>
 <div class="panel warning" data-role="panel" id="paso1">
@@ -332,11 +351,67 @@
         </center>
     </div>
 </div>
+<div class="panel info" data-role="panel" id="paso6" style="display: none">
+    <div class="heading">
+        <span class="icon mif-stack fg-white bg-darkBlue"></span>
+        <span class="title">Paso 6: Defectos</span>
+    </div>
+    <div class="content">
+        <br>
+        <center>
+            <div class="flex-grid">
+                <div class="row cell-auto-size">
+                    <div class="cell">
+                        <center>
+                            <label class="input-control checkbox">
+                                <input type="checkbox" value="todo" name="defectostodo" id="defectostodo" onclick="Todos('defectos', 'defectostodo')">
+                                <span class="check"></span>
+                                <span class="caption"><b class="fg-darkCobalt">Marcar todos los defectos</b></span>
+                            </label>
+                        </center>
+                        <table class="table shadow" data-role="datatable">
+                            <thead>
+                                <tr>
+                                    <th>Seleccionar</th>
+                                    <th>Defecto</th>
+                                    <th>Categoría</th>
+                            </thead>
+                            <?php foreach ($defectos->result() as $defecto): ?>
+                                <?php
+                                $ci = &get_instance();
+                                $ci->load->model("modeloadministrador");
+                                $categ = $ci->modeloadministrador->CategoriaDefecto($defecto->IdDefectos);
+                                ?>
+                                <tr>
+                                    <td>
+                                        <label class = "input-control checkbox">
+                                            <input type = "checkbox" value = "<?= $defecto->IdDefectos; ?>" name = "defectos" class = "defectos">
+                                            <span class = "check"></span>
+                                            <span class = "caption"><b></b></span>
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <?= $defecto->Nombre; ?>
+                                    </td>
+                                    <td><?= $categ->row()->Nombre ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </table>
 
-<div class="panel success" data-role="panel" id="paso6" style="display: none">
+                    </div>
+                </div>
+            </div>
+            <br><br>
+            <button onclick="Paso(5)" class="button block-shadow-alert text-shadow alert big-button">Atrás</button>
+            <button onclick="Paso(7)" class="button block-shadow-info text-shadow primary big-button">Siguiente</button>
+        </center>
+    </div>
+</div>
+
+<div class="panel success" data-role="panel" id="paso7" style="display: none">
     <div class="heading">
         <span class="icon mif-stack fg-white bg-darkGreen"></span>
-        <span class="title">Paso 6: Generación de Reporte</span>
+        <span class="title">Paso 7: Generación de Reporte</span>
     </div>
     <div class="content">
         <br>
@@ -363,6 +438,7 @@
                                 <option value="cp.IdCproductos">Producto</option>
                                 <option value="m.IdModelos">Modelo</option>
                                 <option value="co.IdColores">Color</option>
+                                <option value="d.IdDefectos">Defecto</option>
                             </select>
                         </div>
                         <br>
@@ -371,7 +447,7 @@
                 </tr>
             </table>
             <center>
-                <button onclick="Paso(5)" class="button block-shadow-alert text-shadow alert big-button">Atrás</button>
+                <button onclick="Paso(6)" class="button block-shadow-alert text-shadow alert big-button">Atrás</button>
             </center>
         </div>
         <div id="detalle" class="shadow" ></div><br><div id="texto"></div>
@@ -426,7 +502,7 @@
 //                    var y_value = this.data.datasets[0].data[e._index];
 //                    console.log(x_value);
 //                    console.log(y_value);
-//                    }
+                        //                    }
                     }
                 });
                 document.getElementById("myChart").onclick = function (evt) {
@@ -437,12 +513,11 @@
                     //alert(valores[activePoints[0]._index]);
                     DetalleSeleccionado(etiquetas[activePoints[0]._index]);
 //                    console.log(theElement);
-//                    console.log(myChart.config.data.datakeys[activePoints[0]._index]);
+                    //                    console.log(myChart.config.data.datakeys[activePoints[0]._index]);
                     // document.getElementById("texto").innerText = myChart.config.da [activePoints[0]._index];
-//                    console.log(myChart.config.type);
+                    //                    console.log(myChart.config.type);
                 }
 
-            }
-        </script>
+            }</script>
     </div>
 </div>

@@ -17,10 +17,11 @@
         <tr>
             <th>No.</th>
             <th>Cantidad</th>
+            <th>Defecto</th>
             <th>Clasificación</th>
             <th>Producto</th>
             <th>Modelo</th>
-            <th>Color</th>
+
         </tr>
     </thead>
     <tbody>
@@ -40,10 +41,11 @@
             <tr>
                 <td class="center"><?= $cont ?></td>
                 <td class="center"><?= $producto->cuantos ?></td>
+                <td class="center"><?= $producto->defecto ?></td>
                 <td class="center"><?= $letra ?></td>
                 <td class="center"><?= $producto->producto ?></td>
                 <td class="center"><?= $producto->modelo ?></td>
-                <td class="center"><?= $producto->color ?></td>
+
             </tr>
             <?php $cont++; ?>
         <?php endforeach; ?>

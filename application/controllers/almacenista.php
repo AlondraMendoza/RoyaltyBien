@@ -9,7 +9,7 @@ class Almacenista extends CI_Controller {
         parent::__construct();
         $this->load->model("modelousuario");
         if (!EstaLogueado()) {
-            redirect('usuario/iniciar_sesion');
+            redirect('usuario/index');
         }
         $id = $this->session->userdata('id');
         if (!$this->modelousuario->TienePerfil($id, 4)) {
@@ -27,7 +27,7 @@ class Almacenista extends CI_Controller {
         $this->load->view('template/footerd', '');
     }
 
-     public function barcodevista($filepath = "", $text = "", $size = "20", $orientation = "horizontal", $code_type = "code128", $print = false, $SizeFactor = 1) {
+    public function barcodevista($filepath = "", $text = "", $size = "20", $orientation = "horizontal", $code_type = "code128", $print = false, $SizeFactor = 1) {
         $text = $this->input->post_get('text', TRUE);
         $code_string = "";
         // Translate the $text into barcode the correct $code_type
@@ -361,7 +361,7 @@ class Almacenista extends CI_Controller {
         }
         print json_encode($infocontent);
     }
-    
+
     public function BusquedaTarimas() {
         $infoheader["titulo"] = "Almacén: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
@@ -371,7 +371,7 @@ class Almacenista extends CI_Controller {
         $this->load->view('almacenista/BusquedaTarimas', $infocontent);
         $this->load->view('template/footerd', '');
     }
-    
+
     public function VerificarClaveTarima2() {
         $clave = $this->input->post_get('clave', TRUE);
         $this->load->model("modeloalmacenista");
@@ -383,7 +383,7 @@ class Almacenista extends CI_Controller {
         }
         print json_encode($infocontent);
     }
-    
+
     public function ExpedienteTarima() {
         $infoheader["titulo"] = "Almacén: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
@@ -393,12 +393,13 @@ class Almacenista extends CI_Controller {
         $infocontent["producto"] = $this->modeloalmacenista->ObtenerProducto($tarima_id);
         $infocontent["historiales"] = $this->modeloalmacenista->HistorialMovimientosTarima($tarima_id);
         $infocontent["ubicacion"] = $this->modeloalmacenista->Ubicacion($tarima_id);
-        /*$infocontent["tarima"] = $this->modeloclasificador->EstatusTarima($producto_id);
-        $infocontent["tarimaid"] = $this->modeloclasificador->EstatusTarimaId($producto_id);
-        $infocontent["clasificaciones"] = $this->modeloclasificador->ClasificacionesProducto($producto_id);
-        $infocontent["entarimados"] = $this->modeloclasificador->EntarimadosProducto($producto_id);*/
+        /* $infocontent["tarima"] = $this->modeloclasificador->EstatusTarima($producto_id);
+          $infocontent["tarimaid"] = $this->modeloclasificador->EstatusTarimaId($producto_id);
+          $infocontent["clasificaciones"] = $this->modeloclasificador->ClasificacionesProducto($producto_id);
+          $infocontent["entarimados"] = $this->modeloclasificador->EntarimadosProducto($producto_id); */
         $infocontent["codigo"] = $this->modeloalmacenista->CodigoBarrasTarimaTexto($tarima_id);
         $this->load->view('almacenista/ExpedienteTarima', $infocontent);
         $this->load->view('template/footerd', '');
     }
+
 }

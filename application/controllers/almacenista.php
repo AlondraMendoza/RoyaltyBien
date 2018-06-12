@@ -401,4 +401,13 @@ class Almacenista extends CI_Controller {
         $this->load->view('almacenista/ExpedienteTarima', $infocontent);
         $this->load->view('template/footerd', '');
     }
+    
+     public function InventarioAlmacen() {
+        $infoheader["titulo"] = "Inventario: Almacén";
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->model("modeloalmacenista");
+        $infocontent["modelos"] = $this->modeloalmacenista->ListaModelos();
+        $this->load->view('almacenista/InventarioAlmacen', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
 }

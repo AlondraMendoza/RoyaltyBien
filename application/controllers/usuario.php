@@ -9,7 +9,11 @@ class Usuario extends CI_Controller {
         parent::__construct();
     }
 
-    public function iniciar_sesion() {
+    public function index() {
+        $this->load->model("modelousuario");
+        if (EstaLogueado()) {
+            redirect('usuario/logueado');
+        }
         $infoheader["titulo"] = "Royalty Ceramic";
         $this->load->view('template/headerLogin', $infoheader);
         $data = array();
@@ -37,15 +41,19 @@ class Usuario extends CI_Controller {
                 $infoheader["titulo"] = "Royalty Ceramic";
                 $this->load->view('template/headerLogin', $infoheader);
                 $data["mensaje"] = "error";
-                $this->load->view('usuario/iniciar_sesion', $data);
+                $this->load->view('usuario/index', $data);
                 $this->load->view('template/footerLogin', '');
             }
         } else {
-            $this->iniciar_sesion();
+            $this->index();
         }
     }
 
     public function logueado() {
+        $this->load->model("modelousuario");
+        if (!EstaLogueado()) {
+            redirect('usuario/index');
+        }
         if ($this->session->userdata('logueado')) {
             $data = array();
             $data['nombre'] = $this->session->userdata('nombre');
@@ -59,7 +67,7 @@ class Usuario extends CI_Controller {
             $this->load->view('usuario/logueado', $data);
             $this->load->view('template/footerd', '');
         } else {
-            redirect('usuario/iniciar_sesion');
+            redirect('usuario/index');
         }
     }
 
@@ -69,7 +77,7 @@ class Usuario extends CI_Controller {
         );
         $this->session->set_userdata($usuario_data);
         $this->session->sess_destroy();
-        redirect('usuario/iniciar_sesion');
+        redirect('usuario/index');
     }
 
     //Verificar metodo

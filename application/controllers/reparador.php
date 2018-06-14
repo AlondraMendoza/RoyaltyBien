@@ -9,14 +9,14 @@ class Reparador extends CI_Controller {
         parent::__construct();
         $this->load->model("modelousuario");
         if (!EstaLogueado()) {
-            redirect('usuario/iniciar_sesion');
+            redirect('usuario/index');
         }
         $id = $this->session->userdata('id');
         if (!$this->modelousuario->TienePerfil($id, 1)) {
             redirect('usuario/logueado');
         }
     }
-    
+
     public function ExpedienteProducto() {
         $infoheader["titulo"] = "Reparador: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
@@ -40,7 +40,7 @@ class Reparador extends CI_Controller {
         $this->load->view('reparador/BusquedaProductos', $infocontent);
         $this->load->view('template/footerd', '');
     }
-    
+
     public function VerificarClaveProd() {
         $clave = $this->input->post_get('clave', TRUE);
         $this->load->model("modeloreparador");
@@ -52,7 +52,7 @@ class Reparador extends CI_Controller {
         }
         print json_encode($infocontent);
     }
-    
+
     public function barcodevista($filepath = "", $text = "", $size = "20", $orientation = "horizontal", $code_type = "code128", $print = false, $SizeFactor = 1) {
         $text = $this->input->post_get('text', TRUE);
         $code_string = "";
@@ -183,18 +183,18 @@ class Reparador extends CI_Controller {
             imagedestroy($image);
         }
     }
-    
-    public function CapturaReparacion(){
+
+    public function CapturaReparacion() {
         $infoheader["titulo"] = "Reparador: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $producto_id = $this->input->post_get('producto_id', TRUE);
         $this->load->model("modeloreparador");
-        $infocontent["ProductoId"]=$producto_id;
+        $infocontent["ProductoId"] = $producto_id;
         $this->load->view('reparador/CapturaReparacion', $infocontent);
         $this->load->view('template/footerd', '');
     }
-    
-     public function GuardarReparacion() {
+
+    public function GuardarReparacion() {
         $this->load->model("modeloreparador");
         $producto = $this->input->post_get('producto', TRUE);
         $diagnostico = $this->input->post_get('diagnostico', TRUE);
@@ -204,6 +204,5 @@ class Reparador extends CI_Controller {
     }
 
 }
-
 ?>
 

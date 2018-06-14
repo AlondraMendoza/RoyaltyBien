@@ -9,7 +9,7 @@ class Clasificador extends CI_Controller {
         parent::__construct();
         $this->load->model("modelousuario");
         if (!EstaLogueado()) {
-            redirect('usuario/iniciar_sesion');
+            redirect('usuario/index');
         }
         $id = $this->session->userdata('id');
         if (!$this->modelousuario->TienePerfil($id, 1)) {

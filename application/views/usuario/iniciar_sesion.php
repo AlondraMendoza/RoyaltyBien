@@ -20,20 +20,20 @@ if ($mensaje == "error") {
         <br />
         <div class="input-control text full-size" data-role="input">
             <label for="user_login"><b>Usuario:</b></label>
-            <input type="text" name="nombre" id="nombre" style="padding-right: 36px;">
+            <input type="text" name="nombre" id="nombre" required="required" style="padding-right: 36px;">
             <button class="button helper-button clear"><span class="mif-cross"></span></button>
         </div>
         <br />
         <br />
         <div class="input-control password full-size" data-role="input">
             <label for="user_password"><b>Contraseña:</b></label>
-            <input type="password" name="contrasena" id="contrasena" style="padding-right: 36px;">
+            <input type="password" name="contrasena" id="contrasena" required="required" style="padding-right: 36px;">
             <button class="button helper-button reveal"><span class="mif-looks"></span></button>
         </div>
         <br />
         <br />
         <div class="form-actions">
-            <button class="button success" onclick="Iniciar()">Iniciar Sesión</button>
+            <button class="button success" type="submit">Iniciar Sesión</button>
             <button class="button link">Cancelar</button>
         </div>
     </form>

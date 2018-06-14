@@ -401,7 +401,7 @@ class Almacenista extends CI_Controller {
         $this->load->view('almacenista/ExpedienteTarima', $infocontent);
         $this->load->view('template/footerd', '');
     }
-<<<<<<< HEAD
+
     
      public function InventarioAlmacen() {
         $infoheader["titulo"] = "Inventario: Almacén";
@@ -411,7 +411,5 @@ class Almacenista extends CI_Controller {
         $this->load->view('almacenista/InventarioAlmacen', $infocontent);
         $this->load->view('template/footerd', '');
     }
-=======
 
->>>>>>> 9c3a7dd82fee59074a476398baf1b73706616f78
 }

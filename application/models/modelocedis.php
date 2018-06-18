@@ -85,7 +85,6 @@ class Modelocedis extends CI_Model {
     }
 
     public function BuscarProductoCedis($clave) {
-
         $this->db->select("p.IdProductos, cp.Nombre as producto, c.Nombre as color, m.Nombre as modelo");
         $this->db->from("Productos p");
         $this->db->join("CProductos cp", "p.CProductosId=cp.IdCProductos");

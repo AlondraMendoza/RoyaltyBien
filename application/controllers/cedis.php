@@ -2,9 +2,7 @@
 
 if (!defined('BASEPATH'))
 	exit('No direct script access allowed');
-
-class Cedis extends CI_Controller
-{
+class Cedis extends CI_Controller {
 
 	function __construct()
 	{
@@ -20,190 +18,172 @@ class Cedis extends CI_Controller
 		}
 	}
 
-	public function index()
-	{
-		$datos["nombre"] = "Cadena ejemplo";
-		$datos["apellido"] = "Cadena ejemplo 2";
-		$this->load->view('capturista/index', $datos);
-	}
+    public function index() {
+        $datos["nombre"] = "Cadena ejemplo";
+        $datos["apellido"] = "Cadena ejemplo 2";
+        $this->load->view('capturista/index', $datos);
+    }
 
-	public function EntradaTarimas()
-	{
-		$infoheader["titulo"] = "Entrada Tarimas: Royalty Ceramic";
-		$this->load->view('template/headerd', $infoheader);
-		$infocontent["Nombre"] = "Alondra Mendoza";
-		$this->load->view('cedis/EntradaProductos', $infocontent);
-		$this->load->view('template/footerd', '');
-	}
+    public function EntradaTarimas() {
+        $infoheader["titulo"] = "Entrada Tarimas: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $infocontent["Nombre"] = "Alondra Mendoza";
+        $this->load->view('cedis/EntradaProductos', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
 
-	public function EntradaProductos()
-	{
-		$infoheader["titulo"] = "Entrada Productos: Royalty Ceramic";
-		$this->load->view('template/headerd', $infoheader);
-		$infocontent["Nombre"] = "Alondra Mendoza";
-		$this->load->view('cedis/EntradaProductos', $infocontent);
-		$this->load->view('template/footerd', '');
-	}
+    public function EntradaProductos() {
+        $infoheader["titulo"] = "Entrada Productos: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $infocontent["Nombre"] = "Alondra Mendoza";
+        $this->load->view('cedis/EntradaProducto', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
 
-	public function VerificarClaveProd()
-	{
-		$clave = $this->input->post_get('clave', TRUE);
-		$this->load->model("modelocedis");
-		$fila = $this->modelocedis->BuscarClaveProducto($clave);
-		$infocontent["nombre"] = "No se encontró el producto";
-		if ($fila != "No se encontró el producto") {
-			$infocontent["nombre"] = $fila->producto . "/" . $fila->modelo . "/" . $fila->color;
-			$infocontent["id"] = $fila->IdProductos;
-		}
-		print json_encode($infocontent);
-	}
+    public function VerificarClaveProd() {
+        $clave = $this->input->post_get('clave', TRUE);
+        $this->load->model("modelocedis");
+        $fila = $this->modelocedis->BuscarClaveProducto($clave);
+        $infocontent["nombre"] = "No se encontró el producto";
+        if ($fila != "No se encontró el producto") {
+            $infocontent["nombre"] = $fila->producto . "/" . $fila->modelo . "/" . $fila->color;
+            $infocontent["id"] = $fila->IdProductos;
+        }
+        print json_encode($infocontent);
+    }
 
-	public function VerificarClaveTarima()
-	{
-		$clave = $this->input->post_get('clave', TRUE);
-		$this->load->model("modelocedis");
-		$fila = $this->modelocedis->BuscarClaveTarima($clave);
-		if ($fila != "No se encontró la tarima") {
-			$infocontent["id"] = $fila->IdTarimas;
-		}
-		print json_encode($infocontent);
-	}
+    public function VerificarClaveTarima() {
+        $clave = $this->input->post_get('clave', TRUE);
+        $this->load->model("modelocedis");
+        $fila = $this->modelocedis->BuscarClaveTarima($clave);
+        if ($fila != "No se encontró la tarima") {
+            $infocontent["id"] = $fila->IdTarimas;
+        }
+        print json_encode($infocontent);
+    }
 
-	public function GuardarTarimasCedis()
-	{
-		$idtarima = $this->input->post_get('idtarima', TRUE);
-		$this->load->model("modelocedis");
-		$resp = $this->modelocedis->GuardarProductosTarima($idtarima);
-		if ($resp == "Existe") {
-			print("Existe");
-		} else if ($resp == "correcto") {
-			print("Correcto");
-		} else {
-			print("Error");
-		}
-	}
+    public function GuardarTarimasCedis() {
+        $idtarima = $this->input->post_get('idtarima', TRUE);
+        $this->load->model("modelocedis");
+        $resp = $this->modelocedis->GuardarProductosTarima($idtarima);
+        if ($resp == "Existe") {
+            print("Existe");
+        } else if ($resp == "correcto") {
+            print("Correcto");
+        } else {
+            print("Error");
+        }
+    }
 
-	public function GuardarProductoCedis()
-	{
-		$idproducto = $this->input->post_get('idproducto', TRUE);
-		$this->load->model("modelocedis");
-		if ($this->modelocedis->ProductoEnCedis($idproducto)) {
-			print("Existe");
-		} else {
-			$this->modelocedis->GuardarProductoCedis($idproducto);
-			print("Correcto");
-		}
-	}
+    public function GuardarProductoCedis() {
+        $idproducto = $this->input->post_get('idproducto', TRUE);
+        $this->load->model("modelocedis");
+        if ($this->modelocedis->ProductoEnCedis($idproducto)) {
+            print("Existe");
+        } else {
+            $this->modelocedis->GuardarProductoCedis($idproducto);
+            print("Correcto");
+        }
+    }
 
-	public function CapturaPedidos()
-	{
-		$infoheader["titulo"] = "Captura Pedidos: Royalty Ceramic";
-		$this->load->view('template/headerd', $infoheader);
-		$infocontent["Nombre"] = "Alondra Mendoza";
-		$this->load->model("modelocedis");
-		$infocontent["ListaPedidos"] = $this->modelocedis->ListaCompletaPedidos();
-		$this->load->view('cedis/CapturaPedidos', $infocontent);
+    public function CapturaPedidos() {
+        $infoheader["titulo"] = "Captura Pedidos: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $infocontent["Nombre"] = "Alondra Mendoza";
+        $this->load->model("modelocedis");
+        $infocontent["ListaPedidos"] = $this->modelocedis->ListaCompletaPedidos();
+        $this->load->view('cedis/CapturaPedidos', $infocontent);
 
-		$this->load->view('template/footerd', '');
-	}
+        $this->load->view('template/footerd', '');
+    }
 
-	public function VerificarProductoCedis()
-	{
-		$clave = $this->input->post_get('clave', TRUE);
-		$this->load->model("modelocedis");
-		$fila = $this->modelocedis->BuscarProductoCedis($clave);
-		$infocontent["nombre"] = $fila;
-		if ($fila != "No se encontró el producto" && $fila != "No está en cedis" && $fila != "El producto ya se encuentra en un pedido") {
-			$infocontent["nombre"] = $fila->producto . "/" . $fila->modelo . "/" . $fila->color;
-			$infocontent["id"] = $fila->IdProductos;
-		}
-		print json_encode($infocontent);
-	}
+    public function VerificarProductoCedis() {
+        $clave = $this->input->post_get('clave', TRUE);
+        $this->load->model("modelocedis");
+        $fila = $this->modelocedis->BuscarProductoCedis($clave);
+        $infocontent["nombre"] = $fila;
+        if ($fila != "No se encontró el producto" && $fila != "No está en cedis" && $fila != "El producto ya se encuentra en un pedido") {
+            $infocontent["nombre"] = $fila->producto . "/" . $fila->modelo . "/" . $fila->color;
+            $infocontent["id"] = $fila->IdProductos;
+        }
+        print json_encode($infocontent);
+    }
 
-	public function GuardarPedidoCedis()
-	{
-		$cliente = $this->input->post_get('cliente', TRUE);
-		$this->load->model("modelocedis");
-		$idpedido = $this->modelocedis->GuardarPedido($cliente);
-		print($idpedido);
-	}
+    public function GuardarPedidoCedis() {
+        $cliente = $this->input->post_get('cliente', TRUE);
+        $this->load->model("modelocedis");
+        $idpedido = $this->modelocedis->GuardarPedido($cliente);
+        print($idpedido);
+    }
 
-	public function GuardarDetallePedidoCedis()
-	{
-		$idproducto = $this->input->post_get('idproducto', TRUE);
-		$idpedido = $this->input->post_get('idpedido', TRUE);
-		$this->load->model("modelocedis");
-		$iddetalle = $this->modelocedis->GuardarDetallePedido($idproducto, $idpedido);
-		if ($iddetalle == "En pedido") {
-			print("En pedido");
-		} else {
-			print("Correcto");
-		}
-	}
+    public function GuardarDetallePedidoCedis() {
+        $idproducto = $this->input->post_get('idproducto', TRUE);
+        $idpedido = $this->input->post_get('idpedido', TRUE);
+        $this->load->model("modelocedis");
+        $iddetalle = $this->modelocedis->GuardarDetallePedido($idproducto, $idpedido);
+        if ($iddetalle == "En pedido") {
+            print("En pedido");
+        } else {
+            print("Correcto");
+        }
+    }
 
-	public function AbrirPedido()
-	{
-		$pedidoid = $this->input->post_get('pedidoid', TRUE);
-		$this->load->model("modelocedis");
-		$infocontent["ListaProductos"] = $this->modelocedis->ProductosPedido($pedidoid);
-		$infocontent["pedidoid"] = $pedidoid;
-		$this->load->view('cedis/AbrirPedido', $infocontent);
-	}
+    public function AbrirPedido() {
+        $pedidoid = $this->input->post_get('pedidoid', TRUE);
+        $this->load->model("modelocedis");
+        $infocontent["ListaProductos"] = $this->modelocedis->ProductosPedido($pedidoid);
+        $infocontent["pedidoid"] = $pedidoid;
+        $this->load->view('cedis/AbrirPedido', $infocontent);
+    }
 
-	public function SalidaCedis()
-	{
-		$pedidoid = $this->input->post_get('pedidoid', TRUE);
-		$this->load->model("modelocedis");
-		$this->modelocedis->SalidaPedido($pedidoid);
-		print("correcto");
-	}
+    public function SalidaCedis() {
+        $pedidoid = $this->input->post_get('pedidoid', TRUE);
+        $this->load->model("modelocedis");
+        $this->modelocedis->SalidaPedido($pedidoid);
+        print("correcto");
+    }
 
-	public function MaximosMinimos()
-	{
-		$infoheader["titulo"] = "Máximos y Mínimos: Royalty Ceramic";
-		$this->load->view('template/headerd', $infoheader);
-		$this->load->model("modelocedis");
-		$infocontent["modelos"] = $this->modelocedis->ListaModelos();
-		$this->load->view('cedis/MaximosMinimos', $infocontent);
+    public function MaximosMinimos() {
+        $infoheader["titulo"] = "Máximos y Mínimos: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->model("modelocedis");
+        $infocontent["modelos"] = $this->modelocedis->ListaModelos();
+        $this->load->view('cedis/MaximosMinimos', $infocontent);
 
-		$this->load->view('template/footerd', '');
-	}
+        $this->load->view('template/footerd', '');
+    }
 
-	public function ConfiguracionMaximosMinimos()
-	{
-		$infoheader["titulo"] = "Configuración Máximos y Mínimos: Royalty Ceramic";
-		$this->load->view('template/headerd', $infoheader);
-		$this->load->model("modelocedis");
-		$infocontent["modelos"] = $this->modelocedis->ListaModelos();
-		$this->load->view('cedis/ConfiguracionMaximosMinimos', $infocontent);
+    public function ConfiguracionMaximosMinimos() {
+        $infoheader["titulo"] = "Configuración Máximos y Mínimos: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->model("modelocedis");
+        $infocontent["modelos"] = $this->modelocedis->ListaModelos();
+        $this->load->view('cedis/ConfiguracionMaximosMinimos', $infocontent);
 
-		$this->load->view('template/footerd', '');
-	}
+        $this->load->view('template/footerd', '');
+    }
 
-	public function GuardarMaximo()
-	{
-		$cproducto = $this->input->post_get('cproducto', TRUE);
-		$modelo = $this->input->post_get('modelo', TRUE);
-		$color = $this->input->post_get('color', TRUE);
-		$clasificacion = $this->input->post_get('clasificacion', TRUE);
-		$valor = $this->input->post_get('valor', TRUE);
-		$this->load->model("modelocedis");
-		$this->modelocedis->GuardarMaximo($cproducto, $modelo, $color, $clasificacion, $valor);
-		print("correcto");
-	}
+    public function GuardarMaximo() {
+        $cproducto = $this->input->post_get('cproducto', TRUE);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $color = $this->input->post_get('color', TRUE);
+        $clasificacion = $this->input->post_get('clasificacion', TRUE);
+        $valor = $this->input->post_get('valor', TRUE);
+        $this->load->model("modelocedis");
+        $this->modelocedis->GuardarMaximo($cproducto, $modelo, $color, $clasificacion, $valor);
+        print("correcto");
+    }
 
-	public function GuardarMinimo()
-	{
-		$cproducto = $this->input->post_get('cproducto', TRUE);
-		$modelo = $this->input->post_get('modelo', TRUE);
-		$color = $this->input->post_get('color', TRUE);
-		$clasificacion = $this->input->post_get('clasificacion', TRUE);
-		$valor = $this->input->post_get('valor', TRUE);
-		$this->load->model("modelocedis");
-		$this->modelocedis->GuardarMinimo($cproducto, $modelo, $color, $clasificacion, $valor);
-		print("correcto");
-	}
-
+    public function GuardarMinimo() {
+        $cproducto = $this->input->post_get('cproducto', TRUE);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $color = $this->input->post_get('color', TRUE);
+        $clasificacion = $this->input->post_get('clasificacion', TRUE);
+        $valor = $this->input->post_get('valor', TRUE);
+        $this->load->model("modelocedis");
+        $this->modelocedis->GuardarMinimo($cproducto, $modelo, $color, $clasificacion, $valor);
+        print("correcto");
+    }
 	public function CapturaDevoluciones()
 	{
 		$infoheader["titulo"] = "Devoluciones: Royalty Ceramic";
@@ -248,7 +228,6 @@ class Cedis extends CI_Controller
 		$iddetalle = $this->modelocedis->GuardarSubproducto($subproducto_id, $detalle_id);
 		print($iddetalle);
 	}
-
 }
 
 //Guardar fecha de presalida

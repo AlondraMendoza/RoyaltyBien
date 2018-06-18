@@ -77,9 +77,9 @@
 				'subproducto_id': $(this).val()
 			}, function (id_sub) {
 				$.Notify({
-					caption: 'Success',
-					content: 'El ',
-					type: 'alert'
+					caption: 'Correcto',
+					content: 'El subproducto se guardó correctamente',
+					type: 'success'
 				});
 			});
 		});

@@ -1,22 +1,22 @@
 <?php
 
 if (!defined('BASEPATH'))
-	exit('No direct script access allowed');
+    exit('No direct script access allowed');
+
 class Cedis extends CI_Controller {
 
-	function __construct()
-	{
-		parent::__construct();
-		$this->load->model("modelousuario");
-		$this->load->model("modelocedis");
-		if (!EstaLogueado()) {
-			redirect('usuario/index');
-		}
-		$id = $this->session->userdata('id');
-		if (!$this->modelousuario->TienePerfil($id, 6)) {
-			redirect('usuario/logueado');
-		}
-	}
+    function __construct() {
+        parent::__construct();
+        $this->load->model("modelousuario");
+        $this->load->model("modelocedis");
+        if (!EstaLogueado()) {
+            redirect('usuario/index');
+        }
+        $id = $this->session->userdata('id');
+        if (!$this->modelousuario->TienePerfil($id, 6)) {
+            redirect('usuario/logueado');
+        }
+    }
 
     public function index() {
         $datos["nombre"] = "Cadena ejemplo";
@@ -184,50 +184,56 @@ class Cedis extends CI_Controller {
         $this->modelocedis->GuardarMinimo($cproducto, $modelo, $color, $clasificacion, $valor);
         print("correcto");
     }
-	public function CapturaDevoluciones()
-	{
-		$infoheader["titulo"] = "Devoluciones: Royalty Ceramic";
-		$this->load->view('template/headerd', $infoheader);
-		$infocontent["Nombre"] = "Alondra Mendoza";
-		$infocontent["devolucionescapturadas"]= $this->modelocedis->DevolucionesCapturadas();
-		$this->load->view('cedis/CapturaDevoluciones', $infocontent);
-		$this->load->view('template/footerd', '');
-	}
 
-	public function BuscarSubproducto()
-	{
-		$texto = $this->input->post_get('texto', TRUE);
-		$id = $this->input->post_get('id', TRUE);
-		$encontrados = $this->modelocedis->BuscarSubproducto($texto);
-		$infocontent["encontrados"] = $encontrados;
-		$infocontent["id"] = $id;
-		$this->load->view('cedis/BuscarSubproducto', $infocontent);
-	}
+    public function CapturaDevoluciones() {
+        $infoheader["titulo"] = "Devoluciones: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $infocontent["Nombre"] = "Alondra Mendoza";
+        $infocontent["hoy"] = date("d/m/Y");
+        $this->load->view('cedis/CapturaDevoluciones', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
 
-	public function GuardarDevolucion()
-	{
-		$cliente = $this->input->post_get('cliente', TRUE);
-		$motivo = $this->input->post_get('motivo', TRUE);
-		$responsable = $this->input->post_get('responsable', TRUE);
-		$this->load->model("modelosclasificador");
-		$iddevolucion = $this->modelosclasificador->GuardarDevolucion($cliente, $motivo, $responsable);
-		print($iddevolucion);
-	}
-	public function GuardarDetalleDevolucion()
-	{
-		$id_producto = $this->input->post_get('producto_id', TRUE);
-		$id_devolucion = $this->input->post_get('devolucion_id', TRUE);
-		$this->load->model("modelosclasificador");
-		$iddetalle = $this->modelosclasificador->GuardarDetalleDevolucion($id_producto, $id_devolucion);
-		print($iddetalle);
-	}
-	public function GuardarSubproducto()
-	{
-		$detalle_id=$this->input->post_get("detalle_id");
-		$subproducto_id=$this->input->post_get("subproducto_id");
-		$iddetalle = $this->modelocedis->GuardarSubproducto($subproducto_id, $detalle_id);
-		print($iddetalle);
-	}
+    public function DevolucionesCapturadas() {
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $infocontent["devolucionescapturadas"] = $this->modelocedis->DevolucionesCapturadas($fechainicio, $fechafin);
+        $this->load->view('cedis/DevolucionesCapturadas', $infocontent);
+    }
+
+    public function BuscarSubproducto() {
+        $texto = $this->input->post_get('texto', TRUE);
+        $id = $this->input->post_get('id', TRUE);
+        $encontrados = $this->modelocedis->BuscarSubproducto($texto);
+        $infocontent["encontrados"] = $encontrados;
+        $infocontent["id"] = $id;
+        $this->load->view('cedis/BuscarSubproducto', $infocontent);
+    }
+
+    public function GuardarDevolucion() {
+        $cliente = $this->input->post_get('cliente', TRUE);
+        $motivo = $this->input->post_get('motivo', TRUE);
+        $responsable = $this->input->post_get('responsable', TRUE);
+        $this->load->model("modelosclasificador");
+        $iddevolucion = $this->modelosclasificador->GuardarDevolucion($cliente, $motivo, $responsable);
+        print($iddevolucion);
+    }
+
+    public function GuardarDetalleDevolucion() {
+        $id_producto = $this->input->post_get('producto_id', TRUE);
+        $id_devolucion = $this->input->post_get('devolucion_id', TRUE);
+        $this->load->model("modelosclasificador");
+        $iddetalle = $this->modelosclasificador->GuardarDetalleDevolucion($id_producto, $id_devolucion);
+        print($iddetalle);
+    }
+
+    public function GuardarSubproducto() {
+        $detalle_id = $this->input->post_get("detalle_id");
+        $subproducto_id = $this->input->post_get("subproducto_id");
+        $iddetalle = $this->modelocedis->GuardarSubproducto($subproducto_id, $detalle_id);
+        print($iddetalle);
+    }
+
 }
 
 //Guardar fecha de presalida

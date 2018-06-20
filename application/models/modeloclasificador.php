@@ -360,6 +360,7 @@ class Modeloclasificador extends CI_Model {
     public function BuscarClaveProductoDevoluciones($clave) {
         $this->db->select("p.IdProductos, cp.Nombre as producto, c.Nombre as color, m.Nombre as modelo");
         $this->db->from("DetalleDevoluciones dd");
+        $this->db->join("Devoluciones d", "d.IdDevoluciones=dd.DevolucionesId");
         $this->db->join("Productos p", "p.IdProductos=dd.ProductosId");
         $this->db->join("CProductos cp", "p.CProductosId=cp.IdCProductos");
         $this->db->join("Colores c", "p.ColoresId=c.IdColores");
@@ -367,6 +368,7 @@ class Modeloclasificador extends CI_Model {
         $this->db->where("p.Activo", 1);
         $this->db->where("p.IdProductos", $clave);
         $this->db->where("dd.Procesado", 0);
+        $this->db->where("d.VerificadaSupervisor", "Si");
         $fila = $this->db->get();
         if ($fila->num_rows() > 0) {
             return $fila->row();
@@ -574,7 +576,7 @@ class Modeloclasificador extends CI_Model {
             return "No se encuentra en pedido";
         }
     }
-    
+
     public function ObtenerReparaciones($producto_id) {
         $this->db->select("r.*,cr.Nombre as Diagnostico,CONCAT(per.Nombre,per.APaterno) as Persona");
         $this->db->from("Reparaciones r");
@@ -588,7 +590,6 @@ class Modeloclasificador extends CI_Model {
         $fila = $this->db->get();
         return $fila;
     }
-    
 
 }
 

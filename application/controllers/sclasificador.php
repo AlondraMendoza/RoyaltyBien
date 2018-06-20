@@ -15,6 +15,7 @@ class Sclasificador extends CI_Controller {
         if (!$this->modelousuario->TienePerfil($id, 5)) {
             redirect('usuario/logueado');
         }
+        $this->load->database();
     }
 
     public function CapturaDevolucion() {
@@ -38,25 +39,38 @@ class Sclasificador extends CI_Controller {
         print json_encode($infocontent);
     }
 
-    public function GuardarDevolucion() {
-        $cliente = $this->input->post_get('cliente', TRUE);
-        $motivo = $this->input->post_get('motivo', TRUE);
-        $responsable = $this->input->post_get('responsable', TRUE);
-        $this->load->model("modelosclasificador");
-        $iddevolucion = $this->modelosclasificador->GuardarDevolucion($cliente, $motivo, $responsable);
-        print($iddevolucion);
+    public function Devoluciones() {
+        $infoheader["titulo"] = "Devoluciones: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $infocontent["Nombre"] = "Alondra Mendoza";
+        $infocontent["hoy"] = date("d/m/Y");
+        $this->load->view('sclasificador/Devoluciones', $infocontent);
+        $this->load->view('template/footerd', '');
     }
 
-    public function GuardarDetalleDevolucion() {
-        $idproducto = $this->input->post_get('idproducto', TRUE);
-        $iddevolucion = $this->input->post_get('iddevolucion', TRUE);
-        $this->load->model("modelosclasificador");
-        $iddetalle = $this->modelosclasificador->GuardarDetalleDevolucion($idproducto, $iddevolucion);
-        if ($iddetalle == "existe") {
-            print("Existe");
-        } else if ($iddetalle != null) {
-            print("Correcto");
-        }
+    public function DevolucionesCapturadas() {
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $this->load->model("modelocedis");
+        $infocontent["devolucionescapturadas"] = $this->modelocedis->DevolucionesCapturadas($fechainicio, $fechafin);
+        $this->load->view('sclasificador/DevolucionesCapturadas', $infocontent);
+    }
+
+    public function VerificarSubproducto() {
+        $id = $this->input->post_get('sub_id', TRUE);
+        $valor = $this->input->post_get('valor', TRUE);
+        $this->db->set("Verificado", $valor);
+        $this->db->where("IdSubproductosDevoluciones", $id);
+        $this->db->update("SubproductosDevoluciones");
+        print("correcto");
+    }
+
+    public function ProcesarDevolucion() {
+        $id = $this->input->post_get('dev_id', TRUE);
+        $this->db->set("VerificadaSupervisor", "Si");
+        $this->db->where("IdDevoluciones", $id);
+        $this->db->update("Devoluciones");
+        print("correcto");
     }
 
 }

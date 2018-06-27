@@ -13,6 +13,7 @@ class Modeloalmacenista extends CI_Model {
     public function ListarGriferia() {
         $this->db->select('*');
         $this->db->from('CGriferia c');
+        $this->db->where('c.ClasificacionesSubproductosId', 4);
         $this->db->where('c.Activo', 1);
         $query = $this->db->get();
         return $query;
@@ -22,6 +23,7 @@ class Modeloalmacenista extends CI_Model {
         $this->db->select("*");
         $this->db->from("CGriferia c");
         $this->db->where("c.Activo", 1);
+        $this->db->where("c.ClasificacionesSubproductosId", 4);
         $this->db->where("c.Clave", $clave);
         $fila = $this->db->get();
         if ($fila->num_rows() > 0) {

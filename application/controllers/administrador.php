@@ -667,4 +667,11 @@ class Administrador extends CI_Controller {
         }
     }
 
+    public function Cambios() {
+        $infoheader["titulo"] = "Cambios Sistema: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->view('administrador/Cambios');
+        $this->load->view('template/footerd', '');
+    }
+
 }

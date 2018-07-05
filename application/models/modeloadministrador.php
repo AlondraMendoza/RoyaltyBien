@@ -8,6 +8,7 @@ class Modeloadministrador extends CI_Model {
     function __construct() {
         parent::__construct();
         $this->load->database();
+        $this->load->library('encryption');
     }
 
     public function Productos() {
@@ -995,9 +996,10 @@ class Modeloadministrador extends CI_Model {
 
     public function CrearUsuario($persona) {
         $usuario = $this->GenerarUsuario($persona, 1);
+        $contra = md5("RoyaltyCeramic");
         $datos = array(
             'Nombre' => $usuario,
-            'Contrasena' => 'RoyaltyCeramic',
+            'Contrasena' => $contra,
             'PersonasId' => $persona,
             'Activo' => 1,
         );

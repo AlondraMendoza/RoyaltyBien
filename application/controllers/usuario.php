@@ -7,6 +7,7 @@ class Usuario extends CI_Controller {
 
     function __construct() {
         parent::__construct();
+        $this->load->library('encryption');
     }
 
     public function index() {
@@ -26,6 +27,8 @@ class Usuario extends CI_Controller {
             $nombre = $this->input->post('nombre');
             $contrasena = $this->input->post('contrasena');
             $this->load->model('modelousuario');
+            $contrasena = md5($contrasena);
+            print($contrasena);
             $usuario = $this->modelousuario->usuario_por_nombre_contrasena($nombre, $contrasena);
             if ($usuario) {
                 $usuario_data = array(
@@ -38,14 +41,10 @@ class Usuario extends CI_Controller {
                 $this->session->set_userdata($usuario_data);
                 redirect('usuario/logueado');
             } else {
-                $infoheader["titulo"] = "Royalty Ceramic";
-                $this->load->view('template/headerLogin', $infoheader);
-                $data["mensaje"] = "error";
-                $this->load->view('usuario/index', $data);
-                $this->load->view('template/footerLogin', '');
+                redirect('usuario/index');
             }
         } else {
-            $this->index();
+            redirect('usuario/index');
         }
     }
 

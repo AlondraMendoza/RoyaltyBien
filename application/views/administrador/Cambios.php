@@ -5,4 +5,5 @@
     <li>Se agregó el almacén de subproductos (detalle y concentrado) 28/06/2018</li>
     <li>Se agregó la opción para reclasificar productos en general 04/07/2018</li>
     <li>Se agregó el reporte de devoluciones procesadas en el perfil de clasificador 04/07/2018</li>
+    <li>Se agregó la encriptación de la contraseña 04/07/2018</li>
 </ul>

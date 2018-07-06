@@ -18,7 +18,7 @@
             <a class="app-bar-element" href="<?= base_url() ?>inicio/index"><img src="<?= base_url() ?>public/img/logo.png" style="height: 45px;width: 180px"></a>
             <ul class="app-bar-menu">
                 <li><a href="<?php echo base_url() ?>usuario/logueado">Inicio</a></li>
-                <li><a href="">Cuenta</a></li>
+                <li><a href="<?php echo base_url() ?>usuario/Cuenta">Cuenta</a></li>
                 <li><a href="">Contacto</a></li>
                 <ul class="app-bar-menu">
                     <li><a href="">Soporte</a></li>

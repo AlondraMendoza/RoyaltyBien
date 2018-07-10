@@ -1,4 +1,4 @@
-<h1 class="light text-shadow">INVENTARIOS ALMACÉN (PRODUCTO SUELTO)</h1><br>
+<h1 class="light text-shadow">INVENTARIOS ALMACÉN (PRODUCTO EN TARIMA)</h1><br>
 <div class="tabcontrol" data-role="tabcontrol" data-save-state="true" id='tabs'>
     <ul class="tabs">
         <?php foreach ($modelos->result() as $modelo): ?>
@@ -45,8 +45,8 @@
                                     </td>
                                     <?php
                                     foreach ($productos->result() as $producto):
-                                        $proda = $ci->modeloalmacenista->ProductosAlmacen($modelo->IdModelos, $color->IdColores, 1, $producto->IdCProductos);
-                                        $prodb = $ci->modeloalmacenista->ProductosAlmacen($modelo->IdModelos, $color->IdColores, 2, $producto->IdCProductos);
+                                        $proda = $ci->modeloalmacenista->ProductosTarima($modelo->IdModelos, $color->IdColores, 1, $producto->IdCProductos);
+                                        $prodb = $ci->modeloalmacenista->ProductosTarima($modelo->IdModelos, $color->IdColores, 2, $producto->IdCProductos);
 //                                        $maximominimoa = $ci->modelocedis->MaximoMinimo($modelo->IdModelos, $color->IdColores, 1, $producto->IdCProductos, $proda);
 //                                        $maximominimob = $ci->modelocedis->MaximoMinimo($modelo->IdModelos, $color->IdColores, 2, $producto->IdCProductos, $prodb);
 //                                        $semaforoa = "gray";

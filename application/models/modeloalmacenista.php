@@ -586,18 +586,26 @@ class Modeloalmacenista extends CI_Model {
     }
 
     public function ProductosAlmacen($modelo, $color, $clasificacion, $producto) {
-        //print("SELECT count(*) as cuantos from InventariosCedis ic JOIN Productos p on p.IdProductos=ic.ProductosId JOIN CProductos cp on cp.IdCProductos=p.CProductosId where cp.IdCProductos= " . $producto . " AND Clasificacion(p.IdProductos)=" . $clasificacion . " AND ic.FechaSalida is null AND p.ModelosId= " . $modelo . " AND p.ColoresId= " . $color . " GROUP BY p.IdProductos");
-//        $query = $this->db->query("SELECT count(*) as cuantos from InventariosCedis ic "
-//                . "JOIN Productos p on p.IdProductos=ic.ProductosId JOIN CProductos cp on"
-//                . " cp.IdCProductos=p.CProductosId where cp.IdCProductos= " . $producto . " "
-//                . "AND Clasificacion(p.IdProductos)=" . $clasificacion . " AND ic.FechaSalida is null "
-//                . "AND p.ModelosId= " . $modelo . " AND ic.Activo=1 AND p.ColoresId= " . $color . " ");
+        //Productos Solos(fuera de tarima)
         $query2 = $this->db->query("SELECT count(*) as cuantos from InventariosAlmacen ia"
-                . " JOIN Tarimas t on t.IdTarimas=ia.TarimasId JOIN DetalleTarimas dt on"
-                . " dt.TarimasId=t.IdTarimas JOIN Productos p on dt.ProductosId=p.IdProductos JOIN"
-                . " CProductos cp on cp.IdCProductos= p.CProductosId where cp.IdCProductos= " . $producto . " AND"
-                . " Clasificacion(p.IdProductos)= " . $clasificacion . " AND ia.FechaSalida is null "
-                . "AND p.ModelosId= " . $modelo . " AND p.ColoresId= " . $color . " ");
+                . " JOIN Productos p on ia.ProductosId=p.IdProductos JOIN"
+                . " CProductos cp on cp.IdCProductos= p.CProductosId where cp.IdCProductos= " . $producto . " "
+                . " AND  Clasificacion(p.IdProductos)= " . $clasificacion . " AND ia.FechaSalida is null "
+                . " AND p.ModelosId= " . $modelo . " AND p.ColoresId= " . $color . " ");
+        $row = $query2->row();
+        if (isset($row)) {
+            return $row->cuantos;
+        }
+    }
+    
+    public function ProductosTarima($modelo, $color, $clasificacion, $producto) {
+        //Productos en tarima
+        $query2 = $this->db->query("SELECT count(*) as cuantos from InventariosAlmacen ia"
+                . " JOIN Tarimas t on ia.TarimasId=t.IdTarimas JOIN DetalleTarimas dt "
+                . "on dt.TarimasId=t.IdTarimas JOIN Productos p on p.IdProductos=dt.ProductosId JOIN"
+                . " CProductos cp on cp.IdCProductos= p.CProductosId where cp.IdCProductos= " . $producto . " "
+                . " AND  Clasificacion(p.IdProductos)= " . $clasificacion . " AND ia.FechaSalida is null "
+                . " AND p.ModelosId= " . $modelo . " AND p.ColoresId= " . $color . " ");
         $row = $query2->row();
         if (isset($row)) {
             return $row->cuantos;

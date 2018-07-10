@@ -8,3 +8,10 @@
     <li>Se agregó la encriptación de la contraseña 04/07/2018</li>
     <li>Se agregó página de Cuenta del menú principal, con la opción de cambio de contraseña 05/07/2018</li>
 </ul>
+<ul class="simple-list large-bullet" style="color: blue;">
+    <li>Se agrego lista de inventarios de productos en almacén 10/07/2018 AM</li>
+    <li>Se agrego lista de inventarios de productos en tarima en almacén 10/07/2018 AM</li>
+    <li>Se agregó vista de ventas 10/07/2018 AM</li>
+    <li>Como podras imaginar no he tenido mucha actividad de ese tipo jaja... Perdón</li>
+    
+</ul>

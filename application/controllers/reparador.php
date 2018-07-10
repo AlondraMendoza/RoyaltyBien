@@ -12,7 +12,7 @@ class Reparador extends CI_Controller {
             redirect('usuario/index');
         }
         $id = $this->session->userdata('id');
-        if (!$this->modelousuario->TienePerfil($id, 1)) {
+        if (!$this->modelousuario->TienePerfil($id, 7)) {
             redirect('usuario/logueado');
         }
     }

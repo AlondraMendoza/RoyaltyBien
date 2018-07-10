@@ -71,6 +71,12 @@ class Modelousuario extends CI_Model {
 //        return $datos;
     }
 
+    public function GuardarNuevaContra($contra) {
+        $this->db->set("Contrasena", $contra);
+        $this->db->where("IdUsuarios", IdUsuario());
+        $this->db->update("Usuarios");
+    }
+
     public function TienePerfil($id, $perfil) {
         $this->db->select('p.Nombre, p.IdPerfiles');
         $this->db->from('Perfiles p');

@@ -7,7 +7,7 @@
                 var inicio = 9;
                 var clave = cadena.substring(inicio);
                 $("#des").html("Verificando clave...");
-                $.getJSON("VerificarClaveProdDevoluciones", {"clave": clave}, function (data) {
+                $.getJSON("VerificarClaveProd", {"clave": clave}, function (data) {
                     if (data.id != null) {
                         $("#des").html("Producto encontrado en devoluciones");
                         $("#panelbusqueda").fadeOut();

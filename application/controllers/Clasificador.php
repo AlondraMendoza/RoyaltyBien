@@ -539,6 +539,15 @@ class Clasificador extends CI_Controller {
         $this->load->view('template/footerd', '');
     }
 
+    public function ReclasificarGeneral() {
+        $infoheader["titulo"] = "Reclasificar: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $infocontent["Nombre"] = "Alondra Mendoza";
+        $this->load->model("modeloclasificador");
+        $this->load->view('clasificador/ReclasificarGeneral', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+
     public function VerificarClaveProdDevoluciones() {
         $clave = $this->input->post_get('clave', TRUE);
         $this->load->model("Modeloclasificador");
@@ -549,6 +558,23 @@ class Clasificador extends CI_Controller {
             $infocontent["id"] = $fila->IdProductos;
         }
         print json_encode($infocontent);
+    }
+
+    public function Devoluciones() {
+        $infoheader["titulo"] = "Devoluciones: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $infocontent["Nombre"] = "Alondra Mendoza";
+        $infocontent["hoy"] = date("d/m/Y");
+        $this->load->view('clasificador/Devoluciones', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+
+    public function DevolucionesCapturadas() {
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $this->load->model("modelocedis");
+        $infocontent["devolucionescapturadas"] = $this->modelocedis->DevolucionesCapturadas($fechainicio, $fechafin);
+        $this->load->view('clasificador/DevolucionesCapturadas', $infocontent);
     }
 
     public function ExpedienteProducto() {

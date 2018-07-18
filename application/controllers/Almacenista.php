@@ -7,12 +7,12 @@ class Almacenista extends CI_Controller {
 
     function __construct() {
         parent::__construct();
-        $this->load->model("Modelousuario");
+        $this->load->model("modelousuario");
         if (!EstaLogueado()) {
             redirect('usuario/index');
         }
         $id = $this->session->userdata('id');
-        if (!$this->Modelousuario->TienePerfil($id, 4)) {
+        if (!$this->modelousuario->TienePerfil($id, 4)) {
             redirect('usuario/logueado');
         }
     }
@@ -408,6 +408,15 @@ class Almacenista extends CI_Controller {
         $this->load->model("Modeloalmacenista");
         $infocontent["modelos"] = $this->Modeloalmacenista->ListaModelos();
         $this->load->view('almacenista/InventarioAlmacen', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+
+    public function InventarioTarimas() {
+        $infoheader["titulo"] = "Inventario: Almacén";
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->model("Modeloalmacenista");
+        $infocontent["modelos"] = $this->Modeloalmacenista->ListaModelos();
+        $this->load->view('almacenista/InventarioTarimas', $infocontent);
         $this->load->view('template/footerd', '');
     }
 

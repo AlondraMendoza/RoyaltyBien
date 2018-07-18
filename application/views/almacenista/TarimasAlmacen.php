@@ -1,4 +1,4 @@
-<h1 class="light text-shadow">INVENTARIOS ALMACÉN (PRODUCTO SUELTO)</h1><br>
+<h1 class="light text-shadow">INVENTARIOS ALMACÉN (TARIMAS EN ALMACÉN)</h1><br>
 <div class="tabcontrol" data-role="tabcontrol" data-save-state="true" id='tabs'>
     <ul class="tabs">
         <?php foreach ($modelos->result() as $modelo): ?>

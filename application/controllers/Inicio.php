@@ -7,12 +7,12 @@ class Inicio extends CI_Controller {
 
     function __construct() {
         parent::__construct();
-        $this->load->model("modelousuario");
+        $this->load->model("Modelousuario");
         if (!EstaLogueado()) {
             redirect('usuario/index');
         }
         $id = $this->session->userdata('id');
-        if (!$this->modelousuario->TienePerfil($id, 3)) {
+        if (!$this->Modelousuario->TienePerfil($id, 3)) {
             redirect('usuario/logueado');
         }
     }

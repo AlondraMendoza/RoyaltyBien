@@ -7,59 +7,59 @@ class Administrador extends CI_Controller {
 
     function __construct() {
         parent::__construct();
-        $this->load->model("modelousuario");
+        $this->load->model("Modelousuario");
         if (!EstaLogueado()) {
             redirect('usuario/index');
         }
         $id = $this->session->userdata('id');
-        if (!$this->modelousuario->TienePerfil($id, 3)) {
+        if (!$this->Modelousuario->TienePerfil($id, 3)) {
             redirect('usuario/logueado');
         }
     }
 
     public function Reportes() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $infoheader["titulo"] = "Administrador: Royalty Ceramic";
         $infocontent["hoy"] = date("d/m/Y");
-        $infocontent["clasificaciones"] = $this->modeloadministrador->Clasificaciones();
-        $infocontent["productos"] = $this->modeloadministrador->Productos();
-        $infocontent["modelos"] = $this->modeloadministrador->Modelos(0);
-        $infocontent["colores"] = $this->modeloadministrador->Colores(0);
+        $infocontent["clasificaciones"] = $this->Modeloadministrador->Clasificaciones();
+        $infocontent["productos"] = $this->Modeloadministrador->Productos();
+        $infocontent["modelos"] = $this->Modeloadministrador->Modelos(0);
+        $infocontent["colores"] = $this->Modeloadministrador->Colores(0);
         $this->load->view('template/headerd', $infoheader);
         $this->load->view('administrador/Reportes', $infocontent);
         $this->load->view('template/footerd', '');
     }
 
     public function ReportesDefectos() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $infoheader["titulo"] = "Administrador: Royalty Ceramic";
         $infocontent["hoy"] = date("d/m/Y");
-        $infocontent["clasificaciones"] = $this->modeloadministrador->Clasificaciones();
-        $infocontent["productos"] = $this->modeloadministrador->Productos();
-        $infocontent["modelos"] = $this->modeloadministrador->Modelos(0);
-        $infocontent["colores"] = $this->modeloadministrador->Colores(0);
-        $infocontent["defectos"] = $this->modeloadministrador->Defectos();
+        $infocontent["clasificaciones"] = $this->Modeloadministrador->Clasificaciones();
+        $infocontent["productos"] = $this->Modeloadministrador->Productos();
+        $infocontent["modelos"] = $this->Modeloadministrador->Modelos(0);
+        $infocontent["colores"] = $this->Modeloadministrador->Colores(0);
+        $infocontent["defectos"] = $this->Modeloadministrador->Defectos();
         $this->load->view('template/headerd', $infoheader);
         $this->load->view('administrador/ReportesDefectos', $infocontent);
         $this->load->view('template/footerd', '');
     }
 
     public function ReporteQuemado() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $infoheader["titulo"] = "Administrador: Royalty Ceramic";
         $infocontent["Nombre"] = "Alondra Mendoza";
         $infocontent["hoy"] = date("d/m/Y");
-        $infocontent["hornos"] = $this->modeloadministrador->Hornos();
-        $infocontent["productos"] = $this->modeloadministrador->ProductosQuemado();
-        $infocontent["modelos"] = $this->modeloadministrador->ModelosQuemado(0);
-        $infocontent["colores"] = $this->modeloadministrador->Colores(0);
+        $infocontent["hornos"] = $this->Modeloadministrador->Hornos();
+        $infocontent["productos"] = $this->Modeloadministrador->ProductosQuemado();
+        $infocontent["modelos"] = $this->Modeloadministrador->ModelosQuemado(0);
+        $infocontent["colores"] = $this->Modeloadministrador->Colores(0);
         $this->load->view('template/headerd', $infoheader);
         $this->load->view('administrador/ReporteQuemado', $infocontent);
         $this->load->view('template/footerd', '');
     }
 
     public function ReporteQAcc() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $infoheader["titulo"] = "Administrador: Royalty Ceramic";
         $infocontent["Nombre"] = "Alondra Mendoza";
         $infocontent["hoy"] = date("d/m/Y");
@@ -70,15 +70,15 @@ class Administrador extends CI_Controller {
 
     public function ObtenerModelos() {
         $producto = $this->input->post_get('producto', TRUE);
-        $this->load->model("modeloadministrador");
-        $infocontent["modelos"] = $this->modeloadministrador->Modelos($producto);
+        $this->load->model("Modeloadministrador");
+        $infocontent["modelos"] = $this->Modeloadministrador->Modelos($producto);
         $this->load->view('administrador/ObtenerModelos', $infocontent);
     }
 
     public function ObtenerColores() {
         $modelo = $this->input->post_get('modelo', TRUE);
-        $this->load->model("modeloadministrador");
-        $infocontent["colores"] = $this->modeloadministrador->Colores($modelo);
+        $this->load->model("Modeloadministrador");
+        $infocontent["colores"] = $this->Modeloadministrador->Colores($modelo);
         $this->load->view('administrador/ObtenerColores', $infocontent);
     }
 
@@ -95,8 +95,8 @@ class Administrador extends CI_Controller {
         $acolor = json_decode($color);
         $defecto = $this->input->post_get('defecto', TRUE);
         $adefecto = json_decode($defecto);
-        $this->load->model("modeloadministrador");
-        $infocontent["productos"] = $this->modeloadministrador->GenerarReporte($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $adefecto);
+        $this->load->model("Modeloadministrador");
+        $infocontent["productos"] = $this->Modeloadministrador->GenerarReporte($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $adefecto);
         $this->load->view('administrador/GenerarReporte', $infocontent);
     }
 
@@ -113,8 +113,8 @@ class Administrador extends CI_Controller {
         $amodelo = json_decode($modelo);
         $color = $this->input->post_get('color', TRUE);
         $acolor = json_decode($color);
-        $this->load->model("modeloadministrador");
-        $infocontent["productos"] = $this->modeloadministrador->GenerarDetalleSeleccionado($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $por, $nombre);
+        $this->load->model("Modeloadministrador");
+        $infocontent["productos"] = $this->Modeloadministrador->GenerarDetalleSeleccionado($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $por, $nombre);
         $this->load->view('administrador/GenerarDetalleSeleccionado', $infocontent);
     }
 
@@ -131,16 +131,16 @@ class Administrador extends CI_Controller {
         $amodelo = json_decode($modelo);
         $color = $this->input->post_get('color', TRUE);
         $acolor = json_decode($color);
-        $this->load->model("modeloadministrador");
-        $infocontent["productos"] = $this->modeloadministrador->GenerarDetalleSeleccionadoQ($fechainicio, $fechafin, $ahornos, $aproducto, $amodelo, $acolor, $por, $nombre);
+        $this->load->model("Modeloadministrador");
+        $infocontent["productos"] = $this->Modeloadministrador->GenerarDetalleSeleccionadoQ($fechainicio, $fechafin, $ahornos, $aproducto, $amodelo, $acolor, $por, $nombre);
         $this->load->view('administrador/GenerarDetalleSeleccionadoQ', $infocontent);
     }
 
     public function GenerarReporteQAcc() {
         $fechainicio = $this->input->post_get('fechainicio', TRUE);
         $fechafin = $this->input->post_get('fechafin', TRUE);
-        $this->load->model("modeloadministrador");
-        $infocontent["productos"] = $this->modeloadministrador->GenerarReporteQAcc($fechainicio, $fechafin);
+        $this->load->model("Modeloadministrador");
+        $infocontent["productos"] = $this->Modeloadministrador->GenerarReporteQAcc($fechainicio, $fechafin);
         $this->load->view('administrador/GenerarReporteQAcc', $infocontent);
     }
 
@@ -156,9 +156,9 @@ class Administrador extends CI_Controller {
         $color = $this->input->post_get('color', TRUE);
         $acolor = json_decode($color);
         $por = $this->input->post_get('por', TRUE);
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $infocontent["por"] = $por;
-        $infocontent["productos"] = $this->modeloadministrador->GenerarConcentrado($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $por);
+        $infocontent["productos"] = $this->Modeloadministrador->GenerarConcentrado($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $por);
         $this->load->view('administrador/GenerarConcentrado', $infocontent);
     }
 
@@ -176,9 +176,9 @@ class Administrador extends CI_Controller {
         $defecto = $this->input->post_get('defecto', TRUE);
         $adefecto = json_decode($defecto);
         $por = $this->input->post_get('por', TRUE);
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $infocontent["por"] = $por;
-        $infocontent["productos"] = $this->modeloadministrador->GenerarConcentradoDefectos($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $adefecto, $por);
+        $infocontent["productos"] = $this->Modeloadministrador->GenerarConcentradoDefectos($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $adefecto, $por);
         $this->load->view('administrador/GenerarConcentradoDefectos', $infocontent);
     }
 
@@ -195,8 +195,8 @@ class Administrador extends CI_Controller {
         $acolor = json_decode($color);
         $defecto = $this->input->post_get('defecto', TRUE);
         $adefecto = json_decode($defecto);
-        $this->load->model("modeloadministrador");
-        $infocontent["productos"] = $this->modeloadministrador->GenerarReporteDefectos($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $adefecto);
+        $this->load->model("Modeloadministrador");
+        $infocontent["productos"] = $this->Modeloadministrador->GenerarReporteDefectos($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $adefecto);
         $this->load->view('administrador/GenerarReporteDefectos', $infocontent);
     }
 
@@ -215,8 +215,8 @@ class Administrador extends CI_Controller {
         $acolor = json_decode($color);
         $defecto = $this->input->post_get('defecto', TRUE);
         $adefecto = json_decode($defecto);
-        $this->load->model("modeloadministrador");
-        $infocontent["productos"] = $this->modeloadministrador->GenerarDetalleSeleccionadoDefectos($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $adefecto, $por, $nombre);
+        $this->load->model("Modeloadministrador");
+        $infocontent["productos"] = $this->Modeloadministrador->GenerarDetalleSeleccionadoDefectos($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $adefecto, $por, $nombre);
         $this->load->view('administrador/GenerarDetalleSeleccionadoDefectos', $infocontent);
     }
 
@@ -231,8 +231,8 @@ class Administrador extends CI_Controller {
         $amodelo = json_decode($modelo);
         $color = $this->input->post_get('color', TRUE);
         $acolor = json_decode($color);
-        $this->load->model("modeloadministrador");
-        $infocontent["productos"] = $this->modeloadministrador->GenerarReporteQ($fechainicio, $fechafin, $ahornos, $aproducto, $amodelo, $acolor);
+        $this->load->model("Modeloadministrador");
+        $infocontent["productos"] = $this->Modeloadministrador->GenerarReporteQ($fechainicio, $fechafin, $ahornos, $aproducto, $amodelo, $acolor);
         $this->load->view('administrador/GenerarReporteQ', $infocontent);
     }
 
@@ -248,205 +248,205 @@ class Administrador extends CI_Controller {
         $color = $this->input->post_get('color', TRUE);
         $acolor = json_decode($color);
         $por = $this->input->post_get('por', TRUE);
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $infocontent["por"] = $por;
-        $infocontent["productos"] = $this->modeloadministrador->GenerarConcentradoQ($fechainicio, $fechafin, $ahornos, $aproducto, $amodelo, $acolor, $por);
+        $infocontent["productos"] = $this->Modeloadministrador->GenerarConcentradoQ($fechainicio, $fechafin, $ahornos, $aproducto, $amodelo, $acolor, $por);
         $this->load->view('administrador/GenerarConcentradoQ', $infocontent);
     }
 
     public function CapturaPerfiles() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $infoheader["titulo"] = "Administrador: Royalty Ceramic";
-        $infocontent["usuarios"] = $this->modeloadministrador->Usuarios();
+        $infocontent["usuarios"] = $this->Modeloadministrador->Usuarios();
         $this->load->view('template/headerd', $infoheader);
         $this->load->view('administrador/CapturaPerfiles', $infocontent);
         $this->load->view('template/footerd', '');
     }
 
     public function ExpedienteUsuario() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $infoheader["titulo"] = "Administrador: Royalty Ceramic";
         $persona = $this->input->post_get('persona', TRUE);
-        $usuario = $this->modeloadministrador->Usuario($persona);
-        $infocontent["persona"] = $this->modeloadministrador->ObtenerPersona($persona);
+        $usuario = $this->Modeloadministrador->Usuario($persona);
+        $infocontent["persona"] = $this->Modeloadministrador->ObtenerPersona($persona);
         $infocontent["usuario"] = $usuario;
-        $infocontent["ultimopuesto"] = $this->modeloadministrador->UltimoPuesto($persona);
+        $infocontent["ultimopuesto"] = $this->Modeloadministrador->UltimoPuesto($persona);
         $ultimoperfil = "";
         if ($usuario != null) {
-            $ultimoperfil = $this->modeloadministrador->UltimoPerfil($usuario->IdUsuarios);
+            $ultimoperfil = $this->Modeloadministrador->UltimoPerfil($usuario->IdUsuarios);
         } else {
             $ultimoperfil = "No existe Usuario";
         }
         $infocontent["ultimoperfil"] = $ultimoperfil;
-        $infocontent["tieneusuario"] = $this->modeloadministrador->TieneUsuario($persona);
+        $infocontent["tieneusuario"] = $this->Modeloadministrador->TieneUsuario($persona);
         $this->load->view('template/headerd', $infoheader);
         $this->load->view('administrador/ExpedienteUsuario', $infocontent);
         $this->load->view('template/footerd', '');
     }
 
     public function CargaPerfilesUsuario() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $usuario = $this->input->post_get('usuario', TRUE);
-        $infocontent["usuario"] = $this->modeloadministrador->GetUsuario($usuario);
-        $infocontent["perfiles"] = $this->modeloadministrador->PerfilesUsuario($usuario);
-        $infocontent["perfilestodos"] = $this->modeloadministrador->Perfiles();
+        $infocontent["usuario"] = $this->Modeloadministrador->GetUsuario($usuario);
+        $infocontent["perfiles"] = $this->Modeloadministrador->PerfilesUsuario($usuario);
+        $infocontent["perfilestodos"] = $this->Modeloadministrador->Perfiles();
         $this->load->view('administrador/CargaPerfilesUsuario', $infocontent);
     }
 
     public function CargaPuestosUsuario() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $persona = $this->input->post_get('persona', TRUE);
-        $infocontent["persona"] = $this->modeloadministrador->ObtenerPersona($persona);
-        $infocontent["puestos"] = $this->modeloadministrador->PuestosUsuario($persona);
-        $infocontent["puestostodos"] = $this->modeloadministrador->Puestos();
-        $infocontent["areas"] = $this->modeloadministrador->Areas();
+        $infocontent["persona"] = $this->Modeloadministrador->ObtenerPersona($persona);
+        $infocontent["puestos"] = $this->Modeloadministrador->PuestosUsuario($persona);
+        $infocontent["puestostodos"] = $this->Modeloadministrador->Puestos();
+        $infocontent["areas"] = $this->Modeloadministrador->Areas();
         $this->load->view('administrador/CargaPuestosUsuario', $infocontent);
     }
 
     public function AgregarPerfil() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $usuario = $this->input->post_get('usuario', TRUE);
         $perfil = $this->input->post_get('perfil', TRUE);
-        $id = $this->modeloadministrador->AgregarPerfil($usuario, $perfil);
+        $id = $this->Modeloadministrador->AgregarPerfil($usuario, $perfil);
         if ($id != null) {
             print_r("correcto");
         }
     }
 
     public function AgregarPuesto() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $persona = $this->input->post_get('persona', TRUE);
         $puesto = $this->input->post_get('puesto', TRUE);
         $clave = $this->input->post_get('clave', TRUE);
         $area = $this->input->post_get('area', TRUE);
-        $id = $this->modeloadministrador->AgregarPuesto($persona, $puesto, $area, $clave);
+        $id = $this->Modeloadministrador->AgregarPuesto($persona, $puesto, $area, $clave);
         if ($id != null) {
             print_r("correcto");
         }
     }
 
     public function EliminarPerfil() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $usuario = $this->input->post_get('usuario', TRUE);
         $perfil = $this->input->post_get('perfil', TRUE);
-        $this->modeloadministrador->EliminarPerfil($usuario, $perfil);
+        $this->Modeloadministrador->EliminarPerfil($usuario, $perfil);
         print_r("correcto");
     }
 
     public function EliminarPuesto() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $persona = $this->input->post_get('persona', TRUE);
         $puesto = $this->input->post_get('puesto', TRUE);
-        $this->modeloadministrador->EliminarPuesto($persona, $puesto);
+        $this->Modeloadministrador->EliminarPuesto($persona, $puesto);
         print_r("correcto");
     }
 
     public function Productos() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $infoheader["titulo"] = "Administrador: Royalty Ceramic";
-        $infocontent["productos"] = $this->modeloadministrador->ProductosT();
+        $infocontent["productos"] = $this->Modeloadministrador->ProductosT();
         $this->load->view('template/headerd', $infoheader);
         $this->load->view('administrador/Productos', $infocontent);
         $this->load->view('template/footerd', '');
     }
 
     public function DetalleProd() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $infoheader["titulo"] = "Administrador: Royalty Ceramic";
         $producto = $this->input->post_get('producto', TRUE);
         $infocontent["producto"] = $producto;
-        //$infocontent["producto"] = $this->modeloadministrador->ProductosT($producto);
-        $infocontent["modelos"] = $this->modeloadministrador->ObtenerModelos($producto);
-        $infocontent["todos"] = $this->modeloadministrador->TodosModelos();
+        //$infocontent["producto"] = $this->Modeloadministrador->ProductosT($producto);
+        $infocontent["modelos"] = $this->Modeloadministrador->ObtenerModelos($producto);
+        $infocontent["todos"] = $this->Modeloadministrador->TodosModelos();
         $this->load->view('template/headerd', $infoheader);
         $this->load->view('administrador/DetalleProd', $infocontent);
         $this->load->view('template/footerd', '');
     }
 
     public function DetalleMod() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $infoheader["titulo"] = "Administrador: Royalty Ceramic";
         $modelo = $this->input->post_get('modelo', TRUE);
         $infocontent["modelo"] = $modelo;
-        $infocontent["colores"] = $this->modeloadministrador->ObtenerColores($modelo);
-        $infocontent["todos"] = $this->modeloadministrador->TodosColores();
+        $infocontent["colores"] = $this->Modeloadministrador->ObtenerColores($modelo);
+        $infocontent["todos"] = $this->Modeloadministrador->TodosColores();
         $this->load->view('template/headerd', $infoheader);
         $this->load->view('administrador/DetalleMod', $infocontent);
         $this->load->view('template/footerd', '');
     }
 
     public function DesactivarProducto() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $producto = $this->input->post_get('producto', TRUE);
-        $this->modeloadministrador->DesactivarProducto($producto);
+        $this->Modeloadministrador->DesactivarProducto($producto);
         print_r("correcto");
     }
 
     public function ActivarProducto() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $producto = $this->input->post_get('producto', TRUE);
-        $this->modeloadministrador->ActivarProducto($producto);
+        $this->Modeloadministrador->ActivarProducto($producto);
         print_r("correcto");
     }
 
     public function NuevoProducto() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $nombre = $this->input->post_get('nombre', TRUE);
-        $this->modeloadministrador->NuevoProducto($nombre);
+        $this->Modeloadministrador->NuevoProducto($nombre);
         print_r("correcto");
     }
 
     public function DesactivarModelo() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $codigo = $this->input->post_get('codigo', TRUE);
-        $this->modeloadministrador->DesactivarModelo($codigo);
+        $this->Modeloadministrador->DesactivarModelo($codigo);
         print_r("correcto");
     }
 
     public function ActivarModelo() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $codigo = $this->input->post_get('codigo', TRUE);
-        $this->modeloadministrador->ActivarModelo($codigo);
+        $this->Modeloadministrador->ActivarModelo($codigo);
         print_r("correcto");
     }
 
     public function SeleccionModelo() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $nombre = $this->input->post_get('nombre', TRUE);
         $producto = $this->input->post_get('producto', TRUE);
-        $this->modeloadministrador->SeleccionModelo($nombre, $producto);
+        $this->Modeloadministrador->SeleccionModelo($nombre, $producto);
         print_r("correcto");
     }
 
     public function NuevoModelo() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $nombre = $this->input->post_get('nombre', TRUE);
         $producto = $this->input->post_get('producto', TRUE);
-        $this->modeloadministrador->NuevoModelo($nombre, $producto);
+        $this->Modeloadministrador->NuevoModelo($nombre, $producto);
         print_r("correcto");
     }
 
     public function DesactivarColor() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $color = $this->input->post_get('color', TRUE);
         $modelo = $this->input->post_get('modelo', TRUE);
-        $this->modeloadministrador->DesactivarColor($color, $modelo);
+        $this->Modeloadministrador->DesactivarColor($color, $modelo);
         print_r("correcto");
     }
 
     public function SeleccionColor() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $color = $this->input->post_get('color', TRUE);
         $modelo = $this->input->post_get('modelo', TRUE);
-        $this->modeloadministrador->SeleccionColor($color, $modelo);
+        $this->Modeloadministrador->SeleccionColor($color, $modelo);
         print_r("correcto");
     }
 
     public function NuevoColor() {
-        $this->load->model("modeloadministrador");
+        $this->load->model("Modeloadministrador");
         $color = $this->input->post_get('color', TRUE);
         $modelo = $this->input->post_get('modelo', TRUE);
-        $this->modeloadministrador->NuevoColor($color, $modelo);
+        $this->Modeloadministrador->NuevoColor($color, $modelo);
         print_r("correcto");
     }
 
@@ -455,29 +455,29 @@ class Administrador extends CI_Controller {
         $apellidop = $this->input->post_get('apellidop', TRUE);
         $apellidom = $this->input->post_get('apellidom', TRUE);
         $nempleado = $this->input->post_get('nempleado', TRUE);
-        $this->load->model("modeloadministrador");
-        $this->modeloadministrador->GuardarEmpleado($nombre, $apellidop, $apellidom, $nempleado);
+        $this->load->model("Modeloadministrador");
+        $this->Modeloadministrador->GuardarEmpleado($nombre, $apellidop, $apellidom, $nempleado);
         redirect('administrador/CapturaPerfiles');
     }
 
     public function CrearUsuario() {
         $persona = $this->input->post_get('persona_id', TRUE);
-        $this->load->model("modeloadministrador");
-        $this->modeloadministrador->CrearUsuario($persona);
+        $this->load->model("Modeloadministrador");
+        $this->Modeloadministrador->CrearUsuario($persona);
         redirect('administrador/ExpedienteUsuario?persona=' . $persona);
     }
 
     public function CancelarUsuario() {
         $persona = $this->input->post_get('persona_id', TRUE);
-        $this->load->model("modeloadministrador");
-        $this->modeloadministrador->CancelarUsuario($persona);
+        $this->load->model("Modeloadministrador");
+        $this->Modeloadministrador->CancelarUsuario($persona);
         redirect('administrador/ExpedienteUsuario?persona=' . $persona);
     }
 
     public function ActivarUsuario() {
         $persona = $this->input->post_get('persona_id', TRUE);
-        $this->load->model("modeloadministrador");
-        $this->modeloadministrador->ActivarUsuario($persona);
+        $this->load->model("Modeloadministrador");
+        $this->Modeloadministrador->ActivarUsuario($persona);
         redirect('administrador/ExpedienteUsuario?persona=' . $persona);
     }
 
@@ -503,17 +503,17 @@ class Administrador extends CI_Controller {
 
     public function CargaInfoModelo() {
         $modelo = $this->input->post_get('modelo_id', TRUE);
-        $this->load->model("modeloadministrador");
-        $infocontent["modelo"] = $this->modeloadministrador->ObtenerModelo($modelo);
+        $this->load->model("Modeloadministrador");
+        $infocontent["modelo"] = $this->Modeloadministrador->ObtenerModelo($modelo);
         $this->load->view('administrador/CargaInfoModelo', $infocontent);
     }
 
     public function InventarioCedisTarimas() {
         $infoheader["titulo"] = "Inventario Cedis Tarimas: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
-        $this->load->model("modeloadministrador");
-        $infocontent["tarimas"] = $this->modeloadministrador->ObtenerTarimasCedis();
-        $infocontent["productos"] = $this->modeloadministrador->ObtenerProdSinTarimaCedis();
+        $this->load->model("Modeloadministrador");
+        $infocontent["tarimas"] = $this->Modeloadministrador->ObtenerTarimasCedis();
+        $infocontent["productos"] = $this->Modeloadministrador->ObtenerProdSinTarimaCedis();
         $this->load->view('administrador/InventarioCedisTarimas', $infocontent);
         $this->load->view('template/footerd', '');
     }
@@ -523,15 +523,15 @@ class Administrador extends CI_Controller {
         $this->load->view('template/headerd', $infoheader);
         $tarima_id = $this->input->post_get('tarima_id', TRUE);
         $infocontent["Nombre"] = "Alondra Mendoza";
-        $this->load->model("modeloalmacenista");
-        $infocontent["producto"] = $this->modeloalmacenista->ObtenerProducto($tarima_id);
-        $infocontent["historiales"] = $this->modeloalmacenista->HistorialMovimientosTarima($tarima_id);
-        $infocontent["ubicacion"] = $this->modeloalmacenista->Ubicacion($tarima_id);
-        /* $infocontent["tarima"] = $this->modeloclasificador->EstatusTarima($producto_id);
-          $infocontent["tarimaid"] = $this->modeloclasificador->EstatusTarimaId($producto_id);
-          $infocontent["clasificaciones"] = $this->modeloclasificador->ClasificacionesProducto($producto_id);
-          $infocontent["entarimados"] = $this->modeloclasificador->EntarimadosProducto($producto_id); */
-        $infocontent["codigo"] = $this->modeloalmacenista->CodigoBarrasTarimaTexto($tarima_id);
+        $this->load->model("Modeloalmacenista");
+        $infocontent["producto"] = $this->Modeloalmacenista->ObtenerProducto($tarima_id);
+        $infocontent["historiales"] = $this->Modeloalmacenista->HistorialMovimientosTarima($tarima_id);
+        $infocontent["ubicacion"] = $this->Modeloalmacenista->Ubicacion($tarima_id);
+        /* $infocontent["tarima"] = $this->ModeloClasificador->EstatusTarima($producto_id);
+          $infocontent["tarimaid"] = $this->ModeloClasificador->EstatusTarimaId($producto_id);
+          $infocontent["clasificaciones"] = $this->ModeloClasificador->ClasificacionesProducto($producto_id);
+          $infocontent["entarimados"] = $this->ModeloClasificador->EntarimadosProducto($producto_id); */
+        $infocontent["codigo"] = $this->Modeloalmacenista->CodigoBarrasTarimaTexto($tarima_id);
         $this->load->view('almacenista/ExpedienteTarima', $infocontent);
         $this->load->view('template/footerd', '');
     }

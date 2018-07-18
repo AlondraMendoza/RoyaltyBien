@@ -7,12 +7,12 @@ class Reparador extends CI_Controller {
 
     function __construct() {
         parent::__construct();
-        $this->load->model("modelousuario");
+        $this->load->model("Modelousuario");
         if (!EstaLogueado()) {
             redirect('usuario/index');
         }
         $id = $this->session->userdata('id');
-        if (!$this->modelousuario->TienePerfil($id, 1)) {
+        if (!$this->Modelousuario->TienePerfil($id, 1)) {
             redirect('usuario/logueado');
         }
     }
@@ -21,13 +21,13 @@ class Reparador extends CI_Controller {
         $infoheader["titulo"] = "Reparador: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $producto_id = $this->input->post_get('producto_id', TRUE);
-        $this->load->model("modeloreparador");
-        $this->load->model("modelousuario");
-        $infocontent["producto"] = $this->modeloreparador->ObtenerProducto($producto_id);
-        //$infocontent["defecto"] = $this->modeloreparador->ObtenerDefectos($producto_id);
-        $infocontent["defectos"] = $this->modelousuario->ObtenerDefectos($producto_id);
-        $infocontent["codigo"] = $this->modeloreparador->CodigoBarrasTexto($producto_id);
-        $infocontent["diagnostico"] = $this->modeloreparador->ObtenerDiagnosticos();
+        $this->load->model("Modeloreparador");
+        $this->load->model("Modelousuario");
+        $infocontent["producto"] = $this->Modeloreparador->ObtenerProducto($producto_id);
+        //$infocontent["defecto"] = $this->Modeloreparador->ObtenerDefectos($producto_id);
+        $infocontent["defectos"] = $this->Modelousuario->ObtenerDefectos($producto_id);
+        $infocontent["codigo"] = $this->Modeloreparador->CodigoBarrasTexto($producto_id);
+        $infocontent["diagnostico"] = $this->Modeloreparador->ObtenerDiagnosticos();
         $this->load->view('reparador/ExpedienteProducto', $infocontent);
         $this->load->view('template/footerd', '');
     }
@@ -36,15 +36,15 @@ class Reparador extends CI_Controller {
         $infoheader["titulo"] = "Reparador: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $infocontent["Nombre"] = "Alondra Mendoza";
-        $this->load->model("modeloreparador");
+        $this->load->model("Modeloreparador");
         $this->load->view('reparador/BusquedaProductos', $infocontent);
         $this->load->view('template/footerd', '');
     }
 
     public function VerificarClaveProd() {
         $clave = $this->input->post_get('clave', TRUE);
-        $this->load->model("modeloreparador");
-        $fila = $this->modeloreparador->BuscarClaveProducto($clave);
+        $this->load->model("Modeloreparador");
+        $fila = $this->Modeloreparador->BuscarClaveProducto($clave);
         $infocontent["nombre"] = "No se encontró el producto";
         if ($fila != "No se encontró el producto") {
             $infocontent["nombre"] = $fila->producto . "/" . $fila->modelo . "/" . $fila->color;
@@ -188,18 +188,18 @@ class Reparador extends CI_Controller {
         $infoheader["titulo"] = "Reparador: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $producto_id = $this->input->post_get('producto_id', TRUE);
-        $this->load->model("modeloreparador");
+        $this->load->model("Modeloreparador");
         $infocontent["ProductoId"] = $producto_id;
         $this->load->view('reparador/CapturaReparacion', $infocontent);
         $this->load->view('template/footerd', '');
     }
 
     public function GuardarReparacion() {
-        $this->load->model("modeloreparador");
+        $this->load->model("Modeloreparador");
         $producto = $this->input->post_get('producto', TRUE);
         $diagnostico = $this->input->post_get('diagnostico', TRUE);
         $solucion = $this->input->post_get('solucion', TRUE);
-        $this->modeloreparador->GuardarReparacion($producto, $diagnostico, $solucion);
+        $this->Modeloreparador->GuardarReparacion($producto, $diagnostico, $solucion);
         print_r("correcto");
     }
 

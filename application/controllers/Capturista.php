@@ -7,12 +7,12 @@ class Capturista extends CI_Controller {
 
     function __construct() {
         parent::__construct();
-        $this->load->model("modelousuario");
+        $this->load->model("Modelousuario");
         if (!EstaLogueado()) {
             redirect('usuario/index');
         }
         $id = $this->session->userdata('id');
-        if (!$this->modelousuario->TienePerfil($id, 2)) {
+        if (!$this->Modelousuario->TienePerfil($id, 2)) {
             redirect('usuario/logueado');
         }
     }
@@ -25,8 +25,8 @@ class Capturista extends CI_Controller {
 
     public function VerificarClave() {
         $clave = $this->input->post_get('clave', TRUE);
-        $this->load->model("modelocapturista");
-        $fila = $this->modelocapturista->BuscarClave($clave);
+        $this->load->model("Modelocapturista");
+        $fila = $this->Modelocapturista->BuscarClave($clave);
         $infocontent["nombrec"] = "No se encontró la persona";
         if ($fila != "No se encontró el producto") {
             $infocontent["nombrec"] = $fila->Nombre . " " . $fila->APaterno . " " . $fila->AMaterno;
@@ -39,10 +39,10 @@ class Capturista extends CI_Controller {
         $infoheader["titulo"] = "Capturista: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $infocontent["Nombre"] = "Alondra Mendoza";
-        $this->load->model("modelocapturista");
-        $infocontent["hornos"] = $this->modelocapturista->ListarHornos();
-        $infocontent["carros"] = $this->modelocapturista->ListarCarros();
-        $infocontent["productos"] = $this->modelocapturista->ListarProductos();
+        $this->load->model("Modelocapturista");
+        $infocontent["hornos"] = $this->Modelocapturista->ListarHornos();
+        $infocontent["carros"] = $this->Modelocapturista->ListarCarros();
+        $infocontent["productos"] = $this->Modelocapturista->ListarProductos();
         $this->load->view('capturista/capturaCarro', $infocontent);
         $this->load->view('template/footerd', '');
 //        $p = \Models\CProductos::ListarProductos();
@@ -59,15 +59,15 @@ class Capturista extends CI_Controller {
         $infoheader["titulo"] = "Capturista: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $infocontent["Nombre"] = "Alondra Mendoza";
-        $this->load->model("modelocapturista");
+        $this->load->model("Modelocapturista");
         $this->load->view('capturista/capturaAccesorios', $infocontent);
         $this->load->view('template/footerd', '');
     }
 
     public function ObtenerModelos() {
         $id = $this->input->post_get('id', TRUE);
-        $this->load->model("modelocapturista");
-        $infocontent["modelos"] = $this->modelocapturista->ListarModelos($id);
+        $this->load->model("Modelocapturista");
+        $infocontent["modelos"] = $this->Modelocapturista->ListarModelos($id);
         $this->load->view('capturista/ObtenerModelos', $infocontent);
 //        $id = $_REQUEST["id"];
 //        $m = \Models\Modelos::ListarModelos($id);
@@ -78,8 +78,8 @@ class Capturista extends CI_Controller {
 
     public function ObtenerColores() {
         $id = $this->input->post_get('id', TRUE);
-        $this->load->model("modelocapturista");
-        $infocontent["colores"] = $this->modelocapturista->ListarColores($id);
+        $this->load->model("Modelocapturista");
+        $infocontent["colores"] = $this->Modelocapturista->ListarColores($id);
         $this->load->view('capturista/ObtenerColores', $infocontent);
 //        $id = $_REQUEST["id"];
 //        $c = \Models\Colores::ListarColores($id);
@@ -126,16 +126,16 @@ class Capturista extends CI_Controller {
         $piezas = $this->input->post_get('piezas', TRUE);
         $fecha = $this->input->post_get('fecha', TRUE);
         $hornero = $this->input->post_get('hornero', TRUE);
-        $this->load->model("modelocapturista");
-        $infocontent["lista"] = $this->modelocapturista->ListarProductosGuardados($carro, $horno, $prod, $mod, $col, $piezas, $this->FechaIngles($fecha), $hornero);
-        //$infocontent["prod"] = $this->modelocapturista->ObtenerProductoId($infocontent["id"]);
+        $this->load->model("Modelocapturista");
+        $infocontent["lista"] = $this->Modelocapturista->ListarProductosGuardados($carro, $horno, $prod, $mod, $col, $piezas, $this->FechaIngles($fecha), $hornero);
+        //$infocontent["prod"] = $this->Modelocapturista->ObtenerProductoId($infocontent["id"]);
         $this->load->view('capturista/Resultados', $infocontent);
     }
 
     public function ResultadosAccesorios() {
         $fecha = $this->input->post_get('fecha', TRUE);
-        $this->load->model("modelocapturista");
-        $infocontent["lista"] = $this->modelocapturista->ListarAccesoriosGuardados($this->FechaIngles($fecha));
+        $this->load->model("Modelocapturista");
+        $infocontent["lista"] = $this->Modelocapturista->ListarAccesoriosGuardados($this->FechaIngles($fecha));
         $this->load->view('capturista/ResultadosAccesorios', $infocontent);
     }
 

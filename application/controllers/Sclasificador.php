@@ -7,19 +7,19 @@ class Sclasificador extends CI_Controller {
 
     function __construct() {
         parent::__construct();
-        $this->load->model("modelousuario");
+        $this->load->model("Modelousuario");
         if (!EstaLogueado()) {
             redirect('usuario/index');
         }
         $id = $this->session->userdata('id');
-        if (!$this->modelousuario->TienePerfil($id, 5)) {
+        if (!$this->Modelousuario->TienePerfil($id, 5)) {
             redirect('usuario/logueado');
         }
         $this->load->database();
     }
 
     public function CapturaDevolucion() {
-        $this->load->model("modeloclasificador");
+        $this->load->model("Modeloclasificador");
         $infoheader["titulo"] = "Clasificador: Royalty Ceramic";
 
         $this->load->view('template/headerd', $infoheader);
@@ -29,8 +29,8 @@ class Sclasificador extends CI_Controller {
 
     public function VerificarClaveProd() {
         $clave = $this->input->post_get('clave', TRUE);
-        $this->load->model("modeloclasificador");
-        $fila = $this->modeloclasificador->BuscarClaveProducto($clave);
+        $this->load->model("Modeloclasificador");
+        $fila = $this->Modeloclasificador->BuscarClaveProducto($clave);
         $infocontent["nombre"] = "No se encontró el producto";
         if ($fila != "No se encontró el producto") {
             $infocontent["nombre"] = $fila->producto . "/" . $fila->modelo . "/" . $fila->color;
@@ -51,8 +51,8 @@ class Sclasificador extends CI_Controller {
     public function DevolucionesCapturadas() {
         $fechainicio = $this->input->post_get('fechainicio', TRUE);
         $fechafin = $this->input->post_get('fechafin', TRUE);
-        $this->load->model("modelocedis");
-        $infocontent["devolucionescapturadas"] = $this->modelocedis->DevolucionesCapturadas($fechainicio, $fechafin);
+        $this->load->model("Modelocedis");
+        $infocontent["devolucionescapturadas"] = $this->Modelocedis->DevolucionesCapturadas($fechainicio, $fechafin);
         $this->load->view('sclasificador/DevolucionesCapturadas', $infocontent);
     }
 
@@ -77,8 +77,8 @@ class Sclasificador extends CI_Controller {
         $infoheader["titulo"] = "Almacén de SubProductos: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $infocontent["Nombre"] = "Alondra Mendoza";
-        $this->load->model("modeloalmacenista");
-        $infocontent["griferia"] = $this->modeloalmacenista->ListarGriferia();
+        $this->load->model("Modeloalmacenista");
+        $infocontent["griferia"] = $this->Modeloalmacenista->ListarGriferia();
         $this->load->view('sclasificador/EntradaSubproductos', $infocontent);
         $this->load->view('template/footerd', '');
     }
@@ -87,8 +87,8 @@ class Sclasificador extends CI_Controller {
         $infoheader["titulo"] = "Almacén de SubProductos: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $infocontent["Nombre"] = "Alondra Mendoza";
-        $this->load->model("modeloalmacenista");
-        $infocontent["griferia"] = $this->modeloalmacenista->ListarGriferia();
+        $this->load->model("Modeloalmacenista");
+        $infocontent["griferia"] = $this->Modeloalmacenista->ListarGriferia();
         $this->load->view('sclasificador/SalidaSubproductos', $infocontent);
         $this->load->view('template/footerd', '');
     }
@@ -97,17 +97,17 @@ class Sclasificador extends CI_Controller {
         $infoheader["titulo"] = "Almacén de SubProductos: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $infocontent["Nombre"] = "Alondra Mendoza";
-        $this->load->model("modeloalmacenista");
-        $infocontent["subproductosdetalle"] = $this->modeloalmacenista->ListarSubproductosDetalle();
-        $infocontent["subproductosunicos"] = $this->modeloalmacenista->ListarSubproductosUnicos();
+        $this->load->model("Modeloalmacenista");
+        $infocontent["subproductosdetalle"] = $this->Modeloalmacenista->ListarSubproductosDetalle();
+        $infocontent["subproductosunicos"] = $this->Modeloalmacenista->ListarSubproductosUnicos();
         $this->load->view('sclasificador/AlmacenSubproductos', $infocontent);
         $this->load->view('template/footerd', '');
     }
 
     public function VerificarClave() {
         $clave = $this->input->post_get('clave', TRUE);
-        $this->load->model("modeloalmacenista");
-        $fila = $this->modeloalmacenista->BuscarClaveSubproductos($clave);
+        $this->load->model("Modeloalmacenista");
+        $fila = $this->Modeloalmacenista->BuscarClaveSubproductos($clave);
         $infocontent["nombre"] = "No se encontró el producto";
         if ($fila != "No se encontró el producto") {
             $infocontent["nombre"] = $fila->Descripcion;
@@ -119,8 +119,8 @@ class Sclasificador extends CI_Controller {
     public function GuardarSubproductosAlmacen() {
         $id = $this->input->post_get('idsubproducto', TRUE);
         $cantidad = $this->input->post_get('cantidad', TRUE);
-        $this->load->model("modeloalmacenista");
-        $id = $this->modeloalmacenista->GuardarSubproducto($id, $cantidad);
+        $this->load->model("Modeloalmacenista");
+        $id = $this->Modeloalmacenista->GuardarSubproducto($id, $cantidad);
         if ($id != null) {
             print("correcto");
         } else {
@@ -131,8 +131,8 @@ class Sclasificador extends CI_Controller {
     public function GuardarSalidaSubproductos() {
         $id = $this->input->post_get('id', TRUE);
         $cantidad = $this->input->post_get('cantidad', TRUE);
-        $this->load->model("modeloalmacenista");
-        $resp = $this->modeloalmacenista->SalidaSub($id, $cantidad);
+        $this->load->model("Modeloalmacenista");
+        $resp = $this->Modeloalmacenista->SalidaSub($id, $cantidad);
         if ($resp == "correcto") {
             print("Correcto");
         } else {
@@ -142,13 +142,13 @@ class Sclasificador extends CI_Controller {
 
     public function VerificarClaveExistencia() {
         $clave = $this->input->post_get('clave', TRUE);
-        $this->load->model("modeloalmacenista");
-        $fila = $this->modeloalmacenista->BuscarClaveSubproductos($clave);
+        $this->load->model("Modeloalmacenista");
+        $fila = $this->Modeloalmacenista->BuscarClaveSubproductos($clave);
         $infocontent["nombre"] = "No se encontró el producto";
         if ($fila != "No se encontró el producto") {
             $infocontent["nombre"] = $fila->Descripcion;
             $infocontent["id"] = $fila->IdCGriferia;
-            $data = $this->modeloalmacenista->ExistenciasSubproductos($fila->IdCGriferia);
+            $data = $this->Modeloalmacenista->ExistenciasSubproductos($fila->IdCGriferia);
             $infocontent["existencia"] = $data;
         }
         print json_encode($infocontent);

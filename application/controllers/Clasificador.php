@@ -7,25 +7,25 @@ class Clasificador extends CI_Controller {
 
     function __construct() {
         parent::__construct();
-        $this->load->model("modelousuario");
+        $this->load->model("Modelousuario");
         if (!EstaLogueado()) {
             redirect('usuario/index');
         }
         $id = $this->session->userdata('id');
-        if (!$this->modelousuario->TienePerfil($id, 1)) {
+        if (!$this->Modelousuario->TienePerfil($id, 1)) {
             redirect('usuario/logueado');
         }
     }
 
     public function index() {
-        $this->load->model("modeloclasificador");
+        $this->load->model("Modeloclasificador");
         $infoheader["titulo"] = "Clasificador: Royalty Ceramic";
         $infocontent["Nombre"] = "Tania Torres";
         $infocontent["hoy"] = date("d/m/Y");
         $infocontent["hoyingles"] = date("m/d/Y");
-        $infocontent["colores"] = $this->modeloclasificador->ListaTodosColores();
-        $infocontent["clasificaciones"] = $this->modeloclasificador->Clasificaciones();
-        //$infocontent["hornos"] = $this->modeloclasificador->ListaHornos($this->FechaIngles(date("d/m/Y")));
+        $infocontent["colores"] = $this->Modeloclasificador->ListaTodosColores();
+        $infocontent["clasificaciones"] = $this->Modeloclasificador->Clasificaciones();
+        //$infocontent["hornos"] = $this->Modeloclasificador->ListaHornos($this->FechaIngles(date("d/m/Y")));
         $this->load->view('template/headerd', $infoheader);
         $this->load->view('clasificador/index', $infocontent);
         $this->load->view('template/footerd', '');
@@ -33,8 +33,8 @@ class Clasificador extends CI_Controller {
 
     public function ObtenerHornos() {
         $d = $this->input->post_get('d', TRUE);
-        $this->load->model("modeloclasificador");
-        $infocontent["hornos"] = $this->modeloclasificador->ListaHornos($this->FechaIngles($d));
+        $this->load->model("Modeloclasificador");
+        $infocontent["hornos"] = $this->Modeloclasificador->ListaHornos($this->FechaIngles($d));
         $infocontent["d"] = $this->FechaIngles($d);
         $this->load->view('clasificador/ObtenerHornos', $infocontent);
         // $dia = $this->FechaIngles($d);
@@ -78,8 +78,8 @@ class Clasificador extends CI_Controller {
 
         $horno = $this->input->post_get('horno', TRUE);
         $fecha = $this->input->post_get('fecha', TRUE);
-        $this->load->model("modeloclasificador");
-        $infocontent["productos"] = $this->modeloclasificador->ListaProductos($this->FechaIngles($fecha), $horno);
+        $this->load->model("Modeloclasificador");
+        $infocontent["productos"] = $this->Modeloclasificador->ListaProductos($this->FechaIngles($fecha), $horno);
         $infocontent["dia"] = $fecha;
         $infocontent["horno"] = $horno;
         $this->load->view('clasificador/ObtenerProductos', $infocontent);
@@ -89,9 +89,9 @@ class Clasificador extends CI_Controller {
         $horno = $this->input->post_get('horno', TRUE);
         $fecha = $this->input->post_get('fecha', TRUE);
         $cprod = $this->input->post_get('cprod', TRUE);
-        $this->load->model("modeloclasificador");
+        $this->load->model("Modeloclasificador");
         //print_r($cprod . ' ' . $horno . ' ' . $fecha);
-        $infocontent["modelos"] = $this->modeloclasificador->ListaModelos($this->FechaIngles($fecha), $horno, $cprod);
+        $infocontent["modelos"] = $this->Modeloclasificador->ListaModelos($this->FechaIngles($fecha), $horno, $cprod);
         $infocontent["dia"] = $fecha;
         $infocontent["cprod"] = $cprod;
         $infocontent["horno"] = $horno;
@@ -116,8 +116,8 @@ class Clasificador extends CI_Controller {
 
 //        $mod = $_REQUEST["mod"];
 //        $dia = $this->FechaIngles($fecha);
-        $this->load->model("modeloclasificador");
-        $infocontent["colores"] = $this->modeloclasificador->ListaColores($this->FechaIngles($fecha), $horno, $cprod, $mod);
+        $this->load->model("Modeloclasificador");
+        $infocontent["colores"] = $this->Modeloclasificador->ListaColores($this->FechaIngles($fecha), $horno, $cprod, $mod);
         $infocontent["dia"] = $fecha;
         $infocontent["cprod"] = $cprod;
         $infocontent["horno"] = $horno;
@@ -140,9 +140,9 @@ class Clasificador extends CI_Controller {
         $puestodefecto2 = $this->input->post_get('puestodefecto2', TRUE);
         $puestodefecto1 = $this->input->post_get('puestodefecto1', TRUE);
         $fueratono = $this->input->post_get('fueratono', TRUE);
-        $this->load->model("modeloclasificador");
-        $idclasificacion = $this->modeloclasificador->GuardarClasificacion($idprod, $idclasi, $fueratono);
-        $this->modeloclasificador->GuardarDefectos($defecto1, $puestodefecto1, $defecto2, $puestodefecto2, $idclasificacion);
+        $this->load->model("Modeloclasificador");
+        $idclasificacion = $this->Modeloclasificador->GuardarClasificacion($idprod, $idclasi, $fueratono);
+        $this->Modeloclasificador->GuardarDefectos($defecto1, $puestodefecto1, $defecto2, $puestodefecto2, $idclasificacion);
         print("correcto");
     }
 
@@ -152,27 +152,27 @@ class Clasificador extends CI_Controller {
         $cprod = $this->input->post_get('cprod', TRUE);
         $mod = $this->input->post_get('mod', TRUE);
         $color = $this->input->post_get('color', TRUE);
-        $this->load->model("modeloclasificador");
+        $this->load->model("Modeloclasificador");
         $infocontent["mod"] = $mod;
         $infocontent["cprod"] = $cprod;
         $infocontent["color"] = $color;
-        $infocontent["clasificaciones"] = $this->modeloclasificador->Clasificaciones();
-        $infocontent["productos"] = $this->modeloclasificador->ProductosSeleccion($this->FechaIngles($fecha), $horno, $cprod, $mod, $color);
+        $infocontent["clasificaciones"] = $this->Modeloclasificador->Clasificaciones();
+        $infocontent["productos"] = $this->Modeloclasificador->ProductosSeleccion($this->FechaIngles($fecha), $horno, $cprod, $mod, $color);
         $this->load->view('clasificador/TablaProductos', $infocontent);
     }
 
     public function TablaProductosReclasificar() {
         $producto = $this->input->post_get('producto', TRUE);
-        $this->load->model("modeloclasificador");
-        $infocontent["clasificaciones"] = $this->modeloclasificador->Clasificaciones();
-        $infocontent["producto"] = $this->modeloclasificador->ProductosSeleccionReclasificar($producto);
+        $this->load->model("Modeloclasificador");
+        $infocontent["clasificaciones"] = $this->Modeloclasificador->Clasificaciones();
+        $infocontent["producto"] = $this->Modeloclasificador->ProductosSeleccionReclasificar($producto);
         $this->load->view('clasificador/TablaProductosReclasificar', $infocontent);
     }
 
     public function GuardarProcesado() {
         $producto = $this->input->post_get('producto', TRUE);
-        $this->load->model("modeloclasificador");
-        $this->modeloclasificador->GuardarProcesado($producto);
+        $this->load->model("Modeloclasificador");
+        $this->Modeloclasificador->GuardarProcesado($producto);
     }
 
     public function CargarDefectos() {
@@ -181,16 +181,16 @@ class Clasificador extends CI_Controller {
         $ndef = $this->input->post_get('ndef', TRUE);
         $infocontent["idprod"] = $idprod;
         $infocontent["ndef"] = $ndef;
-        $this->load->model("modeloclasificador");
-        $infocontent["defectos"] = $this->modeloclasificador->ListarDefectos($idcat);
+        $this->load->model("Modeloclasificador");
+        $infocontent["defectos"] = $this->Modeloclasificador->ListarDefectos($idcat);
         $this->load->view('clasificador/CargarDefectos', $infocontent);
     }
 
     public function VerificarEmpleado() {
         $clave = $this->input->post_get('clave', TRUE);
         $categoria = $this->input->post_get('categoria', TRUE);
-        $this->load->model("modeloclasificador");
-        $fila = $this->modeloclasificador->BuscarClavePuesto($clave, $categoria);
+        $this->load->model("Modeloclasificador");
+        $fila = $this->Modeloclasificador->BuscarClavePuesto($clave, $categoria);
         $infocontent["nombre"] = "No se encontró trabajador";
         if ($fila != "No se encontró trabajador") {
             $infocontent["nombre"] = $fila->Nombre . ' ' . $fila->APaterno . ' ' . $fila->AMaterno;
@@ -484,10 +484,10 @@ class Clasificador extends CI_Controller {
         $clavepuesto1 = $this->input->post_get('clavepuesto1', TRUE);
         $clavepuesto2 = $this->input->post_get('clavepuesto2', TRUE);
         $idclasi = $this->input->post_get('clasificacionseleccionada', TRUE);
-        $this->load->model("modeloclasificador");
-        $idproducto = $this->modeloclasificador->GuardarAccesorio($colorseleccionado);
-        $idclasificacion = $this->modeloclasificador->GuardarClasificacion($idproducto, $idclasi, $fueratono);
-        $this->modeloclasificador->GuardarDefectos($iddefecto1, $clavepuesto1, $iddefecto2, $clavepuesto2, $idclasificacion);
+        $this->load->model("Modeloclasificador");
+        $idproducto = $this->Modeloclasificador->GuardarAccesorio($colorseleccionado);
+        $idclasificacion = $this->Modeloclasificador->GuardarClasificacion($idproducto, $idclasi, $fueratono);
+        $this->Modeloclasificador->GuardarDefectos($iddefecto1, $clavepuesto1, $iddefecto2, $clavepuesto2, $idclasificacion);
         print($idproducto);
     }
 
@@ -495,15 +495,15 @@ class Clasificador extends CI_Controller {
         $infoheader["titulo"] = "Clasificación: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $infocontent["Nombre"] = "Alondra Mendoza";
-        $this->load->model("modeloclasificador");
+        $this->load->model("Modeloclasificador");
         $this->load->view('clasificador/EntradaProductos', $infocontent);
         $this->load->view('template/footerd', '');
     }
 
     public function VerificarClaveProd() {
         $clave = $this->input->post_get('clave', TRUE);
-        $this->load->model("modeloclasificador");
-        $fila = $this->modeloclasificador->BuscarClaveProducto($clave);
+        $this->load->model("Modeloclasificador");
+        $fila = $this->Modeloclasificador->BuscarClaveProducto($clave);
         $infocontent["nombre"] = "No se encontró el producto";
         if ($fila != "No se encontró el producto") {
             $infocontent["nombre"] = $fila->producto . "/" . $fila->modelo . "/" . $fila->color;
@@ -513,16 +513,16 @@ class Clasificador extends CI_Controller {
     }
 
     public function GuardarTarima() {
-        $this->load->model("modeloclasificador");
-        $idtarima = $this->modeloclasificador->GuardarTarima();
+        $this->load->model("Modeloclasificador");
+        $idtarima = $this->Modeloclasificador->GuardarTarima();
         print($idtarima);
     }
 
     public function GuardarDetalleTarima() {
         $idproducto = $this->input->post_get('idproducto', TRUE);
         $idtarima = $this->input->post_get('idtarima', TRUE);
-        $this->load->model("modeloclasificador");
-        $iddetalle = $this->modeloclasificador->GuardarDetalleTarima($idproducto, $idtarima);
+        $this->load->model("Modeloclasificador");
+        $iddetalle = $this->Modeloclasificador->GuardarDetalleTarima($idproducto, $idtarima);
         if ($iddetalle == "existe") {
             print("Existe");
         } else if ($iddetalle != null) {
@@ -534,15 +534,15 @@ class Clasificador extends CI_Controller {
         $infoheader["titulo"] = "Reclasificar: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $infocontent["Nombre"] = "Alondra Mendoza";
-        $this->load->model("modeloclasificador");
+        $this->load->model("Modeloclasificador");
         $this->load->view('clasificador/Reclasificar', $infocontent);
         $this->load->view('template/footerd', '');
     }
 
     public function VerificarClaveProdDevoluciones() {
         $clave = $this->input->post_get('clave', TRUE);
-        $this->load->model("modeloclasificador");
-        $fila = $this->modeloclasificador->BuscarClaveProductoDevoluciones($clave);
+        $this->load->model("Modeloclasificador");
+        $fila = $this->Modeloclasificador->BuscarClaveProductoDevoluciones($clave);
         $infocontent["nombre"] = "No se encontró el producto en devoluciones";
         if ($fila != "No se encontró el producto en devoluciones") {
             $infocontent["nombre"] = $fila->producto . "/" . $fila->modelo . "/" . $fila->color;
@@ -556,20 +556,20 @@ class Clasificador extends CI_Controller {
         $this->load->view('template/headerd', $infoheader);
         $producto_id = $this->input->post_get('producto_id', TRUE);
         $infocontent["Nombre"] = "Alondra Mendoza";
-        $this->load->model("modeloclasificador");
-        $this->load->model("modelousuario");
-        $infocontent["producto"] = $this->modeloclasificador->ObtenerProducto($producto_id);
-        $infocontent["historiales"] = $this->modeloclasificador->HistorialMovimientosProducto($producto_id);
-        $infocontent["ubicacion"] = $this->modeloclasificador->Ubicacion($producto_id);
-        $infocontent["clasificacion"] = $this->modeloclasificador->Clasificacion($producto_id);
-        $infocontent["tarima"] = $this->modeloclasificador->EstatusTarima($producto_id);
-        $infocontent["tarimaid"] = $this->modeloclasificador->EstatusTarimaId($producto_id);
-        $infocontent["pedido"] = $this->modeloclasificador->EstatusPedido($producto_id);
-        $infocontent["defectos"] = $this->modelousuario->ObtenerDefectos($producto_id);
-        $infocontent["clasificaciones"] = $this->modeloclasificador->ClasificacionesProducto($producto_id);
-        $infocontent["entarimados"] = $this->modeloclasificador->EntarimadosProducto($producto_id);
-        $infocontent["codigo"] = $this->modeloclasificador->CodigoBarrasTexto($producto_id);
-        $infocontent["reparacion"] = $this->modeloclasificador->ObtenerReparaciones($producto_id);
+        $this->load->model("Modeloclasificador");
+        $this->load->model("Modelousuario");
+        $infocontent["producto"] = $this->Modeloclasificador->ObtenerProducto($producto_id);
+        $infocontent["historiales"] = $this->Modeloclasificador->HistorialMovimientosProducto($producto_id);
+        $infocontent["ubicacion"] = $this->Modeloclasificador->Ubicacion($producto_id);
+        $infocontent["clasificacion"] = $this->Modeloclasificador->Clasificacion($producto_id);
+        $infocontent["tarima"] = $this->Modeloclasificador->EstatusTarima($producto_id);
+        $infocontent["tarimaid"] = $this->Modeloclasificador->EstatusTarimaId($producto_id);
+        $infocontent["pedido"] = $this->Modeloclasificador->EstatusPedido($producto_id);
+        $infocontent["defectos"] = $this->Modelousuario->ObtenerDefectos($producto_id);
+        $infocontent["clasificaciones"] = $this->Modeloclasificador->ClasificacionesProducto($producto_id);
+        $infocontent["entarimados"] = $this->Modeloclasificador->EntarimadosProducto($producto_id);
+        $infocontent["codigo"] = $this->Modeloclasificador->CodigoBarrasTexto($producto_id);
+        $infocontent["reparacion"] = $this->Modeloclasificador->ObtenerReparaciones($producto_id);
         $this->load->view('clasificador/ExpedienteProducto', $infocontent);
         $this->load->view('template/footerd', '');
     }
@@ -578,7 +578,7 @@ class Clasificador extends CI_Controller {
         $infoheader["titulo"] = "Clasificación: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $infocontent["Nombre"] = "Alondra Mendoza";
-        $this->load->model("modeloclasificador");
+        $this->load->model("Modeloclasificador");
         $this->load->view('clasificador/BusquedaProducto', $infocontent);
         $this->load->view('template/footerd', '');
     }

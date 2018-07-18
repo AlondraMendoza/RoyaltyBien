@@ -10,7 +10,7 @@ class Usuario extends CI_Controller {
     }
 
     public function index() {
-        $this->load->model("modelousuario");
+        $this->load->model("Modelousuario");
         if (EstaLogueado()) {
             redirect('usuario/logueado');
         }
@@ -25,14 +25,14 @@ class Usuario extends CI_Controller {
         if ($this->input->post()) {
             $nombre = $this->input->post('nombre');
             $contrasena = $this->input->post('contrasena');
-            $this->load->model('modelousuario');
-            $usuario = $this->modelousuario->usuario_por_nombre_contrasena($nombre, $contrasena);
+            $this->load->model('Modelousuario');
+            $usuario = $this->Modelousuario->usuario_por_nombre_contrasena($nombre, $contrasena);
             if ($usuario) {
                 $usuario_data = array(
                     'id' => $usuario->IdUsuarios,
                     'nombre' => $usuario->Nombre,
                     'persona' => $usuario->NombreCompleto,
-                    'perfiles' => $this->modelousuario->ObtenerPerfiles($usuario->IdUsuarios),
+                    'perfiles' => $this->Modelousuario->ObtenerPerfiles($usuario->IdUsuarios),
                     'logueado' => TRUE
                 );
                 $this->session->set_userdata($usuario_data);
@@ -41,7 +41,7 @@ class Usuario extends CI_Controller {
                 $infoheader["titulo"] = "Royalty Ceramic";
                 $this->load->view('template/headerLogin', $infoheader);
                 $data["mensaje"] = "error";
-                $this->load->view('usuario/index', $data);
+                $this->load->view('usuario/iniciar_sesion', $data);
                 $this->load->view('template/footerLogin', '');
             }
         } else {
@@ -50,7 +50,7 @@ class Usuario extends CI_Controller {
     }
 
     public function logueado() {
-        $this->load->model("modelousuario");
+        $this->load->model("Modelousuario");
         if (!EstaLogueado()) {
             redirect('usuario/index');
         }
@@ -61,9 +61,9 @@ class Usuario extends CI_Controller {
             $infoheader["titulo"] = "Royalty Ceramic";
             $this->load->view('template/headerd', $infoheader);
             $id = $this->session->userdata('id');
-            $this->load->model('modelousuario');
-            $data['perfiles'] = $this->modelousuario->ObtenerPerfiles($id);
-            //$data['menu'] = $this->modelousuario->ObtenerMenu($p);
+            $this->load->model('Modelousuario');
+            $data['perfiles'] = $this->Modelousuario->ObtenerPerfiles($id);
+            //$data['menu'] = $this->Modelousuario->ObtenerMenu($p);
             $this->load->view('usuario/logueado', $data);
             $this->load->view('template/footerd', '');
         } else {

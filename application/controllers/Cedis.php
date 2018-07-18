@@ -7,13 +7,13 @@ class Cedis extends CI_Controller {
 
     function __construct() {
         parent::__construct();
-        $this->load->model("modelousuario");
-        $this->load->model("modelocedis");
+        $this->load->model("Modelousuario");
+        $this->load->model("Modelocedis");
         if (!EstaLogueado()) {
             redirect('usuario/index');
         }
         $id = $this->session->userdata('id');
-        if (!$this->modelousuario->TienePerfil($id, 6)) {
+        if (!$this->Modelousuario->TienePerfil($id, 6)) {
             redirect('usuario/logueado');
         }
     }
@@ -42,8 +42,8 @@ class Cedis extends CI_Controller {
 
     public function VerificarClaveProd() {
         $clave = $this->input->post_get('clave', TRUE);
-        $this->load->model("modelocedis");
-        $fila = $this->modelocedis->BuscarClaveProducto($clave);
+        $this->load->model("Modelocedis");
+        $fila = $this->Modelocedis->BuscarClaveProducto($clave);
         $infocontent["nombre"] = "No se encontró el producto";
         if ($fila != "No se encontró el producto") {
             $infocontent["nombre"] = $fila->producto . "/" . $fila->modelo . "/" . $fila->color;
@@ -54,8 +54,8 @@ class Cedis extends CI_Controller {
 
     public function VerificarClaveTarima() {
         $clave = $this->input->post_get('clave', TRUE);
-        $this->load->model("modelocedis");
-        $fila = $this->modelocedis->BuscarClaveTarima($clave);
+        $this->load->model("Modelocedis");
+        $fila = $this->Modelocedis->BuscarClaveTarima($clave);
         if ($fila != "No se encontró la tarima") {
             $infocontent["id"] = $fila->IdTarimas;
         }
@@ -64,8 +64,8 @@ class Cedis extends CI_Controller {
 
     public function GuardarTarimasCedis() {
         $idtarima = $this->input->post_get('idtarima', TRUE);
-        $this->load->model("modelocedis");
-        $resp = $this->modelocedis->GuardarProductosTarima($idtarima);
+        $this->load->model("Modelocedis");
+        $resp = $this->Modelocedis->GuardarProductosTarima($idtarima);
         if ($resp == "Existe") {
             print("Existe");
         } else if ($resp == "correcto") {
@@ -77,11 +77,11 @@ class Cedis extends CI_Controller {
 
     public function GuardarProductoCedis() {
         $idproducto = $this->input->post_get('idproducto', TRUE);
-        $this->load->model("modelocedis");
-        if ($this->modelocedis->ProductoEnCedis($idproducto)) {
+        $this->load->model("Modelocedis");
+        if ($this->Modelocedis->ProductoEnCedis($idproducto)) {
             print("Existe");
         } else {
-            $this->modelocedis->GuardarProductoCedis($idproducto);
+            $this->Modelocedis->GuardarProductoCedis($idproducto);
             print("Correcto");
         }
     }
@@ -90,8 +90,8 @@ class Cedis extends CI_Controller {
         $infoheader["titulo"] = "Captura Pedidos: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $infocontent["Nombre"] = "Alondra Mendoza";
-        $this->load->model("modelocedis");
-        $infocontent["ListaPedidos"] = $this->modelocedis->ListaCompletaPedidos();
+        $this->load->model("Modelocedis");
+        $infocontent["ListaPedidos"] = $this->Modelocedis->ListaCompletaPedidos();
         $this->load->view('cedis/CapturaPedidos', $infocontent);
 
         $this->load->view('template/footerd', '');
@@ -99,8 +99,8 @@ class Cedis extends CI_Controller {
 
     public function VerificarProductoCedis() {
         $clave = $this->input->post_get('clave', TRUE);
-        $this->load->model("modelocedis");
-        $fila = $this->modelocedis->BuscarProductoCedis($clave);
+        $this->load->model("Modelocedis");
+        $fila = $this->Modelocedis->BuscarProductoCedis($clave);
         $infocontent["nombre"] = $fila;
         if ($fila != "No se encontró el producto" && $fila != "No está en cedis" && $fila != "El producto ya se encuentra en un pedido") {
             $infocontent["nombre"] = $fila->producto . "/" . $fila->modelo . "/" . $fila->color;
@@ -111,16 +111,16 @@ class Cedis extends CI_Controller {
 
     public function GuardarPedidoCedis() {
         $cliente = $this->input->post_get('cliente', TRUE);
-        $this->load->model("modelocedis");
-        $idpedido = $this->modelocedis->GuardarPedido($cliente);
+        $this->load->model("Modelocedis");
+        $idpedido = $this->Modelocedis->GuardarPedido($cliente);
         print($idpedido);
     }
 
     public function GuardarDetallePedidoCedis() {
         $idproducto = $this->input->post_get('idproducto', TRUE);
         $idpedido = $this->input->post_get('idpedido', TRUE);
-        $this->load->model("modelocedis");
-        $iddetalle = $this->modelocedis->GuardarDetallePedido($idproducto, $idpedido);
+        $this->load->model("Modelocedis");
+        $iddetalle = $this->Modelocedis->GuardarDetallePedido($idproducto, $idpedido);
         if ($iddetalle == "En pedido") {
             print("En pedido");
         } else {
@@ -130,24 +130,24 @@ class Cedis extends CI_Controller {
 
     public function AbrirPedido() {
         $pedidoid = $this->input->post_get('pedidoid', TRUE);
-        $this->load->model("modelocedis");
-        $infocontent["ListaProductos"] = $this->modelocedis->ProductosPedido($pedidoid);
+        $this->load->model("Modelocedis");
+        $infocontent["ListaProductos"] = $this->Modelocedis->ProductosPedido($pedidoid);
         $infocontent["pedidoid"] = $pedidoid;
         $this->load->view('cedis/AbrirPedido', $infocontent);
     }
 
     public function SalidaCedis() {
         $pedidoid = $this->input->post_get('pedidoid', TRUE);
-        $this->load->model("modelocedis");
-        $this->modelocedis->SalidaPedido($pedidoid);
+        $this->load->model("Modelocedis");
+        $this->Modelocedis->SalidaPedido($pedidoid);
         print("correcto");
     }
 
     public function MaximosMinimos() {
         $infoheader["titulo"] = "Máximos y Mínimos: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
-        $this->load->model("modelocedis");
-        $infocontent["modelos"] = $this->modelocedis->ListaModelos();
+        $this->load->model("Modelocedis");
+        $infocontent["modelos"] = $this->Modelocedis->ListaModelos();
         $this->load->view('cedis/MaximosMinimos', $infocontent);
 
         $this->load->view('template/footerd', '');
@@ -156,8 +156,8 @@ class Cedis extends CI_Controller {
     public function ConfiguracionMaximosMinimos() {
         $infoheader["titulo"] = "Configuración Máximos y Mínimos: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
-        $this->load->model("modelocedis");
-        $infocontent["modelos"] = $this->modelocedis->ListaModelos();
+        $this->load->model("Modelocedis");
+        $infocontent["modelos"] = $this->Modelocedis->ListaModelos();
         $this->load->view('cedis/ConfiguracionMaximosMinimos', $infocontent);
 
         $this->load->view('template/footerd', '');
@@ -169,8 +169,8 @@ class Cedis extends CI_Controller {
         $color = $this->input->post_get('color', TRUE);
         $clasificacion = $this->input->post_get('clasificacion', TRUE);
         $valor = $this->input->post_get('valor', TRUE);
-        $this->load->model("modelocedis");
-        $this->modelocedis->GuardarMaximo($cproducto, $modelo, $color, $clasificacion, $valor);
+        $this->load->model("Modelocedis");
+        $this->Modelocedis->GuardarMaximo($cproducto, $modelo, $color, $clasificacion, $valor);
         print("correcto");
     }
 
@@ -180,8 +180,8 @@ class Cedis extends CI_Controller {
         $color = $this->input->post_get('color', TRUE);
         $clasificacion = $this->input->post_get('clasificacion', TRUE);
         $valor = $this->input->post_get('valor', TRUE);
-        $this->load->model("modelocedis");
-        $this->modelocedis->GuardarMinimo($cproducto, $modelo, $color, $clasificacion, $valor);
+        $this->load->model("Modelocedis");
+        $this->Modelocedis->GuardarMinimo($cproducto, $modelo, $color, $clasificacion, $valor);
         print("correcto");
     }
 
@@ -197,14 +197,14 @@ class Cedis extends CI_Controller {
     public function DevolucionesCapturadas() {
         $fechainicio = $this->input->post_get('fechainicio', TRUE);
         $fechafin = $this->input->post_get('fechafin', TRUE);
-        $infocontent["devolucionescapturadas"] = $this->modelocedis->DevolucionesCapturadas($fechainicio, $fechafin);
+        $infocontent["devolucionescapturadas"] = $this->Modelocedis->DevolucionesCapturadas($fechainicio, $fechafin);
         $this->load->view('cedis/DevolucionesCapturadas', $infocontent);
     }
 
     public function BuscarSubproducto() {
         $texto = $this->input->post_get('texto', TRUE);
         $id = $this->input->post_get('id', TRUE);
-        $encontrados = $this->modelocedis->BuscarSubproducto($texto);
+        $encontrados = $this->Modelocedis->BuscarSubproducto($texto);
         $infocontent["encontrados"] = $encontrados;
         $infocontent["id"] = $id;
         $this->load->view('cedis/BuscarSubproducto', $infocontent);
@@ -230,7 +230,7 @@ class Cedis extends CI_Controller {
     public function GuardarSubproducto() {
         $detalle_id = $this->input->post_get("detalle_id");
         $subproducto_id = $this->input->post_get("subproducto_id");
-        $iddetalle = $this->modelocedis->GuardarSubproducto($subproducto_id, $detalle_id);
+        $iddetalle = $this->Modelocedis->GuardarSubproducto($subproducto_id, $detalle_id);
         print($iddetalle);
     }
 

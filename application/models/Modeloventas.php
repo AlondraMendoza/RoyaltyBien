@@ -9,11 +9,12 @@ class Modeloventas extends CI_Model {
         parent::__construct();
         $this->load->database();
     }
-    
+
     public function ObtenerModelo($id) {
         $query = $this->db->query("select * from Modelos where IdModelos=$id");
         return $query->row();
     }
-    
+
 }
+
 ?>

@@ -35,7 +35,7 @@ class Usuario extends CI_Controller {
                     'nombre' => $usuario->Nombre,
                     'persona' => $usuario->NombreCompleto,
                     'perfiles' => $this->Modelousuario->ObtenerPerfiles($usuario->IdUsuarios),
-                    'idpersona' => $this->Modelousuario->ObtenerPerfiles($usuario->PersonasId),
+                    'idpersona' => $usuario->PersonasId,
                     'logueado' => TRUE
                 );
                 $this->session->set_userdata($usuario_data);

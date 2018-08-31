@@ -10,7 +10,7 @@ class Modelousuario extends CI_Model {
     }
 
     public function usuario_por_nombre_contrasena($nombre, $contrasena) {
-        $this->db->select("u.IdUsuarios, u.Nombre,concat(p.Nombre,' ',p.APaterno)as NombreCompleto");
+        $this->db->select("u.IdUsuarios, u.Nombre,concat(p.Nombre,' ',p.APaterno)as NombreCompleto,u.PersonasId");
         $this->db->from('Usuarios u');
         $this->db->join('Personas p', 'p.IdPersonas= u.PersonasId');
         $this->db->where('u.Nombre', $nombre);

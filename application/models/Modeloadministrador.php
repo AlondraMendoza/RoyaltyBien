@@ -751,6 +751,7 @@ class Modeloadministrador extends CI_Model {
         $this->db->join('Puestos pu', 'p.IdPersonas= pu.PersonasId');
         $this->db->where('p.IdPersonas', $persona_id);
         $this->db->where('pu.Nombre', $puesto);
+        $this->db->where('pu.Activo', 1);
         $consulta = $this->db->get();
         if ($consulta->num_rows() > 0) {
             return true;

@@ -10,12 +10,9 @@
                         $img = &get_instance();
                         $img->load->model("modeloclasificador");
                         ?>
-                        <img src="<?= base_url() ?>public/imagenes/<?= $img->modeloclasificador->ImagenProductoModelo($modelo->CProductosId, $modelo->ModelosId) ?>" height="190px;" width="190px;" title="<?= $modelo->Nombre ?>">        
-                    </div>
-                    <div class="image-overlay op-orange">
+                        <img src="<?= base_url() ?>public/imagenes/<?= $img->modeloclasificador->ImagenProductoModelo($modelo->CProductosId, $modelo->ModelosId) ?>" height="190px;" width="190px;" title="<?= $modelo->Nombre ?>">        <br>
                         <h2><?= $modelo->Nombre ?></h2>
                         <p>
-
                             <?php
                             $ci = &get_instance();
                             $ci->load->model("modeloclasificador");
@@ -24,8 +21,7 @@
                             <?= $npen ?> prod. pendiente(s) de clasificación.
                         </p>
                     </div>
-                </div>
-            <?php endforeach; ?>    
+                <?php endforeach; ?>
+            </div>
         </div>
     </div>
-</div>

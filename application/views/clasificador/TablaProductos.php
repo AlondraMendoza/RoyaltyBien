@@ -16,8 +16,11 @@ $cont = 1;
                 <?= $productos->num_rows() ?>
                 según filtros seleccionados.</span>
         </div>
-        <div class="content">
-            <div class=""  >
+        <div class="content"><br><br>
+            <div style="display:none">
+                <div id="areaimprimir<?= $producto->IdProductos ?>"><img src='barcodeventana?text=<?= date_format(date_create($producto->FechaCaptura), 'dmY') ?>-<?php echo str_pad($producto->IdProductos, 10, '0', STR_PAD_LEFT) ?>'></div>
+            </div>
+            <div class="">
                 <table class="table hovered border bordered" >
                     <tr class="center primary" style="font-size: 1.2em">
                         <td class="center" style="text-align: center"><span onclick="CargarColores(<?= $mod . ',' . $cprod ?>)" style="font-size: 3em" class="mif-undo mif-ani-hover-spanner mif-ani-slow" title="Regresar a lista de Colores"></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
@@ -37,10 +40,7 @@ $cont = 1;
                                 <input type="hidden" id="clasel<?= $producto->IdProductos ?>">
                                 <input type="hidden" id="letraclasel<?= $producto->IdProductos ?>">
                             <?php endforeach; ?>
-
-
                         </td>
-
                     </tr>
                     <tr>
                         <td style="width: 45%">
@@ -195,6 +195,7 @@ $cont = 1;
     }
     function Siguiente(idprod, fecha)
     {
+        //$("#areaimprimir").html("<img src='barcodeventana?text=" + fecha + "-" + pad(idprod, 10) + "'>");
         /*Guardar clasificacion*/
         var idclasi = $("#clasel" + idprod).val();
         var letraclasi = $("#letraclasel" + idprod).val();
@@ -221,12 +222,18 @@ $cont = 1;
             Notificacion("Error", "Es necesario que captures la clave del empleado relacionado al defecto 2.", "cancel", "alert");
             return(0);
         }
+
         $.post("GuardarClasificacion", {"idclasi": idclasi, "idprod": idprod, "defecto1": iddefecto1, "defecto2": iddefecto2, "puestodefecto1": clavepuesto1, "puestodefecto2": clavepuesto2, "fueratono": fueratono}, function (data) {
             if (data == "correcto")
             {
                 Notificacion("Correcto", "La Clasificación se guardó correctamente", "check", "success");
-                $("#imprimeme").attr("src", "EnviarTicket?codigo=" + fecha + "-" + pad(idprod, 10) + "&producto_id=" + idprod);
-                //document.getElementById("imprimeme").focus();
+                //Soy la anterior buena  $("#imprimeme").attr("src", "EnviarTicket?codigo=" + fecha + "-" + pad(idprod, 10) + "&producto_id=" + idprod);
+                //soy la segunda mejor opción window.open("barcodeventana?text=" + fecha + "-" + pad(idprod, 10), "Código de Barras", "width = 200, height = 100");
+                $("#areaimprimir" + idprod).printArea();
+//$("#codigobarras").html("<a href='barcodevista?text="+fecha + "-" + pad(idprod, 10) + "&producto_id=" + idprod+"' target='_blank' onclick=''></a>");
+                //
+//
+//document.getElementById("imprimeme").focus();
                 //document.getElementById("imprimeme").print();
                 //var w = window.open("EnviarTicket?codigo=<?= $cprod . $mod . $color ?>" + fecha + idprod, 'algo', 'width=300,height=400');
                 //w.print();

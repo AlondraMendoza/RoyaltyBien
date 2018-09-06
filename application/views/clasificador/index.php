@@ -58,7 +58,7 @@
                         <table class="table">
                             <tr>
                                 <td style="width: 50%" class="center">
-                                    <b style="" class="fg-darkEmerald">Selecciona la fecha de quemado:</b><br> 
+                                    <b style="" class="fg-darkEmerald">Selecciona la fecha de quemado:</b><br>
                                     <div class="input-control text full-size" style="height:80px;" data-role="datepicker" data-locale="es" data-format="dd/mm/yyyy" id="datepicker" data-on-select="CargarHornos(d)">
                                         <input type="text" id="fecha" value="<?= $hoy ?>">
                                         <button class="button" style="height: 80px"><span class="mif-calendar"></span></button>
@@ -91,7 +91,7 @@
                                                     <img class="imgcolores" id="color-<?= $color->IdColores ?>" src="<?= base_url() ?>public/colores/<?= $color->Descripcion ?>" height="100px;" width="100px;" title="<?= $color->Nombre ?>" onclick="SeleccionaColor(<?= $color->IdColores ?>)"><br><br>
                                                     <?= $color->Nombre ?>
                                                 </td>
-                                            <?php endforeach; ?>    
+                                            <?php endforeach; ?>
                                         </tr>
                                     </table>
                                 </td>
@@ -207,7 +207,8 @@
     </div>
     <br><br><br><br><br><br>
 </center>
-<iframe src="" id="imprimeme" width="100%" height="100%" style="display:none"></iframe>
+<iframe src="" id="imprimeme" width="100%" height="100%" style="display:none" ></iframe>
+
 <input type="hidden" id="colorseleccionado">
 <script>
     function SeleccionaColor(id)

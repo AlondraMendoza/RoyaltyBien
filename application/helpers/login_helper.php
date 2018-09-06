@@ -17,7 +17,7 @@ function IdUsuario() {
     $CI = &get_instance();
 // We need to use $CI->session instead of $this->session
     $user = $CI->session->userdata('id');
-    if (!isset($user)) {
+    if (isset($user)) {
         return $user;
     } else {
         return true;
@@ -29,7 +29,7 @@ function IdPersona() {
     $CI = &get_instance();
 // We need to use $CI->session instead of $this->session
     $user = $CI->session->userdata('idpersona');
-    if (!isset($user)) {
+    if (isset($user)) {
         return $user;
     } else {
         return true;
@@ -41,7 +41,7 @@ function NombreUsuario() {
     $CI = &get_instance();
 // We need to use $CI->session instead of $this->session
     $user = $CI->session->userdata('persona');
-    if (!isset($user)) {
+    if (isset($user)) {
         return $user;
     } else {
         return true;

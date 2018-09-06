@@ -1,6 +1,7 @@
 <script>
     function AgregarPerfil()
     {
+        $("#botonagregar").fadeOut();
         var perfil = $("#perfilnuevo").val();
         $.post("AgregarPerfil", {"usuario": "<?= $usuario->IdUsuarios ?>", "perfil": perfil}, function (data) {
             if ($.trim(data) === "correcto")
@@ -72,6 +73,6 @@ if ($cuantos > 0) {
             <td class="center">
                 <button class="button block-shadow-danger text-shadow danger big-button" onclick="EliminarPerfil(<?= $perfil->IdPerfilesUsuarios ?>)">Eliminar</button>
             </td>
-        </tr>    
+        </tr>
     <?php endforeach; ?>
 </table>

@@ -2,6 +2,7 @@
 <h1> Bienvenido/a <?php echo $persona ?></h1><br>
 <?php if ($perfiles->num_rows() == 0) { ?>
     <h2>No tiene ningún perfil</h2>
+    <a href="<?php echo base_url() ?>usuario/logueado">Ir a Inicio</a>
 <?php } else { ?>
     <?php foreach ($perfiles->result() as $perfil): ?>
         <div class="panel" data-role="panel">

@@ -257,7 +257,6 @@ class Modeloclasificador extends CI_Model {
             'Activo' => 1
         );
         $this->db->insert('HistorialClasificacion', $datos);
-
         return $this->db->insert_id();
     }
 

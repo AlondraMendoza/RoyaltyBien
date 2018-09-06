@@ -115,7 +115,7 @@
     }
 
     function Cancelar(){
-    $("#carro").val("");
+        $("#carro").val("");
         $('#SHorno').val("");
         Producto="";
         Modelo="";

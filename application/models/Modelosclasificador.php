@@ -16,7 +16,7 @@ class Modelosclasificador extends CI_Model {
             'Cliente' => $cliente,
             'Motivo' => $motivo,
             'Responsable' => $responsable,
-            'UsuarioCapturaId' => 1,
+            'UsuarioCapturaId' => IdUsuario(),
             'Activo' => 1,
             'FechaCaptura' => date('Y-m-d | h:i:sa')
         );

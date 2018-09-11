@@ -65,7 +65,7 @@
                             }
                             ?>
                         <?php endif; ?>
-                        <br>
+                        <br><br>
                     </td>
                     <td class="center">
                         <b>Tarima</b>
@@ -92,15 +92,15 @@
                     <td>
                         <b>Defectos</b><br>
                         <?php
-                        if ($defectos != null) {
+                        if ($defectos != null && $defectos->num_rows() > 0) {
                             foreach ($defectos->result() as $defecto):
                                 ?>
-                                <?= $defecto->Nombre ?>asd<br>
+                                <?= $defecto->Nombre ?><br>
                                 <?php
                             endforeach;
                         }
                         else {
-                            echo "Sin defectos Registrados";
+                            echo "Sin defectos <br>Registrados";
                         }
                         ?>
                         <br>

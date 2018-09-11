@@ -23,7 +23,7 @@
     }
     function GuardarPedido2(id) {
         /*
-         * 
+         *
          * if ( $("#undiv").length ) {
          */
         if (guardado == 0) {
@@ -87,12 +87,13 @@
         });
     }
 </script>
+<h1><b> INFORMACIÓN DE PEDIDO: <?= $pedidoid ?></b></h1><br>
 <div class="panel  fg-white" data-role="panel">
     <div class="heading bg-green">
         <span class="icon mif-stack fg-white bg-darkGreen"></span>
         <span class="title">Ingresar Código de Barras del Producto que Desea Agregar al Pedido</span>
     </div>
-    <div class="content" id="Inicio"> 
+    <div class="content" id="Inicio">
         <table class="table">
             <tr>
                 <td class="center">
@@ -101,12 +102,12 @@
                         <input type="text" id="claveProdp" onkeyup="VerificarClavep(event)">
                     </div>
                     <br><label><span id="desp"></span></label>
-                </td> 
+                </td>
             </tr>
             <br><br>
         </table>
     </div>
-</div>      
+</div>
 <div class="panel warning" data-role="panel">
     <div class="heading">
         <span class="icon mif-stack fg-white bg-darkOrange"></span>
@@ -135,10 +136,48 @@
             <?php endforeach; ?>
         </table>
         <br><br>
+
     </div>
+</div>
+<div class="panel primary" data-role="panel">
+    <div class="heading">
+        <span class="icon mif-stack fg-white bg-darkBlue"></span>
+        <span class="title">Imagenes de pedido</span>
+    </div>
+    <div class="content" id="" style="padding: 15px">
+        <br>
+        <div id="formulario_imagenes">
+            <form action="SubirImagenPedido" enctype="multipart/form-data" method="post">
+                <label>Selecciona la imagen:</label><br>
+                <div class="input-control file" data-role="input">
+                    <input type="file" name="userfile" />
+                    <input type="hidden" name="pedidoid" value="<?= $pedidoid ?>">
+                    <button class="button"><span class="mif-folder"></span></button>
+                </div>
+                <input type="submit" class="button primary" value="Subir imágen"/>
+            </form>
+        </div>
+        <hr>
+        <div class="grid">
+            <div class="row cells5">
+                <?php foreach ($ListaImagenes->result() as $imagen):
+                    ?>
+                    <div class="cell">
+                        <img  src="<?= base_url() ?><?= $imagen->Ruta ?>"><br>
+                        <a href="EliminarImagenPedido?idimagen=<?= $imagen->IdImagenesPedidos ?>&pedidoid=<?= $pedidoid ?>" class=" button danger">Eliminar</a>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+</div>
+<br><br>
+<center>
     <div class="input-control text big-input medium-size" id="">
-        <button class="button primary" onclick="Cancelar()">Regresar a Pedidos</button>
+        <a class="button primary" href="CapturaPedidos">Regresar a Pedidos</a>
     </div>
     <div class="input-control text big-input medium-size" id="">
         <button class="button danger" onclick="MarcarSalidaProducto()">Salida de Pedido</button>
     </div>
+</center>
+

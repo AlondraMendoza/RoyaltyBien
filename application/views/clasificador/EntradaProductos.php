@@ -43,15 +43,26 @@
         }
     }
     var guardado = 0;
+    function pad(n, length) {
+        var n = n.toString();
+        while (n.length < length)
+            n = "0" + n;
+        return n;
+    }
     function Guardar() {
         /*
-         * 
+         *
          * if ( $("#undiv").length ) {
          */
         if (guardado == 0) {
             $.post("GuardarTarima", function (data) {
                 var idtarima = data;
-                $("input[name='IDS[]']:checked").each(function () {
+
+                var codigob = "<?= date_format(date_create($hoyingles), 'dmY') . '-' ?>" + pad(idtarima, 10);
+                var imagen = "barcodeventana?text=" + codigob + "";
+                $("#etiquetatarima").html("<img src=" + imagen + ">");
+                var cuantos = $("input[name='IDS[]']:checked").length;
+                $("input[name='IDS[]']:checked").each(function (index, item) {
                     var id = $(this).val();
 
                     $.post("GuardarDetalleTarima", {"idproducto": $(this).val(), "idtarima": idtarima}, function (data) {
@@ -75,11 +86,17 @@
                             });
                         }
                     });
+                    if (index == cuantos - 1)
+                    {
+                        $("#etiquetatarima").printArea();
+                    }
 
                 });
+
             });
             guardado = 1;
             $("#botonguardar").fadeOut();
+            $("#busquedaproductos").fadeOut();
             $("#nuevatarima").fadeIn();
         }
         //$("#tablaproductos").empty();
@@ -91,7 +108,10 @@
 </script>
 <h1><b> CAPTURA DE TARIMAS</b></h1><br>
 <center>
-    <div class="panel warning" data-role="panel">
+    <div style="display: none">
+        <div id="etiquetatarima"></div>
+    </div>
+    <div class="panel warning" data-role="panel" id="busquedaproductos">
         <div class="heading">
             <span class="icon mif-stack fg-white bg-darkOrange"></span>
             <span class="title">Ingresar Código de Barras</span>
@@ -105,7 +125,7 @@
                             <input type="text" id="claveProd" onkeyup="VerificarClave(event)">
                         </div>
                         <br><label><span id="des"></span></label>
-                    </td> 
+                    </td>
                 </tr>
                 <br><br>
             </table>

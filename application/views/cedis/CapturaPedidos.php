@@ -45,7 +45,7 @@
     }
     function GuardarPedido() {
         /*
-         * 
+         *
          * if ( $("#undiv").length ) {
          */
         if (guardado == 0) {
@@ -114,11 +114,11 @@
                         <table class="dataTable border bordered hovered hover" id="tablalistapedidos" data-role="datatable">
                             <thead>
                                 <tr>
-                                    <th>Clave</th> 
-                                    <th>Fecha registro</th> 
-                                    <th>Cliente</th> 
-                                    <th>Resumen</th> 
-                                    <th style="width: 15%">Acción</th> 
+                                    <th>Clave</th>
+                                    <th>Fecha registro</th>
+                                    <th>Cliente</th>
+                                    <th>Resumen</th>
+                                    <th style="width: 15%">Acción</th>
                                 </tr>
                             </thead>
                             <?php foreach ($ListaPedidos->result() as $pedido): ?>
@@ -133,16 +133,16 @@
                                         $resumen = $ci->modelocedis->ResumenProductosPedido($pedido->IdPedidos);
                                         ?>
                                         <?php foreach ($resumen->result() as $r): ?>
-                                            <?= $r->cantidad ?> 
-                                            <?= $r->producto ?> 
+                                            <?= $r->cantidad ?>
+                                            <?= $r->producto ?>
                                             <?= $r->modelo ?>
                                             <br>
-                                        <?php endforeach; ?>            
+                                        <?php endforeach; ?>
 
                                     </td>
                                     <td class="center">
                                         <div class="input-control text big-input medium-size">
-                                            <button class="button success" onclick="AbrirPedido(<?= $pedido->IdPedidos ?>)">Abrir Pedido</button>
+                                            <a class="button warning large-button text-shadow block-shadow-warning" href="AbrirPedido?pedidoid=<?= $pedido->IdPedidos ?>">Abrir Pedido</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -170,7 +170,7 @@
                                         <input type="text" id="claveProd" onkeyup="VerificarClave(event)">
                                     </div>
                                     <br><label><span id="des"></span></label>
-                                </td> 
+                                </td>
                             </tr>
                             <br><br>
                         </table>

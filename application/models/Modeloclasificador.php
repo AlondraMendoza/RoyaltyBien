@@ -1,6 +1,6 @@
 <?php
 
-//return str_pad((int) $number,$n,"0",STR_PAD_LEFT); 
+//return str_pad((int) $number,$n,"0",STR_PAD_LEFT);
 //Saludos de Alondra del pasado a Tania del Futuro; jaajaja
 //Espero te sirva Tania del futuro, Gracias Tania del pasado.
 if (!defined('BASEPATH'))
@@ -240,7 +240,7 @@ class Modeloclasificador extends CI_Model {
 
         //Guardar historial producto
         $Historial = array(
-            'UsuariosId' => 1,
+            'UsuariosId' => IdUsuario(),
             'MovimientosProductosId' => 3,
             'Activo' => 1,
             'ProductosId' => $idprod);
@@ -253,7 +253,7 @@ class Modeloclasificador extends CI_Model {
             'FechaClasificacion' => date('Y-m-d | h:i:sa'),
             'ClasificacionesId' => $idclasi,
             'FueraTono' => $fueratono,
-            'UsuariosId' => 1,
+            'UsuariosId' => IdUsuario(),
             'Activo' => 1
         );
         $this->db->insert('HistorialClasificacion', $datos);
@@ -378,7 +378,7 @@ class Modeloclasificador extends CI_Model {
 
     public function GuardarTarima() {
         $datos = array(
-            'UsuarioCapturaId' => 1,
+            'UsuarioCapturaId' => IdUsuario(),
             'Activo' => 1,
             'FechaCaptura' => date('Y-m-d | h:i:sa')
         );
@@ -390,18 +390,18 @@ class Modeloclasificador extends CI_Model {
         if ($this->VerificarProductoTarima($idproducto) == "no existe") {
             //Guardar historial producto
             $Historial = array(
-                'UsuariosId' => 1,
+                'UsuariosId' => IdUsuario(),
                 'MovimientosProductosId' => 4,
                 'Activo' => 1,
                 'ProductosId' => $idproducto);
             $this->db->set('Fecha', 'NOW()', FALSE);
             $this->db->insert('HistorialProducto', $Historial);
-            //Fin y ahora si entarimas 
+            //Fin y ahora si entarimas
             $datos = array(
                 'ProductosId' => $idproducto,
                 'Activo' => 1,
                 'TarimasId' => $idtarima,
-                'UsuariosId' => 1
+                'UsuariosId' => IdUsuario()
             );
             $this->db->insert("DetalleTarimas", $datos);
             return $this->db->insert_id();

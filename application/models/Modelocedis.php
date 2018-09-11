@@ -59,10 +59,21 @@ class Modelocedis extends CI_Model {
             'CedisId' => 1,
             'FechaEntrada' => date('Y-m-d | h:i:sa'),
             'ProductosId' => $idproducto,
-            'UsuariosIdEntrada' => 1,
+            'UsuariosIdEntrada' => IdUsuario(),
             'Activo' => 1
         );
         $this->db->insert('InventariosCedis', $datos);
+    }
+
+    public function SubirImagenPedido($ruta, $pedidoid) {
+        $datos = array(
+            'Ruta' => $ruta,
+            'Fecha' => date('Y-m-d | h:i:sa'),
+            'PedidosId' => $pedidoid,
+            'UsuariosId' => IdUsuario(),
+            'Activo' => 1
+        );
+        $this->db->insert('ImagenesPedidos', $datos);
     }
 
     public function GuardarProductosTarima($idtarima) {
@@ -110,7 +121,7 @@ class Modelocedis extends CI_Model {
 
     public function GuardarPedido($cliente) {
         $datos = array(
-            'UsuariosId' => 1,
+            'UsuariosId' => IdUsuario(),
             'Activo' => 1,
             'Cliente' => $cliente,
             'FechaRegistro' => date('Y-m-d | h:i:sa')
@@ -129,6 +140,12 @@ class Modelocedis extends CI_Model {
         } else {
             return "En pedido";
         }
+    }
+
+    public function EliminarImagenPedido($idimagen) {
+        $this->db->set("Activo", 0);
+        $this->db->where("IdImagenesPedidos", $idimagen);
+        $this->db->update("ImagenesPedidos");
     }
 
     public function GuardarTarimaAbierta($idproducto) {
@@ -168,6 +185,15 @@ class Modelocedis extends CI_Model {
         $this->db->from("Pedidos p");
         $this->db->where("p.Activo", 1);
         $this->db->where("p.FechaSalida", null);
+        $fila = $this->db->get();
+        return $fila;
+    }
+
+    public function ListaImagenesPedido($pedidoid) {
+        $this->db->select("i.*");
+        $this->db->from("ImagenesPedidos i");
+        $this->db->where("i.Activo", 1);
+        $this->db->where("i.PedidosId", $pedidoid);
         $fila = $this->db->get();
         return $fila;
     }
@@ -359,7 +385,7 @@ class Modelocedis extends CI_Model {
             'Cliente' => $cliente,
             'Motivo' => $motivo,
             'Responsable' => $responsable,
-            'UsuarioCapturaId' => 1,
+            'UsuarioCapturaId' => IdUsuario(),
             'Activo' => 1,
             'VerificadaSupervisor' => "No",
             'FechaCaptura' => date('Y-m-d | h:i:sa')

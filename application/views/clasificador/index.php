@@ -45,13 +45,12 @@
         $("#divclasificacion").load("TablaProductos", {"fecha": d, "horno": horno, "cprod": cprod, "mod": mod, "color": color});
     }
     $(document).ready(function () {
-
         CargarHornos('<?= $hoy ?>');
     });
 </script>
 <h1 class="light text-shadow">CLASIFICACIÓN</h1><br>
 <center>
-    <div class="tabcontrol" data-role="tabcontrol" data-save-state="true" data-open-target="#regular" id='tabs'>
+    <div class="tabcontrol" data-role="tabcontrol" data-open-target="#regular" data-save-state="true"  id='tabs'>
         <ul class="tabs">
             <li><a href="#regular" >Regular</a></li>
             <li><a href="#accesorios">Accesorios</a></li>

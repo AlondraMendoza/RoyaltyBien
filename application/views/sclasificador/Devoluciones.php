@@ -75,6 +75,7 @@
     {
         var fechainicio = $("#fechainicio").val();
         var fechafin = $("#fechafin").val();
+        $("#devolucionesconsultadas").html("");
         $("#devolucionesconsultadas").load("DevolucionesCapturadas", {"fechainicio": fechainicio, "fechafin": fechafin});
     }
     $(document).ready(function () {

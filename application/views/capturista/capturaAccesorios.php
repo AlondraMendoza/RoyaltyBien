@@ -80,7 +80,7 @@
         </div>
         <div class="content" id="">
             <div id="Resultados">
-                <table class="table">
+                <table class="table" style="text-align:center;">
                     <thead>
                         <tr>
                             <th>Producto:</th>
@@ -105,7 +105,7 @@
             <span class="title">Detalle de capturas</span>
         </div>
         <div class="content" id="">
-            <table class="table" id="ListaTabla">
+            <table class="table" id="ListaTabla" style="text-align:center;">
                 <thead>
                     <tr>
                         <th>Producto:</th>

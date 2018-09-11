@@ -450,6 +450,31 @@ class Modeloalmacenista extends CI_Model {
         $this->db->insert('HistorialProducto', $HistorialSalida);
         return "correcto";
     }
+    
+    public function GuardarAccidente($fila,$Responsable,$Motivo) {
+        $datos = array(
+            'CulpableAccidente'=> $Responsable,
+            'Motivo' => $Motivo,
+            'Tipo' => "Producto",
+            'TarimasId' => null,
+            'Fecha' => date('Y-m-d | h:i:sa'),
+            'UsuariosId' => IdUsuario(),
+        );
+        $this->db->insert('Accidentes', $datos);
+        $id=$this->db->insert_id();
+        $datos2 = array(
+            'AccidentesId'=> $id,
+            'ProductosId'=>$fila,
+            'Procesado'=>0,
+            'Dañado'=>1,
+        );
+        //Historial
+        $HistorialSalida = array('UsuariosId' => IdUsuario(), 'MovimientosProductosId' => 10,
+            'Activo' => 1, 'ProductosId' => $fila);
+        $this->db->set('Fecha', 'NOW()', FALSE);
+        $this->db->insert('HistorialProducto', $HistorialSalida);
+        return "correcto";
+    }
 
     public function VerificarProd($id) {
         $this->db->select("*");

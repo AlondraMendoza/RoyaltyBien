@@ -326,6 +326,26 @@ class Almacenista extends CI_Controller {
             print ("NoExiste");
         }
     }
+    
+    //Por producto
+    public function SalirTarimasAlmacenPAccidente() {
+        $idproducto = $this->input->post_get('idtarima', TRUE);
+        $Responsable = $this->input->post_get('Responsable', TRUE);
+        $Motivo = $this->input->post_get('Motivo', TRUE);
+        $this->load->model("Modeloalmacenista");
+        $resp = $this->Modeloalmacenista->SalirTarimaP($idproducto);
+        if ($resp != null) {
+            $query2 = $this->Modeloalmacenista->GuardarAccidente($resp,$Responsable,$Motivo);
+            $query = $this->Modeloalmacenista->SalirProductoAlmacenP($resp);
+            if ($query == "correcto") {
+                print("Correcto");
+            } else {
+                print("Error");
+            }
+        } else {
+            print ("NoExiste");
+        }
+    }
 
     public function GuardarAlmacen() {
         $id = $this->input->post_get('id', TRUE);
@@ -417,6 +437,15 @@ class Almacenista extends CI_Controller {
         $this->load->model("Modeloalmacenista");
         $infocontent["modelos"] = $this->Modeloalmacenista->ListaModelos();
         $this->load->view('almacenista/InventarioTarimas', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+    
+    public function CapturaAccidentes() {
+        $infoheader["titulo"] = "Almacén: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $infocontent["Nombre"] = "";
+        $this->load->model("Modeloalmacenista");
+        $this->load->view('almacenista/CapturaAccidente', $infocontent);
         $this->load->view('template/footerd', '');
     }
 

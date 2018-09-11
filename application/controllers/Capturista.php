@@ -138,5 +138,53 @@ class Capturista extends CI_Controller {
         $infocontent["lista"] = $this->Modelocapturista->ListarAccesoriosGuardados($this->FechaIngles($fecha));
         $this->load->view('capturista/ResultadosAccesorios', $infocontent);
     }
+    
+    public function ReporteQuemado() {
+        $this->load->model("Modelocapturista");
+        $infoheader["titulo"] = "Capturista: Royalty Ceramic";
+        $infocontent["Nombre"] = "";
+        $infocontent["hoy"] = date("d/m/Y");
+        $infocontent["hornos"] = $this->Modelocapturista->Hornos();
+        $infocontent["productos"] = $this->Modelocapturista->ProductosQuemado();
+        $infocontent["modelos"] = $this->Modelocapturista->ModelosQuemado(0);
+        $infocontent["colores"] = $this->Modelocapturista->Colores(0);
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->view('capturista/ReporteQuemado', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+    
+    public function GenerarReporteQ() {
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $hornos = $this->input->post_get('hornos', TRUE);
+        $ahornos = json_decode($hornos);
+        $producto = $this->input->post_get('producto', TRUE);
+        $aproducto = json_decode($producto);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $amodelo = json_decode($modelo);
+        $color = $this->input->post_get('color', TRUE);
+        $acolor = json_decode($color);
+        $this->load->model("Modelocapturista");
+        $infocontent["productos"] = $this->Modelocapturista->GenerarReporteQ($fechainicio, $fechafin, $ahornos, $aproducto, $amodelo, $acolor);
+        $this->load->view('capturista/GenerarReporteQ', $infocontent);
+    }
+
+    public function GenerarConcentradoQ() {
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $hornos = $this->input->post_get('hornos', TRUE);
+        $ahornos = json_decode($hornos);
+        $producto = $this->input->post_get('producto', TRUE);
+        $aproducto = json_decode($producto);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $amodelo = json_decode($modelo);
+        $color = $this->input->post_get('color', TRUE);
+        $acolor = json_decode($color);
+        $por = $this->input->post_get('por', TRUE);
+        $this->load->model("Modelocapturista");
+        $infocontent["por"] = $por;
+        $infocontent["productos"] = $this->Modelocapturista->GenerarConcentradoQ($fechainicio, $fechafin, $ahornos, $aproducto, $amodelo, $acolor, $por);
+        $this->load->view('capturista/GenerarConcentradoQ', $infocontent);
+    }
 
 }

@@ -111,7 +111,9 @@
         $("#clave").val("");
         $("#idpu").val("");
         $("#NombreC").html("");
-        
+        $("#MostrarModelos").html('<span style="font-size:5em" class="mif-spinner5 mif-ani-spin"></span> <br>Cargando modelos');
+        $("#MostrarColores").html('<span style="font-size:5em" class="mif-spinner5 mif-ani-spin"></span> <br>Cargando colores');
+        $("#DivOtros").fadeOut();
     }
 
     function Cancelar(){
@@ -125,6 +127,9 @@
         $("#clave").val("");
         $("#idpu").val("");
         $("#NombreC").html("");
+        $("#MostrarModelos").html('<span style="font-size:5em" class="mif-spinner5 mif-ani-spin"></span> <br>Cargando modelos');
+        $("#MostrarColores").html('<span style="font-size:5em" class="mif-spinner5 mif-ani-spin"></span> <br>Cargando colores');
+        $("#DivOtros").fadeOut();
     }
 
     function VerificarClave() {

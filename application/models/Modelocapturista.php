@@ -124,10 +124,10 @@ class Modelocapturista extends CI_Model {
                 $this->db->set('FechaCaptura', 'NOW()', FALSE);
                 $this->db->insert('Productos', $datos);  
                 $id=$this->db->insert_id();
-                $HistorialQuemado=array( 'Fecha'=>$fecha, 'UsuariosId'=>1, 'MovimientosProductosId'=>1,
+                $HistorialQuemado=array( 'Fecha'=>$fecha, 'UsuariosId'=>IdUsuario(), 'MovimientosProductosId'=>1,
                     'Activo'=>1, 'ProductosId'=>$id);
                 $this->db->insert('HistorialProducto', $HistorialQuemado);
-                $HistorialCaptura= array('UsuariosId'=>1, 'MovimientosProductosId'=>2,
+                $HistorialCaptura= array('UsuariosId'=>IdUsuario(), 'MovimientosProductosId'=>2,
                     'Activo'=>1, 'ProductosId'=>$id);
                 $this->db->set('Fecha', 'NOW()', FALSE);
                 $this->db->insert('HistorialProducto', $HistorialCaptura);
@@ -173,9 +173,228 @@ class Modelocapturista extends CI_Model {
             echo $exc->getTraceAsString();
             return "mal";
         }
+        
         }
-        
-        
+ 
+        public function GenerarReporteQ($fechainicio, $fechafin, $ahornos, $aproducto, $amodelo, $acolor) {
+        $fechainicio = $this->FechaIngles($fechainicio);
+        $fechafin = $this->FechaIngles($fechafin);
+        $parteclasificacion = "";
+        $parteproducto = "";
+        $partemodelo = "";
+        $partecolor = "";
+        if (count($ahornos) > 0) {
+            $parteclasificacion = " AND ";
+            $contclasi = 1;
+            $parteclasificacion .= " ( ";
+            foreach ($ahornos as $ac) {
+                if ($contclasi > 1) {
+                    $parteclasificacion .= " OR ";
+                }
+                $parteclasificacion .= " Horno(p.IdProductos) =" . $ac;
+                $contclasi++;
+            }
+            $parteclasificacion .= " ) ";
+        }
+        if (count($aproducto) > 0) {
+            $parteproducto = " AND ";
+            $contprod = 1;
+            $parteproducto .= " ( ";
+            foreach ($aproducto as $ap) {
+                if ($contprod > 1) {
+                    $parteproducto .= " OR ";
+                }
+                $parteproducto .= " p.CProductosId =" . $ap;
+                $contprod++;
+            }
+            $parteproducto .= " ) ";
+        }
+        if (count($amodelo) > 0) {
+            $partemodelo = " AND ";
+            $contmod = 1;
+            $partemodelo .= " ( ";
+            foreach ($amodelo as $am) {
+                if ($contmod > 1) {
+                    $partemodelo .= " OR ";
+                }
+                $partemodelo .= " p.ModelosId =" . $am;
+                $contmod++;
+            }
+            $partemodelo .= " ) ";
+        }
+        if (count($acolor) > 0) {
+            $partecolor = " AND ";
+            $contcol = 1;
+            $partecolor .= " ( ";
+            foreach ($acolor as $acol) {
+                if ($contcol > 1) {
+                    $partecolor .= " OR ";
+                }
+                $partecolor .= " p.ColoresId =" . $acol;
+                $contcol++;
+            }
+            $partecolor .= " ) ";
+        }
+        //$query = $this->db->query("select p.IdProductos,cp.Nombre as producto,m.Nombre as modelo,co.Nombre as color from Productos p left join CProductos cp on cp.IdCProductos=p.CProductosId left join Modelos m on m.IdModelos=p.ModelosId left join Colores co on co.IdColores=p.ColoresId where  date(FechaQuemado) BETWEEN $fechainicio AND $fechafin" . $parteclasificacion . $parteproducto . $partemodelo . $partecolor);
+        //Agregar count y group
+        $query = $this->db->query("select count(*) as cuantos, h.NHorno as horno, cp.Nombre as producto,m.Nombre as modelo,co.Nombre as color from "
+                . "Productos p left join CProductos cp on cp.IdCProductos=p.CProductosId "
+                . "left join Modelos m on m.IdModelos=p.ModelosId left join Colores co on co.IdColores=p.ColoresId left join Hornos"
+                . " h on p.HornosId=h.IdHornos where  date(FechaQuemado) "
+                . "BETWEEN $fechainicio AND $fechafin" . $parteclasificacion . $parteproducto . $partemodelo . $partecolor . " group by horno ,m.IdModelos, cp.IdCProductos, co.IdColores");
+
+        //print_r($this->db->get_compiled_select());
+        return $query;
+    }
+
+    public function Hornos() {
+        $this->db->select('h.NHorno, h.IdHornos');
+        $this->db->from("Hornos h");
+        $this->db->where("Activo=", 1);
+        return $this->db->get();
+    }
+    
+    public function ProductosQuemado() {
+        $this->db->select('*');
+        $this->db->from("CProductos");
+        $this->db->where("Activo=", 1);
+        $this->db->where("IdCProductos!=", 7);
+        return $this->db->get();
+    }
+     
+    public function ModelosQuemado($producto) {
+
+        $this->db->select('m.*');
+        $this->db->from("CProductosModelos cm");
+        $this->db->join("Modelos m", "m.IdModelos=cm.ModelosId");
+        if ($producto > 0) { //Si producto=0 significa que seleccionó Todos por lo que se deben devolver todos los modelos
+            $this->db->where("CProductosId=", $producto);
+        }
+        $this->db->where("cm.Activo=", 1);
+        $this->db->where("m.IdModelos!=", 12);
+        $this->db->group_by('m.IdModelos');
+        return $this->db->get();
+    }
+
+    public function Colores($modelo) {
+        $this->db->select('c.*');
+        $this->db->from("ModelosColores mc");
+        $this->db->join("Colores c", "c.IdColores=mc.ColoresId");
+        if ($modelo > 0) { //Si modelo=0 significa que seleccionó Todos por lo que se deben devolver todos los colores
+            $this->db->where("ModelosId=", $modelo);
+        }
+        $this->db->group_by('c.IdColores');
+        return $this->db->get();
+    }
+    
+     public function GenerarConcentradoQ($fechainicio, $fechafin, $ahornos, $aproducto, $amodelo, $acolor, $por) {
+        $fechainicio = $this->FechaIngles($fechainicio);
+        $fechafin = $this->FechaIngles($fechafin);
+        $parteclasificacion = "";
+        $parteproducto = "";
+        $partemodelo = "";
+        $partecolor = "";
+        if (count($ahornos) > 0) {
+            $parteclasificacion = " AND ";
+            $contclasi = 1;
+            $parteclasificacion .= " ( ";
+            foreach ($ahornos as $ac) {
+                if ($contclasi > 1) {
+                    $parteclasificacion .= " OR ";
+                }
+                $parteclasificacion .= " p.HornosId =" . $ac;
+                $contclasi++;
+            }
+            $parteclasificacion .= " ) ";
+        }
+        if (count($aproducto) > 0) {
+            $parteproducto = " AND ";
+            $contprod = 1;
+            $parteproducto .= " ( ";
+            foreach ($aproducto as $ap) {
+                if ($contprod > 1) {
+                    $parteproducto .= " OR ";
+                }
+                $parteproducto .= " p.CProductosId =" . $ap;
+                $contprod++;
+            }
+            $parteproducto .= " ) ";
+        }
+        if (count($amodelo) > 0) {
+            $partemodelo = " AND ";
+            $contmod = 1;
+            $partemodelo .= " ( ";
+            foreach ($amodelo as $am) {
+                if ($contmod > 1) {
+                    $partemodelo .= " OR ";
+                }
+                $partemodelo .= " p.ModelosId =" . $am;
+                $contmod++;
+            }
+            $partemodelo .= " ) ";
+        }
+        if (count($acolor) > 0) {
+            $partecolor = " AND ";
+            $contcol = 1;
+            $partecolor .= " ( ";
+            foreach ($acolor as $acol) {
+                if ($contcol > 1) {
+                    $partecolor .= " OR ";
+                }
+                $partecolor .= " p.ColoresId =" . $acol;
+                $contcol++;
+            }
+            $partecolor .= " ) ";
+        }
+        $campo = "";
+        switch ($por) {
+            case "h.IdHornos":
+                $campo = "h.NHorno as Nombre";
+                break;
+            case "cp.IdCproductos":
+                $campo = "cp.Nombre";
+                break;
+            case "m.IdModelos":
+                $campo = "m.Nombre";
+                break;
+            case "co.IdColores":
+                $campo = "co.Nombre";
+                break;
+        }
+
+        $query = $this->db->query("select count(*) as cuantos, $campo from Productos p left join CProductos cp on cp.IdCProductos=p.CProductosId left join Modelos m on m.IdModelos=p.ModelosId left join Colores co on co.IdColores=p.ColoresId left join Hornos h on h.IdHornos=p.HornosId where  date(FechaQuemado) BETWEEN $fechainicio AND $fechafin" . $parteclasificacion . $parteproducto . $partemodelo . $partecolor . " group by " . $por);
+        return $query;
+    }
+    
+    public static function FechaIngles($date) {
+        if ($date) {
+            $fecha = $date;
+            $hora = "";
+
+            # separamos la fecha recibida por el espacio de separación entre
+            # la fecha y la hora
+            $fechaHora = explode(" ", $date);
+            if (count($fechaHora) == 2) {
+                $fecha = $fechaHora[0];
+                $hora = $fechaHora[1];
+            }
+
+            # cogemos los valores de la fecha
+            $values = preg_split('/(\/|-)/', $fecha);
+            if (count($values) == 3) {
+                # devolvemos la fecha en formato ingles
+                if ($hora && count(explode(":", $hora)) == 3) {
+                    # si la hora esta separada por : y hay tres valores...
+                    $hora = explode(":", $hora);
+                    return date("Ymd H:i:s", mktime($hora[0], $hora[1], $hora[2], $values[1], $values[0], $values[2]));
+                } else {
+                    return date("Ymd", mktime(0, 0, 0, $values[1], $values[0], $values[2]));
+                }
+            }
+        }
+        return "";
+    }
+
 
 }
 

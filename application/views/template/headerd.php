@@ -28,7 +28,7 @@
                 </ul>
             </ul>
             <div class="app-bar-element place-right">
-                <a class="dropdown-toggle fg-white"> <img onerror="this.src='<?= base_url() ?>public/imagenes/fotos/user.png'" src="<?= base_url() ?>public/imagenes/fotos/<?= IdPersona(); ?>.jpg" style="border-radius: 50%;width:33px;height: 33px"> &nbsp;&nbsp;<?= $this->session->userdata('nombre'); ?></a>
+                <a class="dropdown-toggle fg-white"> <img onerror="this.src='<?= base_url() ?>public/imagenes/fotos/user.png'" src="<?= base_url(); ?>public/imagenes/fotos/<?= IdPersona(); ?>.jpg" style="border-radius: 50%;width:33px;height: 33px"> &nbsp;&nbsp;<?= $this->session->userdata('nombre'); ?></a>
                 <div class="app-bar-drop-container bg-white fg-dark place-right" data-role="dropdown" data-no-close="true" style="z-index: 99999">
                     <div class="padding10" style="width: 200px;">
                         <center>

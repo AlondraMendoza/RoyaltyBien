@@ -148,13 +148,14 @@
         <br>
         <div id="formulario_imagenes">
             <form action="SubirImagenPedido" enctype="multipart/form-data" method="post">
-                <label>Selecciona la imagen:</label><br>
-                <div class="input-control file" data-role="input">
-                    <input type="file" name="userfile" />
-                    <input type="hidden" name="pedidoid" value="<?= $pedidoid ?>">
-                    <button class="button"><span class="mif-folder"></span></button>
-                </div>
-                <input type="submit" class="button primary" value="Subir imágen"/>
+                <center><label>Selecciona la imagen:</label><br>
+                    <div class="input-control file " data-role="input">
+                        <input type="file" name="userfile" />
+                        <input type="hidden" name="pedidoid" value="<?= $pedidoid ?>">
+                        <button class="button"><span class="mif-folder"></span></button>
+                    </div>
+                    <input type="submit" class="button primary" value="Subir imagen"/>
+                </center>
             </form>
         </div>
         <hr>

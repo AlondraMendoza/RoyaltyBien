@@ -5,9 +5,8 @@
             <?php foreach ($productos->result() as $producto): ?>
                 <div class="image-container rounded bordered" style="width: 200px;height: 200px" onclick="CargarModelos(<?= $producto->IdCProductos; ?>)">
                     <div class="frame">
-                        <img src="<?= base_url() ?>public/imagenes/<?= $producto->Imagen; ?>" height="190px;" width="190px;" title="<?= $producto->Nombre; ?>">        
-                    </div>
-                    <div class="image-overlay op-green">
+                        <img src="<?= base_url() ?>public/imagenes/<?= $producto->Imagen; ?>" height="190px;" width="190px;" title="<?= $producto->Nombre; ?>">
+                        <br>
                         <h2><?= $producto->Nombre; ?></h2>
                         <p>
                             <?php
@@ -18,8 +17,9 @@
                             <?= $npen ?> prod. pendiente(s) de clasificación.
                         </p>
                     </div>
+
                 </div>
             <?php endforeach; ?>
         </div>
-    </div>   
+    </div>
 </div>

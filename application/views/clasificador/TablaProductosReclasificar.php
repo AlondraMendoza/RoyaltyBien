@@ -7,6 +7,11 @@ if ($cont > 1) {
     $oculto = "display:none";
 }
 ?>
+<?php
+$ins = &get_instance();
+$ins->load->model("modeloclasificador");
+$clasificacion = $ins->modeloclasificador->Clasificacion($producto->IdProductos);
+?>
 <div class="panel primary tablasproductos" data-role="panel" style="font-size: 1.2em;<?= $oculto ?>" id="tabla<?= $cont ?>">
     <div class="heading">
         <span class="icon mif-stack fg-white bg-darkBlue"></span> Selecciona la información de la clasificación
@@ -19,6 +24,11 @@ if ($cont > 1) {
                     <td class="center" style="text-align: center"><b>Nombre producto:</b><br> <?= $producto->NombreProducto ?></td>
                     <td class="center" style="text-align: center"><b>Modelo:</b><br> <?= $producto->NombreModelo ?></td>
                     <td class="center" style="text-align: center"><b>Color:</b><br> <?= $producto->NombreColor ?></td>
+                    <td class="center" style="text-align: center"><b>Clasificación anterior:</b><br>
+                        <?php if ($clasificacion != null): ?>
+                            <span class="<?= $clasificacion->Color; ?> cycle-button" style="font-size: 1.5rem;width: 40px;height: 40px "><?= $clasificacion->Letra ?></span>
+                        <?php endif; ?>
+                    </td>
                 </tr>
             </table>
             <table class="table bordered hovered border" style="font-size: 1.2em">

@@ -109,11 +109,35 @@ class Cedis extends CI_Controller {
         print json_encode($infocontent);
     }
 
+    function SubirImagenPedido() {
+        $pedidoid = $this->input->post('pedidoid');
+        $config['upload_path'] = 'public/imagenespedidos/';
+        $config['allowed_types'] = 'gif|jpg|png';
+        $config['max_size'] = '4000';
+        $fecha = date('Y-m-d-hi-s-a');
+        $config['file_name'] = "pedido" . $fecha . $pedidoid;
+        $config['max_width'] = '4024';
+        $config['max_height'] = '4008';
+        $this->load->library('upload', $config);
+        $this->upload->do_upload();
+        $file_info = $this->upload->data();
+        $ruta = "public/imagenespedidos/" . $file_info["file_name"];
+        $this->Modelocedis->SubirImagenPedido($ruta, $pedidoid);
+        redirect('cedis/AbrirPedido?pedidoid=' . $pedidoid);
+    }
+
     public function GuardarPedidoCedis() {
         $cliente = $this->input->post_get('cliente', TRUE);
         $this->load->model("Modelocedis");
         $idpedido = $this->Modelocedis->GuardarPedido($cliente);
         print($idpedido);
+    }
+
+    public function EliminarImagenPedido() {
+        $idimagen = $this->input->post_get('idimagen', TRUE);
+        $pedidoid = $this->input->post_get('pedidoid', TRUE);
+        $this->Modelocedis->EliminarImagenPedido($idimagen);
+        redirect('cedis/AbrirPedido?pedidoid=' . $pedidoid);
     }
 
     public function GuardarDetallePedidoCedis() {
@@ -131,9 +155,13 @@ class Cedis extends CI_Controller {
     public function AbrirPedido() {
         $pedidoid = $this->input->post_get('pedidoid', TRUE);
         $this->load->model("Modelocedis");
+        $infoheader["titulo"] = "Pedido: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
         $infocontent["ListaProductos"] = $this->Modelocedis->ProductosPedido($pedidoid);
+        $infocontent["ListaImagenes"] = $this->Modelocedis->ListaImagenesPedido($pedidoid);
         $infocontent["pedidoid"] = $pedidoid;
         $this->load->view('cedis/AbrirPedido', $infocontent);
+        $this->load->view('template/footerd', '');
     }
 
     public function SalidaCedis() {

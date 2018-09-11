@@ -629,6 +629,7 @@ class Clasificador extends CI_Controller {
         $this->load->view('template/headerd', $infoheader);
         $infocontent["Nombre"] = "Alondra Mendoza";
         $this->load->model("Modeloclasificador");
+        $infocontent["hoyingles"] = date("m/d/Y");
         $this->load->view('clasificador/EntradaProductos', $infocontent);
         $this->load->view('template/footerd', '');
     }

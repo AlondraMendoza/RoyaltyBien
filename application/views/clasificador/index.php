@@ -1,4 +1,13 @@
 <script>
+    function Notificacion(titulo, texto, icono, color)
+    {
+        $.Notify({
+            caption: titulo,
+            content: texto,
+            icon: "<span class='mif-" + icono + "'></span>",
+            type: color
+        });
+    }
     function CargarHornos(d)
     {
         $("#divclasificacion").html('');
@@ -36,15 +45,14 @@
         $("#divclasificacion").load("TablaProductos", {"fecha": d, "horno": horno, "cprod": cprod, "mod": mod, "color": color});
     }
     $(document).ready(function () {
-
         CargarHornos('<?= $hoy ?>');
     });
 </script>
 <h1 class="light text-shadow">CLASIFICACIÓN</h1><br>
 <center>
-    <div class="tabcontrol" data-role="tabcontrol" data-save-state="true" id='tabs'>
+    <div class="tabcontrol" data-role="tabcontrol" data-open-target="#regular" data-save-state="true"  id='tabs'>
         <ul class="tabs">
-            <li><a href="#regular">Regular</a></li>
+            <li><a href="#regular" >Regular</a></li>
             <li><a href="#accesorios">Accesorios</a></li>
         </ul>
         <div class="frames">
@@ -83,12 +91,17 @@
                         <table class="table hovered bordered border">
                             <tr>
                                 <td class="center" colspan="2">
-                                    <b style="font-size: 1.3em" class="fg-darkEmerald">Selecciona el color</b>
+                                    <b  class="fg-darkEmerald">Selecciona el color</b>
                                     <table class="table">
                                         <tr>
+                                            <?php $cont = 0; ?>
                                             <?php foreach ($colores->result() as $color): ?>
+                                                <?php $cont++; ?>
+                                                <?php if ($cont == 8 || $cont == 16 || $cont == 24) { ?>
+                                                </tr><tr>
+                                                <?php } ?>
                                                 <td class="center">
-                                                    <img class="imgcolores" id="color-<?= $color->IdColores ?>" src="<?= base_url() ?>public/colores/<?= $color->Descripcion ?>" height="100px;" width="100px;" title="<?= $color->Nombre ?>" onclick="SeleccionaColor(<?= $color->IdColores ?>)"><br><br>
+                                                    <img style="width:100px;height: 100px" class="imgcolores" id="color-<?= $color->IdColores ?>" src="<?= base_url() ?>public/colores/<?= $color->Descripcion ?>" title="<?= $color->Nombre ?>" onclick="SeleccionaColor(<?= $color->IdColores ?>)" ><br><br>
                                                     <?= $color->Nombre ?>
                                                 </td>
                                             <?php endforeach; ?>
@@ -210,6 +223,10 @@
 <iframe src="" id="imprimeme" width="100%" height="100%" style="display:none" ></iframe>
 
 <input type="hidden" id="colorseleccionado">
+
+<div style="display:none">
+    <div id="etiquetaaccesorio"></div>
+</div>
 <script>
     function SeleccionaColor(id)
     {
@@ -237,7 +254,13 @@
             fueratonoaccesorio = 1;
         }
         $.post("GuardarAccesorios", {"fueratono": fueratonoaccesorio, "iddefecto1": iddefecto1, "iddefecto2": iddefecto2, "clavepuesto1": clavepuesto1, "clavepuesto2": clavepuesto2, "colorseleccionado": colorseleccionado, "clasificacionseleccionada": clasi}, function (data) {
-            $("#imprimeme").attr("src", "EnviarTicket?codigo=<?= date_format(date_create($hoyingles), 'dmY') . "-" ?>" + pad(data, 10) + "&producto_id=" + data);
+            var codigob = "<?= date_format(date_create($hoyingles), 'dmY') . '-' ?>" + pad(data, 10);
+            var imagen = "barcodeventana?text=" + codigob + "";
+            $("#etiquetaaccesorio").html("<img src=" + imagen + ">");
+            Notificacion("Correcto", "El accesorio se guardó correctamente", "check", "success");
+            $("#etiquetaaccesorio").printArea();
+
+            //$("#imprimeme").attr("src", "EnviarTicket?codigo=<?= date_format(date_create($hoyingles), 'dmY') . "-" ?>" + pad(data, 10) + "&producto_id=" + data);
         });
     }
     function ApareceFormularioAcc(defecto)

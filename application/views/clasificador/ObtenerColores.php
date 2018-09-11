@@ -6,9 +6,7 @@
             <?php foreach ($colores->result() as $color): ?>
                 <div class="image-container rounded bordered" style="width: 200px;height: 200px" onclick="TablaProductos(<?= $color->CProductosId . ',' . $color->ModelosId . ',' . $color->IdColores ?>)">
                     <div class="frame">
-                        <img src="<?= base_url() ?>public/colores/<?= $color->Descripcion ?>" height="190px;" width="190px;" title="<?= $color->Nombre ?>">        
-                    </div>
-                    <div class="image-overlay op-orange">
+                        <img src="<?= base_url() ?>public/colores/<?= $color->Descripcion ?>" height="190px;" width="190px;" title="<?= $color->Nombre ?>">        <br>
                         <h2><?= $color->Nombre ?></h2>
                         <p>
                             <?php
@@ -18,9 +16,9 @@
                             ?>
                             <?= $npen ?> prod. pendiente(s) de clasificación.
                         </p>
-                    </div>
+                    </div> 
                 </div>
-            <?php endforeach; ?>    
+            <?php endforeach; ?>
         </div>
     </div>
 </div>

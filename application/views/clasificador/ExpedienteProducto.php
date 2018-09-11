@@ -12,11 +12,11 @@
             <table class="table">
                 <tr>
                     <td class="center" rowspan="2" style="width: 30%">
-                        <img src="<?= base_url() ?>public/imagenes/<?= $producto->foto; ?>" height="190px;" width="190px;" title="<?= $producto->NombreProducto; ?>">        
+                        <img src="<?= base_url() ?>public/imagenes/<?= $producto->foto; ?>" height="190px;" width="190px;" title="<?= $producto->NombreProducto; ?>">
                         <br><br>
                         <img src="barcodevista?text=<?= $codigo ?>"><br>
                         <?= $codigo; ?>
-                    </td> 
+                    </td>
                 </tr>
                 <tr>
                     <td>
@@ -65,18 +65,7 @@
                             }
                             ?>
                         <?php endif; ?>
-                        <br>
-                        <?php
-                        $ci = &get_instance();
-                        $ci->load->model("modeloclasificador");
-                        if ($tarimaid > 0) {
-                            $codigotarima = $ci->modeloclasificador->CodigoBarrasTarimaTexto($tarimaid);
-                            ?>
-                            <img src="barcodevista?text=<?= $codigotarima ?>"><br>
-                            <?= $codigotarima; ?>
-                            <?php
-                        }
-                        ?><br>
+                        <br><br>
                     </td>
                     <td class="center">
                         <b>Tarima</b>
@@ -103,7 +92,7 @@
                     <td>
                         <b>Defectos</b><br>
                         <?php
-                        if ($defectos != null) {
+                        if ($defectos != null && $defectos->num_rows() > 0) {
                             foreach ($defectos->result() as $defecto):
                                 ?>
                                 <?= $defecto->Nombre ?><br>
@@ -111,7 +100,7 @@
                             endforeach;
                         }
                         else {
-                            echo "Sin defectos Registrados";
+                            echo "Sin defectos <br>Registrados";
                         }
                         ?>
                         <br>
@@ -130,9 +119,9 @@
                 </div>
                 <div class="content" id="">
                     <br>
-                    <div class="tabcontrol" data-role="tabcontrol" data-save-state="true" id='tabs'>
+                    <div class="tabcontrol" data-role="tabcontrol" data-save-state="true" id='tabs' data-open-target="#historial">
                         <ul class="tabs">
-                            <li class="active"><a href="#historial">Historial</a></li>
+                            <li><a href="#historial">Historial</a></li>
                             <li><a href="#clasificaciones">Clasificaciones</a></li>
                             <li><a href="#entarimado">Entarimado</a></li>
                             <li><a href="#reparaciones">Reparaciones</a></li>
@@ -151,7 +140,7 @@
                                                 <td class="center"><?= $historial->Fecha ?></td>
                                                 <td class="center"><?= $historial->Movimiento ?></td>
                                                 <td class="center"><?= $historial->Persona ?></td>
-                                            </tr>    
+                                            </tr>
                                         <?php endforeach; ?>
                                     </table>
                                 </div>
@@ -168,7 +157,7 @@
                                             <td class="center"><?= $clasificacion->FechaClasificacion ?></td>
                                             <td class="center"><?= $clasificacion->Letra ?></td>
                                             <td class="center"><?= $clasificacion->Persona ?></td>
-                                        </tr>    
+                                        </tr>
                                     <?php endforeach; ?>
                                 </table>
                             </div>
@@ -189,7 +178,7 @@
                                             <td class="center"><?= $entarimado->FechaCaptura ?></td>
                                             <td class="center"><?= $codigotarima ?></td>
                                             <td class="center"><?= $entarimado->Persona ?></td>
-                                        </tr>    
+                                        </tr>
                                     <?php endforeach; ?>
                                 </table>
                             </div>
@@ -205,9 +194,15 @@
                                         <tr>
                                             <td class="center"><?= $r->Fecha ?></td>
                                             <td class="center"><?= $r->Diagnostico ?></td>
-                                            <td class="center"><?php if($r->Solucion==1){ echo 'Si';}else{    echo 'No';} ?></td>
+                                            <td class="center"><?php
+                                                if ($r->Solucion == 1) {
+                                                    echo 'Si';
+                                                } else {
+                                                    echo 'No';
+                                                }
+                                                ?></td>
                                             <td class="center"><?= $r->Persona ?></td>
-                                        </tr>    
+                                        </tr>
                                     <?php endforeach; ?>
                                 </table>
                             </div>

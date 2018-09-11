@@ -10,9 +10,8 @@ $ci->load->model("modelocedis");
             <th>Motivo</th>
             <th>Responsable</th>
             <th>Cliente</th>
-            <th>Verificada</th>
             <th>Productos</th>
-            <th>Procesar</th>
+            <th>Verificar</th>
         </tr>
     </thead>
     <?php foreach ($devolucionescapturadas->result() as $dev): ?>
@@ -22,27 +21,29 @@ $ci->load->model("modelocedis");
             <td><?= $dev->Motivo ?></td>
             <td><?= $dev->Responsable ?></td>
             <td><?= $dev->Cliente ?></td>
-            <td><?= $dev->VerificadaSupervisor ?></td>
             <td>
                 <?php $detalles = $ci->modelocedis->DetalleDevolucionesCapturadas($dev->IdDevoluciones); ?>
                 <ol class="simple-list large-bullet fg-blue">
                     <?php foreach ($detalles->result() as $detalle): ?>
-                        <li>   
-                            <b><?= $detalle->producto ?> / <?= $detalle->color ?> / <?= $detalle->modelo ?></b>                        
+                        <li>
+                            <b><?= $detalle->producto ?> / <?= $detalle->color ?> / <?= $detalle->modelo ?></b>
                         </li>
-                        <ul class="simple-list green-bullet fg-green" >
-                            <?php $subproductos = $ci->modelocedis->SubproductosDetalle($detalle->IdDetalleDevoluciones); ?>
-                            <?php foreach ($subproductos->result() as $sub): ?>
-                                <li style="margin-left: 20px">
-                                    <label class="input-control checkbox">
-                                        <input <?php if ($sub->Verificado == "Si") { ?>checked<?php } ?> type="checkbox" id="veri<?= $sub->IdSubproductosDevoluciones ?>"onclick="VerificarSubproducto(<?= $sub->IdSubproductosDevoluciones ?>)">
-                                        <span class="check"></span>
-                                        <span class="caption"><?= $sub->Descripcion ?> / <?= $sub->Clave ?> </span>
-                                    </label>
 
-                                </li>
-                            <?php endforeach; ?>
-                        </ul>
+                        <?php $subproductos = $ci->modelocedis->SubproductosDetalle($detalle->IdDetalleDevoluciones); ?>
+                        <?php foreach ($subproductos->result() as $sub): ?>
+                            <?php if ($dev->VerificadaSupervisor == "No") { ?>
+                                <label class="input-control checkbox">
+                                    <input <?php if ($sub->Verificado == "Si") { ?>checked<?php } ?> type="checkbox" id="veri<?= $sub->IdSubproductosDevoluciones ?>"onclick="VerificarSubproducto(<?= $sub->IdSubproductosDevoluciones ?>)" class="inputs<?= $dev->IdDevoluciones ?>">
+                                    <span class="check"></span>
+                                    <span class="caption text-small fg-darkGreen"><?= $sub->Descripcion ?> / <?= $sub->Clave ?> </span>
+                                </label>
+                                <br>
+                            <?php } else {
+                                ?>
+                                <span class="mif-checkmark"></span> <span class="caption text-small fg-darkGreen"><?= $sub->Descripcion ?> / <?= $sub->Clave ?> </span><br>
+                            <?php } ?>
+                        <?php endforeach; ?>
+
                     <?php endforeach; ?>
                 </ol>
             </td>
@@ -54,7 +55,7 @@ $ci->load->model("modelocedis");
                     </div>
                     <?php
                 } else {
-                    echo "Procesada";
+                    echo "Verificada";
                 }
                 ?>
             </td>
@@ -65,7 +66,8 @@ $ci->load->model("modelocedis");
     function ProcesarDevolucion(id)
     {
         $.get("ProcesarDevolucion", {"dev_id": id}, function (data) {
-            $("#botonguardar" + id).html("<center>Procesada</center>");
+            $("#botonguardar" + id).html("<center>Verificada</center>");
+            $(".inputs" + id).attr("disabled", "disabled");
             if (data == "correcto") {
                 $.Notify({
                     caption: 'Correcto',
@@ -82,7 +84,6 @@ $ci->load->model("modelocedis");
             valor = "Si";
         }
         $.get("VerificarSubproducto", {"sub_id": id, "valor": valor}, function (data) {
-
             if (data == "correcto") {
                 $.Notify({
                     caption: 'Correcto',

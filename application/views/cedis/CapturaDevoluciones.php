@@ -151,7 +151,7 @@
 </script>
 <h1><b> DEVOLUCIONES</b></h1><br>
 <center>
-    <div class="tabcontrol" data-role="tabcontrol" data-save-state="true" id='tabs'>
+    <div class="tabcontrol" data-role="tabcontrol" data-open-target="#capturadevolucion" data-save-state="true" id='tabs'>
         <ul class="tabs">
             <li class="active"><a href="#capturadevolucion">Captura Devolución</a></li>
             <li><a href="#devolucionescapturadas">Devoluciones Capturadas</a></li>

@@ -234,6 +234,19 @@ class Modelocedis extends CI_Model {
         return $fila;
     }
 
+    public function ResumenProductosPedidoAgrupados($pedidoid) {
+        $this->db->select("cp.Nombre as producto, m.Nombre as modelo,c.Nombre as color, cl.Letra as clasificacion,Cantidad");
+        $this->db->from("PedidosVentas p");
+        $this->db->join("CProductos cp", "p.CProductosId=cp.IdCProductos");
+        $this->db->join("Modelos m", "p.ModelosId=m.IdModelos");
+        $this->db->join("Colores c", "p.ColoresId=c.IdColores");
+        $this->db->join("Clasificaciones cl", "p.ClasificacionesId=cl.IdClasificaciones");
+        $this->db->where("p.Activo", 1);
+        $this->db->where("p.PedidosId", $pedidoid);
+        $fila = $this->db->get();
+        return $fila;
+    }
+
     public function SalidaPedido($pedidoid) {
         foreach ($this->ProductosPedido($pedidoid)->result() as $row) {
             $this->db->set("FechaSalida", date('Y-m-d | h:i:sa'));

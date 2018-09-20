@@ -256,6 +256,12 @@ class Modeloclasificador extends CI_Model {
             'UsuariosId' => IdUsuario(),
             'Activo' => 1
         );
+        /* Se actualiza la clasificacion actual */
+        $this->db->set("ClasificacionesId", $idclasi);
+        $this->db->where("IdProductos", $idprod);
+        $this->db->update("Productos");
+        /* Fin clasificación actual */
+
         $this->db->insert('HistorialClasificacion', $datos);
         return $this->db->insert_id();
     }

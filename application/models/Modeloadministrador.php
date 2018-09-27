@@ -1373,6 +1373,25 @@ class Modeloadministrador extends CI_Model {
         );
         return $query;
     }
+    
+    public function SubirImagenProducto($ruta, $productoid) { 
+        $this->db->set("Imagen", $ruta);
+        $this->db->where("IdCProductos", $productoid);
+        $this->db->update("CProductos");
+    }
+
+    public function SubirImagenModelo($ruta, $modeloid) { 
+        $this->db->set("Imagen", $ruta);
+        $this->db->where("IdCProductosModelos", $modeloid);
+        $this->db->update("CProductosModelos");
+    }
+    
+    public function SubirImagenColores($ruta, $colorid) { 
+        $this->db->set("Descripcion", $ruta);
+        $this->db->where("IdColores", $colorid);
+        $this->db->update("Colores");
+    }
+    
 
 }
 ?>

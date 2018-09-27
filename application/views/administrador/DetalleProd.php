@@ -23,10 +23,22 @@
                             </td>
                             <td class="center" rowspan="1" style="width: 30%">
                                 <img class="block-shadow-warning" src="<?= base_url() ?>public/imagenes/<?= $mod->Imagen ?>" height="100px;" width="100px;">
-                                <form enctype="multipart/form-data" action="uploader.php" method="POST">
+<!--                                <form enctype="multipart/form-data" action="uploader.php" method="POST">
                                 <input name="uploadedfile" type="file" />
                                 <input type="submit" value="Subir archivo" />
+                                </form>-->
+                                <div id="formulario_imagenes">
+                                <form action="SubirImagenModelo" enctype="multipart/form-data" method="post">
+                                <div class="input-control file " data-role="input">
+                                <input type="file" name="userfile" />
+                                <input type="hidden" name="productoid" value="<?= $producto ?>">
+                                <input type="hidden" name="modeloid" value="<?= $mod->codigo ?>">
+                                <button class="button"><span class="mif-folder"></span></button>
+                                </div>
+                                <input type="submit" class="button primary" value="Subir imagen"/>
+                                </center>
                                 </form>
+                                </div>
                             </td>
                             <?php if ($mod->Activocm==1){ ?>
                             <td class="center">
@@ -55,10 +67,11 @@
                             </td>
                             <td class="center" rowspan="1" style="width: 30%">
                                 <img class="block-shadow-warning" src="<?= base_url() ?>public/imagenes/SinImagen.png" height="100px;" width="100px;">
-                                <form enctype="multipart/form-data" action="uploader.php" method="POST">
+<!--                                <form enctype="multipart/form-data" action="uploader.php" method="POST">
                                 <input name="uploadedfile" type="file" />
                                 <input type="submit" value="Subir archivo" />
-                                </form>
+                                </form>-->
+                                
                             </td> 
                             <td class="center">
                                 <a class="button block-shadow-info text-shadow success" onclick="GuardarM()">Guardar Modelo</a>
@@ -73,10 +86,11 @@
                             </td>
                             <td class="center" rowspan="1" style="width: 30%">
                                 <img class="block-shadow-warning" src="<?= base_url() ?>public/imagenes/SinImagen.png" height="100px;" width="100px;">
-                                <form enctype="multipart/form-data" action="uploader.php" method="POST">
+<!--                                <form enctype="multipart/form-data" action="uploader.php" method="POST">
                                 <input name="uploadedfile" type="file" />
                                 <input type="submit" value="Subir archivo" />
-                                </form>
+                                </form>-->
+                                
                             </td> 
                             <td class="center">
                                 <a class="button block-shadow-info text-shadow success" onclick="GuardarN()">Guardar Modelo</a>

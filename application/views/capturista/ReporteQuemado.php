@@ -1,74 +1,76 @@
 <script>
-    $(document).ready(function () {
-        ObtenerModelos();
-    });
+//    $(document).ready(function () {
+//        ObtenerModelos();
+//    });
+//    
+//    function Todos(clasedestino, claseorigen)
+//    {
+//        if ($("#" + claseorigen).prop('checked')) {
+//            $('.' + clasedestino).each(function () {
+//                this.checked = true;
+//            });
+//        } else {
+//            $('.' + clasedestino).each(function () {
+//                this.checked = false;
+//            });
+//        }
+//
+//    }
+//    
+//    function ObtenerModelos()
+//    {
+//        $("#modelo").html("<option>Cargando...</option>");
+//        var producto = $("#producto").val();
+//        $.get("ObtenerModelos", {"producto": producto}, function (data) {
+//            $("#modelo").html(data);
+//            ObtenerColores();
+//        });
+//    }
+//    function ObtenerColores()
+//    {
+//        $("#color").html("<option>Cargando...</option>");
+//        var modelo = $("#modelo").val();
+//        $.get("ObtenerColores", {"modelo": modelo}, function (data) {
+//            $("#color").html(data);
+//        });
+//    }
     
-    function Todos(clasedestino, claseorigen)
-    {
-        if ($("#" + claseorigen).prop('checked')) {
-            $('.' + clasedestino).each(function () {
-                this.checked = true;
-            });
-        } else {
-            $('.' + clasedestino).each(function () {
-                this.checked = false;
-            });
-        }
-
-    }
+//    function DetalleSeleccionado(nombre)
+//    {
+//        var fechainicio = $("#fechainicio").val();
+//        var fechafin = $("#fechafin").val();
+//        var hornos = [];
+//        $(".hornos:checked").each(function ()
+//        {
+//            hornos.push(parseInt($(this).val()));
+//        });
+//        var hornoscadena = JSON.stringify(hornos);
+//
+//        var productos = [];
+//        $(".productos:checked").each(function ()
+//        {
+//            productos.push(parseInt($(this).val()));
+//        });
+//        var productoscadena = JSON.stringify(productos);
+//        var modelos = [];
+//        $(".modelos:checked").each(function ()
+//        {
+//            modelos.push(parseInt($(this).val()));
+//        });
+//        var modeloscadena = JSON.stringify(modelos);
+//        var colores = [];
+//        $(".colores:checked").each(function ()
+//        {
+//            colores.push(parseInt($(this).val()));
+//        });
+//        var colorescadena = JSON.stringify(colores);
+//        var por = $("#concentradox").val();
+//        $("#detalleseleccionado").fadeIn();
+//        $("#detalleseleccionado").html("<center style='font-size:1.2em'><b>Consultando Información...</b></center><br><br>");
+//        $("#detalleseleccionado").load("GenerarDetalleSeleccionadoQ", {"fechainicio": fechainicio, "fechafin": fechafin, 'por': por, 'nombre': nombre})
+//       $("#detalleseleccionado").load("GenerarDetalleSeleccionadoQ", {"fechainicio": fechainicio, "fechafin": fechafin, "hornos": hornoscadena, "producto": productoscadena, "modelo": modeloscadena, "color": colorescadena, 'por': por, 'nombre': nombre})
     
-    function ObtenerModelos()
-    {
-        $("#modelo").html("<option>Cargando...</option>");
-        var producto = $("#producto").val();
-        $.get("ObtenerModelos", {"producto": producto}, function (data) {
-            $("#modelo").html(data);
-            ObtenerColores();
-        });
-    }
-    function ObtenerColores()
-    {
-        $("#color").html("<option>Cargando...</option>");
-        var modelo = $("#modelo").val();
-        $.get("ObtenerColores", {"modelo": modelo}, function (data) {
-            $("#color").html(data);
-        });
-    }
-    
-    function DetalleSeleccionado(nombre)
-    {
-        var fechainicio = $("#fechainicio").val();
-        var fechafin = $("#fechafin").val();
-        var hornos = [];
-        $(".hornos:checked").each(function ()
-        {
-            hornos.push(parseInt($(this).val()));
-        });
-        var hornoscadena = JSON.stringify(hornos);
-
-        var productos = [];
-        $(".productos:checked").each(function ()
-        {
-            productos.push(parseInt($(this).val()));
-        });
-        var productoscadena = JSON.stringify(productos);
-        var modelos = [];
-        $(".modelos:checked").each(function ()
-        {
-            modelos.push(parseInt($(this).val()));
-        });
-        var modeloscadena = JSON.stringify(modelos);
-        var colores = [];
-        $(".colores:checked").each(function ()
-        {
-            colores.push(parseInt($(this).val()));
-        });
-        var colorescadena = JSON.stringify(colores);
-        var por = $("#concentradox").val();
-        $("#detalleseleccionado").fadeIn();
-        $("#detalleseleccionado").html("<center style='font-size:1.2em'><b>Consultando Información...</b></center><br><br>");
-        $("#detalleseleccionado").load("GenerarDetalleSeleccionadoQ", {"fechainicio": fechainicio, "fechafin": fechafin, "hornos": hornoscadena, "producto": productoscadena, "modelo": modeloscadena, "color": colorescadena, 'por': por, 'nombre': nombre})
-    }
+  //  }
     function Detalle()
     {
         var pb = $("#pb2").data('progress');
@@ -76,85 +78,89 @@
         $("#grafica").html("");
         var fechainicio = $("#fechainicio").val();
         var fechafin = $("#fechafin").val();
-        var hornos = [];
-        $(".hornos:checked").each(function ()
-        {
-            hornos.push(parseInt($(this).val()));
-        });
-        var hornoscadena = JSON.stringify(hornos);
-
-        var productos = [];
-        $(".productos:checked").each(function ()
-        {
-            productos.push(parseInt($(this).val()));
-        });
-        var productoscadena = JSON.stringify(productos);
-
-        var modelos = [];
-        $(".modelos:checked").each(function ()
-        {
-            modelos.push(parseInt($(this).val()));
-        });
-        var modeloscadena = JSON.stringify(modelos);
-
-        var colores = [];
-        $(".colores:checked").each(function ()
-        {
-            colores.push(parseInt($(this).val()));
-        });
-        var colorescadena = JSON.stringify(colores);
+//        var hornos = [];
+//        $(".hornos:checked").each(function ()
+//        {
+//            hornos.push(parseInt($(this).val()));
+//        });
+//        var hornoscadena = JSON.stringify(hornos);
+//
+//        var productos = [];
+//        $(".productos:checked").each(function ()
+//        {
+//            productos.push(parseInt($(this).val()));
+//        });
+//        var productoscadena = JSON.stringify(productos);
+//
+//        var modelos = [];
+//        $(".modelos:checked").each(function ()
+//        {
+//            modelos.push(parseInt($(this).val()));
+//        });
+//        var modeloscadena = JSON.stringify(modelos);
+//
+//        var colores = [];
+//        $(".colores:checked").each(function ()
+//        {
+//            colores.push(parseInt($(this).val()));
+//        });
+//        var colorescadena = JSON.stringify(colores);
         $("#detalle").show();
          $("#detalle").html("<center style='font-size:1.2em'><b>Consultando Información...</b></center><br><br>");
         $("#grafica").html("");
         $("#detalleseleccionado").hide();
         $("#divtiporeporte").hide();
-        $("#detalle").load("GenerarReporteQ", {"fechainicio": fechainicio, "fechafin": fechafin, "hornos": hornoscadena, "producto": productoscadena, "modelo": modeloscadena, "color": colorescadena});
+        $("#detalle").load("GenerarReporteQ", {"fechainicio": fechainicio, "fechafin": fechafin});
+//        $("#detalle").load("GenerarReporteQ", {"fechainicio": fechainicio, "fechafin": fechafin, "hornos": hornoscadena, "producto": productoscadena, "modelo": modeloscadena, "color": colorescadena});
+    
     }
-    function Concentrado()
-    {
-        var pb = $("#pb2").data('progress');
-        pb.set(100);
-        var fechainicio = $("#fechainicio").val();
-        var fechafin = $("#fechafin").val();
-        var hornos = $("#hornos").val();
-        var producto = $("#producto").val();
-        var modelo = $("#modelo").val();
-        var color = $("#color").val();
-        var hornos = [];
-        $(".hornos:checked").each(function ()
-        {
-            hornos.push(parseInt($(this).val()));
-        });
-        var hornoscadena = JSON.stringify(hornos);
-
-        var productos = [];
-        $(".productos:checked").each(function ()
-        {
-            productos.push(parseInt($(this).val()));
-        });
-        var productoscadena = JSON.stringify(productos);
-
-        var modelos = [];
-        $(".modelos:checked").each(function ()
-        {
-            modelos.push(parseInt($(this).val()));
-        });
-        var modeloscadena = JSON.stringify(modelos);
-
-        var colores = [];
-        $(".colores:checked").each(function ()
-        {
-            colores.push(parseInt($(this).val()));
-        });
-        var colorescadena = JSON.stringify(colores);
-        var por = $("#concentradox").val();
-        $("#detalle").show();
-        $("#detalle").html("<center style='font-size:1.2em'><b>Consultando Información...</b></center><br><br>");
-        $("#grafica").html("");
-        $("#detalleseleccionado").hide();
-        $("#divtiporeporte").hide();
-        $("#detalle").load("GenerarConcentradoQ", {"fechainicio": fechainicio, "fechafin": fechafin, "hornos": hornoscadena, "producto": productoscadena, "modelo": modeloscadena, "color": colorescadena, "por": por});
-    }
+//    function Concentrado()
+//    {
+//        var pb = $("#pb2").data('progress');
+//        pb.set(100);
+//        var fechainicio = $("#fechainicio").val();
+//        var fechafin = $("#fechafin").val();
+//        var hornos = $("#hornos").val();
+//        var producto = $("#producto").val();
+//        var modelo = $("#modelo").val();
+//        var color = $("#color").val();
+//        var hornos = [];
+//        $(".hornos:checked").each(function ()
+//        {
+//            hornos.push(parseInt($(this).val()));
+//        });
+//        var hornoscadena = JSON.stringify(hornos);
+//
+//        var productos = [];
+//        $(".productos:checked").each(function ()
+//        {
+//            productos.push(parseInt($(this).val()));
+//        });
+//        var productoscadena = JSON.stringify(productos);
+//
+//        var modelos = [];
+//        $(".modelos:checked").each(function ()
+//        {
+//            modelos.push(parseInt($(this).val()));
+//        });
+//        var modeloscadena = JSON.stringify(modelos);
+//
+//        var colores = [];
+//        $(".colores:checked").each(function ()
+//        {
+//            colores.push(parseInt($(this).val()));
+//        });
+////        var colorescadena = JSON.stringify(colores);
+//        var por = $("#concentradox").val();
+//        $("#detalle").show();
+//        $("#detalle").html("<center style='font-size:1.2em'><b>Consultando Información...</b></center><br><br>");
+//        $("#grafica").html("");
+//        $("#detalleseleccionado").hide();
+//        $("#divtiporeporte").hide();
+//        $("#detalle").load("GenerarConcentradoQ", {"fechainicio": fechainicio, "fechafin": fechafin, "por": por});
+//    $("#detalle").load("GenerarConcentradoQ", {"fechainicio": fechainicio, "fechafin": fechafin, "hornos": hornoscadena, "producto": productoscadena, "modelo": modeloscadena, "color": colorescadena, "por": por});
+    
+  //  }
     function Paso(paso)
     {
         $("#paso1").hide();
@@ -201,7 +207,7 @@
                 </td>
             </tr>
         </table>
-        <br>
+<!--        <br>
         <center><button onclick="Paso(2)" class="button block-shadow-info text-shadow primary big-button">Siguiente</button></center>
         <br>
         <br>
@@ -317,8 +323,9 @@
                             <span class="caption"><b class="fg-darkCobalt">Todos</b></span>
                         </label>
             <br><br>
-            <button onclick="Paso(4)" class="button block-shadow-alert text-shadow alert big-button">Atrás</button>
-            <button onclick="Paso(6)" class="button block-shadow-info text-shadow primary big-button">Siguiente</button>
+            <button onclick="Paso(4)" class="button block-shadow-alert text-shadow alert big-button">Atrás</button>-->
+        <center> 
+        <button onclick="Paso(6)" class="button block-shadow-info text-shadow primary big-button">Siguiente</button>
         </center>
     </div>
 </div>
@@ -338,7 +345,7 @@
                 </tr>
                 <tr>
                     <th>Lista Detalle</th>
-                    <th>Concentrado y Graficado Por:</th>
+                    <!--<th>Concentrado y Graficado Por:</th>-->
                 </tr>
             </thead>
             <tr>
@@ -346,7 +353,7 @@
                     <i>Se mostrarán los productos a detalle</i><br>
                     <button id="" style="" class="button block-shadow-info text-shadow primary big-button" onclick="Detalle()"><span class="mif-arrow-right mif-ani-hover-horizontal"></span> Consultar</button>
                 </td>
-                <td class="center">
+<!--                <td class="center">
                     <div class="input-control select full-size">
                         <select id="concentradox">
                             <option value="h.IdHornos">Hornos</option>
@@ -357,11 +364,11 @@
                     </div>
                     <br>
                     <button id="" style="" class="button block-shadow-warning text-shadow warning big-button" onclick="Concentrado()"><span class="mif-arrow-right mif-ani-hover-horizontal"></span> Consultar</button>
-                </td>
+                </td>-->
             </tr>
         </table>
         <center>
-            <button onclick="Paso(5)" class="button block-shadow-alert text-shadow alert big-button">Atrás</button>
+            <button onclick="Paso(1)" class="button block-shadow-alert text-shadow alert big-button">Atrás</button>
         </center>
         </div>
         <div id="detalle" class="shadow" ></div><br><br><div id="texto"></div>
@@ -369,6 +376,8 @@
             <canvas id="myChart" width="300" height="100" class="shadow"></canvas>
         </div>
         <div id="detalleseleccionado"> </div>
+           </div>
+</div><!--
         <script>
             function Grafica(etiquetas, valores) {
 
@@ -424,7 +433,6 @@
                 }
             }
         </script>
-    </div>
-</div>
+ 
 
-
+-->

@@ -34,6 +34,7 @@ class Creditocobranza extends CI_Controller {
     public function LiberarPedido() {
         $pedido = $this->input->post_get('id', TRUE);
         $this->db->set("FechaLiberacion", date('Y-m-d | h:i:sa'));
+        $this->db->set("Estatus", "Liberado");
         $this->db->where("IdPedidos", $pedido);
         $this->db->update("Pedidos");
         print("correcto");

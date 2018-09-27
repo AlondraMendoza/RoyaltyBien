@@ -94,13 +94,13 @@
         location.reload(true);
     }
 </script>
-<h1><b> CAPTURA DE PEDIDOS</b></h1><br>
+<h1><b> PEDIDOS</b></h1><br>
 <center>
     <div class="tabcontrol" data-role="tabcontrol" data-save-state="true" id='tabs'>
         <ul class="tabs">
-            <li class="active"><a href="#productos">Captura de pedidos</a></li>
-            <li><a href="#pedidos">Pedidos capturados
-                </a>
+            <li class="active"><a href="#productos">Asignación de productos en pedidos</a></li>
+            <li>
+                <a href="#pedidos">Pedidos capturados</a>
             </li>
         </ul>
         <div class="frames">
@@ -142,7 +142,7 @@
                                     </td>
                                     <td class="center">
                                         <div class="input-control text big-input medium-size">
-                                            <a class="button warning large-button text-shadow block-shadow-warning" href="AbrirPedido?pedidoid=<?= $pedido->IdPedidos ?>">Abrir Pedido</a>
+                                            <a class="button primary large-button text-shadow block-shadow-primary" href="AbrirPedido?pedidoid=<?= $pedido->IdPedidos ?>">Abrir Pedido</a>
                                         </div>
                                     </td>
                                 </tr>

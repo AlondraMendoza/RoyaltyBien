@@ -497,7 +497,7 @@ class Administrador extends CI_Controller {
         $this->load->model("modelocedis");
         $infocontent["modelos"] = $this->modelocedis->ListaModelos();
         $this->load->view('administrador/InventarioCedis', $infocontent);
-        
+
         $this->load->view('template/footerd', '');
     }
 

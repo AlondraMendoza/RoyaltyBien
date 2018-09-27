@@ -147,6 +147,10 @@ class Cedis extends CI_Controller {
         $iddetalle = $this->Modelocedis->GuardarDetallePedido($idproducto, $idpedido);
         if ($iddetalle == "En pedido") {
             print("En pedido");
+        } else if ($iddetalle == "No solicitado") {
+            print("No solicitado");
+        } else if ($iddetalle == "Fuera de límite") {
+            print("Fuera límite");
         } else {
             print("Correcto");
         }
@@ -160,8 +164,23 @@ class Cedis extends CI_Controller {
         $infocontent["ListaProductos"] = $this->Modelocedis->ProductosPedido($pedidoid);
         $infocontent["ListaImagenes"] = $this->Modelocedis->ListaImagenesPedido($pedidoid);
         $infocontent["pedidoid"] = $pedidoid;
+        $infocontent["pedido"] = $this->Modelocedis->ObtenerPedido($pedidoid);
         $this->load->view('cedis/AbrirPedido', $infocontent);
         $this->load->view('template/footerd', '');
+    }
+
+    public function InformacionPedidoVentas() {
+        $pedidoid = $this->input->post_get('pedidoid', TRUE);
+        $infocontent["pedido"] = $this->Modelocedis->ObtenerPedido($pedidoid);
+        $infocontent["ListaProductosAgrupados"] = $this->Modelocedis->ProductosPedidoAgrupados($pedidoid);
+        $this->load->view('cedis/InformacionPedidoVentas', $infocontent);
+    }
+
+    public function RecargaProductosPedido() {
+        $pedidoid = $this->input->post_get('pedidoid', TRUE);
+        $infocontent["pedido"] = $this->Modelocedis->ObtenerPedido($pedidoid);
+        $infocontent["ListaProductos"] = $this->Modelocedis->ProductosPedido($pedidoid);
+        $this->load->view('cedis/RecargaProductosPedido', $infocontent);
     }
 
     public function SalidaCedis() {

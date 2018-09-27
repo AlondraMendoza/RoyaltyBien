@@ -132,11 +132,17 @@ class Modelocedis extends CI_Model {
 
     public function GuardarDetallePedido($idproducto, $idpedido) {
         if ($this->VerificarProductoPedido($idproducto) == "correcto") {
-            $this->db->set("PedidosId", $idpedido);
-            $this->db->set("FechaPresalida", date('Y-m-d | h:i:sa'));
-            $this->db->where("ProductosId", $idproducto);
-            $this->db->update("InventariosCedis");
-            $this->GuardarTarimaAbierta($idproducto);
+            if ($this->VerificarProductoPedidoVenta($idproducto, $idpedido) == "correcto") {
+                $this->db->set("PedidosId", $idpedido);
+                $this->db->set("FechaPresalida", date('Y-m-d | h:i:sa'));
+                $this->db->where("ProductosId", $idproducto);
+                $this->db->update("InventariosCedis");
+                $this->GuardarTarimaAbierta($idproducto);
+            } else if ($this->VerificarProductoPedidoVenta($idproducto, $idpedido) == "No solicitado") {
+                return "No solicitado";
+            } else {
+                return "Fuera de límite";
+            }
         } else {
             return "En pedido";
         }
@@ -180,12 +186,48 @@ class Modelocedis extends CI_Model {
         }
     }
 
+    public function ObtenerPedidoVentaDeProducto($idproducto, $idpedido) {
+        $producto = $this->ObtenerProducto($idproducto);
+        $this->db->select("*");
+        $this->db->from("PedidosVentas p");
+        $this->db->where("Activo", 1);
+        $this->db->where("p.CProductosId", $producto->CProductosId);
+        $this->db->where("p.ColoresId", $producto->ColoresId);
+        $this->db->where("p.ModelosId", $producto->ModelosId);
+        $this->db->where("p.ClasificacionesId", $producto->ClasificacionesId);
+        $this->db->where("p.PedidosId", $idpedido);
+        $fila = $this->db->get()->row();
+        return $fila;
+    }
+
+    public function VerificarProductoPedidoVenta($idproducto, $idpedido) {
+        $pedidoventa = $this->ObtenerPedidoVentaDeProducto($idproducto, $idpedido);
+        //Si retorna correcto es que el producto está dentro del límite configurado
+        /* Se verifica si es mayor ya que si es igual + el producto que se va a agregar se pasaría del límite */
+        if ($pedidoventa == null) {
+            return "No solicitado";
+        }
+        if ($pedidoventa->Cantidad > $this->ObtenerProductosPedido($idpedido, $pedidoventa->IdPedidosVentas)) {
+            return "correcto";
+        } else {
+            return "Fuera de límite";
+        }
+    }
+
     public function ListaCompletaPedidos() {
         $this->db->select("p.*");
         $this->db->from("Pedidos p");
         $this->db->where("p.Activo", 1);
         $this->db->where("p.FechaSalida", null);
         $fila = $this->db->get();
+        return $fila;
+    }
+
+    public function ObtenerPedido($id) {
+        $this->db->select("p.*");
+        $this->db->from("Pedidos p");
+        $this->db->where("p.IdPedidos", $id);
+        $fila = $this->db->get()->row();
         return $fila;
     }
 
@@ -205,6 +247,49 @@ class Modelocedis extends CI_Model {
         $this->db->join("CProductos cp", "p.CProductosId=cp.IdCProductos");
         $this->db->join("Colores c", "p.ColoresId=c.IdColores");
         $this->db->join("Modelos m", "p.ModelosId=m.IdModelos");
+        $this->db->where("i.Activo", 1);
+        $this->db->where("i.PedidosId", $pedidoid);
+        $fila = $this->db->get();
+        return $fila;
+    }
+
+    public function ObtenerProducto($id) {
+        $this->db->select("*");
+        $this->db->from("Productos p");
+        $this->db->where("p.IdProductos", $id);
+        $fila = $this->db->get()->row();
+        return $fila;
+    }
+
+    public function ObtenerPedidoVenta($id) {
+        $this->db->select("*");
+        $this->db->from("PedidosVentas p");
+        $this->db->where("p.IdPedidosVentas", $id);
+        $fila = $this->db->get()->row();
+        return $fila;
+    }
+
+    public function ObtenerProductosPedido($pedidoid, $pedidoventa) {
+        $pedidoventa = $this->ObtenerPedidoVenta($pedidoventa);
+        $this->db->select("count(*)as cuantos");
+        $this->db->from("InventariosCedis i");
+        $this->db->join("Productos p", "p.IdProductos=i.ProductosId");
+        $this->db->join("CProductos cp", "p.CProductosId=cp.IdCProductos");
+        $this->db->join("Colores c", "p.ColoresId=c.IdColores");
+        $this->db->join("Modelos m", "p.ModelosId=m.IdModelos");
+        $this->db->where("i.Activo", 1);
+        $this->db->where("cp.IdCProductos", $pedidoventa->CProductosId);
+        $this->db->where("c.IdColores", $pedidoventa->ColoresId);
+        $this->db->where("m.IdModelos", $pedidoventa->ModelosId);
+        $this->db->where("p.ClasificacionesId", $pedidoventa->ClasificacionesId);
+        $this->db->where("i.PedidosId", $pedidoid);
+        $fila = $this->db->get()->row()->cuantos;
+        return $fila;
+    }
+
+    public function ProductosPedidoAgrupados($pedidoid) {
+        $this->db->select("*");
+        $this->db->from("PedidosVentas i");
         $this->db->where("i.Activo", 1);
         $this->db->where("i.PedidosId", $pedidoid);
         $fila = $this->db->get();
@@ -254,6 +339,7 @@ class Modelocedis extends CI_Model {
             $this->db->update("InventariosCedis");
         }
         $this->db->set("FechaSalida", date('Y-m-d | h:i:sa'));
+        $this->db->set("Estatus", "Entregado");
         $this->db->where("IdPedidos", $pedidoid);
         $this->db->update("Pedidos");
     }

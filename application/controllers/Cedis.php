@@ -313,7 +313,9 @@ class Cedis extends CI_Controller {
         $clasi = $this->input->post_get('clasi', TRUE);
         $this->load->model("Modelocedis");
         $idprod=$this->Modelocedis->GuardarProductos($prod, $mod, $col, $clasi);
-        print($idprod);
+        $producto=$this->Modelocedis->ObtenerProducto($idprod);
+        $fechaformateada=date_format(date_create($producto->FechaCaptura), 'dmY');
+        print(str_pad($idprod, 10, '0', STR_PAD_LEFT)."*".$fechaformateada);
     }
     
     public function barcodeventana($filepath = "", $text = "", $size = "100", $orientation = "horizontal", $code_type = "code128", $print = true, $SizeFactor = 4.5) {

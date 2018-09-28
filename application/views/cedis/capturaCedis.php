@@ -1,11 +1,10 @@
 
 <script>
-document.getElementById("boton").disabled = true; 
 
     var Producto = "";
     var Modelo = "";
     var Color = "";
-    var Clasi = "";
+    var Clasi = 0;
     
 
     function AbrirModelos(id)
@@ -58,7 +57,7 @@ document.getElementById("boton").disabled = true;
             Notificacion("Error", "Captura el número de piezas antes de continuar", "cancel", "alert");
             return(0);
         }
-        if(clasi == ""){
+        if(clasi == 0){
             Notificacion("Error", "Elige la clasificación", "cancel", "alert");
             return(0);
         }
@@ -86,7 +85,11 @@ document.getElementById("boton").disabled = true;
             {
                 $("#tdAccion" + i).html('<span class="mif-checkmark fg-green"></span> Listo');
                 Notificacion("Correcto", "Guardado correctamente", "check", "success");
-                $("#areaimprimir" + data).printArea(); 
+                var idprod=data.substring(0,data.indexOf("*"));
+                var fechaformateada=data.substring(data.indexOf("*")+1);
+                var linea="<img src='barcodeventana?text="+fechaformateada+"-"+idprod+"'>";
+                $("#areaimprimir").html(linea); 
+                $("#areaimprimir").printArea(); 
             } else
             {
                 Notificacion("Error", "Ocurrió un error al guardar", "cancel", "alert");
@@ -98,6 +101,7 @@ document.getElementById("boton").disabled = true;
 
 
     function Cancelar(){
+    location.reload();
        
     }
 </script>
@@ -148,6 +152,7 @@ document.getElementById("boton").disabled = true;
                         <td style="width: 32%" class="center">
                             <b style="font-size: 1.3em" class="fg-darkEmerald">Clasificación:</b><br> 
                             <select class="select full-size" id="clas" onchange="Seleccion()">
+                                <option value="0">Selecciona la clasificación</option>
                                 <?php foreach ($clasificacion->result() as $c): ?>
                                     <option value=<?= $c->IdClasificaciones ?>><?= $c->Letra ?></option>
                                 <?php endforeach; ?>
@@ -172,7 +177,7 @@ document.getElementById("boton").disabled = true;
     <div class="panel primary" data-role="panel" id="" style="z-index: 1">
         <div class="heading" style="position:relative;z-index: 1">
             <span class="icon mif-stack fg-white bg-darkBlue"></span>
-            <span class="title">Detalle de Carro</span>
+            <span class="title">Productos</span>
         </div>
         <div class="content" id="">
             <div id="Resultados">
@@ -205,8 +210,8 @@ document.getElementById("boton").disabled = true;
     <br>
     <br>
 </center><br><br><br>
-<!--<div style="display:none">
-     <div id="areaimprimir<?= $producto->IdProductos ?>"><img src='barcodeventana?text=<?= date_format(date_create($producto->FechaCaptura), 'dmY') ?>-<?php echo str_pad($producto->IdProductos, 10, '0', STR_PAD_LEFT) ?>'></div>
-</div>-->
+<div style="display: none">
+     <div id="areaimprimir"></div>
+</div>
 
 

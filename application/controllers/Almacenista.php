@@ -309,6 +309,25 @@ class Almacenista extends CI_Controller {
             print ("NoExiste");
         }
     }
+    
+    public function SalirTarimasAlmacenAccidente() {
+        $idtarima = $this->input->post_get('idtarima', TRUE);
+        $Responsable = $this->input->post_get('Responsable', TRUE);
+        $Motivo = $this->input->post_get('Motivo', TRUE);
+        $this->load->model("Modeloalmacenista");
+        $resp = $this->Modeloalmacenista->SalirTarima($idtarima);
+        if ($resp != null) {
+            $query = $this->Modeloalmacenista->SalirProductoAlmacen($resp);
+            $query2 = $this->Modeloalmacenista->GuardarAccidenteT($idtarima, $Responsable, $Motivo);
+            if ($query == "correcto") {
+                print("Correcto");
+            } else {
+                print("Error");
+            }
+        } else {
+            print ("NoExiste");
+        }
+    }
 
     //Por producto
     public function SalirTarimasAlmacenP() {
@@ -335,8 +354,8 @@ class Almacenista extends CI_Controller {
         $this->load->model("Modeloalmacenista");
         $resp = $this->Modeloalmacenista->SalirTarimaP($idproducto);
         if ($resp != null) {
-            $query2 = $this->Modeloalmacenista->GuardarAccidente($idproducto, $Responsable, $Motivo);
             $query = $this->Modeloalmacenista->SalirProductoAlmacenP($resp);
+            $query2 = $this->Modeloalmacenista->GuardarAccidente($idproducto, $Responsable, $Motivo);
             if ($query == "correcto") {
                 print("Correcto");
             } else {

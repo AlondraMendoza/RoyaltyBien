@@ -470,11 +470,39 @@ class Modeloalmacenista extends CI_Model {
             'Dañado'=>1,
         );
         $this->db->insert('DetalleAccidentes', $datos2);
-        //Historial Salida
-//        $HistorialSalida = array('UsuariosId' => IdUsuario(), 'MovimientosProductosId' => 10,
-//            'Activo' => 1, 'ProductosId' => $idproducto);
-//        $this->db->set('Fecha', 'NOW()', FALSE);
-//        $this->db->insert('HistorialProducto', $HistorialSalida);
+        //Historial 
+        $Historial = array('UsuariosId' => IdUsuario(), 'MovimientosProductosId' => 10,
+            'Activo' => 1, 'ProductosId' => $idproducto);
+        $this->db->set('Fecha', 'NOW()', FALSE);
+        $this->db->insert('HistorialProducto', $Historial);
+        return "correcto";
+    }
+    
+    //Accidente tarima
+     public function GuardarAccidenteT($idtarima, $Responsable, $Motivo) {
+        $datos = array(
+            'CulpableAccidente'=> $Responsable,
+            'Motivo' => $Motivo,
+            'Tipo' => "Tarima",
+            'TarimasId' => $idtarima,
+            'Fecha' => date('Y-m-d | h:i:sa'),
+            'UsuariosId' => IdUsuario(),
+            'Activo' => 1,
+        );
+        $this->db->insert('Accidentes', $datos);
+        $id=$this->db->insert_id();
+//        $datos2 = array(
+//            'AccidentesId'=> $id,
+//            'ProductosId'=> $idproducto,
+//            'Procesado'=>0,
+//            'Dañado'=>1,
+//        );
+//        $this->db->insert('DetalleAccidentes', $datos2);
+        //Historial 
+        $Historial= array('UsuariosId' => IdUsuario(), 'MovimientosTarimasId' => 7,
+            'Activo' => 1, 'TarimasId' => $idtarima);
+        $this->db->set('Fecha', 'NOW()', FALSE);
+        $this->db->insert('HistorialTarima', $Historial);
         return "correcto";
     }
 

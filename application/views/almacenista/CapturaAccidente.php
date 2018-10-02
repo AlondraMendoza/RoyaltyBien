@@ -66,6 +66,7 @@ var guardado = 0;
                 });
             });
             guardado = 1;
+             $("#Inicio2").fadeOut();
             $("#botonguardar2").fadeOut();
             $("#nuevatarima2").fadeIn();
         }
@@ -91,7 +92,7 @@ var guardado = 0;
             <span class="icon mif-stack fg-white bg-darkOrange"></span>
             <span class="title">Ingresar Código de Barras</span>
         </div>
-        <div class="content" id="Inicio">
+        <div class="content" id="Inicio2">
             <table class="table">
                 <tr>
                     <td class="center">
@@ -282,6 +283,7 @@ var guardadoP = 0;
                 });
             });
             guardadoP = 1;
+            $("#Inicio").fadeOut();
             $("#botonguardar2P").fadeOut();
             $("#nuevatarima2P").fadeIn();
         }

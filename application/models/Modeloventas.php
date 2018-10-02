@@ -30,6 +30,12 @@ class Modeloventas extends CI_Model {
         }
     }
 
+    public function ObtenerProductoImportacion($clave) {
+        $query = $this->db->query("select * from Claves where Clave='$clave'");
+        $fila = $query->row();
+        return $fila;
+    }
+
     public function ObtenerModeloImportacion($clave) {
         $query = $this->db->query("select IdModelos from Modelos where ClaveImportacion='$clave'");
         $fila = $query->row();

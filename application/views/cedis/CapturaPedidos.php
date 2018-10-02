@@ -98,17 +98,17 @@
 <center>
     <div class="tabcontrol" data-role="tabcontrol" data-save-state="true" id='tabs'>
         <ul class="tabs">
-            <li class="active"><a href="#productos">Asignación de productos en pedidos</a></li>
-            <li>
-                <a href="#pedidos">Pedidos capturados</a>
-            </li>
+            <li class="active"><a href="#pedidoscapturados" >Pedidos Solicitados</a></li>
+            <li class="active"><a href="#pedidosliberados" >Pedidos Liberados</a></li>
+            <li class="active"><a href="#pedidosentregados" >Pedidos Entregados</a></li>
         </ul>
         <div class="frames">
-            <div class="frame" id="pedidos">
+
+            <div class="frame" id="pedidoscapturados">
                 <div class="panel warning" data-role="panel">
                     <div class="heading">
                         <span class="icon mif-stack fg-white bg-darkOrange"></span>
-                        <span class="title">Lista de pedidos pendientes</span>
+                        <span class="title">Lista de pedidos solicitados</span>
                     </div>
                     <div class="content" id="listapedidos" style="padding: 15px">
                         <table class="dataTable border bordered hovered hover" id="tablalistapedidos" data-role="datatable">
@@ -117,28 +117,94 @@
                                     <th>Clave</th>
                                     <th>Fecha registro</th>
                                     <th>Cliente</th>
+                                    <th>Nota</th>
                                     <th>Resumen</th>
-                                    <th style="width: 15%">Acción</th>
                                 </tr>
                             </thead>
-                            <?php foreach ($ListaPedidos->result() as $pedido): ?>
+                            <?php foreach ($ListaPedidosCapturados->result() as $pedido): ?>
                                 <tr>
                                     <td><?= $pedido->IdPedidos ?></td>
                                     <td><?= $pedido->FechaRegistro ?></td>
                                     <td><?= $pedido->Cliente ?></td>
+                                    <td><?= $pedido->NotaCedis ?></td>
                                     <td>
                                         <?php
                                         $ci = &get_instance();
                                         $ci->load->model("modelocedis");
-                                        $resumen = $ci->modelocedis->ResumenProductosPedido($pedido->IdPedidos);
+                                        $resumen = $ci->modelocedis->ResumenProductosPedidoAgrupados($pedido->IdPedidos);
                                         ?>
-                                        <?php foreach ($resumen->result() as $r): ?>
-                                            <?= $r->cantidad ?>
-                                            <?= $r->producto ?>
-                                            <?= $r->modelo ?>
-                                            <br>
-                                        <?php endforeach; ?>
+                                        <ul class="simple-list">
+                                            <?php foreach ($resumen->result() as $r): ?>
+                                                <li >
+                                                    <?= $r->Cantidad ?>
+                                                    <?= $r->producto ?>
+                                                    <?= $r->modelo ?>
+                                                    <?= $r->color ?>
+                                                    <?= $r->clasificacion ?>
+                                                    <br>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </td>
 
+                                </tr>
+                            <?php endforeach; ?>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="frame" id="pedidosliberados">
+                <div class="panel warning" data-role="panel">
+                    <div class="heading">
+                        <span class="icon mif-stack fg-white bg-darkOrange"></span>
+                        <span class="title">Lista de pedidos liberados</span>
+                    </div>
+                    <div class="content" id="listapedidos" style="padding: 15px">
+                        <table class="dataTable border bordered hovered hover" id="tablalistapedidos" data-role="datatable">
+                            <thead>
+                                <tr>
+                                    <th>Clave</th>
+                                    <th>Fecha registro</th>
+                                    <th>Fecha liberación</th>
+                                    <th>Cliente</th>
+                                    <th>Nota</th>
+                                    <th>Resumen</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <?php foreach ($ListaPedidosLiberados->result() as $pedido): ?>
+                                <tr>
+                                    <td><?= $pedido->IdPedidos ?></td>
+                                    <td><?= $pedido->FechaRegistro ?></td>
+                                    <td class="center">
+                                        <?php
+                                        if ($pedido->FechaLiberacion != null) {
+                                            echo "<b class='fg-green'>$pedido->FechaLiberacion</b>";
+                                        } else {
+                                            echo "<h6 class='fg-red'><i><b>Crédito y Cobranza no ha liberado el pedido</b></i></h6>";
+                                        }
+                                        ?>
+                                    </td>
+                                    <td><?= $pedido->Cliente ?></td>
+                                    <td><?= $pedido->NotaCedis ?></td>
+                                    <td>
+                                        <?php
+                                        $ci = &get_instance();
+                                        $ci->load->model("modelocedis");
+                                        $resumen = $ci->modelocedis->ResumenProductosPedidoAgrupados($pedido->IdPedidos);
+                                        ?>
+                                        <ul class="simple-list">
+                                            <?php foreach ($resumen->result() as $r): ?>
+                                                <li >
+                                                    <?= $r->Cantidad ?>
+                                                    <?= $r->producto ?>
+                                                    <?= $r->modelo ?>
+                                                    <?= $r->color ?>
+                                                    <?= $r->clasificacion ?>
+                                                    <br>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
                                     </td>
                                     <td class="center">
                                         <div class="input-control text big-input medium-size">
@@ -149,77 +215,68 @@
                             <?php endforeach; ?>
                         </table>
                     </div>
-                    <br><br><br>
-                    <br><br><br>
                 </div>
-                <br><br><br>
-                <br><br><br>
             </div>
-            <div class="frame" id="productos">
+            <div class="frame" id="pedidosentregados">
                 <div class="panel warning" data-role="panel">
                     <div class="heading">
                         <span class="icon mif-stack fg-white bg-darkOrange"></span>
-                        <span class="title">Ingresar Código de Barras de producto</span>
+                        <span class="title">Lista de pedidos entregados</span>
                     </div>
-                    <div class="content" id="Inicio">
-                        <table class="table">
-                            <tr>
-                                <td class="center">
-                                    <b style="font-size: 1.3em" class="fg-darkEmerald"> Código de Barras:</b><br>
-                                    <div class="input-control text full-size" style="height:80px;font-size: x-large">
-                                        <input type="text" id="claveProd" onkeyup="VerificarClave(event)">
-                                    </div>
-                                    <br><label><span id="des"></span></label>
-                                </td>
-                            </tr>
-                            <br><br>
+                    <div class="content" id="listapedidos" style="padding: 15px">
+                        <table class="dataTable border bordered hovered hover" id="tablalistapedidos" data-role="datatable">
+                            <thead>
+                                <tr>
+                                    <th>Clave</th>
+                                    <th>Fecha registro</th>
+                                    <th>Fecha liberación</th>
+                                    <th>Fecha salida</th>
+                                    <th>Cliente</th>
+                                    <th>Nota</th>
+                                    <th>Resumen</th>
+
+                                </tr>
+                            </thead>
+                            <?php foreach ($ListaPedidosEntregados->result() as $pedido): ?>
+                                <tr>
+                                    <td><?= $pedido->IdPedidos ?></td>
+                                    <td><?= $pedido->FechaRegistro ?></td>
+                                    <td class="center">
+                                        <?php
+                                        if ($pedido->FechaLiberacion != null) {
+                                            echo "<b class='fg-green'>$pedido->FechaLiberacion</b>";
+                                        } else {
+                                            echo "<h6 class='fg-red'><i><b>Crédito y Cobranza no ha liberado el pedido</b></i></h6>";
+                                        }
+                                        ?>
+                                    </td>
+                                    <td><?= $pedido->FechaSalida ?></td>
+                                    <td><?= $pedido->Cliente ?></td>
+                                    <td><?= $pedido->NotaCedis ?></td>
+                                    <td>
+                                        <?php
+                                        $ci = &get_instance();
+                                        $ci->load->model("modelocedis");
+                                        $resumen = $ci->modelocedis->ResumenProductosPedidoAgrupados($pedido->IdPedidos);
+                                        ?>
+                                        <ul class="simple-list">
+                                            <?php foreach ($resumen->result() as $r): ?>
+                                                <li >
+                                                    <?= $r->Cantidad ?>
+                                                    <?= $r->producto ?>
+                                                    <?= $r->modelo ?>
+                                                    <?= $r->color ?>
+                                                    <?= $r->clasificacion ?>
+                                                    <br>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                    </td>
+
+                                </tr>
+                            <?php endforeach; ?>
                         </table>
                     </div>
-                </div>
-                <div id="resultadosproductos" style="display: none">
-                    <center>
-                        <div class="panel primary" data-role="panel">
-                            <div class="heading">
-                                <span class="icon mif-stack fg-white bg-darkBlue"></span>
-                                <span class="title">Detalle de Productos agregados</span>
-                            </div>
-                            <br>
-                            <table class="table">
-                                <tr>
-                                    <td class="center">
-                                        <b style="font-size: 1.2em" class="fg-darkEmerald"> Nombre completo de cliente:</b><br>
-                                        <div class="input-control text full-size" style="height:80px;font-size: x-large">
-                                            <input type="text" id="cliente" onkeyup="" placeholder="Teclea el nombre del cliente">
-                                        </div>
-                                    </td>
-                                </tr>
-                            </table>
-                            <div class="content" id="Resultados">
-                                <table class="table bordered border hovered" id="tablaproductos">
-                                    <thead>
-                                        <tr>
-                                            <th>Clave</th>
-                                            <th>Descripción</th>
-                                            <th>Seleccion/Acción</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                                <table>
-                                    <tr>
-                                        <td class="center" id="Botones"><br>
-                                            <div class="input-control text big-input medium-size" id="nuevatarima" style="display: none">
-                                                <button class="button warning" onclick="Cancelar()">Nuevo Pedido</button></div>
-                                            <div class="input-control text big-input medium-size" id="botonguardar">
-                                                <button class="button success" onclick="GuardarPedido()">Guardar</button></div>
-                                            <div class="input-control text big-input medium-size">
-                                                <button class="button danger" onclick="Cancelar()">Cancelar</button></div>
-
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </center>
                 </div>
             </div>
         </div>

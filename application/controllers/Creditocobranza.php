@@ -26,8 +26,10 @@ class Creditocobranza extends CI_Controller {
         $infoheader["titulo"] = "Pedidos: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $this->load->model("Modelocedis");
-        $infocontent["ListaPedidos"] = $this->Modelocedis->ListaCompletaPedidos();
-        $this->load->view('creditocobranza/Pedidos', $infocontent);
+        $infocontent["ListaPedidosCapturados"] = $this->Modelocedis->ListaCompletaPedidosCapturados();
+        $infocontent["ListaPedidosLiberados"] = $this->Modelocedis->ListaCompletaPedidosLiberados();
+        $infocontent["ListaPedidosEntregados"] = $this->Modelocedis->ListaCompletaPedidosEntregados();
+        $this->load->view('Creditocobranza/Pedidos', $infocontent);
         $this->load->view('template/footerd', '');
     }
 

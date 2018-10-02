@@ -91,7 +91,9 @@ class Cedis extends CI_Controller {
         $this->load->view('template/headerd', $infoheader);
         $infocontent["Nombre"] = "Alondra Mendoza";
         $this->load->model("Modelocedis");
-        $infocontent["ListaPedidos"] = $this->Modelocedis->ListaCompletaPedidos();
+        $infocontent["ListaPedidosCapturados"] = $this->Modelocedis->ListaCompletaPedidosCapturados();
+        $infocontent["ListaPedidosLiberados"] = $this->Modelocedis->ListaCompletaPedidosLiberados();
+        $infocontent["ListaPedidosEntregados"] = $this->Modelocedis->ListaCompletaPedidosEntregados();
         $this->load->view('cedis/CapturaPedidos', $infocontent);
 
         $this->load->view('template/footerd', '');

@@ -68,6 +68,16 @@ class Administrador extends CI_Controller {
         $this->load->view('template/footerd', '');
     }
 
+    public function agmb() {
+        $this->load->model("Modeloadministrador");
+        $infoheader["titulo"] = "Administrador: Royalty Ceramic";
+        $infocontent["Nombre"] = "Alondra Mendoza";
+        $infocontent["hoy"] = date("d/m/Y");
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->view('administrador/agmb', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+
     public function ObtenerModelos() {
         $producto = $this->input->post_get('producto', TRUE);
         $this->load->model("Modeloadministrador");
@@ -145,6 +155,7 @@ class Administrador extends CI_Controller {
     }
 
     public function GenerarConcentrado() {
+
         $fechainicio = $this->input->post_get('fechainicio', TRUE);
         $fechafin = $this->input->post_get('fechafin', TRUE);
         $clasificacion = $this->input->post_get('clasificacion', TRUE);

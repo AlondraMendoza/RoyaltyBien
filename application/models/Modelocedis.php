@@ -223,6 +223,33 @@ class Modelocedis extends CI_Model {
         return $fila;
     }
 
+    public function ListaCompletaPedidosLiberados() {
+        $this->db->select("p.*");
+        $this->db->from("Pedidos p");
+        $this->db->where("p.Activo", 1);
+        $this->db->where("p.Estatus", "Liberado");
+        $fila = $this->db->get();
+        return $fila;
+    }
+
+    public function ListaCompletaPedidosCapturados() {
+        $this->db->select("p.*");
+        $this->db->from("Pedidos p");
+        $this->db->where("p.Activo", 1);
+        $this->db->where("p.Estatus", "Solicitado");
+        $fila = $this->db->get();
+        return $fila;
+    }
+
+    public function ListaCompletaPedidosEntregados() {
+        $this->db->select("p.*");
+        $this->db->from("Pedidos p");
+        $this->db->where("p.Activo", 1);
+        $this->db->where("p.Estatus", "Entregado");
+        $fila = $this->db->get();
+        return $fila;
+    }
+
     public function ObtenerPedido($id) {
         $this->db->select("p.*");
         $this->db->from("Pedidos p");

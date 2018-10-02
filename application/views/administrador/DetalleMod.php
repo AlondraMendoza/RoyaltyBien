@@ -23,10 +23,22 @@
                             </td>
                             <td class="center" rowspan="1" style="width: 30%">
                                 <img class="block-shadow-warning" src="<?= base_url() ?>public/colores/<?= $col->Descripcion ?>" height="100px;" width="100px;">
-                                <form enctype="multipart/form-data" action="uploader.php" method="POST">
+<!--                                <form enctype="multipart/form-data" action="uploader.php" method="POST">
                                 <input name="uploadedfile" type="file" />
                                 <input type="submit" value="Subir archivo" />
+                                </form>-->
+                                <div id="formulario_imagenes">
+                                <form action="SubirImagenColores" enctype="multipart/form-data" method="post">
+                                <div class="input-control file " data-role="input">
+                                <input type="file" name="userfile" />
+                                <input type="hidden" name="colorid" value="<?= $col->IdColores ?>">
+                                <input type="hidden" name="modeloid" value="<?= $modelo ?>">
+                                <button class="button"><span class="mif-folder"></span></button>
+                                </div>
+                                <input type="submit" class="button primary" value="Subir imagen"/>
+                                </center>
                                 </form>
+                                </div>
                             </td> 
                             <td class="center">
                                 <a class="button block-shadow-info text-shadow alert" onclick="Desactivar(<?= $col->IdColores ?>)">Desactivar</a>
@@ -61,10 +73,6 @@
                             </td>
                             <td class="center" rowspan="1" style="width: 30%">
                                 <img class="block-shadow-warning" src="<?= base_url() ?>public/imagenes/SinImagen.png" height="100px;" width="100px;">
-                                <form enctype="multipart/form-data" action="uploader.php" method="POST">
-                                <input name="uploadedfile" type="file" />
-                                <input type="submit" value="Subir archivo" />
-                                </form>
                             </td> 
                             <td class="center">
                                 <a class="button block-shadow-info text-shadow success" onclick="GuardarNC()">Guardar Color</a>

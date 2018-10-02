@@ -451,7 +451,7 @@ class Modeloalmacenista extends CI_Model {
         return "correcto";
     }
     
-    public function GuardarAccidente($fila,$Responsable,$Motivo) {
+    public function GuardarAccidente($idproducto, $Responsable, $Motivo) {
         $datos = array(
             'CulpableAccidente'=> $Responsable,
             'Motivo' => $Motivo,
@@ -459,18 +459,20 @@ class Modeloalmacenista extends CI_Model {
             'TarimasId' => null,
             'Fecha' => date('Y-m-d | h:i:sa'),
             'UsuariosId' => IdUsuario(),
+            'Activo' => 1,
         );
         $this->db->insert('Accidentes', $datos);
         $id=$this->db->insert_id();
         $datos2 = array(
             'AccidentesId'=> $id,
-            'ProductosId'=>$fila,
+            'ProductosId'=> $idproducto,
             'Procesado'=>0,
             'Dañado'=>1,
         );
+        $this->db->insert('DetalleAccidentes', $datos2);
         //Historial
         $HistorialSalida = array('UsuariosId' => IdUsuario(), 'MovimientosProductosId' => 10,
-            'Activo' => 1, 'ProductosId' => $fila);
+            'Activo' => 1, 'ProductosId' => $idproducto);
         $this->db->set('Fecha', 'NOW()', FALSE);
         $this->db->insert('HistorialProducto', $HistorialSalida);
         return "correcto";

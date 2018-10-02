@@ -594,7 +594,105 @@ class Modelocedis extends CI_Model {
         }
         return "";
     }
+    
+     public function ListarProductos() {
+        $this->db->select('*');
+        $this->db->from('CProductos cp');
+        $this->db->where('cp.Activo', 1);
+        $query = $this->db->get();
+        return $query;
+    }
+    
+    public function ListarModelos($id) {
+        $this->db->select('m.Nombre, m.IdModelos, cpm.Imagen');
+        $this->db->from('CProductos p');
+        $this->db->join('CProductosModelos cpm', 'p.IdCProductos=cpm.CProductosId');
+        $this->db->join('Modelos m', 'cpm.ModelosId=m.IdModelos');
+        $this->db->where('p.Activo', 1);
+        $this->db->where('cpm.Activo', 1);
+        $this->db->where('p.IdCProductos', $id);
+        $query = $this->db->get();
+        return $query;
+    }
+    
+    public function ListarColores($id) {
+        $this->db->select('c.*');
+        $this->db->from('Colores c');
+        $this->db->join('ModelosColores mc', 'c.IdColores=mc.ColoresId');
+        $this->db->join('Modelos m', 'mc.ModelosId=m.IdModelos');
+        $this->db->where('c.Activo', 1);
+        $this->db->where('m.IdModelos', $id);
+        $query = $this->db->get();
+        return $query;
+    }
 
+    public function ListarClasificaciones() {
+        $this->db->select('c.*');
+        $this->db->from('Clasificaciones c');
+        $this->db->where('c.Activo',1);
+        $query = $this->db->get();
+        return $query;
+    }
+    
+    public function GuardarProductos($prod, $mod, $col, $clasi ){
+        //Se crea el producto
+       $datos = array(
+            'CProductosId' => $prod,
+            'ColoresId' => $col,
+            'UsuariosId' => IdUsuario(),
+            'Activo' => 1,
+            'Clasificado' => 1,
+            'ModelosId' => $mod,
+            'FechaCaptura' => date('Y-m-d | h:i:sa')
+        );
+        $this->db->insert("Productos", $datos);
+        $idprod= $this->db->insert_id();
+        //Historial captura
+        $HistorialCaptura= array(
+            'UsuariosId'=>IdUsuario(),
+            'MovimientosProductosId'=>14,
+            'Activo'=>1,
+            'ProductosId'=>$idprod,
+            'Fecha' => date ('Y-m-d | h:i:sa')
+        );
+        $this->db->insert('HistorialProducto', $HistorialCaptura);
+        
+        //Clasificación
+        $datos2 = array(
+            'ProductosId' => $idprod,
+            'FechaClasificacion' => date('Y-m-d | h:i:sa'),
+            'ClasificacionesId' => $clasi,
+            'FueraTono' => 0,
+            'UsuariosId' => IdUsuario(),
+            'Activo' => 1
+        );
+        /* Se actualiza la clasificacion actual */
+        $this->db->set("ClasificacionesId", $clasi);
+        $this->db->where("IdProductos", $idprod);
+        $this->db->update("Productos");
+        /* Fin clasificación actual */
+        $this->db->insert('HistorialClasificacion', $datos2);
+        //Historial Clasificación
+        $Historial = array(
+            'UsuariosId' => IdUsuario(),
+            'MovimientosProductosId' => 15,
+            'Activo' => 1,
+            'ProductosId' => $idprod,
+            'Fecha' => date('Y-m-d | h:i:sa')
+        );
+        $this->db->insert('HistorialProducto', $Historial);
+        //Entrada al inventario
+        $this->GuardarProductoCedis($idprod);
+        $HistorialEntrada = array(
+            'UsuariosId' => IdUsuario(),
+            'MovimientosProductosId' => 6,
+            'Activo' => 1,
+            'ProductosId' => $idprod,
+            'Fecha' => date('Y-m-d | h:i:sa')
+        );
+        $this->db->insert('HistorialProducto', $HistorialEntrada);
+        return $idprod;
+    }
 }
 
 ?>

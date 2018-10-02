@@ -42,13 +42,13 @@
      }
 
 var guardado = 0;
-    function GuardarAccidente1() {
-    var Responsable = $("Responsable").val();
-    var Motivo= $("Motivo").val();
+    function GuardarAccidenteT() {
+    var Responsable = $("#ResponsableT").val();
+    var Motivo= $("#MotivoT").val();
         if (guardado == 0) {
             $("input[name='IDS2[]']:checked").each(function () {
                 var id = $(this).val();
-                $.post("SalirTarimasAlmacen", {"idtarima": id}, function (data) {
+                $.post("SalirTarimasAlmacenAccidente", {"idtarima": id, "Responsable": Responsable, "Motivo": Motivo}, function (data) {
                     if (data == "Correcto")
                     {
                         $("#td2" + id).html('<span class="mif-checkmark fg-green"></span> Tarima fuera del almacén');
@@ -123,10 +123,19 @@ var guardado = 0;
            </thead>
         </table>
         <table>
+             <tr>
+                <td><b>Responsable: <br></b><div class="input-control text full-size">
+                            <input type="text" id="ResponsableT">
+                        </div></td>
+                <td><b>Motivo: <br></b><div class="input-control text full-size">
+                            <input type="text" id="MotivoT" >
+                        </div></td>
+                
+            </tr>
         <tr>
             <td class="center" id="Botones"><br>
                 <div class="input-control text big-input medium-size" id="nuevatarima2" style="display: none"><button class="button warning" onclick="Cancelar()">Nueva Entrada</button></div>
-                <div class="input-control text big-input medium-size" id="botonguardar2"><button class="button success" onclick="GuardarTarimas()">Guardar</button></div>
+                <div class="input-control text big-input medium-size" id="botonguardar2"><button class="button success" onclick="GuardarAccidenteT()">Guardar</button></div>
                 <div class="input-control text big-input medium-size"><button class="button danger" onclick="Cancelar()">Cancelar</button></div>
             </td>
         </tr>
@@ -250,15 +259,15 @@ var guardado = 0;
 
 var guardadoP = 0;
     function GuardarAccidente() {
-    var Responsable = $("Responsable").val();
-    var Motivo= $("Motivo").val();
+    var Responsable = $("#Responsable").val();
+    var Motivo= $("#Motivo").val();
         if (guardadoP == 0) {
             $("input[name='IDS2P[]']:checked").each(function () {
                 var id = $(this).val();
                 $.post("SalirTarimasAlmacenPAccidente", {"idtarima": id, "Responsable": Responsable, "Motivo": Motivo}, function (data) {
                     if (data == "Correcto")
                     {
-                        $("#td2" + id).html('<span class="mif-checkmark fg-green"></span> Producto fuera del almacén');
+                        $("#td2" + id).html('<span class="mif-checkmark fg-green"></span> Producto con accidente fuera del almacén');
                     } else if (data == "NoExiste")
                     {
                        $("#td2" + id).html('<span class="mif-cancel fg-red"></span> El producto no se encontró');

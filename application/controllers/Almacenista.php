@@ -335,7 +335,7 @@ class Almacenista extends CI_Controller {
         $this->load->model("Modeloalmacenista");
         $resp = $this->Modeloalmacenista->SalirTarimaP($idproducto);
         if ($resp != null) {
-            $query2 = $this->Modeloalmacenista->GuardarAccidente($resp,$Responsable,$Motivo);
+            $query2 = $this->Modeloalmacenista->GuardarAccidente($idproducto, $Responsable, $Motivo);
             $query = $this->Modeloalmacenista->SalirProductoAlmacenP($resp);
             if ($query == "correcto") {
                 print("Correcto");

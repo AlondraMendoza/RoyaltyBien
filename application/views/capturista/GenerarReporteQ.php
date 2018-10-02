@@ -9,18 +9,18 @@
 </script>
 <center><button onclick="RegresoCriterios()" class="button block-shadow-info text-shadow primary big-button">Regresar a Criterios de Selección</button></center>
 <br>
-<table class="table shadow" data-role="datatable">
+<table class="table shadow" data-role="datatable" >
     <thead>
         <tr>
             <th colspan="6" class="fg-darkBlue">RESULTADOS</th>
         </tr>
         <tr>
-            <th>No.</th>
-            <th>Horno</th>
-            <th>Piezas</th>
-            <th>Producto</th>
-            <th>Modelo</th>
-            <th>Color</th>
+            <th style="text-align:center;">No.</th>
+            <th style="text-align:center;">Horno</th>
+            <th style="text-align:center;">Piezas</th>
+            <th style="text-align:center;">Producto</th>
+            <th style="text-align:center;">Modelo</th>
+            <th style="text-align:center;">Color</th>
         </tr>
     </thead>
     <tbody>

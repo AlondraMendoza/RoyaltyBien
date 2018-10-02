@@ -685,4 +685,58 @@ class Administrador extends CI_Controller {
         $this->load->view('template/footerd', '');
     }
 
+    function SubirImagenProducto() {
+        $this->load->model("Modeloadministrador");
+        $productoid = $this->input->post('productoid');
+        $config['upload_path'] = 'public/imagenes/';
+        $config['allowed_types'] = 'gif|jpg|png';
+        $config['max_size'] = '4000';
+        $config['file_name'] = "imgCProd" . $productoid;
+        $config['max_width'] = '4024';
+        $config['max_height'] = '4008';
+        $this->load->library('upload', $config);
+        $this->upload->do_upload();
+        $file_info = $this->upload->data();
+        $ruta = $file_info["file_name"];
+        $this->Modeloadministrador->SubirImagenProducto($ruta, $productoid);
+        redirect('administrador/Productos');
+    }
+    
+    function SubirImagenModelo() {
+        $this->load->model("Modeloadministrador");
+        $modeloid = $this->input->post('modeloid');
+        $productoid = $this->input->post('productoid');
+        $config['upload_path'] = 'public/imagenes/';
+        $config['allowed_types'] = 'gif|jpg|png';
+        $config['max_size'] = '4000';
+        $config['file_name'] = "imgMod" . $modeloid;
+        $config['max_width'] = '4024';
+        $config['max_height'] = '4008';
+        $this->load->library('upload', $config);
+        $this->upload->do_upload();
+        $file_info = $this->upload->data();
+        $ruta = $file_info["file_name"];
+        $this->Modeloadministrador->SubirImagenModelo($ruta, $modeloid);
+        redirect('administrador/DetalleProd?producto='. $productoid);
+    }
+    
+    function SubirImagenColores() {
+        $this->load->model("Modeloadministrador");
+        $modeloid = $this->input->post('modeloid');
+        $colorid = $this->input->post('colorid');
+        $config['upload_path'] = 'public/imagenes/';
+        $config['allowed_types'] = 'gif|jpg|png';
+        $config['max_size'] = '4000';
+        $config['file_name'] = "imgCol" . $colorid;
+        $config['max_width'] = '4024';
+        $config['max_height'] = '4008';
+        $this->load->library('upload', $config);
+        $this->upload->do_upload();
+        $file_info = $this->upload->data();
+        $ruta = $file_info["file_name"];
+        $this->Modeloadministrador->SubirImagenColores($ruta, $colorid);
+        redirect('administrador/DetalleMod?modelo='. $modeloid);
+    }
+    
+    
 }

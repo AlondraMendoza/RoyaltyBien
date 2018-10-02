@@ -470,11 +470,11 @@ class Modeloalmacenista extends CI_Model {
             'Dañado'=>1,
         );
         $this->db->insert('DetalleAccidentes', $datos2);
-        //Historial
-        $HistorialSalida = array('UsuariosId' => IdUsuario(), 'MovimientosProductosId' => 10,
-            'Activo' => 1, 'ProductosId' => $idproducto);
-        $this->db->set('Fecha', 'NOW()', FALSE);
-        $this->db->insert('HistorialProducto', $HistorialSalida);
+        //Historial Salida
+//        $HistorialSalida = array('UsuariosId' => IdUsuario(), 'MovimientosProductosId' => 10,
+//            'Activo' => 1, 'ProductosId' => $idproducto);
+//        $this->db->set('Fecha', 'NOW()', FALSE);
+//        $this->db->insert('HistorialProducto', $HistorialSalida);
         return "correcto";
     }
 

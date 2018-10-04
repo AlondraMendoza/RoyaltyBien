@@ -42,7 +42,14 @@ if ($correcto) {
                         <?php foreach ($ListaPedidosCapturados->result() as $pedido): ?>
                             <tr>
                                 <td><?= $pedido->IdPedidos ?></td>
-                                <td><?= $pedido->FechaRegistro ?></td>
+                                <td><?= $pedido->FechaRegistro ?>
+                                    <?php
+                                    $ci = &get_instance();
+                                    $ci->load->model("modeloventas");
+                                    $npen = $ci->modeloventas->Usuario($pedido->UsuariosId);?>
+                                    <br><br>
+                                    <?= $npen->Nombre." ".$npen->APaterno ?>
+                                </td>
                                 <td><?= $pedido->Cliente ?></td>
                                 <td><?= $pedido->NotaCedis ?></td>
                                 <td><?= $pedido->NotaCredito ?></td>

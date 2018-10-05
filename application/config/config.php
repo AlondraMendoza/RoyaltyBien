@@ -25,11 +25,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   |
  */
 
-$config['base_url'] = 'http://localhost:81/RoyaltyBien/';
-
-
-
-//este no es $config['base_url'] = 'http://localhost/royaltyceramic.com/';
+//$config['base_url'] = 'http://localhost:81/RoyaltyBien/';
+$config['base_url'] = 'http://localhost/RoyaltyBien/';
 //$config['base_url'] = 'http://www.royaltyceramic.com/';
 
 /*

@@ -58,7 +58,7 @@
             $.post("GuardarTarima", function (data) {
                 var idtarima = data;
 
-                var codigob = "<?= date_format(date_create($hoyingles), 'dmY') . '-' ?>" + pad(idtarima, 10);
+                var codigob = "<?= date_format(date_create($hoyingles), 'dmY') . '*' ?>" + pad(idtarima, 10);
                 var imagen = "barcodeventana?text=" + codigob + "";
                 $("#etiquetatarima").html("<img src=" + imagen + ">");
                 var cuantos = $("input[name='IDS[]']:checked").length;
@@ -90,9 +90,7 @@
                     {
                         $("#etiquetatarima").printArea();
                     }
-
                 });
-
             });
             guardado = 1;
             $("#botonguardar").fadeOut();
@@ -101,7 +99,6 @@
         }
         //$("#tablaproductos").empty();
     }
-
     function Cancelar() {
         location.reload(true);
     }
@@ -157,7 +154,6 @@
                                     <button class="button success" onclick="Guardar()">Guardar</button></div>
                                 <div class="input-control text big-input medium-size">
                                     <button class="button danger" onclick="Cancelar()">Cancelar</button></div>
-
                             </td>
                         </tr>
                     </table>
@@ -166,5 +162,3 @@
         </center>
     </div>
 </center><br><br><br>
-
-

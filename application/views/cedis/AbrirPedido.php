@@ -155,19 +155,24 @@
 <div class="panel primary" data-role="panel">
     <div class="heading">
         <span class="icon mif-stack fg-white bg-darkBlue"></span>
-        <span class="title">Imagenes de pedido</span>
+        <span class="title">Información adicional para pedido</span>
     </div>
     <div class="content" id="" style="padding: 15px">
         <br>
         <div id="formulario_imagenes">
             <form action="SubirImagenPedido" enctype="multipart/form-data" method="post">
                 <center><label>Selecciona la imagen:</label><br>
-                    <div class="input-control file " data-role="input">
+                    <div class="input-control file full-size" data-role="input">
                         <input type="file" name="userfile" />
                         <input type="hidden" name="pedidoid" value="<?= $pedidoid ?>">
                         <button class="button"><span class="mif-folder"></span></button>
                     </div>
-                    <input type="submit" class="button primary" value="Subir imagen"/>
+                    <br><br>
+                    <label>Teclea la observación:</label><br>
+                    <div class="input-control textarea full-size">
+                        <textarea name="observacioncedis"><?= $pedido->ObservacionSalida ?></textarea>
+                    </div><br>
+                    <input type="submit" class="button primary" value="Guardar Cambios"/>
                 </center>
             </form>
         </div>

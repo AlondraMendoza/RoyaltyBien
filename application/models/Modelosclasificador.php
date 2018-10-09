@@ -26,6 +26,16 @@ class Modelosclasificador extends CI_Model {
 
     public function GuardarDetalleDevolucion($idproducto, $iddevolucion) {
         if ($this->VerificarProductoDevolucion($idproducto) == "no existe") {
+            //Historial captura
+            $HistorialCaptura = array(
+                'UsuariosId' => IdUsuario(),
+                'MovimientosProductosId' => 16,
+                'Activo' => 1,
+                'ProductosId' => $idproducto,
+                'Fecha' => date('Y-m-d | h:i:sa')
+            );
+            $this->db->insert('HistorialProducto', $HistorialCaptura);
+            /* Fin captura historial */
             $datos = array(
                 'ProductosId' => $idproducto,
                 'Activo' => 1,

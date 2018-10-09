@@ -12,13 +12,14 @@
     function CargaInfo(id)
     {
         if (!$("#" + id).hasClass("cargado")) {
+            $("#" + id).html("Consultando información");
             $("#" + id).load("CargaInfoModelo", {"modelo_id": id});
             $("#" + id).addClass("cargado");
         }
 
     }
 </script>
-<h1 class="light text-shadow">INVENTARIO CEDIS</h1><br>
+<h1 class="light text-shadow">INVENTARIO CEDIS REDUCIENDO PEDIDOS LIBERADOS</h1><br>
 
 <div class="tabcontrol" data-role="tabcontrol" data-save-state="true" id='tabs'>
     <ul class="tabs">
@@ -38,7 +39,7 @@
         ?>
     </ul>
     <div class="frames">
-        <?php foreach ($modelos->result() as $modelo): ?>  
+        <?php foreach ($modelos->result() as $modelo): ?>
             <div class="frame" id="<?= $modelo->IdModelos ?>">
 
             </div>

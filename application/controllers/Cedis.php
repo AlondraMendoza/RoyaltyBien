@@ -113,18 +113,24 @@ class Cedis extends CI_Controller {
 
     function SubirImagenPedido() {
         $pedidoid = $this->input->post('pedidoid');
-        $config['upload_path'] = 'public/imagenespedidos/';
-        $config['allowed_types'] = 'gif|jpg|png';
-        $config['max_size'] = '4000';
-        $fecha = date('Y-m-d-hi-s-a');
-        $config['file_name'] = "pedido" . $fecha . $pedidoid;
-        $config['max_width'] = '4024';
-        $config['max_height'] = '4008';
-        $this->load->library('upload', $config);
-        $this->upload->do_upload();
-        $file_info = $this->upload->data();
-        $ruta = "public/imagenespedidos/" . $file_info["file_name"];
-        $this->Modelocedis->SubirImagenPedido($ruta, $pedidoid);
+        $observacion = $this->input->post_get('observacioncedis', TRUE);
+        $this->db->set("ObservacionSalida", $observacion);
+        $this->db->where("IdPedidos", $pedidoid);
+        $this->db->update("Pedidos");
+        if (!empty($_FILES['userfile']['name'])) {
+            $config['upload_path'] = 'public/imagenespedidos/';
+            $config['allowed_types'] = 'gif|jpg|png';
+            $config['max_size'] = '4000';
+            $fecha = date('Y-m-d-hi-s-a');
+            $config['file_name'] = "pedido" . $fecha . $pedidoid;
+            $config['max_width'] = '4024';
+            $config['max_height'] = '4008';
+            $this->load->library('upload', $config);
+            $this->upload->do_upload();
+            $file_info = $this->upload->data();
+            $ruta = "public/imagenespedidos/" . $file_info["file_name"];
+            $this->Modelocedis->SubirImagenPedido($ruta, $pedidoid);
+        }
         redirect('cedis/AbrirPedido?pedidoid=' . $pedidoid);
     }
 
@@ -282,7 +288,7 @@ class Cedis extends CI_Controller {
         $iddetalle = $this->Modelocedis->GuardarSubproducto($subproducto_id, $detalle_id);
         print($iddetalle);
     }
-    
+
     public function capturaCedis() {
         $infoheader["titulo"] = "Cedis: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
@@ -293,7 +299,7 @@ class Cedis extends CI_Controller {
         $this->load->view('cedis/capturaCedis', $infocontent);
         $this->load->view('template/footerd', '');
     }
-    
+
     public function ObtenerModelos() {
         $id = $this->input->post_get('id', TRUE);
         $this->load->model("Modelocedis");
@@ -307,19 +313,19 @@ class Cedis extends CI_Controller {
         $infocontent["colores"] = $this->Modelocedis->ListarColores($id);
         $this->load->view('cedis/ObtenerColores', $infocontent);
     }
-    
+
     public function Guardado() {
         $prod = $this->input->post_get('prod', TRUE);
         $mod = $this->input->post_get('mod', TRUE);
         $col = $this->input->post_get('col', TRUE);
         $clasi = $this->input->post_get('clasi', TRUE);
         $this->load->model("Modelocedis");
-        $idprod=$this->Modelocedis->GuardarProductos($prod, $mod, $col, $clasi);
-        $producto=$this->Modelocedis->ObtenerProducto($idprod);
-        $fechaformateada=date_format(date_create($producto->FechaCaptura), 'dmY');
-        print(str_pad($idprod, 10, '0', STR_PAD_LEFT)."*".$fechaformateada);
+        $idprod = $this->Modelocedis->GuardarProductos($prod, $mod, $col, $clasi);
+        $producto = $this->Modelocedis->ObtenerProducto($idprod);
+        $fechaformateada = date_format(date_create($producto->FechaCaptura), 'dmY');
+        print(str_pad($idprod, 10, '0', STR_PAD_LEFT) . "*" . $fechaformateada);
     }
-    
+
     public function barcodeventana($filepath = "", $text = "", $size = "100", $orientation = "horizontal", $code_type = "code128", $print = true, $SizeFactor = 4.5) {
         $text = $this->input->post_get('text', TRUE);
         $code_string = "";

@@ -367,6 +367,7 @@ class Modelocedis extends CI_Model {
         }
         $this->db->set("FechaSalida", date('Y-m-d | h:i:sa'));
         $this->db->set("Estatus", "Entregado");
+        $this->db->set("UsuarioEntregaId", IdUsuario());
         $this->db->where("IdPedidos", $pedidoid);
         $this->db->update("Pedidos");
     }
@@ -403,6 +404,15 @@ class Modelocedis extends CI_Model {
     public function ProductosCedis($modelo, $color, $clasificacion, $producto) {
         //print("SELECT count(*) as cuantos from InventariosCedis ic JOIN Productos p on p.IdProductos=ic.ProductosId JOIN CProductos cp on cp.IdCProductos=p.CProductosId where cp.IdCProductos= " . $producto . " AND Clasificacion(p.IdProductos)=" . $clasificacion . " AND ic.FechaSalida is null AND p.ModelosId= " . $modelo . " AND p.ColoresId= " . $color . " GROUP BY p.IdProductos");
         $query = $this->db->query("SELECT count(*) as cuantos from InventariosCedis ic JOIN Productos p on p.IdProductos=ic.ProductosId JOIN CProductos cp on cp.IdCProductos=p.CProductosId where cp.IdCProductos= " . $producto . " AND Clasificacion(p.IdProductos)=" . $clasificacion . " AND ic.FechaSalida is null AND p.ModelosId= " . $modelo . " AND ic.Activo=1 AND p.ColoresId= " . $color . " ");
+        $row = $query->row();
+        if (isset($row)) {
+            return $row->cuantos;
+        }
+    }
+
+    public function ProductosPedidosVentas($modelo, $color, $clasificacion, $producto) {
+        //print("SELECT count(*) as cuantos from InventariosCedis ic JOIN Productos p on p.IdProductos=ic.ProductosId JOIN CProductos cp on cp.IdCProductos=p.CProductosId where cp.IdCProductos= " . $producto . " AND Clasificacion(p.IdProductos)=" . $clasificacion . " AND ic.FechaSalida is null AND p.ModelosId= " . $modelo . " AND p.ColoresId= " . $color . " GROUP BY p.IdProductos");
+        $query = $this->db->query("SELECT count(*) as cuantos from PedidosVentas p JOIN Pedidos pe on pe.IdPedidos=p.PedidosId where p.CProductosId= " . $producto . " AND ClasificacionesId=" . $clasificacion . " AND p.Activo=1 AND p.ModelosId= " . $modelo . " AND pe.Activo=1 AND pe.Estatus='Liberado' AND  p.ColoresId= " . $color . " ");
         $row = $query->row();
         if (isset($row)) {
             return $row->cuantos;
@@ -517,6 +527,8 @@ class Modelocedis extends CI_Model {
             'FechaCaptura' => date('Y-m-d | h:i:sa')
         );
         $this->db->insert("Devoluciones", $datos);
+
+
         return $this->db->insert_id();
     }
 
@@ -594,15 +606,15 @@ class Modelocedis extends CI_Model {
         }
         return "";
     }
-    
-     public function ListarProductos() {
+
+    public function ListarProductos() {
         $this->db->select('*');
         $this->db->from('CProductos cp');
         $this->db->where('cp.Activo', 1);
         $query = $this->db->get();
         return $query;
     }
-    
+
     public function ListarModelos($id) {
         $this->db->select('m.Nombre, m.IdModelos, cpm.Imagen');
         $this->db->from('CProductos p');
@@ -614,7 +626,7 @@ class Modelocedis extends CI_Model {
         $query = $this->db->get();
         return $query;
     }
-    
+
     public function ListarColores($id) {
         $this->db->select('c.*');
         $this->db->from('Colores c');
@@ -629,14 +641,14 @@ class Modelocedis extends CI_Model {
     public function ListarClasificaciones() {
         $this->db->select('c.*');
         $this->db->from('Clasificaciones c');
-        $this->db->where('c.Activo',1);
+        $this->db->where('c.Activo', 1);
         $query = $this->db->get();
         return $query;
     }
-    
-    public function GuardarProductos($prod, $mod, $col, $clasi ){
+
+    public function GuardarProductos($prod, $mod, $col, $clasi) {
         //Se crea el producto
-       $datos = array(
+        $datos = array(
             'CProductosId' => $prod,
             'ColoresId' => $col,
             'UsuariosId' => IdUsuario(),
@@ -646,17 +658,17 @@ class Modelocedis extends CI_Model {
             'FechaCaptura' => date('Y-m-d | h:i:sa')
         );
         $this->db->insert("Productos", $datos);
-        $idprod= $this->db->insert_id();
+        $idprod = $this->db->insert_id();
         //Historial captura
-        $HistorialCaptura= array(
-            'UsuariosId'=>IdUsuario(),
-            'MovimientosProductosId'=>14,
-            'Activo'=>1,
-            'ProductosId'=>$idprod,
-            'Fecha' => date ('Y-m-d | h:i:sa')
+        $HistorialCaptura = array(
+            'UsuariosId' => IdUsuario(),
+            'MovimientosProductosId' => 14,
+            'Activo' => 1,
+            'ProductosId' => $idprod,
+            'Fecha' => date('Y-m-d | h:i:sa')
         );
         $this->db->insert('HistorialProducto', $HistorialCaptura);
-        
+
         //Clasificación
         $datos2 = array(
             'ProductosId' => $idprod,
@@ -693,6 +705,7 @@ class Modelocedis extends CI_Model {
         $this->db->insert('HistorialProducto', $HistorialEntrada);
         return $idprod;
     }
+
 }
 
 ?>

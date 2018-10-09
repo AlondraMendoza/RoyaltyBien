@@ -1,7 +1,8 @@
 <script>
     function LiberarPedido(id)
     {
-        $.post("LiberarPedido", {"id": id}, function (data) {
+        var observacion = $("#observacioncredito").val();
+        $.post("LiberarPedido", {"id": id, "observacionliberacion": observacion}, function (data) {
             $("#botonliberar" + id).fadeOut();
             $("#tdliberar" + id).html("<b class='fg-darkGreen'>Liberado</b>");
 
@@ -50,7 +51,24 @@
                         <?php foreach ($ListaPedidosCapturados->result() as $pedido): ?>
                             <tr>
                                 <td><?= $pedido->IdPedidos ?></td>
-                                <td><?= $pedido->FechaRegistro ?></td>
+                                <td><?= $pedido->FechaRegistro ?>
+                                    <?php
+                                    $ci = &get_instance();
+                                    $ci->load->model("modeloventas");
+                                    $npen = $ci->modeloventas->Usuario($pedido->UsuariosId);
+                                    $textomodifico = "";
+                                    if ($pedido->UsuarioModificaId != null) {
+                                        $modifico = $ci->modeloventas->Usuario($pedido->UsuarioModificaId);
+                                        $textomodifico = "<br><br>Modificó: " . $modifico->Nombre . " " . $modifico->APaterno;
+                                    }
+                                    ?>
+                                    <br><br><div class="text-small fg-darkGreen">Creó:<br>
+                                        <?= $npen->Nombre . " " . $npen->APaterno ?>
+                                    </div>
+                                    <div class="text-small fg-darkGreen">
+                                        <?= $textomodifico ?>
+                                    </div>
+                                </td>
                                 <td><?= $pedido->Cliente ?></td>
                                 <td><?= $pedido->NotaCredito ?></td>
                                 <td>
@@ -78,6 +96,10 @@
                                         echo "<b class='fg-darkGreen'>Liberado</b>";
                                     } else {
                                         ?>
+                                        <b>Observación</b><br>
+                                        <div class="input-control text">
+                                            <input type="text" value="" id="observacioncredito">
+                                        </div>
                                         <button id="botonliberar<?= $pedido->IdPedidos ?>" class="button block-shadow-success text-shadow success big-button" onclick="LiberarPedido(<?= $pedido->IdPedidos ?>)">Liberar</button>
                                         <?php
                                     }
@@ -111,11 +133,36 @@
                         <?php foreach ($ListaPedidosLiberados->result() as $pedido): ?>
                             <tr>
                                 <td><?= $pedido->IdPedidos ?></td>
-                                <td><?= $pedido->FechaRegistro ?></td>
+                                <td><?= $pedido->FechaRegistro ?>
+                                    <?php
+                                    $ci = &get_instance();
+                                    $ci->load->model("modeloventas");
+                                    $npen = $ci->modeloventas->Usuario($pedido->UsuariosId);
+                                    $textomodifico = "";
+                                    if ($pedido->UsuarioModificaId != null) {
+                                        $modifico = $ci->modeloventas->Usuario($pedido->UsuarioModificaId);
+                                        $textomodifico = "<br><br>Modificó: " . $modifico->Nombre . " " . $modifico->APaterno;
+                                    }
+                                    ?>
+                                    <br><br><div class="text-small fg-darkGreen">Creó:<br>
+                                        <?= $npen->Nombre . " " . $npen->APaterno ?>
+                                    </div>
+                                    <div class="text-small fg-darkGreen">
+                                        <?= $textomodifico ?>
+                                    </div>
+                                </td>
                                 <td class="center">
                                     <?php
                                     if ($pedido->FechaLiberacion != null) {
                                         echo "<b class='fg-green'>$pedido->FechaLiberacion</b>";
+                                        $ci = &get_instance();
+                                        $ci->load->model("modeloventas");
+                                        $usuariolibero = $ci->modeloventas->Usuario($pedido->UsuarioLiberaId);
+                                        ?>
+                                        <br><br><div class="text-small fg-darkGreen">Liberó:<br>
+                                            <?= $usuariolibero->Nombre . " " . $usuariolibero->APaterno ?>
+                                        </div>
+                                        <?php
                                     } else {
                                         echo "<h6 class='fg-red'><i><b>Crédito y Cobranza no ha liberado el pedido</b></i></h6>";
                                     }
@@ -172,17 +219,51 @@
                         <?php foreach ($ListaPedidosEntregados->result() as $pedido): ?>
                             <tr>
                                 <td><?= $pedido->IdPedidos ?></td>
-                                <td><?= $pedido->FechaRegistro ?></td>
+                                <td class="center"><?= $pedido->FechaRegistro ?>
+                                    <?php
+                                    $ci = &get_instance();
+                                    $ci->load->model("modeloventas");
+                                    $npen = $ci->modeloventas->Usuario($pedido->UsuariosId);
+                                    $textomodifico = "";
+                                    if ($pedido->UsuarioModificaId != null) {
+                                        $modifico = $ci->modeloventas->Usuario($pedido->UsuarioModificaId);
+                                        $textomodifico = "<br><br>Modificó: " . $modifico->Nombre . " " . $modifico->APaterno;
+                                    }
+                                    ?>
+                                    <br><br><div class="text-small fg-darkGreen">Creó:<br>
+                                        <?= $npen->Nombre . " " . $npen->APaterno ?>
+                                    </div>
+                                    <div class="text-small fg-darkGreen">
+                                        <?= $textomodifico ?>
+                                    </div>
+                                </td>
                                 <td class="center">
                                     <?php
                                     if ($pedido->FechaLiberacion != null) {
                                         echo "<b class='fg-green'>$pedido->FechaLiberacion</b>";
+                                        $ci = &get_instance();
+                                        $ci->load->model("modeloventas");
+                                        $usuariolibero = $ci->modeloventas->Usuario($pedido->UsuarioLiberaId);
+                                        ?>
+                                        <br><br><div class="text-small fg-darkGreen">Liberó:<br>
+                                            <?= $usuariolibero->Nombre . " " . $usuariolibero->APaterno ?>
+                                        </div>
+                                        <?php
                                     } else {
                                         echo "<h6 class='fg-red'><i><b>Crédito y Cobranza no ha liberado el pedido</b></i></h6>";
                                     }
                                     ?>
                                 </td>
-                                <td><?= $pedido->FechaSalida ?></td>
+                                <td class="center"><?= $pedido->FechaSalida ?>
+                                    <?php
+                                    $ci = &get_instance();
+                                    $ci->load->model("modeloventas");
+                                    $usuarioentrego = $ci->modeloventas->Usuario($pedido->UsuarioEntregaId);
+                                    ?>
+                                    <br><br><div class="text-small fg-darkGreen">Entregó:<br>
+                                        <?= $usuarioentrego->Nombre . " " . $usuarioentrego->APaterno ?>
+                                    </div>
+                                </td>
                                 <td><?= $pedido->Cliente ?></td>
                                 <td><?= $pedido->NotaCredito ?></td>
                                 <td>

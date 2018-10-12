@@ -19,7 +19,7 @@ class Modeloreparador extends CI_Model {
         $this->db->join("Modelos m", "p.ModelosId=m.IdModelos");
         $this->db->join("HistorialClasificacion hc","p.IdProductos=hc.ProductosId");
         $this->db->where("p.IdProductos", $producto_id);
-        $this->db->where("hc.ClasificacionesId", 5);
+        //$this->db->where("hc.ClasificacionesId", 5);
         // print($this->db->get_compiled_select());
         $fila = $this->db->get()->row();
         //print($producto_id);

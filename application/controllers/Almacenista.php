@@ -365,6 +365,25 @@ class Almacenista extends CI_Controller {
             print ("NoExiste");
         }
     }
+    
+    //Detalle Por producto de la tarima
+    public function GuardadoDetalle() {
+        $idTarima = $this->input->post_get('idtarima', TRUE);
+        $idProducto = $this->input->post_get('idProducto', TRUE);
+        $this->load->model("Modeloalmacenista");
+        $resp = $this->Modeloalmacenista->BuscarEnTarima($idProducto, $idTarima);
+        if ($resp == true) {
+            $query = $this->Modeloalmacenista->GuardarDetalle($idProducto, $idTarima);
+            if ($query == "correcto") {
+                print("Correcto");
+            } else {
+                print("Error");
+            }
+        } else {
+            print ("NoExiste");
+        }
+    }
+    
 
     public function GuardarAlmacen() {
         $id = $this->input->post_get('id', TRUE);
@@ -390,6 +409,19 @@ class Almacenista extends CI_Controller {
 
     //Por producto
     public function VerificarClaveTarimaAlmacenP() {
+        $clave = $this->input->post_get('clave', TRUE);
+        $this->load->model("Modeloalmacenista");
+        $fila = $this->Modeloalmacenista->BuscarClaveTarimaP($clave);
+        $infocontent["nombre"] = "No se encontró el producto";
+        if ($fila != "No se encontró el producto") {
+            $infocontent["nombre"] = $fila->producto . "/" . $fila->modelo . "/" . $fila->color;
+            $infocontent["id"] = $fila->IdProductos;
+        }
+        print json_encode($infocontent);
+    }
+    
+    //Por producto dañado
+    public function Verificar() {
         $clave = $this->input->post_get('clave', TRUE);
         $this->load->model("Modeloalmacenista");
         $fila = $this->Modeloalmacenista->BuscarClaveTarimaP($clave);

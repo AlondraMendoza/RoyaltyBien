@@ -666,7 +666,36 @@ class Modeloalmacenista extends CI_Model {
             return $row->cuantos;
         }
     }
-
+    
+    public function BuscarEnTarima($idProducto, $idTarima){
+        $this->db->select("dt.*");
+        $this->db->from("DetalleTarimas dt");
+        $this->db->where("dt.TarimasId", $idTarima);
+        $this->db->where("dt.ProductosId", $idProducto);
+        $fila = $this->db->get()->row();
+        return $fila;
+    }
+    
+    public function GuardarDetalle($idProducto, $idTarima){
+        $this->db->select("a.IdAccidentes");
+        $this->db->from("Accidentes a");
+        $this->db->where("a.TarimasId", $idTarima);
+        $ida = $this->db->get()->row();
+        $datos = array(
+            'AccidentesId'=> $ida->IdAccidentes,
+            'ProductosId'=> $idProducto,
+            'Procesado'=>0,
+            'Dañado'=>1,
+        );
+        $this->db->insert('DetalleAccidentes', $datos);
+        //Historial 
+        $Historial= array('UsuariosId' => IdUsuario(), 'MovimientosProductosId' => 10,
+            'Activo' => 1, 'ProductosId' => $idProducto);
+        $this->db->set('Fecha', 'NOW()', FALSE);
+        $this->db->insert('HistorialProducto', $Historial);
+        return "correcto";
+        
+    }
 }
 
 ?>

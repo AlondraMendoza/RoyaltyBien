@@ -42,6 +42,7 @@
      }
 
 var guardado = 0;
+var Tarima = 0;
     function GuardarAccidenteT() {
     var Responsable = $("#ResponsableT").val();
     var Motivo= $("#MotivoT").val();
@@ -51,6 +52,7 @@ var guardado = 0;
                 $.post("SalirTarimasAlmacenAccidente", {"idtarima": id, "Responsable": Responsable, "Motivo": Motivo}, function (data) {
                     if (data == "Correcto")
                     {
+                        Tarima= id;
                         $("#td2" + id).html('<span class="mif-checkmark fg-green"></span> Tarima fuera del almacén');
                     } else if (data == "NoExiste")
                     {
@@ -66,15 +68,88 @@ var guardado = 0;
                 });
             });
             guardado = 1;
-             $("#Inicio2").fadeOut();
+            $("#Inicio2").fadeOut();
             $("#botonguardar2").fadeOut();
-            $("#nuevatarima2").fadeIn();
+            //$("#nuevatarima2").fadeIn();
+            $("#Inicio3").fadeIn();
+            
         }
         //$("#tablaproductos").empty();
     }
     
     function Cancelar() {
         location.reload(true);
+    }
+    
+    function Verificar(e) {
+        var code = (e.keyCode ? e.keyCode : e.which);
+        if (code != 13 && code != 16 && code != 17 && code != 18) { //Enter keycode
+            var cadena = $("#claveProdD").val();
+            if (cadena.length == 19) {
+                var inicio = 9;
+                var clave = cadena.substring(inicio);
+                $("#des3").html("Verificando clave de producto...");
+                $.getJSON("Verificar", {"clave": clave}, function (data) {
+                    if (data.id != null) {
+                        $("#des3").html("Producto encontrado");
+                        if ($("#td2" + data.id).length)
+                        {
+                            $.Notify({
+                                caption: 'Error',
+                                content: 'Ya agregaste el producto a la lista',
+                                type: 'alert'
+                            });
+                            $("#claveProdD").val("");
+                            $("#des3").html("");
+                        } else {
+                            //metodo para Abrir tabla y agregar datos
+                            var input = '<tr><td class="center">' + data.id + '</td>';
+                            input += '</td>';
+                            input += '<td class="center" id="td2' + data.id + '"><label class="input-control checkbox">';
+                            input += '<input type="checkbox" name="IDS2[]" value="' + data.id + '" checked>';
+                            input += '<span class="check"></span>';
+                            input += '</label></td></tr>';
+                            $("#tabladañados").append(input);
+                            $("#claveProdD").val("");
+                            $("#des3").html("");
+                            $("#resultadosdañados").fadeIn();
+                        }
+                    } else
+                    {
+                        $("#des3").html("No se encontró el producto");
+                    }
+                });
+            }
+        }
+     }
+     
+     var guardadoDañado = 0;
+    function GuardarDetalle() {
+        if (guardadoDañado == 0) {
+            $("input[name='IDS2[]']:checked").each(function () {
+                var id = $(this).val();
+                $.post("GuardadoDetalle", {"idtarima": Tarima, "idProducto": id}, function (data) {
+                    if (data == "Correcto")
+                    {
+                        $("#td2" + id).html('<span class="mif-checkmark fg-green"></span> Producto marcado');
+                    } else if (data == "NoExiste")
+                    {
+                       $("#td2" + id).html('<span class="mif-cancel fg-red"></span> El producto no se encontro');
+                    } else
+                    {
+                        $.Notify({
+                            caption: 'Error',
+                            content: 'Ocurrió un error con la tarima',
+                            type: 'alert'
+                        });
+                    }
+                });
+            });
+            guardadoDañado = 1;
+            Tarima= 0;
+            
+            $("#botonguardar4").fadeOut();
+        }
     }
 </script>
 
@@ -141,13 +216,48 @@ var guardado = 0;
             </td>
         </tr>
         </table>
-        </div>
-    </div>
-</center>
-    </div>
+        </center>
+</div>       
 </center><br><br><br>
+<div id="Inicio3"style="display: none">
+    <div class="content">
+            <table class="table">
+                <tr>
+                    <td class="center">
+                        <b style="font-size: 1.3em" class="fg-darkEmerald"> Código de Barras de los productos dañados:</b><br>
+                        <div class="input-control text full-size" style="height:80px;font-size: x-large">
+                            <input type="text" id="claveProdD" onkeyup="Verificar(event)">
+                        </div>
+                         <br><label><span id="des3"></span></label>
+                    </td> 
+                </tr>
+                <br><br>
+            </table>
+    </div>
+    <div id="resultadosdañados" style="display: none"></div>
+        <div class="content" id="Resultados3">
+        <table class="table bordered border hovered" id="tabladañados">
+            <thead>
+             <tr>
+                <th>Clave</th>
+                <th>Seleccion/Acción</th>
+             </tr>
+           </thead>
+        </table>
+        <table>
+        <tr>
+            <td class="center" id="Botones"><br>
+                <div class="input-control text big-input medium-size" id="nuevatarima4" style="display: none"><button class="button warning" onclick="Cancelar()">Nueva Entrada</button></div>
+                <div class="input-control text big-input medium-size" id="botonguardar4"><button class="button success" onclick="GuardarDetalle()">Guardar</button></div>
+                <div class="input-control text big-input medium-size"><button class="button danger" onclick="Cancelar()">Cancelar</button></div>
+            </td>
+        </tr>
+        </table>
+        </div>
+
 </div>
-            <div class="frame" id="productos">
+</div>
+<div class="frame" id="productos">
 <h1><b> ACCIDENTE DE PRODUCTOS</b></h1><br>
 <center>
     <div class="panel warning" data-role="panel">

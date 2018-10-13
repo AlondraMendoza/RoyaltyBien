@@ -701,7 +701,7 @@ class Administrador extends CI_Controller {
         $this->Modeloadministrador->SubirImagenProducto($ruta, $productoid);
         redirect('administrador/Productos');
     }
-    
+
     function SubirImagenModelo() {
         $this->load->model("Modeloadministrador");
         $modeloid = $this->input->post('modeloid');
@@ -717,9 +717,9 @@ class Administrador extends CI_Controller {
         $file_info = $this->upload->data();
         $ruta = $file_info["file_name"];
         $this->Modeloadministrador->SubirImagenModelo($ruta, $modeloid);
-        redirect('administrador/DetalleProd?producto='. $productoid);
+        redirect('administrador/DetalleProd?producto=' . $productoid);
     }
-    
+
     function SubirImagenColores() {
         $this->load->model("Modeloadministrador");
         $modeloid = $this->input->post('modeloid');
@@ -735,8 +735,15 @@ class Administrador extends CI_Controller {
         $file_info = $this->upload->data();
         $ruta = $file_info["file_name"];
         $this->Modeloadministrador->SubirImagenColores($ruta, $colorid);
-        redirect('administrador/DetalleMod?modelo='. $modeloid);
+        redirect('administrador/DetalleMod?modelo=' . $modeloid);
     }
-    
-    
+
+    public function CargarClasificacionesFecha() {
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $this->load->model("Modeloclasificador");
+        $infocontent["clasificaciones"] = $this->Modeloclasificador->ConsultarClasificacionesFecha($fechainicio, $fechafin);
+        $this->load->view('administrador/CargarclasificacionesFecha', $infocontent);
+    }
+
 }

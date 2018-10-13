@@ -39,6 +39,13 @@ class Ventas extends CI_Controller {
         $this->load->view('ventas/CargaInfoModelo', $infocontent);
     }
 
+    public function CargarInfoModeloSinClasificar() {
+        $modelo = $this->input->post_get('modelo_id', TRUE);
+        $this->load->model("Modeloventas");
+        $infocontent["modelo"] = $this->Modeloventas->ObtenerModelo($modelo);
+        $this->load->view('ventas/CargarInfoModeloSinClasificar', $infocontent);
+    }
+
     public function Pedidos() {
         $infoheader["titulo"] = "Pedidos: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
@@ -207,6 +214,15 @@ class Ventas extends CI_Controller {
         $infocontent["pedidoid"] = $pedidoid;
         $infocontent["pedido"] = $this->Modelocedis->ObtenerPedido($pedidoid);
         $this->load->view('ventas/AbrirPedido', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+
+    public function InventarioSinClasificar() {
+        $infoheader["titulo"] = "Inventario Cedis: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->model("Modelocedis");
+        $infocontent["modelos"] = $this->Modelocedis->ListaModelos();
+        $this->load->view('ventas/InventarioSinClasificar', $infocontent);
         $this->load->view('template/footerd', '');
     }
 

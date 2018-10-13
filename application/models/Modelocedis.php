@@ -403,7 +403,15 @@ class Modelocedis extends CI_Model {
 
     public function ProductosCedis($modelo, $color, $clasificacion, $producto) {
         //print("SELECT count(*) as cuantos from InventariosCedis ic JOIN Productos p on p.IdProductos=ic.ProductosId JOIN CProductos cp on cp.IdCProductos=p.CProductosId where cp.IdCProductos= " . $producto . " AND Clasificacion(p.IdProductos)=" . $clasificacion . " AND ic.FechaSalida is null AND p.ModelosId= " . $modelo . " AND p.ColoresId= " . $color . " GROUP BY p.IdProductos");
-        $query = $this->db->query("SELECT count(*) as cuantos from InventariosCedis ic JOIN Productos p on p.IdProductos=ic.ProductosId JOIN CProductos cp on cp.IdCProductos=p.CProductosId where cp.IdCProductos= " . $producto . " AND Clasificacion(p.IdProductos)=" . $clasificacion . " AND ic.FechaSalida is null AND p.ModelosId= " . $modelo . " AND ic.Activo=1 AND p.ColoresId= " . $color . " ");
+        $query = $this->db->query("SELECT count(*) as cuantos from InventariosCedis ic JOIN Productos p on p.IdProductos=ic.ProductosId JOIN CProductos cp on cp.IdCProductos=p.CProductosId where cp.IdCProductos= " . $producto . " AND Clasificacion(p.IdProductos)=" . $clasificacion . " AND ic.FechaSalida is null AND p.ModelosId= " . $modelo . " AND ic.Activo=1 AND p.Activo=1  AND p.ColoresId= " . $color . " ");
+        $row = $query->row();
+        if (isset($row)) {
+            return $row->cuantos;
+        }
+    }
+
+    public function ProductosSinClasificar($modelo, $color, $clasificacion, $producto) {
+        $query = $this->db->query("SELECT count(*) as cuantos from Productos p JOIN CProductos cp on cp.IdCProductos=p.CProductosId where cp.IdCProductos= " . $producto . " AND p.ClasificacionesId=" . $clasificacion . " AND p.ModelosId= " . $modelo . " AND p.Activo=1 AND p.Clasificado=0 AND p.ColoresId= " . $color . " ");
         $row = $query->row();
         if (isset($row)) {
             return $row->cuantos;

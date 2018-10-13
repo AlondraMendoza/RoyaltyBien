@@ -743,4 +743,33 @@ class Clasificador extends CI_Controller {
         $this->load->view('template/footerd', '');
     }
 
+    public function ClasificacionesFecha() {
+        $this->load->model("Modeloclasificador");
+        $infoheader["titulo"] = "Administrador: Royalty Ceramic";
+        $infocontent["hoy"] = date("d/m/Y");
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->view('clasificador/ClasificacionesFecha', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+
+    public function CargarClasificacionesFecha() {
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $this->load->model("Modeloclasificador");
+        $infocontent["clasificaciones"] = $this->Modeloclasificador->ConsultarClasificacionesFecha($fechainicio, $fechafin);
+        $this->load->view('clasificador/CargarClasificacionesFecha', $infocontent);
+    }
+
+    public function CargarClasificacionesFechaDetalle() {
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $producto = $this->input->post_get('producto', TRUE);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $color = $this->input->post_get('color', TRUE);
+        $clasificacion = $this->input->post_get('clasificacion', TRUE);
+        $this->load->model("Modeloclasificador");
+        $infocontent["clasificaciones"] = $this->Modeloclasificador->ConsultarClasificacionesFechaDetalle($fechainicio, $fechafin, $producto, $modelo, $color, $clasificacion);
+        $this->load->view('clasificador/CargarClasificacionesFechaDetalle', $infocontent);
+    }
+
 }

@@ -28,7 +28,7 @@
                     </td>
                     <?php
                     foreach ($productos->result() as $producto):
-                        $proda = $ci->modelocedis->ProductosSinClasificar($modelo->IdModelos, $color->IdColores, 1, $producto->IdCProductos);
+                        $proda = $ci->modelocedis->ProductosSinClasificar($modelo->IdModelos, $color->IdColores, $producto->IdCProductos);
                         ?>
                         <td class="center" style="border-left: #0067cb solid 1px;">
                             <?= $proda ?>

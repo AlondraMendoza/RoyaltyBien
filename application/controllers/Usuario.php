@@ -141,6 +141,21 @@ class Usuario extends CI_Controller {
         }
     }
 
+    public function GuardarRespuesta() {
+        $this->load->model("Modelousuario");
+        $respuesta = $this->input->post_get('respuesta', TRUE);
+        $soporteid = $this->input->post_get('soporte', TRUE);
+        $this->Modelousuario->GuardarRespuesta($respuesta, $soporteid);
+        redirect('Usuario/Soporte');
+    }
+
+    public function GuardarSoporte() {
+        $this->load->model("Modelousuario");
+        $mensaje = $this->input->post_get('mensaje', TRUE);
+        $this->Modelousuario->GuardarSoporte($mensaje);
+        redirect('Usuario/Soporte');
+    }
+
     //Verificar metodo
     /* public function ObtenerUsuario() {
       $usuario = new \Models\Usuarios();
@@ -156,4 +171,13 @@ class Usuario extends CI_Controller {
       "otravariable" => 5,];
       return $array;
       } */
+    public function Soporte() {
+        $this->load->model("Modelousuario");
+        $infoheader["titulo"] = "Soporte: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $infocontent["soportes"] = $this->Modelousuario->Soportes();
+        $this->load->view('usuario/Soporte', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+
 }

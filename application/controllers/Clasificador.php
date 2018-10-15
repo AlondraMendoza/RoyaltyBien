@@ -711,6 +711,16 @@ class Clasificador extends CI_Controller {
         $this->load->view('clasificador/DevolucionesCapturadas', $infocontent);
     }
 
+    public function ReentarimarAccidentes() {
+        $this->load->model("modeloclasificador");
+        $infoheader["titulo"] = "Devoluciones: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $infocontent["Nombre"] = "Alondra Mendoza";
+        $infocontent["accidentes"] = $this->modeloclasificador->AccidentesSinProcesar();
+        $this->load->view('clasificador/ReentarimarAccidentes', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+
     public function ExpedienteProducto() {
         $infoheader["titulo"] = "Reclasificar: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);

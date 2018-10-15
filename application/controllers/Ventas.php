@@ -2,7 +2,7 @@
 
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
-require_once APPPATH . '/third_party/Spout/Autoloader/autoload.php';
+require_once APPPATH . 'third_party/Spout/Autoloader/autoload.php';
 
 use Box\Spout\Reader\ReaderFactory;
 use Box\Spout\Common\Type;

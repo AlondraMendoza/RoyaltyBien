@@ -220,6 +220,18 @@ class Modeloclasificador extends CI_Model {
         return $query;
     }
 
+    public function AccidentesSinProcesar() {
+        $this->db->select('a.IdAccidentes,a.CulpableAccidente,a.Motivo,a.TarimasId,a.Fecha');
+        $this->db->from('DetalleAccidentes d');
+        $this->db->join('Accidentes a', "a.IdAccidentes=d.AccidentesId");
+        $this->db->where('a.Activo', 1);
+        $this->db->where('d.Procesado', 0);
+        $this->db->where('d.Dañado', 0);
+        $this->db->group_by('IdAccidentes');
+        $query = $this->db->get();
+        return $query;
+    }
+
     public function Clasificaciones() {
         $this->db->select('c.Letra,c.Color,c.IdClasificaciones');
         $this->db->from("Clasificaciones c");

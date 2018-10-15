@@ -410,8 +410,8 @@ class Modelocedis extends CI_Model {
         }
     }
 
-    public function ProductosSinClasificar($modelo, $color, $clasificacion, $producto) {
-        $query = $this->db->query("SELECT count(*) as cuantos from Productos p JOIN CProductos cp on cp.IdCProductos=p.CProductosId where cp.IdCProductos= " . $producto . " AND p.ClasificacionesId=" . $clasificacion . " AND p.ModelosId= " . $modelo . " AND p.Activo=1 AND p.Clasificado=0 AND p.ColoresId= " . $color . " ");
+    public function ProductosSinClasificar($modelo, $color, $producto) {
+        $query = $this->db->query("SELECT count(*) as cuantos from Productos p JOIN CProductos cp on cp.IdCProductos=p.CProductosId where cp.IdCProductos= " . $producto . " AND p.ModelosId= " . $modelo . " AND p.Activo=1 AND p.Clasificado=0 AND p.ColoresId= " . $color . " ");
         $row = $query->row();
         if (isset($row)) {
             return $row->cuantos;

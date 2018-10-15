@@ -39,6 +39,21 @@ class Modelousuario extends CI_Model {
         return $arreglo;
     }
 
+    public function Soportes() {
+        $this->db->select('s.*,per.Nombre as Nombre1, per.APaterno as Paterno1, per2.Nombre as Nombre2, per2.APaterno as Paterno2');
+        $this->db->from('Soportes s');
+        $this->db->join("Usuarios u", "u.IdUsuarios=s.UsuarioCapturaId", "left");
+        $this->db->join("Personas per", "per.IdPersonas=u.PersonasId", "left");
+        $this->db->join("Usuarios u2", "u2.IdUsuarios=s.UsuarioContestaId", "left");
+        $this->db->join("Personas per2", "per2.IdPersonas=u2.PersonasId", "left");
+        /* Si es un usuario diferente a Alondra entonces se listarán sólo los que cada uno capturó, si es Alondra verá todos */
+        if (IdUsuario() > 1) {
+            $this->db->where('s.UsuarioCapturaId', IdUsuario());
+        }
+        $arreglo = $this->db->get();
+        return $arreglo;
+    }
+
     public function ObtenerReportes($id) {
         $this->db->select('*');
         $this->db->from('Menus');
@@ -123,6 +138,23 @@ class Modelousuario extends CI_Model {
         } else {
             return null;
         }
+    }
+
+    public function GuardarSoporte($mensaje) {
+        $datos = array(
+            'Mensaje' => $mensaje,
+            'UsuarioCapturaId' => IdUsuario(),
+            'Fecha' => date('Y-m-d | h:i:sa')
+        );
+        $this->db->insert('Soportes', $datos);
+        return "correcto";
+    }
+
+    public function GuardarRespuesta($respuesta, $soporteid) {
+        $this->db->set("Respuesta", $respuesta);
+        $this->db->set("UsuarioContestaId", IdUsuario());
+        $this->db->where("IdSoportes", $soporteid);
+        $this->db->update("Soportes");
     }
 
 }

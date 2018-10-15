@@ -150,6 +150,18 @@ $cont = 1;
     ?>
 
 <?php endforeach; ?>
+<div id="Finalizar" style="display:none">
+    <div class="panel primary" data-role="panel">
+        <div class="heading">
+            <span class="icon mif-stack fg-white bg-darkBlue"></span>
+            <span class="title"> Presiona para seleccionar nuevos filtros</span>
+        </div>
+        <div class="content"><br><br>
+            <button id="" style="height: 80px;" class="button block-shadow-success text-shadow success big-button " onclick="RecargarHornos()" >Continuar Clasificación</button>
+            <br><br><br>
+        </div>
+    </div>
+</div>
 <div id='etiqueta'></div>
 <script>
     function Notificacion(titulo, texto, icono, color)
@@ -230,31 +242,31 @@ $cont = 1;
                 //Soy la anterior buena  $("#imprimeme").attr("src", "EnviarTicket?codigo=" + fecha + "-" + pad(idprod, 10) + "&producto_id=" + idprod);
                 //soy la segunda mejor opción window.open("barcodeventana?text=" + fecha + "-" + pad(idprod, 10), "Código de Barras", "width = 200, height = 100");
                 $("#areaimprimir" + idprod).printArea();
-//$("#codigobarras").html("<a href='barcodevista?text="+fecha + "-" + pad(idprod, 10) + "&producto_id=" + idprod+"' target='_blank' onclick=''></a>");
+                //$("#codigobarras").html("<a href='barcodevista?text="+fecha + "-" + pad(idprod, 10) + "&producto_id=" + idprod+"' target='_blank' onclick=''></a>");
                 //
-//
-//document.getElementById("imprimeme").focus();
+                //
+                //document.getElementById("imprimeme").focus();
                 //document.getElementById("imprimeme").print();
                 //var w = window.open("EnviarTicket?codigo=<?= $cprod . $mod . $color ?>" + fecha + idprod, 'algo', 'width=300,height=400');
                 //w.print();
                 //setTimeout(w.close, 2000);
 
-//                var ventana = window.open("EnviarTicket?codigo=<?= $cprod . $mod . $color ?>" + fecha + idprod, 'algo', 'width=300,height=400');
+                //                var ventana = window.open("EnviarTicket?codigo=<?= $cprod . $mod . $color ?>" + fecha + idprod, 'algo', 'width=300,height=400');
                 //window.location.href = "EnviarTicket?codigo=<?= $cprod . $mod . $color ?>" + fecha + idprod;
-//                setTimeout(ventana.close, 3000);
+                //                setTimeout(ventana.close, 3000);
 
-//                $("#imprimeme").html("<img src='barcodevista?text=<?= $cprod . $mod . $color ?>" + fecha + idprod + "'>");
-//                document.getElementById("imprimeme").focus();
-//                document.getElementById("imprimeme").contentWindow.print();
-//                var win = window.open();
-//                win.document.write('<html>');
-//                win.document.write('<head></head>');
-//                win.document.write('<body>');
-//                win.document.write("<img src='barcodevista?text=<?= $cprod . $mod . $color ?>" + fecha + idprod + "'>");
-//                win.document.write('</body>');
-//                win.document.write('</html>');
-//                setTimeout(win.print, 3000);
-//                setTimeout(win.close, 5000);
+                //                $("#imprimeme").html("<img src='barcodevista?text=<?= $cprod . $mod . $color ?>" + fecha + idprod + "'>");
+                //                document.getElementById("imprimeme").focus();
+                //                document.getElementById("imprimeme").contentWindow.print();
+                //                var win = window.open();
+                //                win.document.write('<html>');
+                //                win.document.write('<head></head>');
+                //                win.document.write('<body>');
+                //                win.document.write("<img src='barcodevista?text=<?= $cprod . $mod . $color ?>" + fecha + idprod + "'>");
+                //                win.document.write('</body>');
+                //                win.document.write('</html>');
+                //                setTimeout(win.print, 3000);
+                //                setTimeout(win.close, 5000);
                 //var ventana = window.open('', '_blank', 'width=200,height=200');  //abrimos una ventana vacía nueva
                 //ventana.document.write("<img src='barcodevista?text=<?= $cprod . $mod . $color ?>" + fecha + idprod + "'>");  //imprimimos el HTML del objeto en la nueva ventana
                 //ventana.document.close();  //cerramos el documento
@@ -271,11 +283,8 @@ $cont = 1;
         //alert($("#spanbotonsiguiente" + idprod).html());
         if ($("#spanbotonsiguiente" + idprod).html() == "Finalizar clasificación")
         {
-            var d = $("#fecha").val();
-            CargarHornos(d);
+            $("#Finalizar").fadeIn();
         }
-
-
         cont++;
     }
     function SeleccionarClasificacion(clasificacion, producto, letra)
@@ -307,6 +316,11 @@ $cont = 1;
                 $("#puestoclaveempleadodef" + defecto + producto).val("");
             }
         });
+    }
+    function RecargarHornos()
+    {
+        var d = $("#fecha").val();
+        CargarHornos(d);
     }
 </script>
 

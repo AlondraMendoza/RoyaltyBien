@@ -158,8 +158,9 @@ class Modeloalmacenista extends CI_Model {
             'Cantidad' => $cantidad,
             'UsuariosId' => IdUsuario(),
             'Activo' => 1,
+            'FechaSalida' => date('Y-m-d | H:i:sa')
         );
-        $this->db->set('FechaSalida', 'NOW()', FALSE);
+        //$this->db->set('FechaSalida', 'NOW()', FALSE);
         $this->db->insert('AlmacenGriferia', $datos);
         return "correcto";
     }
@@ -170,8 +171,9 @@ class Modeloalmacenista extends CI_Model {
             'Cantidad' => $cantidad,
             'UsuariosId' => IdUsuario(),
             'Activo' => 1,
+            'FechaSalida' => date('Y-m-d | H:i:sa')
         );
-        $this->db->set('FechaSalida', 'NOW()', FALSE);
+        //$this->db->set('FechaSalida', 'NOW()', FALSE);
         $this->db->insert('AlmacenSubproductos', $datos);
         return "correcto";
     }
@@ -183,8 +185,9 @@ class Modeloalmacenista extends CI_Model {
                 'Cantidad' => $cantidad,
                 'UsuariosId' => IdUsuario(),
                 'Activo' => 1,
+                'FechaEntrada' => date('Y-m-d | H:i:sa')
             );
-            $this->db->set('FechaEntrada', 'NOW()', FALSE);
+            //$this->db->set('FechaEntrada', 'NOW()', FALSE);
             $this->db->insert('AlmacenGriferia', $datos);
             $idR = $this->db->insert_id();
             $this->db->select('*');
@@ -225,8 +228,9 @@ class Modeloalmacenista extends CI_Model {
             'Cantidad' => $cantidad,
             'UsuariosId' => IdUsuario(),
             'Activo' => 1,
+            'FechaEntrada' => date('Y-m-d | H:i:sa')
         );
-        $this->db->set('FechaEntrada', 'NOW()', FALSE);
+        //$this->db->set('FechaEntrada', 'NOW()', FALSE);
         $this->db->insert('AlmacenSubproductos', $datos);
         $idR = $this->db->insert_id();
         return $idR;
@@ -374,13 +378,14 @@ class Modeloalmacenista extends CI_Model {
             'AlmacenesId' => 1,
             'TarimasId' => $idtarima,
             'UsuariosIdEntrada' => IdUsuario(),
+            'FechaEntrada' => date('Y-m-d | H:i:sa')
         );
-        $this->db->set('FechaEntrada', 'NOW()', FALSE);
+        //$this->db->set('FechaEntrada', 'NOW()', FALSE);
         $this->db->insert('InventariosAlmacen', $datos);
         //Historial tarima
-        $HistorialEntrada = array('UsuariosId' => IdUsuario(), 'MovimientosTarimasId' => 2,
+        $HistorialEntrada = array('Fecha' => date('Y-m-d | H:i:sa'), 'UsuariosId' => IdUsuario(), 'MovimientosTarimasId' => 2,
             'Activo' => 1, 'TarimasId' => $idtarima);
-        $this->db->set('Fecha', 'NOW()', FALSE);
+        //$this->db->set('Fecha', 'NOW()', FALSE);
         $this->db->insert('HistorialTarima', $HistorialEntrada);
         //Historial producto--- Para Inspeccionar con Tania
         $this->db->select("ProductosId");
@@ -391,9 +396,9 @@ class Modeloalmacenista extends CI_Model {
         //if($fila->num_rows != 0) {
         foreach ($fila->result() as $row) {
             $Id = $row->ProductosId;
-            $HistorialEntradaProd = array('UsuariosId' => IdUsuario(), 'MovimientosProductosId' => 5,
+            $HistorialEntradaProd = array('Fecha' => date('Y-m-d | H:i:sa'), 'UsuariosId' => IdUsuario(), 'MovimientosProductosId' => 5,
                 'Activo' => 1, 'ProductosId' => $Id);
-            $this->db->set('Fecha', 'NOW()', FALSE);
+            //$this->db->set('Fecha', 'NOW()', FALSE);
             $this->db->insert('HistorialProducto', $HistorialEntradaProd);
         }
         //}
@@ -405,19 +410,20 @@ class Modeloalmacenista extends CI_Model {
             'AlmacenesId' => 1,
             'ProductosId' => $idProducto,
             'UsuariosIdEntrada' => IdUsuario(),
+            'FechaEntrada' => date('Y-m-d | H:i:sa')
         );
-        $this->db->set('FechaEntrada', 'NOW()', FALSE);
+        //$this->db->set('FechaEntrada', 'NOW()', FALSE);
         $this->db->insert('InventariosAlmacen', $datos);
         //Historial
-        $HistorialEntrada = array('UsuariosId' => IdUsuario(), 'MovimientosProductosId' => 5,
+        $HistorialEntrada = array('Fecha' => date('Y-m-d | H:i:sa'), 'UsuariosId' => IdUsuario(), 'MovimientosProductosId' => 5,
             'Activo' => 1, 'ProductosId' => $idProducto);
-        $this->db->set('Fecha', 'NOW()', FALSE);
+        //$this->db->set('Fecha', 'NOW()', FALSE);
         $this->db->insert('HistorialProducto', $HistorialEntrada);
     }
 
     public function SalirProductoAlmacen($fila) {
         $datos = array(
-            'FechaSalida' => date('Y-m-d | h:i:sa'),
+            'FechaSalida' => date('Y-m-d | H:i:sa'),
             'UsuariosIdSalida' => IdUsuario(),
         );
         $this->db->where('IdInventariosAlmacen', $fila);
@@ -426,16 +432,16 @@ class Modeloalmacenista extends CI_Model {
         $this->db->from("InventariosAlmacen");
         $this->db->where("IdInventariosAlmacen", $fila);
         $id = $this->db->get()->row()->TarimasId;
-        $HistorialSalida = array('UsuariosId' => IdUsuario(), 'MovimientosTarimasId' => 3,
+        $HistorialSalida = array('Fecha' => date('Y-m-d | H:i:sa'), 'UsuariosId' => IdUsuario(), 'MovimientosTarimasId' => 3,
             'Activo' => 1, 'TarimasId' => $id);
-        $this->db->set('Fecha', 'NOW()', FALSE);
+        //$this->db->set('Fecha', 'NOW()', FALSE);
         $this->db->insert('HistorialTarima', $HistorialSalida);
         return "correcto";
     }
 
     public function SalirProductoAlmacenP($fila) {
         $datos = array(
-            'FechaSalida' => date('Y-m-d | h:i:sa'),
+            'FechaSalida' => date('Y-m-d | H:i:sa'),
             'UsuariosIdSalida' => IdUsuario(),
         );
         $this->db->where('IdInventariosAlmacen', $fila);
@@ -444,9 +450,9 @@ class Modeloalmacenista extends CI_Model {
         $this->db->from("InventariosAlmacen");
         $this->db->where("IdInventariosAlmacen", $fila);
         $id = $this->db->get()->row()->ProductosId;
-        $HistorialSalida = array('UsuariosId' => IdUsuario(), 'MovimientosProductosId' => 7,
+        $HistorialSalida = array('Fecha' => date('Y-m-d | H:i:sa'), 'UsuariosId' => IdUsuario(), 'MovimientosProductosId' => 7,
             'Activo' => 1, 'ProductosId' => $id);
-        $this->db->set('Fecha', 'NOW()', FALSE);
+        //$this->db->set('Fecha', 'NOW()', FALSE);
         $this->db->insert('HistorialProducto', $HistorialSalida);
         return "correcto";
     }
@@ -457,7 +463,7 @@ class Modeloalmacenista extends CI_Model {
             'Motivo' => $Motivo,
             'Tipo' => "Producto",
             'TarimasId' => null,
-            'Fecha' => date('Y-m-d | h:i:sa'),
+            'Fecha' => date('Y-m-d | H:i:sa'),
             'UsuariosId' => IdUsuario(),
             'Activo' => 1,
         );
@@ -471,9 +477,9 @@ class Modeloalmacenista extends CI_Model {
         );
         $this->db->insert('DetalleAccidentes', $datos2);
         //Historial 
-        $Historial = array('UsuariosId' => IdUsuario(), 'MovimientosProductosId' => 10,
+        $Historial = array('Fecha' => date('Y-m-d | H:i:sa'), 'UsuariosId' => IdUsuario(), 'MovimientosProductosId' => 10,
             'Activo' => 1, 'ProductosId' => $idproducto);
-        $this->db->set('Fecha', 'NOW()', FALSE);
+        //$this->db->set('Fecha', 'NOW()', FALSE);
         $this->db->insert('HistorialProducto', $Historial);
         return "correcto";
     }
@@ -485,23 +491,16 @@ class Modeloalmacenista extends CI_Model {
             'Motivo' => $Motivo,
             'Tipo' => "Tarima",
             'TarimasId' => $idtarima,
-            'Fecha' => date('Y-m-d | h:i:sa'),
+            'Fecha' => date('Y-m-d | H:i:sa'),
             'UsuariosId' => IdUsuario(),
             'Activo' => 1,
         );
         $this->db->insert('Accidentes', $datos);
         $id=$this->db->insert_id();
-//        $datos2 = array(
-//            'AccidentesId'=> $id,
-//            'ProductosId'=> $idproducto,
-//            'Procesado'=>0,
-//            'Dañado'=>1,
-//        );
-//        $this->db->insert('DetalleAccidentes', $datos2);
         //Historial 
-        $Historial= array('UsuariosId' => IdUsuario(), 'MovimientosTarimasId' => 7,
+        $Historial= array('Fecha' => date('Y-m-d | H:i:sa'), 'UsuariosId' => IdUsuario(), 'MovimientosTarimasId' => 7,
             'Activo' => 1, 'TarimasId' => $idtarima);
-        $this->db->set('Fecha', 'NOW()', FALSE);
+        //$this->db->set('Fecha', 'NOW()', FALSE);
         $this->db->insert('HistorialTarima', $Historial);
         return "correcto";
     }
@@ -530,8 +529,9 @@ class Modeloalmacenista extends CI_Model {
             'AlmacenesId' => 1,
             'ProductosId' => $id,
             'UsuariosIdEntrada' => IdUsuario(),
+            'FechaEntrada' => date('Y-m-d | H:i:sa')
         );
-        $this->db->set('FechaEntrada', 'NOW()', FALSE);
+        //$this->db->set('FechaEntrada', 'NOW()', FALSE);
         $this->db->insert('InventariosAlmacen', $datos);
     }
 
@@ -689,9 +689,9 @@ class Modeloalmacenista extends CI_Model {
         );
         $this->db->insert('DetalleAccidentes', $datos);
         //Historial 
-        $Historial= array('UsuariosId' => IdUsuario(), 'MovimientosProductosId' => 10,
+        $Historial= array('Fecha' => date('Y-m-d | H:i:sa'), 'UsuariosId' => IdUsuario(), 'MovimientosProductosId' => 10,
             'Activo' => 1, 'ProductosId' => $idProducto);
-        $this->db->set('Fecha', 'NOW()', FALSE);
+       // $this->db->set('Fecha', 'NOW()', FALSE);
         $this->db->insert('HistorialProducto', $Historial);
         return "correcto";
         

@@ -78,19 +78,20 @@ class Modeloreparador extends CI_Model {
     public function GuardarReparacion($producto, $diagnostico, $solucion) {
         $reparacion = array(
             'ProductosId' => $producto,
-            'Fecha' => date('Y-m-d | h:i:sa'),
+            'Fecha' => date('Y-m-d | H:i:sa'),
             'CReparacionesId' => $diagnostico,
             'Solucion' => $solucion,
             'UsuariosId' => IdUsuario()
         );
         $this->db->insert('Reparaciones', $reparacion);
         $Historial= array(
+            'Fecha' => date('Y-m-d | H:i:sa'),
             'UsuariosId'=>IdUsuario(),
             'MovimientosProductosId'=>9,
             'Activo'=>1,
             'ProductosId'=>$producto
         );
-        $this->db->set('Fecha', 'NOW()', FALSE);
+        //$this->db->set('Fecha', 'NOW()', FALSE);
         $this->db->insert('HistorialProducto', $Historial);
     }
     

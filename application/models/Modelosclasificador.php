@@ -11,7 +11,7 @@ class Modelosclasificador extends CI_Model {
         $this->load->database();
     }
 
-    public function GuardarDevolucion($cliente, $motivo, $responsable) {
+   /* public function GuardarDevolucion($cliente, $motivo, $responsable) {
         $datos = array(
             'Cliente' => $cliente,
             'Motivo' => $motivo,
@@ -23,7 +23,7 @@ class Modelosclasificador extends CI_Model {
         $this->db->insert("Devoluciones", $datos);
         return $this->db->insert_id();
     }
-
+*/
     public function GuardarDetalleDevolucion($idproducto, $iddevolucion) {
         if ($this->VerificarProductoDevolucion($idproducto) == "no existe") {
             //Historial captura

@@ -29,7 +29,7 @@ class Creditocobranza extends CI_Controller {
         $infocontent["ListaPedidosCapturados"] = $this->Modelocedis->ListaCompletaPedidosCapturados();
         $infocontent["ListaPedidosLiberados"] = $this->Modelocedis->ListaCompletaPedidosLiberados();
         $infocontent["ListaPedidosEntregados"] = $this->Modelocedis->ListaCompletaPedidosEntregados();
-        $this->load->view('Creditocobranza/Pedidos', $infocontent);
+        $this->load->view('creditocobranza/Pedidos', $infocontent);
         $this->load->view('template/footerd', '');
     }
 

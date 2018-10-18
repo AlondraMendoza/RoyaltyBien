@@ -78,7 +78,7 @@ class Modeloreparador extends CI_Model {
     public function GuardarReparacion($producto, $diagnostico, $solucion) {
         $reparacion = array(
             'ProductosId' => $producto,
-            'Fecha' => date('Y-m-d | h:i:sa'),
+            'Fecha' => date('Y-m-d | H:i:sa'),
             'CReparacionesId' => $diagnostico,
             'Solucion' => $solucion,
             'UsuariosId' => IdUsuario()

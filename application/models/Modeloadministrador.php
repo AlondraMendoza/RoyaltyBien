@@ -766,7 +766,7 @@ class Modeloadministrador extends CI_Model {
             'UsuarioAsignaId' => IdUsuario(),
             'PerfilesId' => $perfil,
             'Activo' => 1,
-            'FechaInicio' => date('Y-m-d | h:i:sa')
+            'FechaInicio' => date('Y-m-d | H:i:sa')
         );
         $this->db->insert('PerfilesUsuarios', $Historial);
         return $this->db->insert_id();
@@ -774,7 +774,7 @@ class Modeloadministrador extends CI_Model {
 
     public function EliminarPerfil($usuario, $perfil) {
         $this->db->set("Activo", 0);
-        $this->db->set("FechaFin", date('Y-m-d | h:i:sa'));
+        $this->db->set("FechaFin", date('Y-m-d | H:i:sa'));
         $this->db->where("IdPerfilesUsuarios", $perfil);
         $this->db->update("PerfilesUsuarios");
     }
@@ -794,7 +794,7 @@ class Modeloadministrador extends CI_Model {
             'Activo' => 1,
             'Clave' => $clave,
             'UsuarioAsignaId' => IdUsuario(),
-            'FechaInicio' => date('Y-m-d | h:i:sa')
+            'FechaInicio' => date('Y-m-d | H:i:sa')
         );
         $this->db->insert('Puestos', $Historial);
         return $this->db->insert_id();
@@ -802,7 +802,7 @@ class Modeloadministrador extends CI_Model {
 
     public function EliminarPuesto($persona, $puesto) {
         $this->db->set("Activo", 0);
-        $this->db->set("FechaFin", date('Y-m-d | h:i:sa'));
+        $this->db->set("FechaFin", date('Y-m-d | H:i:sa'));
         $this->db->where("IdPuestos", $puesto);
         $this->db->update("Puestos");
     }
@@ -955,7 +955,7 @@ class Modeloadministrador extends CI_Model {
             'AMaterno' => $apellidom,
             'Nombre' => $nombre,
             'UsuariosId' => IdUsuario(),
-            'FechaRegistro' => date('Y-m-d | h:i:sa'),
+            'FechaRegistro' => date('Y-m-d | H:i:sa'),
             'Activo' => 1,
             'NEmpleado' => $nempleado
         );

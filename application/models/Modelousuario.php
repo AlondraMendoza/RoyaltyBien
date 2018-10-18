@@ -144,7 +144,7 @@ class Modelousuario extends CI_Model {
         $datos = array(
             'Mensaje' => $mensaje,
             'UsuarioCapturaId' => IdUsuario(),
-            'Fecha' => date('Y-m-d | h:i:sa')
+            'Fecha' => date('Y-m-d | H:i:sa')
         );
         $this->db->insert('Soportes', $datos);
         return "correcto";

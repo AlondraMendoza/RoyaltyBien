@@ -18,7 +18,7 @@ class Modelosclasificador extends CI_Model {
             'Responsable' => $responsable,
             'UsuarioCapturaId' => IdUsuario(),
             'Activo' => 1,
-            'FechaCaptura' => date('Y-m-d | h:i:sa')
+            'FechaCaptura' => date('Y-m-d | H:i:sa')
         );
         $this->db->insert("Devoluciones", $datos);
         return $this->db->insert_id();
@@ -32,7 +32,7 @@ class Modelosclasificador extends CI_Model {
                 'MovimientosProductosId' => 16,
                 'Activo' => 1,
                 'ProductosId' => $idproducto,
-                'Fecha' => date('Y-m-d | h:i:sa')
+                'Fecha' => date('Y-m-d | H:i:sa')
             );
             $this->db->insert('HistorialProducto', $HistorialCaptura);
             /* Fin captura historial */

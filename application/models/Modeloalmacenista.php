@@ -417,7 +417,7 @@ class Modeloalmacenista extends CI_Model {
 
     public function SalirProductoAlmacen($fila) {
         $datos = array(
-            'FechaSalida' => date('Y-m-d | h:i:sa'),
+            'FechaSalida' => date('Y-m-d | H:i:sa'),
             'UsuariosIdSalida' => IdUsuario(),
         );
         $this->db->where('IdInventariosAlmacen', $fila);
@@ -435,7 +435,7 @@ class Modeloalmacenista extends CI_Model {
 
     public function SalirProductoAlmacenP($fila) {
         $datos = array(
-            'FechaSalida' => date('Y-m-d | h:i:sa'),
+            'FechaSalida' => date('Y-m-d | H:i:sa'),
             'UsuariosIdSalida' => IdUsuario(),
         );
         $this->db->where('IdInventariosAlmacen', $fila);
@@ -457,7 +457,7 @@ class Modeloalmacenista extends CI_Model {
             'Motivo' => $Motivo,
             'Tipo' => "Producto",
             'TarimasId' => null,
-            'Fecha' => date('Y-m-d | h:i:sa'),
+            'Fecha' => date('Y-m-d | H:i:sa'),
             'UsuariosId' => IdUsuario(),
             'Activo' => 1,
         );
@@ -485,7 +485,7 @@ class Modeloalmacenista extends CI_Model {
             'Motivo' => $Motivo,
             'Tipo' => "Tarima",
             'TarimasId' => $idtarima,
-            'Fecha' => date('Y-m-d | h:i:sa'),
+            'Fecha' => date('Y-m-d | H:i:sa'),
             'UsuariosId' => IdUsuario(),
             'Activo' => 1,
         );

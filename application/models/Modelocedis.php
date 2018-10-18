@@ -57,7 +57,7 @@ class Modelocedis extends CI_Model {
     public function GuardarProductoCedis($idproducto) {
         $datos = array(
             'CedisId' => 1,
-            'FechaEntrada' => date('Y-m-d | h:i:sa'),
+            'FechaEntrada' => date('Y-m-d | H:i:sa'),
             'ProductosId' => $idproducto,
             'UsuariosIdEntrada' => IdUsuario(),
             'Activo' => 1
@@ -68,7 +68,7 @@ class Modelocedis extends CI_Model {
     public function SubirImagenPedido($ruta, $pedidoid) {
         $datos = array(
             'Ruta' => $ruta,
-            'Fecha' => date('Y-m-d | h:i:sa'),
+            'Fecha' => date('Y-m-d | H:i:sa'),
             'PedidosId' => $pedidoid,
             'UsuariosId' => IdUsuario(),
             'Activo' => 1
@@ -124,7 +124,7 @@ class Modelocedis extends CI_Model {
             'UsuariosId' => IdUsuario(),
             'Activo' => 1,
             'Cliente' => $cliente,
-            'FechaRegistro' => date('Y-m-d | h:i:sa')
+            'FechaRegistro' => date('Y-m-d | H:i:sa')
         );
         $this->db->insert("Pedidos", $datos);
         return $this->db->insert_id();
@@ -134,7 +134,7 @@ class Modelocedis extends CI_Model {
         if ($this->VerificarProductoPedido($idproducto) == "correcto") {
             if ($this->VerificarProductoPedidoVenta($idproducto, $idpedido) == "correcto") {
                 $this->db->set("PedidosId", $idpedido);
-                $this->db->set("FechaPresalida", date('Y-m-d | h:i:sa'));
+                $this->db->set("FechaPresalida", date('Y-m-d | H:i:sa'));
                 $this->db->where("ProductosId", $idproducto);
                 $this->db->update("InventariosCedis");
                 $this->GuardarTarimaAbierta($idproducto);
@@ -165,7 +165,7 @@ class Modelocedis extends CI_Model {
         $this->db->where("t.FechaApertura", null);
         $fila = $this->db->get()->row();
         if ($fila != null) {
-            $this->db->set("FechaApertura", date('Y-m-d | h:i:sa'));
+            $this->db->set("FechaApertura", date('Y-m-d | H:i:sa'));
             $this->db->where("IdTarimas", $fila->TarimasId);
             $this->db->update("Tarimas");
         }
@@ -361,11 +361,11 @@ class Modelocedis extends CI_Model {
 
     public function SalidaPedido($pedidoid) {
         foreach ($this->ProductosPedido($pedidoid)->result() as $row) {
-            $this->db->set("FechaSalida", date('Y-m-d | h:i:sa'));
+            $this->db->set("FechaSalida", date('Y-m-d | H:i:sa'));
             $this->db->where("ProductosId", $row->IdProductos);
             $this->db->update("InventariosCedis");
         }
-        $this->db->set("FechaSalida", date('Y-m-d | h:i:sa'));
+        $this->db->set("FechaSalida", date('Y-m-d | H:i:sa'));
         $this->db->set("Estatus", "Entregado");
         $this->db->set("UsuarioEntregaId", IdUsuario());
         $this->db->where("IdPedidos", $pedidoid);
@@ -473,7 +473,7 @@ class Modelocedis extends CI_Model {
         if ($maximominimo == null) {
             $datos = array(
                 'ModelosId' => $modelo,
-                'Fecha' => date('Y-m-d | h:i:sa'),
+                'Fecha' => date('Y-m-d | H:i:sa'),
                 'Maximo' => $valor,
                 'ColoresId' => $color,
                 'ClasificacionesId' => $clasificacion,
@@ -485,7 +485,7 @@ class Modelocedis extends CI_Model {
             $this->db->insert('MaximosMinimos', $datos);
         } else {
             $this->db->set("Maximo", $valor);
-            $this->db->set("Fecha", date('Y-m-d | h:i:sa'));
+            $this->db->set("Fecha", date('Y-m-d | H:i:sa'));
             $this->db->set("UsuariosId", IdUsuario());
             $this->db->where("ModelosId", $modelo);
             $this->db->where("CProductosId", $cproducto);
@@ -501,7 +501,7 @@ class Modelocedis extends CI_Model {
         if ($maximominimo == null) {
             $datos = array(
                 'ModelosId' => $modelo,
-                'Fecha' => date('Y-m-d | h:i:sa'),
+                'Fecha' => date('Y-m-d | H:i:sa'),
                 'Minimo' => $valor,
                 'ColoresId' => $color,
                 'ClasificacionesId' => $clasificacion,
@@ -513,7 +513,7 @@ class Modelocedis extends CI_Model {
             $this->db->insert('MaximosMinimos', $datos);
         } else {
             $this->db->set("Minimo", $valor);
-            $this->db->set("Fecha", date('Y-m-d | h:i:sa'));
+            $this->db->set("Fecha", date('Y-m-d | H:i:sa'));
             $this->db->set("UsuariosId", IdUsuario());
             $this->db->where("ModelosId", $modelo);
             $this->db->where("CProductosId", $cproducto);
@@ -532,7 +532,7 @@ class Modelocedis extends CI_Model {
             'UsuarioCapturaId' => IdUsuario(),
             'Activo' => 1,
             'VerificadaSupervisor' => "No",
-            'FechaCaptura' => date('Y-m-d | h:i:sa')
+            'FechaCaptura' => date('Y-m-d | H:i:sa')
         );
         $this->db->insert("Devoluciones", $datos);
 
@@ -663,7 +663,7 @@ class Modelocedis extends CI_Model {
             'Activo' => 1,
             'Clasificado' => 1,
             'ModelosId' => $mod,
-            'FechaCaptura' => date('Y-m-d | h:i:sa')
+            'FechaCaptura' => date('Y-m-d | H:i:sa')
         );
         $this->db->insert("Productos", $datos);
         $idprod = $this->db->insert_id();
@@ -673,14 +673,14 @@ class Modelocedis extends CI_Model {
             'MovimientosProductosId' => 14,
             'Activo' => 1,
             'ProductosId' => $idprod,
-            'Fecha' => date('Y-m-d | h:i:sa')
+            'Fecha' => date('Y-m-d | H:i:sa')
         );
         $this->db->insert('HistorialProducto', $HistorialCaptura);
 
         //Clasificación
         $datos2 = array(
             'ProductosId' => $idprod,
-            'FechaClasificacion' => date('Y-m-d | h:i:sa'),
+            'FechaClasificacion' => date('Y-m-d | H:i:sa'),
             'ClasificacionesId' => $clasi,
             'FueraTono' => 0,
             'UsuariosId' => IdUsuario(),
@@ -698,7 +698,7 @@ class Modelocedis extends CI_Model {
             'MovimientosProductosId' => 15,
             'Activo' => 1,
             'ProductosId' => $idprod,
-            'Fecha' => date('Y-m-d | h:i:sa')
+            'Fecha' => date('Y-m-d | H:i:sa')
         );
         $this->db->insert('HistorialProducto', $Historial);
         //Entrada al inventario
@@ -708,7 +708,7 @@ class Modelocedis extends CI_Model {
             'MovimientosProductosId' => 6,
             'Activo' => 1,
             'ProductosId' => $idprod,
-            'Fecha' => date('Y-m-d | h:i:sa')
+            'Fecha' => date('Y-m-d | H:i:sa')
         );
         $this->db->insert('HistorialProducto', $HistorialEntrada);
         return $idprod;

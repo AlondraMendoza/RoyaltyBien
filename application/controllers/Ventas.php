@@ -76,7 +76,7 @@ class Ventas extends CI_Controller {
                     'Cliente' => $this->input->post_get('cliente', TRUE),
                     'NotaCredito' => $this->input->post_get('notacredito', TRUE),
                     'NotaCedis' => $this->input->post_get('notacedis', TRUE),
-                    'FechaRegistro' => date('Y-m-d | h:i:sa'),
+                    'FechaRegistro' => date('Y-m-d | H:i:sa'),
                     'Estatus' => 'Solicitado'
                 );
                 $this->db->insert('Pedidos', $data);
@@ -146,7 +146,7 @@ class Ventas extends CI_Controller {
 //                    'Cliente' => $this->input->post_get('cliente', TRUE),
 //                    'NotaCredito' => $this->input->post_get('notacredito', TRUE),
 //                    'NotaCedis' => $this->input->post_get('notacedis', TRUE),
-//                    'FechaRegistro' => date('Y-m-d | h:i:sa'),
+//                    'FechaRegistro' => date('Y-m-d | H:i:sa'),
 //                    'Estatus' => 'Solicitado'
 //                );
 //                $this->db->insert('Pedidos', $data);

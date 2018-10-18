@@ -262,7 +262,7 @@ class Modeloclasificador extends CI_Model {
 
         $datos = array(
             'ProductosId' => $idprod,
-            'FechaClasificacion' => date('Y-m-d | h:i:sa'),
+            'FechaClasificacion' => date('Y-m-d | H:i:sa'),
             'ClasificacionesId' => $idclasi,
             'FueraTono' => $fueratono,
             'UsuariosId' => IdUsuario(),
@@ -352,7 +352,7 @@ class Modeloclasificador extends CI_Model {
             'Activo' => 1,
             'Clasificado' => 1,
             'ModelosId' => 12,
-            'FechaCaptura' => date('Y-m-d | h:i:sa')
+            'FechaCaptura' => date('Y-m-d | H:i:sa')
         );
         $this->db->insert("Productos", $datos);
         return $this->db->insert_id();
@@ -398,7 +398,7 @@ class Modeloclasificador extends CI_Model {
         $datos = array(
             'UsuarioCapturaId' => IdUsuario(),
             'Activo' => 1,
-            'FechaCaptura' => date('Y-m-d | h:i:sa')
+            'FechaCaptura' => date('Y-m-d | H:i:sa')
         );
         $this->db->insert("Tarimas", $datos);
         return $this->db->insert_id();

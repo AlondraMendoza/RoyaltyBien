@@ -207,7 +207,6 @@ $cont = 1;
     }
     function Siguiente(idprod, fecha)
     {
-        //$("#areaimprimir").html("<img src='barcodeventana?text=" + fecha + "-" + pad(idprod, 10) + "'>");
         /*Guardar clasificacion*/
         var idclasi = $("#clasel" + idprod).val();
         var letraclasi = $("#letraclasel" + idprod).val();
@@ -234,53 +233,18 @@ $cont = 1;
             Notificacion("Error", "Es necesario que captures la clave del empleado relacionado al defecto 2.", "cancel", "alert");
             return(0);
         }
-
         $.post("GuardarClasificacion", {"idclasi": idclasi, "idprod": idprod, "defecto1": iddefecto1, "defecto2": iddefecto2, "puestodefecto1": clavepuesto1, "puestodefecto2": clavepuesto2, "fueratono": fueratono}, function (data) {
             if (data == "correcto")
             {
                 Notificacion("Correcto", "La Clasificación se guardó correctamente", "check", "success");
-                //Soy la anterior buena  $("#imprimeme").attr("src", "EnviarTicket?codigo=" + fecha + "-" + pad(idprod, 10) + "&producto_id=" + idprod);
-                //soy la segunda mejor opción window.open("barcodeventana?text=" + fecha + "-" + pad(idprod, 10), "Código de Barras", "width = 200, height = 100");
                 $("#areaimprimir" + idprod).printArea();
-                //$("#codigobarras").html("<a href='barcodevista?text="+fecha + "-" + pad(idprod, 10) + "&producto_id=" + idprod+"' target='_blank' onclick=''></a>");
-                //
-                //
-                //document.getElementById("imprimeme").focus();
-                //document.getElementById("imprimeme").print();
-                //var w = window.open("EnviarTicket?codigo=<?= $cprod . $mod . $color ?>" + fecha + idprod, 'algo', 'width=300,height=400');
-                //w.print();
-                //setTimeout(w.close, 2000);
-
-                //                var ventana = window.open("EnviarTicket?codigo=<?= $cprod . $mod . $color ?>" + fecha + idprod, 'algo', 'width=300,height=400');
-                //window.location.href = "EnviarTicket?codigo=<?= $cprod . $mod . $color ?>" + fecha + idprod;
-                //                setTimeout(ventana.close, 3000);
-
-                //                $("#imprimeme").html("<img src='barcodevista?text=<?= $cprod . $mod . $color ?>" + fecha + idprod + "'>");
-                //                document.getElementById("imprimeme").focus();
-                //                document.getElementById("imprimeme").contentWindow.print();
-                //                var win = window.open();
-                //                win.document.write('<html>');
-                //                win.document.write('<head></head>');
-                //                win.document.write('<body>');
-                //                win.document.write("<img src='barcodevista?text=<?= $cprod . $mod . $color ?>" + fecha + idprod + "'>");
-                //                win.document.write('</body>');
-                //                win.document.write('</html>');
-                //                setTimeout(win.print, 3000);
-                //                setTimeout(win.close, 5000);
-                //var ventana = window.open('', '_blank', 'width=200,height=200');  //abrimos una ventana vacía nueva
-                //ventana.document.write("<img src='barcodevista?text=<?= $cprod . $mod . $color ?>" + fecha + idprod + "'>");  //imprimimos el HTML del objeto en la nueva ventana
-                //ventana.document.close();  //cerramos el documento
-                //setTimeout(ventana.print, 2000);  //imprimimos la ventana
-                //setTimeout(ventana.close,3000);  //cerramos la ventana
             } else
             {
                 Notificacion("Error", "Ocurrió un error al guardar la clasificación", "cancel", "alert");
             }
         });
-        /*Fin guardado*/
         $(".tablasproductos").hide();
         $("#tabla" + cont).fadeIn();
-        //alert($("#spanbotonsiguiente" + idprod).html());
         if ($("#spanbotonsiguiente" + idprod).html() == "Finalizar clasificación")
         {
             $("#Finalizar").fadeIn();

@@ -11,19 +11,19 @@ class Modelosclasificador extends CI_Model {
         $this->load->database();
     }
 
-    public function GuardarDevolucion($cliente, $motivo, $responsable) {
+   /* public function GuardarDevolucion($cliente, $motivo, $responsable) {
         $datos = array(
             'Cliente' => $cliente,
             'Motivo' => $motivo,
             'Responsable' => $responsable,
             'UsuarioCapturaId' => IdUsuario(),
             'Activo' => 1,
-            'FechaCaptura' => date('Y-m-d | h:i:sa')
+            'FechaCaptura' => date('Y-m-d | H:i:sa')
         );
         $this->db->insert("Devoluciones", $datos);
         return $this->db->insert_id();
     }
-
+*/
     public function GuardarDetalleDevolucion($idproducto, $iddevolucion) {
         if ($this->VerificarProductoDevolucion($idproducto) == "no existe") {
             //Historial captura
@@ -32,7 +32,7 @@ class Modelosclasificador extends CI_Model {
                 'MovimientosProductosId' => 16,
                 'Activo' => 1,
                 'ProductosId' => $idproducto,
-                'Fecha' => date('Y-m-d | h:i:sa')
+                'Fecha' => date('Y-m-d | H:i:sa')
             );
             $this->db->insert('HistorialProducto', $HistorialCaptura);
             /* Fin captura historial */

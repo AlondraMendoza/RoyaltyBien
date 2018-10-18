@@ -269,8 +269,8 @@ class Cedis extends CI_Controller {
         $cliente = $this->input->post_get('cliente', TRUE);
         $motivo = $this->input->post_get('motivo', TRUE);
         $responsable = $this->input->post_get('responsable', TRUE);
-        $this->load->model("Modelosclasificador");
-        $iddevolucion = $this->Modelosclasificador->GuardarDevolucion($cliente, $motivo, $responsable);
+        $this->load->model("Modelocedis");
+        $iddevolucion = $this->Modelocedis->GuardarDevolucion($cliente, $motivo, $responsable);
         print($iddevolucion);
     }
 

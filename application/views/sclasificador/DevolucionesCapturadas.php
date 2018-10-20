@@ -40,7 +40,8 @@ $ci->load->model("modelocedis");
                                 <br>
                             <?php } else {
                                 ?>
-                                <span class="mif-checkmark"></span> <span class="caption text-small fg-darkGreen"><?= $sub->Descripcion ?> / <?= $sub->Clave ?> </span><br>
+                                <?php if ($sub->Verificado == "Si") { ?>    <span class="mif-checkmark fg-darkGreen"></span> <?php } else { ?><span class="mif-cross fg-red"></span> <?php } ?><span class="caption text-small fg-darkGreen"><?= $sub->Descripcion ?> / <?= $sub->Clave ?> </span><br>
+
                             <?php } ?>
                         <?php endforeach; ?>
 

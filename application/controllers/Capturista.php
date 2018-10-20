@@ -45,14 +45,7 @@ class Capturista extends CI_Controller {
         $infocontent["productos"] = $this->Modelocapturista->ListarProductos();
         $this->load->view('capturista/capturaCarro', $infocontent);
         $this->load->view('template/footerd', '');
-//        $p = \Models\CProductos::ListarProductos();
-//        $h = \Models\Hornos::ListarHornos();
-//        $c = \Models\Carros::ListarCarros();
-//        $array = [
-//            "listaproductos" => $p,
-//            "hornos" => $h,
-//            "carros" => $c,];
-//        return $array;
+
     }
 
     public function capturaAccesorios() {
@@ -69,11 +62,7 @@ class Capturista extends CI_Controller {
         $this->load->model("Modelocapturista");
         $infocontent["modelos"] = $this->Modelocapturista->ListarModelos($id);
         $this->load->view('capturista/ObtenerModelos', $infocontent);
-//        $id = $_REQUEST["id"];
-//        $m = \Models\Modelos::ListarModelos($id);
-//        $array = [
-//            "modelo" => $m,];
-//        return $array;
+
     }
 
     public function ObtenerColores() {
@@ -81,11 +70,7 @@ class Capturista extends CI_Controller {
         $this->load->model("Modelocapturista");
         $infocontent["colores"] = $this->Modelocapturista->ListarColores($id);
         $this->load->view('capturista/ObtenerColores', $infocontent);
-//        $id = $_REQUEST["id"];
-//        $c = \Models\Colores::ListarColores($id);
-//        $array = [
-//            "color" => $c,];
-//        return $array;
+
     }
 
     public static function FechaIngles($date) {

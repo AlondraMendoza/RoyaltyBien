@@ -85,12 +85,13 @@ class Modeloreparador extends CI_Model {
         );
         $this->db->insert('Reparaciones', $reparacion);
         $Historial= array(
+            'Fecha' => date('Y-m-d | H:i:sa'),
             'UsuariosId'=>IdUsuario(),
             'MovimientosProductosId'=>9,
             'Activo'=>1,
             'ProductosId'=>$producto
         );
-        $this->db->set('Fecha', 'NOW()', FALSE);
+        //$this->db->set('Fecha', 'NOW()', FALSE);
         $this->db->insert('HistorialProducto', $Historial);
     }
     

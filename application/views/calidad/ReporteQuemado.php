@@ -15,6 +15,21 @@
         $("#detalle").load("GenerarReporteQ", {"fechainicio": fechainicio, "fechafin": fechafin}); 
     
     }
+    
+    function Concentrado()
+    {
+        var pb = $("#pb2").data('progress');
+        pb.set(100);
+        var fechainicio = $("#fechainicio").val();
+        var fechafin = $("#fechafin").val();
+        var por = $("#concentradox").val();
+        $("#detalle").show();
+        $("#detalle").html("<center style='font-size:1.2em'><b>Consultando Información...</b></center><br><br>");
+        $("#grafica").html("");
+        $("#detalleseleccionado").hide();
+        $("#divtiporeporte").hide();
+        $("#detalle").load("GenerarConcentradoQ", {"fechainicio": fechainicio, "fechafin": fechafin, "por": por});
+    }
 
     function Paso(paso)
     {
@@ -31,7 +46,7 @@
         $("#paso" + paso).show();
     }
 </script>
-<h1 class="light text-shadow">REPORTE DE HORNOS</h1><br>
+<h1 class="light text-shadow">REPORTE DETALLADO DE MERMAS</h1><br>
 <div class="progress large" id="pb2" data-parts="true" data-role="progress" data-value="0" data-colors="{&quot;bg-red&quot;: 33, &quot;bg-yellow&quot;: 66, &quot;bg-cyan&quot;: 90, &quot;bg-green&quot;: 100}"><div class="bar bg-green" style="width: 100%;height: 30px"></div></div>
 <hr>
 <div class="panel warning" data-role="panel" id="paso1">
@@ -84,7 +99,7 @@
                 </tr>
                 <tr>
                     <th>Lista Detalle</th>
-                    <!--<th>Concentrado y Graficado Por:</th>-->
+                    <th>Concentrado y Graficado Por:</th>
                 </tr>
             </thead>
             <tr>
@@ -92,7 +107,17 @@
                     <i>Se mostrarán los productos a detalle</i><br>
                     <button id="" style="" class="button block-shadow-info text-shadow primary big-button" onclick="Detalle()"><span class="mif-arrow-right mif-ani-hover-horizontal"></span> Consultar</button>
                 </td>
-
+                <td class="center">
+                    <div class="input-control select full-size">
+                        <select id="concentradox">
+                            <option value="cp.IdCproductos">Producto</option>
+                            <option value="m.IdModelos">Modelo</option>
+                            <option value="co.IdColores">Color</option>
+                        </select>
+                    </div>
+                    <br>
+                    <button id="" style="" class="button block-shadow-warning text-shadow warning big-button" onclick="Concentrado()"><span class="mif-arrow-right mif-ani-hover-horizontal"></span> Consultar</button>
+                </td>
             </tr>
         </table>
         <center>
@@ -104,6 +129,61 @@
             <canvas id="myChart" width="300" height="100" class="shadow"></canvas>
         </div>
         <div id="detalleseleccionado"> </div>
+        <script>
+            function Grafica(etiquetas, valores) {
+
+                $("#grafica").html('<canvas id="myChart" width="300" height="100" class="shadow"></canvas>');
+                var ctx = document.getElementById("myChart");
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: etiquetas,
+                        datasets: [{
+                                label: "Productos",
+                                data: valores,
+                                backgroundColor: [
+                                    'rgba(255, 99, 132, 0.2)',
+                                    'rgba(54, 162, 235, 0.2)',
+                                    'rgba(255, 206, 86, 0.2)',
+                                    'rgba(75, 192, 192, 0.2)',
+                                    'rgba(153, 102, 255, 0.2)',
+                                    'rgba(255, 159, 64, 0.2)'
+                                ],
+                                borderColor: [
+                                    'rgba(255,99,132,1)',
+                                    'rgba(54, 162, 235, 1)',
+                                    'rgba(255, 206, 86, 1)',
+                                    'rgba(75, 192, 192, 1)',
+                                    'rgba(153, 102, 255, 1)',
+                                    'rgba(255, 159, 64, 1)'
+                                ],
+                                borderWidth: 1
+                            }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                    ticks: {
+                                        beginAtZero: true
+                                    }
+                                }]
+                        }
+                    }
+                });
+                document.getElementById("myChart").onclick = function (evt) {
+                    var activePoints = myChart.getElementAtEvent(evt);
+                    // var theElement = myChart.config.data.datasets[activePoints[0]._datasetIndex].data[activePoints[0]._index];
+
+                    //alert(etiquetas[activePoints[0]._index]);
+                    //alert(valores[activePoints[0]._index]);
+                    DetalleSeleccionado(etiquetas[activePoints[0]._index]);
+//                    console.log(theElement);
+//                    console.log(myChart.config.data.datakeys[activePoints[0]._index]);
+                    // document.getElementById("texto").innerText = myChart.config.da [activePoints[0]._index];
+//                    console.log(myChart.config.type);
+                }
+            }
+        </script>
            </div>
 </div>
         

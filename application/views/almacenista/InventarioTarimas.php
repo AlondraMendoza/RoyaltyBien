@@ -47,25 +47,7 @@
                                     foreach ($productos->result() as $producto):
                                         $proda = $ci->modeloalmacenista->ProductosTarima($modelo->IdModelos, $color->IdColores, 1, $producto->IdCProductos);
                                         $prodb = $ci->modeloalmacenista->ProductosTarima($modelo->IdModelos, $color->IdColores, 2, $producto->IdCProductos);
-//                                        $maximominimoa = $ci->modelocedis->MaximoMinimo($modelo->IdModelos, $color->IdColores, 1, $producto->IdCProductos, $proda);
-//                                        $maximominimob = $ci->modelocedis->MaximoMinimo($modelo->IdModelos, $color->IdColores, 2, $producto->IdCProductos, $prodb);
-//                                        $semaforoa = "gray";
-//                                        $semaforob = "gray";
-////                                        $maximoa = "--";
-////                                        $minimoa = "--";
-////                                        $maximob = "--";
-////                                        $minimob = "--";
-//
-//                                        if ($maximominimoa != null) {
-//                                            $semaforoa = $ci->modelocedis->ColorMaximosMinimos($proda, $maximominimoa->Maximo, $maximominimoa->Minimo);
-//                                            $maximoa = $maximominimoa->Maximo;
-//                                            $minimoa = $maximominimoa->Minimo;
-//                                        }
-//                                        if ($maximominimob != null) {
-//                                            $semaforob = $ci->modelocedis->ColorMaximosMinimos($prodb, $maximominimob->Maximo, $maximominimob->Minimo);
-//                                            $maximob = $maximominimob->Maximo;
-//                                            $minimob = $maximominimob->Minimo;
-//                                        }
+
                                         ?>
                                         <td class="center">
                                             <!--<button title="Mínimo:<?= $minimoa ?>  Máximo:<?= $maximoa ?>" class="button cycle-button bg-<?= $semaforoa ?>"></button>-->

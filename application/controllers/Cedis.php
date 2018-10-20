@@ -42,7 +42,7 @@ class Cedis extends CI_Controller
         $infoheader["titulo"] = "Entrada Productos: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $infocontent["Nombre"] = "Alondra Mendoza";
-        $this->load->view('cedis/EntradaProducto', $infocontent);
+        $this->load->view('cedis/EntradaProductos', $infocontent);
         $this->load->view('template/footerd', '');
     }
 

@@ -419,11 +419,13 @@ class Modelocedis extends CI_Model {
     }
 
     public function ProductosPedidosVentas($modelo, $color, $clasificacion, $producto) {
-        //print("SELECT count(*) as cuantos from InventariosCedis ic JOIN Productos p on p.IdProductos=ic.ProductosId JOIN CProductos cp on cp.IdCProductos=p.CProductosId where cp.IdCProductos= " . $producto . " AND Clasificacion(p.IdProductos)=" . $clasificacion . " AND ic.FechaSalida is null AND p.ModelosId= " . $modelo . " AND p.ColoresId= " . $color . " GROUP BY p.IdProductos");
-        $query = $this->db->query("SELECT count(*) as cuantos from PedidosVentas p JOIN Pedidos pe on pe.IdPedidos=p.PedidosId where p.CProductosId= " . $producto . " AND ClasificacionesId=" . $clasificacion . " AND p.Activo=1 AND p.ModelosId= " . $modelo . " AND pe.Activo=1 AND pe.Estatus='Liberado' AND  p.ColoresId= " . $color . " ");
+        //print("SELECT count(*) as cuantos from PedidosVentas p JOIN Pedidos pe on pe.IdPedidos=p.PedidosId where p.CProductosId= " . $producto . " AND ClasificacionesId=" . $clasificacion . " AND p.Activo=1 AND p.ModelosId= " . $modelo . " AND pe.Activo=1 AND pe.Estatus='Liberado' AND  p.ColoresId= " . $color . " ");
+        $query = $this->db->query("SELECT IFNULL(sum(p.Cantidad),0) as cuantos from PedidosVentas p JOIN Pedidos pe on pe.IdPedidos=p.PedidosId where p.CProductosId= " . $producto . " AND ClasificacionesId=" . $clasificacion . " AND p.Activo=1 AND p.ModelosId= " . $modelo . " AND pe.Activo=1 AND pe.Estatus='Liberado' AND  p.ColoresId= " . $color . " ");
         $row = $query->row();
         if (isset($row)) {
             return $row->cuantos;
+        } else {
+            return 0;
         }
     }
 

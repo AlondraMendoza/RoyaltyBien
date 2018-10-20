@@ -1,11 +1,14 @@
 <?php
 
-if (!defined('BASEPATH'))
+if (!defined('BASEPATH')) {
     exit('No direct script access allowed');
+}
 
-class Cedis extends CI_Controller {
+class Cedis extends CI_Controller
+{
 
-    function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->load->model("Modelousuario");
         $this->load->model("Modelocedis");
@@ -18,13 +21,15 @@ class Cedis extends CI_Controller {
         }
     }
 
-    public function index() {
+    public function index()
+    {
         $datos["nombre"] = "Cadena ejemplo";
         $datos["apellido"] = "Cadena ejemplo 2";
         $this->load->view('capturista/index', $datos);
     }
 
-    public function EntradaTarimas() {
+    public function EntradaTarimas()
+    {
         $infoheader["titulo"] = "Entrada Tarimas: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $infocontent["Nombre"] = "Alondra Mendoza";
@@ -32,7 +37,8 @@ class Cedis extends CI_Controller {
         $this->load->view('template/footerd', '');
     }
 
-    public function EntradaProductos() {
+    public function EntradaProductos()
+    {
         $infoheader["titulo"] = "Entrada Productos: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $infocontent["Nombre"] = "Alondra Mendoza";
@@ -40,8 +46,9 @@ class Cedis extends CI_Controller {
         $this->load->view('template/footerd', '');
     }
 
-    public function VerificarClaveProd() {
-        $clave = $this->input->post_get('clave', TRUE);
+    public function VerificarClaveProd()
+    {
+        $clave = $this->input->post_get('clave', true);
         $this->load->model("Modelocedis");
         $fila = $this->Modelocedis->BuscarClaveProducto($clave);
         $infocontent["nombre"] = "No se encontró el producto";
@@ -52,8 +59,9 @@ class Cedis extends CI_Controller {
         print json_encode($infocontent);
     }
 
-    public function VerificarClaveTarima() {
-        $clave = $this->input->post_get('clave', TRUE);
+    public function VerificarClaveTarima()
+    {
+        $clave = $this->input->post_get('clave', true);
         $this->load->model("Modelocedis");
         $fila = $this->Modelocedis->BuscarClaveTarima($clave);
         if ($fila != "No se encontró la tarima") {
@@ -62,8 +70,9 @@ class Cedis extends CI_Controller {
         print json_encode($infocontent);
     }
 
-    public function GuardarTarimasCedis() {
-        $idtarima = $this->input->post_get('idtarima', TRUE);
+    public function GuardarTarimasCedis()
+    {
+        $idtarima = $this->input->post_get('idtarima', true);
         $this->load->model("Modelocedis");
         $resp = $this->Modelocedis->GuardarProductosTarima($idtarima);
         if ($resp == "Existe") {
@@ -75,8 +84,9 @@ class Cedis extends CI_Controller {
         }
     }
 
-    public function GuardarProductoCedis() {
-        $idproducto = $this->input->post_get('idproducto', TRUE);
+    public function GuardarProductoCedis()
+    {
+        $idproducto = $this->input->post_get('idproducto', true);
         $this->load->model("Modelocedis");
         if ($this->Modelocedis->ProductoEnCedis($idproducto)) {
             print("Existe");
@@ -86,7 +96,8 @@ class Cedis extends CI_Controller {
         }
     }
 
-    public function CapturaPedidos() {
+    public function CapturaPedidos()
+    {
         $infoheader["titulo"] = "Captura Pedidos: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $infocontent["Nombre"] = "Alondra Mendoza";
@@ -99,8 +110,9 @@ class Cedis extends CI_Controller {
         $this->load->view('template/footerd', '');
     }
 
-    public function VerificarProductoCedis() {
-        $clave = $this->input->post_get('clave', TRUE);
+    public function VerificarProductoCedis()
+    {
+        $clave = $this->input->post_get('clave', true);
         $this->load->model("Modelocedis");
         $fila = $this->Modelocedis->BuscarProductoCedis($clave);
         $infocontent["nombre"] = $fila;
@@ -111,9 +123,10 @@ class Cedis extends CI_Controller {
         print json_encode($infocontent);
     }
 
-    function SubirImagenPedido() {
+    public function SubirImagenPedido()
+    {
         $pedidoid = $this->input->post('pedidoid');
-        $observacion = $this->input->post_get('observacioncedis', TRUE);
+        $observacion = $this->input->post_get('observacioncedis', true);
         $this->db->set("ObservacionSalida", $observacion);
         $this->db->where("IdPedidos", $pedidoid);
         $this->db->update("Pedidos");
@@ -134,23 +147,26 @@ class Cedis extends CI_Controller {
         redirect('cedis/AbrirPedido?pedidoid=' . $pedidoid);
     }
 
-    public function GuardarPedidoCedis() {
-        $cliente = $this->input->post_get('cliente', TRUE);
+    public function GuardarPedidoCedis()
+    {
+        $cliente = $this->input->post_get('cliente', true);
         $this->load->model("Modelocedis");
         $idpedido = $this->Modelocedis->GuardarPedido($cliente);
         print($idpedido);
     }
 
-    public function EliminarImagenPedido() {
-        $idimagen = $this->input->post_get('idimagen', TRUE);
-        $pedidoid = $this->input->post_get('pedidoid', TRUE);
+    public function EliminarImagenPedido()
+    {
+        $idimagen = $this->input->post_get('idimagen', true);
+        $pedidoid = $this->input->post_get('pedidoid', true);
         $this->Modelocedis->EliminarImagenPedido($idimagen);
         redirect('cedis/AbrirPedido?pedidoid=' . $pedidoid);
     }
 
-    public function GuardarDetallePedidoCedis() {
-        $idproducto = $this->input->post_get('idproducto', TRUE);
-        $idpedido = $this->input->post_get('idpedido', TRUE);
+    public function GuardarDetallePedidoCedis()
+    {
+        $idproducto = $this->input->post_get('idproducto', true);
+        $idpedido = $this->input->post_get('idpedido', true);
         $this->load->model("Modelocedis");
         $iddetalle = $this->Modelocedis->GuardarDetallePedido($idproducto, $idpedido);
         if ($iddetalle == "En pedido") {
@@ -164,8 +180,9 @@ class Cedis extends CI_Controller {
         }
     }
 
-    public function AbrirPedido() {
-        $pedidoid = $this->input->post_get('pedidoid', TRUE);
+    public function AbrirPedido()
+    {
+        $pedidoid = $this->input->post_get('pedidoid', true);
         $this->load->model("Modelocedis");
         $infoheader["titulo"] = "Pedido: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
@@ -177,28 +194,32 @@ class Cedis extends CI_Controller {
         $this->load->view('template/footerd', '');
     }
 
-    public function InformacionPedidoVentas() {
-        $pedidoid = $this->input->post_get('pedidoid', TRUE);
+    public function InformacionPedidoVentas()
+    {
+        $pedidoid = $this->input->post_get('pedidoid', true);
         $infocontent["pedido"] = $this->Modelocedis->ObtenerPedido($pedidoid);
         $infocontent["ListaProductosAgrupados"] = $this->Modelocedis->ProductosPedidoAgrupados($pedidoid);
         $this->load->view('cedis/InformacionPedidoVentas', $infocontent);
     }
 
-    public function RecargaProductosPedido() {
-        $pedidoid = $this->input->post_get('pedidoid', TRUE);
+    public function RecargaProductosPedido()
+    {
+        $pedidoid = $this->input->post_get('pedidoid', true);
         $infocontent["pedido"] = $this->Modelocedis->ObtenerPedido($pedidoid);
         $infocontent["ListaProductos"] = $this->Modelocedis->ProductosPedido($pedidoid);
         $this->load->view('cedis/RecargaProductosPedido', $infocontent);
     }
 
-    public function SalidaCedis() {
-        $pedidoid = $this->input->post_get('pedidoid', TRUE);
+    public function SalidaCedis()
+    {
+        $pedidoid = $this->input->post_get('pedidoid', true);
         $this->load->model("Modelocedis");
         $this->Modelocedis->SalidaPedido($pedidoid);
         print("correcto");
     }
 
-    public function MaximosMinimos() {
+    public function MaximosMinimos()
+    {
         $infoheader["titulo"] = "Máximos y Mínimos: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $this->load->model("Modelocedis");
@@ -208,7 +229,8 @@ class Cedis extends CI_Controller {
         $this->load->view('template/footerd', '');
     }
 
-    public function ConfiguracionMaximosMinimos() {
+    public function ConfiguracionMaximosMinimos()
+    {
         $infoheader["titulo"] = "Configuración Máximos y Mínimos: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $this->load->model("Modelocedis");
@@ -218,29 +240,32 @@ class Cedis extends CI_Controller {
         $this->load->view('template/footerd', '');
     }
 
-    public function GuardarMaximo() {
-        $cproducto = $this->input->post_get('cproducto', TRUE);
-        $modelo = $this->input->post_get('modelo', TRUE);
-        $color = $this->input->post_get('color', TRUE);
-        $clasificacion = $this->input->post_get('clasificacion', TRUE);
-        $valor = $this->input->post_get('valor', TRUE);
+    public function GuardarMaximo()
+    {
+        $cproducto = $this->input->post_get('cproducto', true);
+        $modelo = $this->input->post_get('modelo', true);
+        $color = $this->input->post_get('color', true);
+        $clasificacion = $this->input->post_get('clasificacion', true);
+        $valor = $this->input->post_get('valor', true);
         $this->load->model("Modelocedis");
         $this->Modelocedis->GuardarMaximo($cproducto, $modelo, $color, $clasificacion, $valor);
         print("correcto");
     }
 
-    public function GuardarMinimo() {
-        $cproducto = $this->input->post_get('cproducto', TRUE);
-        $modelo = $this->input->post_get('modelo', TRUE);
-        $color = $this->input->post_get('color', TRUE);
-        $clasificacion = $this->input->post_get('clasificacion', TRUE);
-        $valor = $this->input->post_get('valor', TRUE);
+    public function GuardarMinimo()
+    {
+        $cproducto = $this->input->post_get('cproducto', true);
+        $modelo = $this->input->post_get('modelo', true);
+        $color = $this->input->post_get('color', true);
+        $clasificacion = $this->input->post_get('clasificacion', true);
+        $valor = $this->input->post_get('valor', true);
         $this->load->model("Modelocedis");
         $this->Modelocedis->GuardarMinimo($cproducto, $modelo, $color, $clasificacion, $valor);
         print("correcto");
     }
 
-    public function CapturaDevoluciones() {
+    public function CapturaDevoluciones()
+    {
         $infoheader["titulo"] = "Devoluciones: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $infocontent["Nombre"] = "Alondra Mendoza";
@@ -249,47 +274,53 @@ class Cedis extends CI_Controller {
         $this->load->view('template/footerd', '');
     }
 
-    public function DevolucionesCapturadas() {
-        $fechainicio = $this->input->post_get('fechainicio', TRUE);
-        $fechafin = $this->input->post_get('fechafin', TRUE);
+    public function DevolucionesCapturadas()
+    {
+        $fechainicio = $this->input->post_get('fechainicio', true);
+        $fechafin = $this->input->post_get('fechafin', true);
         $infocontent["devolucionescapturadas"] = $this->Modelocedis->DevolucionesCapturadas($fechainicio, $fechafin);
         $this->load->view('cedis/DevolucionesCapturadas', $infocontent);
     }
 
-    public function BuscarSubproducto() {
-        $texto = $this->input->post_get('texto', TRUE);
-        $id = $this->input->post_get('id', TRUE);
+    public function BuscarSubproducto()
+    {
+        $texto = $this->input->post_get('texto', true);
+        $id = $this->input->post_get('id', true);
         $encontrados = $this->Modelocedis->BuscarSubproducto($texto);
         $infocontent["encontrados"] = $encontrados;
         $infocontent["id"] = $id;
         $this->load->view('cedis/BuscarSubproducto', $infocontent);
     }
 
-    public function GuardarDevolucion() {
-        $cliente = $this->input->post_get('cliente', TRUE);
-        $motivo = $this->input->post_get('motivo', TRUE);
-        $responsable = $this->input->post_get('responsable', TRUE);
+    public function GuardarDevolucion()
+    {
+        $cliente = $this->input->post_get('cliente', true);
+        $motivo = $this->input->post_get('motivo', true);
+        $responsable = $this->input->post_get('responsable', true);
         $this->load->model("Modelocedis");
         $iddevolucion = $this->Modelocedis->GuardarDevolucion($cliente, $motivo, $responsable);
         print($iddevolucion);
     }
 
-    public function GuardarDetalleDevolucion() {
-        $id_producto = $this->input->post_get('producto_id', TRUE);
-        $id_devolucion = $this->input->post_get('devolucion_id', TRUE);
+    public function GuardarDetalleDevolucion()
+    {
+        $id_producto = $this->input->post_get('producto_id', true);
+        $id_devolucion = $this->input->post_get('devolucion_id', true);
         $this->load->model("Modelosclasificador");
         $iddetalle = $this->Modelosclasificador->GuardarDetalleDevolucion($id_producto, $id_devolucion);
         print($iddetalle);
     }
 
-    public function GuardarSubproducto() {
+    public function GuardarSubproducto()
+    {
         $detalle_id = $this->input->post_get("detalle_id");
         $subproducto_id = $this->input->post_get("subproducto_id");
         $iddetalle = $this->Modelocedis->GuardarSubproducto($subproducto_id, $detalle_id);
         print($iddetalle);
     }
 
-    public function capturaCedis() {
+    public function capturaCedis()
+    {
         $infoheader["titulo"] = "Cedis: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $infocontent["Nombre"] = "";
@@ -300,25 +331,28 @@ class Cedis extends CI_Controller {
         $this->load->view('template/footerd', '');
     }
 
-    public function ObtenerModelos() {
-        $id = $this->input->post_get('id', TRUE);
+    public function ObtenerModelos()
+    {
+        $id = $this->input->post_get('id', true);
         $this->load->model("Modelocedis");
         $infocontent["modelos"] = $this->Modelocedis->ListarModelos($id);
         $this->load->view('cedis/ObtenerModelos', $infocontent);
     }
 
-    public function ObtenerColores() {
-        $id = $this->input->post_get('id', TRUE);
+    public function ObtenerColores()
+    {
+        $id = $this->input->post_get('id', true);
         $this->load->model("Modelocedis");
         $infocontent["colores"] = $this->Modelocedis->ListarColores($id);
         $this->load->view('cedis/ObtenerColores', $infocontent);
     }
 
-    public function Guardado() {
-        $prod = $this->input->post_get('prod', TRUE);
-        $mod = $this->input->post_get('mod', TRUE);
-        $col = $this->input->post_get('col', TRUE);
-        $clasi = $this->input->post_get('clasi', TRUE);
+    public function Guardado()
+    {
+        $prod = $this->input->post_get('prod', true);
+        $mod = $this->input->post_get('mod', true);
+        $col = $this->input->post_get('col', true);
+        $clasi = $this->input->post_get('clasi', true);
         $this->load->model("Modelocedis");
         $idprod = $this->Modelocedis->GuardarProductos($prod, $mod, $col, $clasi);
         $producto = $this->Modelocedis->ObtenerProducto($idprod);
@@ -326,8 +360,9 @@ class Cedis extends CI_Controller {
         print(str_pad($idprod, 10, '0', STR_PAD_LEFT) . "*" . $fechaformateada);
     }
 
-    public function barcodeventana($filepath = "", $text = "", $size = "100", $orientation = "horizontal", $code_type = "code128", $print = true, $SizeFactor = 4.5) {
-        $text = $this->input->post_get('text', TRUE);
+    public function barcodeventana($filepath = "", $text = "", $size = "100", $orientation = "horizontal", $code_type = "code128", $print = true, $SizeFactor = 4.5)
+    {
+        $text = $this->input->post_get('text', true);
         $code_string = "";
         // Translate the $text into barcode the correct $code_type
         if (in_array(strtolower($code_type), array("code128", "code128b"))) {
@@ -376,8 +411,10 @@ class Cedis extends CI_Controller {
 
             for ($X = 1; $X <= strlen($text); $X++) {
                 for ($Y = 0; $Y < count($code_array1); $Y++) {
-                    if (substr($text, ($X - 1), 1) == $code_array1[$Y])
+                    if (substr($text, ($X - 1), 1) == $code_array1[$Y]) {
                         $temp[$X] = $code_array2[$Y];
+                    }
+
                 }
             }
 
@@ -385,8 +422,10 @@ class Cedis extends CI_Controller {
                 if (isset($temp[$X]) && isset($temp[($X + 1)])) {
                     $temp1 = explode("-", $temp[$X]);
                     $temp2 = explode("-", $temp[($X + 1)]);
-                    for ($Y = 0; $Y < count($temp1); $Y++)
+                    for ($Y = 0; $Y < count($temp1); $Y++) {
                         $code_string .= $temp1[$Y] . $temp2[$Y];
+                    }
+
                 }
             }
 
@@ -400,8 +439,10 @@ class Cedis extends CI_Controller {
 
             for ($X = 1; $X <= strlen($upper_text); $X++) {
                 for ($Y = 0; $Y < count($code_array1); $Y++) {
-                    if (substr($upper_text, ($X - 1), 1) == $code_array1[$Y])
+                    if (substr($upper_text, ($X - 1), 1) == $code_array1[$Y]) {
                         $code_string .= $code_array2[$Y] . "1";
+                    }
+
                 }
             }
             $code_string = "11221211" . $code_string . "1122121";
@@ -439,11 +480,13 @@ class Cedis extends CI_Controller {
 
         $location = 10;
         for ($position = 1; $position <= strlen($code_string); $position++) {
-            $cur_size = $location + ( substr($code_string, ($position - 1), 1) );
-            if (strtolower($orientation) == "horizontal")
+            $cur_size = $location + (substr($code_string, ($position - 1), 1));
+            if (strtolower($orientation) == "horizontal") {
                 imagefilledrectangle($image, $location * $SizeFactor, 0, $cur_size * $SizeFactor, $img_height, ($position % 2 == 0 ? $white : $black));
-            else
+            } else {
                 imagefilledrectangle($image, 0, $location * $SizeFactor, $img_width, $cur_size * $SizeFactor, ($position % 2 == 0 ? $white : $black));
+            }
+
             $location = $cur_size;
         }
 

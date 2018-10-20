@@ -80,7 +80,7 @@ class Clasificador extends CI_Controller {
         $fecha = $this->input->post_get('fecha', TRUE);
         $this->load->model("Modeloclasificador");
         $infocontent["productos"] = $this->Modeloclasificador->ListaProductos($this->FechaIngles($fecha), $horno);
-        $infocontent["dia"] = $fecha;
+          $infocontent["dia"] = $fecha;
         $infocontent["horno"] = $horno;
         $this->load->view('clasificador/ObtenerProductos', $infocontent);
     }

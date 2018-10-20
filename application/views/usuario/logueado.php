@@ -1,33 +1,40 @@
 
 <h1> Bienvenido/a <?php echo $persona ?></h1><br>
-<?php if ($perfiles->num_rows() == 0) { ?>
+<?php
+$cerradas = false;
+if ($perfiles->num_rows() == 0) {?>
     <h2>No tiene ningún perfil</h2>
     <a href="<?php echo base_url() ?>usuario/logueado">Ir a Inicio</a>
-<?php } else { ?>
+<?php } else {
+
+    if ($perfiles->num_rows() > 2) {
+        $cerradas = true;
+    }
+    ?>
     <?php foreach ($perfiles->result() as $perfil): ?>
-        <div class="panel" data-role="panel">
-            <div class="heading fg-white bg-<?= $perfil->Color ?>">
-                <span class="icon mif-<?= $perfil->Icono ?> fg-white bg-<?= $perfil->Color2 ?> "></span>
-                <span class = "title fg-white"><?= $perfil->Nombre ?></span>
+        <div class="panel <?= $cerradas?'collapsed':'' ?>" data-role="panel">
+            <div class="heading fg-white bg-<?=$perfil->Color?>">
+                <span class="icon mif-<?=$perfil->Icono?> fg-white bg-<?=$perfil->Color2?> "></span>
+                <span class = "title fg-white"><?=$perfil->Nombre?></span>
             </div>
             <div class="content" style="text-align: center;">
                 <?php
-                $ci = &get_instance();
-                $ci->load->model("modelousuario");
-                $npen = $ci->modelousuario->ObtenerMenu($perfil->IdPerfiles);
-                ?>
-                <?php if ($npen->num_rows() == 0) { ?>
-                <?php } else { ?>
+$ci = &get_instance();
+    $ci->load->model("modelousuario");
+    $npen = $ci->modelousuario->ObtenerMenu($perfil->IdPerfiles);
+    ?>
+                <?php if ($npen->num_rows() == 0) {?>
+                <?php } else {?>
                     <br><br>
                     <?php foreach ($npen->result() as $m): ?>
-                        <button title="<?= $m->Descripcion ?>" style="height: 100px;width: 170px" class ="button  bg-<?php echo $m->Color ?> fg-white" onclick = "window.location = '<?php echo base_url() ?><?= $m->Ruta ?>'">
+                        <button title="<?=$m->Descripcion?>" style="height: 100px;width: 170px" class ="button  bg-<?php echo $m->Color ?> fg-white" onclick = "window.location = '<?php echo base_url() ?><?=$m->Ruta?>'">
                             <span style="font-size: 2.1em" class = "icon mif-<?php echo $m->Icono ?>"></span><hr style="background-color: #cccccc">
-                            <span style="font-size: 1.2em"><?= $m->Nombre ?></span><br>
+                            <span style="font-size: 1.2em"><?=$m->Nombre?></span><br>
                         </button>
-                    <?php endforeach; ?>
+                    <?php endforeach;?>
                     <br><br>
-                <?php } ?>
+                <?php }?>
             </div>
         </div><br>
-    <?php endforeach; ?>
-<?php } ?>
+    <?php endforeach;?>
+<?php }?>

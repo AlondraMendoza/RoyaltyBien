@@ -463,6 +463,8 @@ class Clasificador extends CI_Controller {
 
     public function barcodeventana($filepath = "", $text = "", $size = "100", $orientation = "horizontal", $code_type = "code128", $print = true, $SizeFactor = 4.5) {
         $text = $this->input->post_get('text', TRUE);
+        $id=substr($text,9,19);
+        
         $code_string = "";
         // Translate the $text into barcode the correct $code_type
         if (in_array(strtolower($code_type), array("code128", "code128b"))) {
@@ -561,7 +563,7 @@ class Clasificador extends CI_Controller {
             $img_width = $size;
             $img_height = $code_length * $SizeFactor;
         }
-        $image = imagecreate($img_width, $img_height + $text_height + 12);
+        $image = imagecreate($img_width, $img_height + $text_height + 120);
         $black = imagecolorallocate($image, 0, 0, 0);
         $white = imagecolorallocate($image, 255, 255, 255);
 
@@ -569,7 +571,8 @@ class Clasificador extends CI_Controller {
         if ($print) {
             //imagestring($image, 5, 441, $img_height, $text, $black);
             $font = "fonts/arial.ttf";
-            imagettftext($image, 30, 0, 350, $img_height + $text_height + 10, $black, $font, $text);
+            /* Aquí se agrega el texto a la etiqueta*/
+            imagettftext($image, 30, 0, 350, $img_height + $text_height + 10, $black, $font, $text."\n.$id");
         }
 
         $location = 10;

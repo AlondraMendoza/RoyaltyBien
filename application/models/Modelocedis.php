@@ -12,31 +12,71 @@ class Modelocedis extends CI_Model {
     }
 
     public function BuscarClaveProducto($clave) {
-        $this->db->select("p.IdProductos, cp.Nombre as producto, c.Nombre as color, m.Nombre as modelo");
-        $this->db->from("Productos p");
-        $this->db->join("CProductos cp", "p.CProductosId=cp.IdCProductos");
-        $this->db->join("Colores c", "p.ColoresId=c.IdColores");
-        $this->db->join("Modelos m", "p.ModelosId=m.IdModelos");
-        $this->db->where("p.Activo", 1);
-        $this->db->where("p.IdProductos", $clave);
+        $estaalmacen=$this->EstaEnAlmacen($clave);
+        if(!$estaalmacen){
+            $this->db->select("p.IdProductos, cp.Nombre as producto, c.Nombre as color, m.Nombre as modelo");
+            $this->db->from("Productos p");
+            $this->db->join("CProductos cp", "p.CProductosId=cp.IdCProductos");
+            $this->db->join("Colores c", "p.ColoresId=c.IdColores");
+            $this->db->join("Modelos m", "p.ModelosId=m.IdModelos");
+            $this->db->where("p.Activo", 1);
+            $this->db->where("p.IdProductos", $clave);
+            //print($this->db->get_compiled_select());
+            $fila = $this->db->get();
+            if ($fila->num_rows() > 0) {
+                return $fila->row();
+            } else {
+                return "No se encontró el producto";
+            }
+        }
+        else
+        {
+            return "No se marcó salida de almacén";
+        }
+    }
+    public function EstaEnAlmacen($idprod) {
+        $this->db->select("i.IdInventariosAlmacen");
+        $this->db->from("InventariosAlmacen i");
+        $this->db->where("i.ProductosId", $idprod);
+        $this->db->where("i.FechaSalida", null);
         $fila = $this->db->get();
         if ($fila->num_rows() > 0) {
-            return $fila->row();
+            return true;
         } else {
-            return "No se encontró el producto";
+            return false;
+        }
+    }
+
+    public function TarimaEnAlmacen($idtarima) {
+        $this->db->select("i.IdInventariosAlmacen");
+        $this->db->from("InventariosAlmacen i");
+        $this->db->where("i.TarimasId", $idtarima);
+        $this->db->where("i.FechaSalida", null);
+        $fila = $this->db->get();
+        if ($fila->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
         }
     }
 
     public function BuscarClaveTarima($clave) {
-        $this->db->select("t.IdTarimas");
-        $this->db->from("Tarimas t");
-        $this->db->where("t.Activo", 1);
-        $this->db->where("t.IdTarimas", $clave);
-        $fila = $this->db->get();
-        if ($fila->num_rows() > 0) {
-            return $fila->row();
-        } else {
-            return "No se encontró la tarima";
+        $estaalmacen=$this->TarimaEnAlmacen($clave);
+        if(!$estaalmacen){
+            $this->db->select("t.IdTarimas");
+            $this->db->from("Tarimas t");
+            $this->db->where("t.Activo", 1);
+            $this->db->where("t.IdTarimas", $clave);
+            $fila = $this->db->get();
+            if ($fila->num_rows() > 0) {
+                return $fila->row();
+            } else {
+                return "No se encontró la tarima";
+            }
+        }
+        else
+        {
+            return "No se marcó salida de almacén";
         }
     }
 

@@ -36,7 +36,7 @@
                         }
                     } else
                     {
-                        $("#des").html("No se encontró producto");
+                        $("#des").html(data.nombre);
                     }
                 });
             }
@@ -77,7 +77,7 @@
                         }
                     } else
                     {
-                        $("#des").html("No se encontró la tarima");
+                        $("#des2").html(data.nombre);
                     }
                 });
             }
@@ -86,7 +86,7 @@
     var guardado = 0;
     function GuardarTarimas() {
         /*
-         * 
+         *
          * if ( $("#undiv").length ) {
          */
         if (guardado == 0) {
@@ -117,7 +117,7 @@
     }
     function GuardarProducto() {
         /*
-         * 
+         *
          * if ( $("#undiv").length ) {
          */
         if (guardado == 0) {
@@ -173,7 +173,7 @@
                                         <input type="text" id="claveProd" onkeyup="VerificarClaveTarima(event)">
                                     </div>
                                     <br><label><span id="des2"></span></label>
-                                </td> 
+                                </td>
                             </tr>
                             <br><br>
                         </table>
@@ -225,7 +225,7 @@
                                         <input type="text" id="claveProd2" onkeyup="VerificarClave(event)">
                                     </div>
                                     <br><label><span id="des"></span></label>
-                                </td> 
+                                </td>
                             </tr>
                             <br><br>
                         </table>
@@ -269,5 +269,3 @@
         </div>
     </div>
 </center><br><br><br>
-
-

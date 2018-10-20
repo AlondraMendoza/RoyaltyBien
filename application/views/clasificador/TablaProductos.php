@@ -29,7 +29,6 @@ $cont = 1;
                         <td class="center" style="text-align: center"><b>Modelo:</b><br> <?= $producto->NombreModelo ?></td>
                         <td class="center" style="text-align: center"><b>Color:</b><br> <?= $producto->NombreColor ?></td>
                     </tr>
-
                 </table>
                 <table class="table bordered hovered border" style="font-size: 1.2em">
                     <tr>

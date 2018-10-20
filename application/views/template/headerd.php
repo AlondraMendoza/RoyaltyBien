@@ -23,8 +23,6 @@
                 <li><a href="<?php echo base_url() ?>usuario/Cuenta">Cuenta</a></li>
                 <ul class="app-bar-menu">
                     <li><a href="<?= base_url() ?>usuario/Soporte">Soporte</a></li>
-                    <li><a href=""></a></li>
-                    <li><a href=""></a></li>
                 </ul>
             </ul>
             <div class="app-bar-element place-right">

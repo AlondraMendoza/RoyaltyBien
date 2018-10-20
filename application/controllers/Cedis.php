@@ -51,8 +51,16 @@ class Cedis extends CI_Controller
         $clave = $this->input->post_get('clave', true);
         $this->load->model("Modelocedis");
         $fila = $this->Modelocedis->BuscarClaveProducto($clave);
-        $infocontent["nombre"] = "No se encontró el producto";
-        if ($fila != "No se encontró el producto") {
+        $infocontent["nombre"] = "";
+        switch($fila)
+        {
+            case "No se encontró el producto":
+            $infocontent["nombre"] = "No se encontró el producto";
+            break;
+            case "No se marcó salida de almacén":
+            $infocontent["nombre"] = "No se marcó salida de almacén";
+            break;
+            default:
             $infocontent["nombre"] = $fila->producto . "/" . $fila->modelo . "/" . $fila->color;
             $infocontent["id"] = $fila->IdProductos;
         }
@@ -64,7 +72,16 @@ class Cedis extends CI_Controller
         $clave = $this->input->post_get('clave', true);
         $this->load->model("Modelocedis");
         $fila = $this->Modelocedis->BuscarClaveTarima($clave);
-        if ($fila != "No se encontró la tarima") {
+        $infocontent["nombre"] = "";
+        switch($fila)
+        {
+            case "No se encontró la tarima":
+            $infocontent["nombre"] = "No se encontró la tarima";
+            break;
+            case "No se marcó salida de almacén":
+            $infocontent["nombre"] = "No se marcó salida de almacén";
+            break;
+            default:
             $infocontent["id"] = $fila->IdTarimas;
         }
         print json_encode($infocontent);

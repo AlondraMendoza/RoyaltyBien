@@ -104,3 +104,5 @@ class Calidad extends CI_Controller {
     }
 
 }
+?>
+

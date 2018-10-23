@@ -13,47 +13,45 @@
                         <div class="input-control text full-size" style="height:80px;font-size: x-large">
                             <input type="text" id="claveProdP" onkeyup="VerificarClave(event)">
                         </div>
-                         <br><label><span id="des2P"></span></label>
+                        <br><label><span id="des2P"></span></label>
                     </td> 
                 </tr>
-                    <br><br>
-                </table>
-            </div>
+                <br><br>
+            </table>
         </div>
+    </div>
     <div id="resultadostarimasP" style="display: none">
         <center>
-    <div class="panel primary" data-role="panel">
-        <div class="heading">
-            <span class="icon mif-stack fg-white bg-darkBlue"></span>
-            <span class="title">Detalle de Productos</span>
-        </div>
-        <div class="content" id="Resultados2P">
-        <table class="table bordered border hovered" id="tablatarimasP">
-            <thead>
-             <tr>
-                <th>Clave</th>
-                <th>Descripción</th>
-                <th>Seleccion/Acción</th>
-             </tr>
-           </thead>
-        </table>
-        <table>
-        <tr>
-            <td class="center" id="BotonesP"><br>
-                <div class="input-control text big-input medium-size" id="nuevatarima2P" style="display: none"><button class="button warning" onclick="CancelarP()">Nueva Entrada</button></div>
-                <div class="input-control text big-input medium-size" id="botonguardar2P"><button class="button success" onclick="GuardarP()">Guardar</button></div>
-                <div class="input-control text big-input medium-size"><button class="button danger" onclick="CancelarP()">Cancelar</button></div>
-            </td>
-        </tr>
-        </table>
-        </div>
+            <div class="panel primary" data-role="panel">
+                <div class="heading">
+                    <span class="icon mif-stack fg-white bg-darkBlue"></span>
+                    <span class="title">Detalle de Productos</span>
+                </div>
+                <div class="content" id="Resultados2P">
+                    <table class="table bordered border hovered" id="tablatarimasP">
+                        <thead>
+                            <tr>
+                                <th>Clave</th>
+                                <th>Descripción</th>
+                                <th>Seleccion/Acción</th>
+                            </tr>
+                        </thead>
+                    </table>
+                    <table>
+                        <tr>
+                            <td class="center" id="BotonesP"><br>
+                                <div class="input-control text big-input medium-size" id="nuevatarima2P" style="display: none"><button class="button warning" onclick="CancelarP()">Nueva Entrada</button></div>
+                                <div class="input-control text big-input medium-size" id="botonguardar2P"><button class="button success" onclick="GuardarP()">Guardar</button></div>
+                                <div class="input-control text big-input medium-size"><button class="button danger" onclick="CancelarP()">Cancelar</button></div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </center>
     </div>
 </center>
-    </div>
-</center><br>   
-
-
-<script>   
+<script>
     function VerificarClave(e) {
         var code = (e.keyCode ? e.keyCode : e.which);
         if (code != 13 && code != 16 && code != 17 && code != 18) { //Enter keycode
@@ -96,9 +94,9 @@
                 });
             }
         }
-     }
+    }
 
-var guardadoP = 0;
+    var guardadoP = 0;
     function GuardarP() {
         if (guardadoP == 0) {
             $("input[name='IDS2P[]']:checked").each(function () {
@@ -106,10 +104,10 @@ var guardadoP = 0;
                 $.post("GuardarProd", {"idProducto": id}, function (data) {
                     if (data == "Correcto")
                     {
-                       $("#td2" + id).html('<span class="mif-checkmark fg-green"></span> Producto Guardado');
+                        $("#td2" + id).html('<span class="mif-checkmark fg-green"></span> Producto Guardado');
                     } else if (data == "Existe")
                     {
-                       $("#td2" + id).html("<span class='mif-cancel fg-red'></span> El producto ya se encuentra <br>en el Almacén ");
+                        $("#td2" + id).html("<span class='mif-cancel fg-red'></span> El producto ya se encuentra <br>en el Almacén ");
                     } else
                     {
                         $.Notify({
@@ -127,7 +125,7 @@ var guardadoP = 0;
         }
         //$("#tablaproductos").empty();
     }
-    
+
     function CancelarP() {
         location.reload(true);
     }

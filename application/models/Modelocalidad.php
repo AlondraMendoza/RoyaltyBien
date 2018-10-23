@@ -145,5 +145,14 @@ class Modelocalidad extends CI_Model {
         }
         return "";
     }
+    
+    public function Usuario($UsuarioId) {
+        $this->db->select('p.*');
+        $this->db->from('Personas p');
+        $this->db->join('Usuarios u', 'p.UsuariosId=u.IdUsuarios');
+        $this->db->where('u.IdUsuarios', $UsuarioId);
+        $query = $this->db->get()->row();
+        return $query;
+    }
 }
 ?>

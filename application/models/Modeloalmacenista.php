@@ -636,6 +636,7 @@ class Modeloalmacenista extends CI_Model {
         $this->db->join("Colores c", "c.IdColores=mc.ColoresId");
         $this->db->where("c.Activo", 1);
         $this->db->where("ModelosId", $modelo);
+        $this->db->Order_by('c.ClaveImportacion');
         $fila = $this->db->get();
         return $fila;
     }
@@ -696,6 +697,14 @@ class Modeloalmacenista extends CI_Model {
         return "correcto";
         
     }
+    
+    public function ProductosEnAlmacenTotal($ModelosId, $ColoresId, $ClasificacionesId, $CProductosId){
+        $ProductosTarima = $this->ProductosTarima($ModelosId, $ColoresId, $ClasificacionesId, $CProductosId);
+        $ProductoSolo = $this->ProductosAlmacen($ModelosId, $ColoresId, $ClasificacionesId, $CProductosId);
+        $Data = $ProductosTarima + $ProductoSolo;
+        return $Data;
+    }
+ 
 }
 
 ?>

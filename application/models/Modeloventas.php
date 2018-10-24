@@ -128,6 +128,7 @@ class Modeloventas extends CI_Model {
         $this->db->join("Colores c", "c.IdColores=mc.ColoresId");
         $this->db->where("ModelosId=", $modelo);
         $this->db->where("c.Activo=", 1);
+        $this->db->Order_by('c.ClaveImportacion');
         return $this->db->get();
     }
     

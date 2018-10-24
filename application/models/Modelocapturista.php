@@ -75,6 +75,7 @@ class Modelocapturista extends CI_Model {
         $this->db->join('Modelos m', 'mc.ModelosId=m.IdModelos');
         $this->db->where('c.Activo', 1);
         $this->db->where('m.IdModelos', $id);
+        $this->db->Order_by('ClaveImportacion');
         $query = $this->db->get();
         return $query;
     }

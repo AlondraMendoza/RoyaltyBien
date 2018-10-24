@@ -12,7 +12,7 @@
 <table class="table shadow" data-role="datatable">
     <thead>
         <tr>
-            <th colspan="8" class="fg-darkBlue">RESULTADOS</th>
+            <th colspan="9" class="fg-darkBlue">RESULTADOS</th>
         </tr>
         <tr>
             <th>No.</th>
@@ -23,7 +23,7 @@
             <th>Cedis</th>
             <th>- Pedidos</th>
             <th>= Total</th>
-           
+            <th>+ Almacén</th>
             
         </tr>
     </thead>
@@ -48,18 +48,16 @@
                 <td class="center"><?= $producto->color ?></td>
                 <td class="center"><?= $letra ?></td>
                 <td class="center"><?= $producto->cuantos ?></td>
-                <td class="center">
-                
-            <?php
-            $ci = &get_instance();
-            $ci->load->model("modeloventas");
-            $ped = $ci->modeloventas->EnPedido($producto->IdProductos);
-            $ci2 =&get_instance();
-            $ci2->load->model("modelocedis");
-            $pedi = $ci->modelocedis->ProductosPedidosVentas($ped->ModelosId, $ped->ColoresId, $ped->ClasificacionesId, $ped->CProductosId);
-            echo "- ".$pedi;
-            ?>
-                
+                <td class="center"> 
+                <?php
+                $ci = &get_instance();
+                $ci->load->model("modeloventas");
+                $ped = $ci->modeloventas->EnPedido($producto->IdProductos);
+                $ci2 =&get_instance();
+                $ci2->load->model("modelocedis");
+                $pedi = $ci->modelocedis->ProductosPedidosVentas($ped->ModelosId, $ped->ColoresId, $ped->ClasificacionesId, $ped->CProductosId);
+                echo "- ".$pedi;
+                ?>
                 </td>
                 <td class="center"><b class="fg-darkGreen">
                 <?php $Total= $producto->cuantos-$pedi;
@@ -67,7 +65,14 @@
                     </b>
                
                 </td>
-                
+                <td class="center">
+                <?php 
+                $ci3 =&get_instance();
+                $ci3->load->model("modeloalmacenista");
+                $almacen = $ci3->modeloalmacenista->ProductosEnAlmacenTotal($ped->ModelosId, $ped->ColoresId, $ped->ClasificacionesId, $ped->CProductosId);
+                echo "+ ".$almacen;
+                ?>   
+                </td>
                 
             </tr>
             <?php $cont++; ?>

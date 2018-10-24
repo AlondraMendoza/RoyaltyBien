@@ -571,8 +571,12 @@ class Clasificador extends CI_Controller {
         if ($print) {
             //imagestring($image, 5, 441, $img_height, $text, $black);
             $font = "fonts/arial.ttf";
-            /* Aquí se agrega el texto a la etiqueta */
-            imagettftext($image, 30, 0, 350, $img_height + $text_height + 10, $black, $font, $text . "\n.$id");
+
+            /* Aquí se agrega el texto a la etiqueta*/
+            $this->load->model("Modeloclasificador");
+            $producto=$this->Modeloclasificador->ObtenerProducto($id);
+            imagettftext($image, 30, 0, 350, $img_height + $text_height + 10, $black, $font, $text."\n".$producto->NombreProducto." | ".$producto->Modelo." | ".$producto->Color);
+
         }
 
         $location = 10;

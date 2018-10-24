@@ -225,6 +225,74 @@ class Ventas extends CI_Controller {
         $this->load->view('ventas/InventarioSinClasificar', $infocontent);
         $this->load->view('template/footerd', '');
     }
+    
+    public function Reportes() {
+        $this->load->model("Modeloventas");
+        $infoheader["titulo"] = "Ventas: Royalty Ceramic";
+        $infocontent["hoy"] = date("d/m/Y");
+        $infocontent["clasificaciones"] = $this->Modeloventas->Clasificaciones();
+        $infocontent["productos"] = $this->Modeloventas->Productos();
+        $infocontent["modelos"] = $this->Modeloventas->Modelos(0);
+        $infocontent["colores"] = $this->Modeloventas->Colores(0);
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->view('ventas/Reportes', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+    
+    public function GenerarDetalleSeleccionado() {
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $nombre = $this->input->post_get('nombre', TRUE);
+        $clasificacion = $this->input->post_get('clasificacion', TRUE);
+        $aclasificacion = json_decode($clasificacion);
+        $producto = $this->input->post_get('producto', TRUE);
+        $por = $this->input->post_get('por', TRUE);
+        $aproducto = json_decode($producto);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $amodelo = json_decode($modelo);
+        $color = $this->input->post_get('color', TRUE);
+        $acolor = json_decode($color);
+        $this->load->model("Modeloventas");
+        $infocontent["productos"] = $this->Modeloventas->GenerarDetalleSeleccionado($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $por, $nombre);
+        $this->load->view('ventas/GenerarDetalleSeleccionado', $infocontent);
+    }
+    
+    public function GenerarReporte() {
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $clasificacion = $this->input->post_get('clasificacion', TRUE);
+        $aclasificacion = json_decode($clasificacion);
+        $producto = $this->input->post_get('producto', TRUE);
+        $aproducto = json_decode($producto);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $amodelo = json_decode($modelo);
+        $color = $this->input->post_get('color', TRUE);
+        $acolor = json_decode($color);
+        $defecto = $this->input->post_get('defecto', TRUE);
+        $adefecto = json_decode($defecto);
+        $this->load->model("Modeloventas");
+        $infocontent["productos"] = $this->Modeloventas->GenerarReporte($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $adefecto);
+        $this->load->view('ventas/GenerarReporte', $infocontent);
+    }
+    
+    public function GenerarConcentrado() {
+
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $clasificacion = $this->input->post_get('clasificacion', TRUE);
+        $aclasificacion = json_decode($clasificacion);
+        $producto = $this->input->post_get('producto', TRUE);
+        $aproducto = json_decode($producto);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $amodelo = json_decode($modelo);
+        $color = $this->input->post_get('color', TRUE);
+        $acolor = json_decode($color);
+        $por = $this->input->post_get('por', TRUE);
+        $this->load->model("Modeloventas");
+        $infocontent["por"] = $por;
+        $infocontent["productos"] = $this->Modeloventas->GenerarConcentrado($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $por);
+        $this->load->view('ventas/GenerarConcentrado', $infocontent);
+    }
 
 }
 ?>

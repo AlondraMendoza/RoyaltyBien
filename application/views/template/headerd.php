@@ -10,8 +10,6 @@
         <script src="<?= base_url() ?>public/js/chart.min.js"></script>
         <script src="<?= base_url() ?>public/js/Funciones.js"></script>
         <script src="<?= base_url() ?>public/js/jquery.dataTables.min.js"></script>
-        <script type="text/javascript">
-        </script>
         <script src="<?= base_url() ?>public/js/jquery.PrintArea.js" type="text/JavaScript" language="javascript"></script>
         <title><?= $titulo ?></title>
     </head>

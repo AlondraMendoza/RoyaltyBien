@@ -9,8 +9,8 @@ class Modelocalidad extends CI_Model {
         parent::__construct();
         $this->load->database();
     }
-    
-   public function BuscarClave($clave) {
+
+    public function BuscarClave($clave) {
         $this->db->select("p.IdProductos, cp.Nombre as producto, c.Nombre as color, m.Nombre as modelo");
         $this->db->from("Productos p");
         $this->db->join("CProductos cp", "p.CProductosId=cp.IdCProductos");
@@ -26,7 +26,7 @@ class Modelocalidad extends CI_Model {
             return "No se encontró el producto";
         }
     }
-    
+
     public function GuardarProductos($idProducto) {
         $existe = false;
         if ($this->ProductoEnAlmacenP($idProducto)) {
@@ -37,7 +37,7 @@ class Modelocalidad extends CI_Model {
             return "correcto";
         }
     }
-    
+
     public function ProductoEnAlmacenP($idProducto) {
         $this->db->select("i.IdInventariosMermas");
         $this->db->from("InventariosMermas i");
@@ -49,20 +49,20 @@ class Modelocalidad extends CI_Model {
             return false;
         }
     }
-    
+
     public function GuardarProductoAlmacenP($idProducto) {
         $datos = array(
             'FechaEntrada' => date('Y-m-d | H:i:sa'),
             'ProductosId' => $idProducto,
             'UsuariosId' => IdUsuario(),
             'Activo' => 1,
-            'Procesado'=> 0
+            'Procesado' => 0
         );
         //$this->db->set('FechaEntrada', 'NOW()', FALSE);
         $this->db->insert('InventariosMermas', $datos);
     }
-    
-    public function GuardarProcesar($idProducto){
+
+    public function GuardarProcesar($idProducto) {
         $this->db->set("Procesado", 1);
         $this->db->set("FechaProcesado", date('Y-m-d | H:i:sa'));
         $this->db->set("UsuariosIdProcesado", IdUsuario());
@@ -71,13 +71,13 @@ class Modelocalidad extends CI_Model {
         $this->db->update("InventariosMermas");
         return "correcto";
     }
-    
+
     public function GenerarReporteQ($fechainicio, $fechafin) {
         $fechainicio = $this->FechaIngles($fechainicio);
         $fechafin = $this->FechaIngles($fechafin);
         $Usuario = IdUsuario();
-       //Agregar count y group
-        $query= $this->db->query("Select cp.Nombre as producto,m.Nombre as modelo,co.Nombre as color,
+        //Agregar count y group
+        $query = $this->db->query("Select cp.Nombre as producto,m.Nombre as modelo,co.Nombre as color,
             im.FechaEntrada, im.UsuariosId, im.Procesado as Destruido, im.FechaProcesado as FechaDestruccion,
             im.UsuariosIdProcesado as Usuariodestruccion from
             Productos p left join CProductos cp on cp.IdCProductos=p.CProductosId
@@ -87,7 +87,7 @@ class Modelocalidad extends CI_Model {
         //print_r($this->db->get_compiled_select());
         return $query;
     }
-    
+
     public function GenerarConcentradoQ($fechainicio, $fechafin, $por) {
         $fechainicio = $this->FechaIngles($fechainicio);
         $fechafin = $this->FechaIngles($fechafin);
@@ -113,10 +113,10 @@ class Modelocalidad extends CI_Model {
 
         $query = $this->db->query("select count(*) as cuantos, $campo from Productos p left join CProductos cp on cp.IdCProductos=p.CProductosId "
                 . "left join Modelos m on m.IdModelos=p.ModelosId left join Colores co on co.IdColores=p.ColoresId "
-                . "left join InventariosMermas im on im.ProductosId= p.IdProductos where date(im.FechaEntrada) BETWEEN $fechainicio AND $fechafin" ." group by " . $por);
+                . "left join InventariosMermas im on im.ProductosId= p.IdProductos where date(im.FechaEntrada) BETWEEN $fechainicio AND $fechafin" . " group by " . $por);
         return $query;
     }
-    
+
     public static function FechaIngles($date) {
         if ($date) {
             $fecha = $date;
@@ -145,5 +145,16 @@ class Modelocalidad extends CI_Model {
         }
         return "";
     }
+
+    public function Usuario($UsuarioId) {
+        $this->db->select('p.*');
+        $this->db->from('Personas p');
+        $this->db->join('Usuarios u', 'p.UsuariosId=u.IdUsuarios');
+        $this->db->where('u.IdUsuarios', $UsuarioId);
+        $query = $this->db->get()->row();
+        return $query;
+    }
+
 }
+
 ?>

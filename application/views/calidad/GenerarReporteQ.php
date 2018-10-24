@@ -12,7 +12,7 @@
 <table class="table shadow" data-role="datatable" >
     <thead>
         <tr>
-            <th colspan="6" class="fg-darkBlue">RESULTADOS</th>
+            <th colspan="9" class="fg-darkBlue">RESULTADOS</th>
         </tr>
         <tr>
             <th style="text-align:center;">No.</th>
@@ -20,7 +20,7 @@
             <th style="text-align:center;">Modelo</th>
             <th style="text-align:center;">Color</th>
             <th style="text-align:center;">Fecha Entrada</th>
-            <th style="text-align:center;">Usuario</th>
+            <th style="text-align:center;">Usuario Entrada</th>
             <th style="text-align:center;">Destruido</th>
             <th style="text-align:center;">Fecha Dest.</th>
             <th style="text-align:center;">Usuario Dest.</th>
@@ -38,10 +38,28 @@
                 <td class="center"><?= $producto->modelo ?></td>
                 <td class="center"><?= $producto->color ?></td>
                 <td class="center"><?= $producto->FechaEntrada ?></td>
-                <td class="center"><?= $producto->UsuariosId ?></td>
+                <td class="center">
+                <?php
+                    $ci = &get_instance();
+                    $ci->load->model("modelocalidad");
+                    $npen = $ci->modelocalidad->Usuario($producto->UsuariosId);?>                                    
+                <?= $npen->Nombre . " " . $npen->APaterno ?>
+                </td>
                 <td class="center"><?php if ($producto->Destruido == 0){ echo 'No';}else{echo 'Si';} ?></td>
                 <td class="center"><?= $producto->FechaDestruccion ?></td>
-                <td class="center"><?= $producto->Usuariodestruccion ?></td>
+                <td class="center">
+                <?php
+                    $ci = &get_instance();
+                    $ci->load->model("modelocalidad");
+                    $npen = $ci->modelocalidad->Usuario($producto->Usuariodestruccion);
+                    if ($producto->Usuariodestruccion != null){
+                        echo $npen->Nombre . " " . $npen->APaterno;
+                    }else{
+                        echo ' ';  
+                    }
+                    ?>                                    
+                
+                </td>
             </tr>
             <?php $cont++; ?>
         <?php endforeach; ?>

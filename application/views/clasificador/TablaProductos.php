@@ -1,6 +1,11 @@
 <?php
 $cont = 1;
 ?>
+<div style="display:none">
+<?php foreach ($productos->result() as $producto): ?>
+        <div id="areaimprimir<?= $producto->IdProductos ?>"><img src='barcodeventana?text=<?= date_format(date_create($producto->FechaCaptura), 'dmY') ?>-<?php echo str_pad($producto->IdProductos, 10, '0', STR_PAD_LEFT) ?>'></div>
+<?php endforeach; ?>
+</div>
 <?php foreach ($productos->result() as $producto): ?>
     <?php
     $oculto = "";
@@ -8,6 +13,7 @@ $cont = 1;
         $oculto = "display:none";
     }
     ?>
+
     <div class="panel primary tablasproductos" data-role="panel" style="font-size: 1.2em;<?= $oculto ?>" id="tabla<?= $cont ?>">
         <div class="heading">
             <span class="icon mif-stack fg-white bg-darkBlue"></span>
@@ -17,9 +23,7 @@ $cont = 1;
                 según filtros seleccionados.</span>
         </div>
         <div class="content"><br><br>
-            <div style="display:none">
-                <div id="areaimprimir<?= $producto->IdProductos ?>"><img src='barcodeventana?text=<?= date_format(date_create($producto->FechaCaptura), 'dmY') ?>-<?php echo str_pad($producto->IdProductos, 10, '0', STR_PAD_LEFT) ?>'></div>
-            </div>
+            
             <div class="">
                 <table class="table hovered border bordered" >
                     <tr class="center primary" style="font-size: 1.2em">
@@ -127,7 +131,7 @@ $cont = 1;
                     </tr>
                     <tr><td colspan="2">
                             <p style="text-align: right;margin-right: 10px;">
-                                <button id="botonsiguiente<?= $producto->IdProductos ?>" style="height: 80px;" class="button block-shadow-success text-shadow success big-button botonessiguiente" onclick="Siguiente(<?= $producto->IdProductos ?>, '<?= date_format(date_create($producto->FechaCaptura), 'dmY') ?>')"><span class="mif-arrow-right mif-ani-hover-horizontal"></span>
+                                <button  id="botonsiguiente<?= $producto->IdProductos ?>" style="height: 80px" class="button block-shadow-success text-shadow success big-button botonessiguiente" onclick="Siguiente(<?= $producto->IdProductos ?>, '<?= date_format(date_create($producto->FechaCaptura), 'dmY') ?>')"><span class="mif-arrow-right mif-ani-hover-horizontal"></span>
                                     <?php
                                     if ($cont == $productos->num_rows()) {
                                         echo ("<span id='spanbotonsiguiente" . $producto->IdProductos . "'>Finalizar clasificación</span>");
@@ -203,6 +207,9 @@ $cont = 1;
         ventana.document.close();  //cerramos el documento
         ventana.print();  //imprimimos la ventana
         setTimeout(ventana.close());  //cerramos la ventana
+    }
+    function MostrarBotonSiguiente (id){
+        $("#botonsiguiente"+id).fadeIn();
     }
     function Siguiente(idprod, fecha)
     {

@@ -705,6 +705,15 @@ class Modeloalmacenista extends CI_Model {
         return $Data;
     }
  
+    public function ObtenerModelo($id) {
+        $query = $this->db->query("select * from Modelos where IdModelos=$id");
+        $fila = $query->row();
+        if ($fila != null) {
+            return $query->row();
+        } else {
+            return null;
+        }
+    }
 }
 
 ?>

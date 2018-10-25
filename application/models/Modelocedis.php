@@ -437,6 +437,7 @@ class Modelocedis extends CI_Model {
         $this->db->join("Colores c", "c.IdColores=mc.ColoresId");
         $this->db->where("c.Activo", 1);
         $this->db->where("ModelosId", $modelo);
+        $this->db->Order_by('c.ClaveImportacion');
         $fila = $this->db->get();
         return $fila;
     }
@@ -684,6 +685,7 @@ class Modelocedis extends CI_Model {
         $this->db->join('Modelos m', 'mc.ModelosId=m.IdModelos');
         $this->db->where('c.Activo', 1);
         $this->db->where('m.IdModelos', $id);
+        $this->db->Order_by('c.ClaveImportacion');
         $query = $this->db->get();
         return $query;
     }

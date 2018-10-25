@@ -499,5 +499,12 @@ class Almacenista extends CI_Controller {
         $this->load->view('almacenista/CapturaAccidente', $infocontent);
         $this->load->view('template/footerd', '');
     }
+    
+    public function CargaInfoModelo() {
+        $modelo = $this->input->post_get('modelo_id', TRUE);
+        $this->load->model("Modeloalmacenista");
+        $infocontent["modelo"] = $this->Modeloalmacenista->ObtenerModelo($modelo);
+        $this->load->view('almacenista/CargaInfoModelo', $infocontent);
+    }
 
 }

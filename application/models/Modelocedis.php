@@ -363,25 +363,55 @@ class Modelocedis extends CI_Model {
         return $fila;
     }
 
+    public function UsuarioCreaPedido($pedidoid) {
+        $this->db->select("u.Nombre");
+        $this->db->from("Pedidos p");
+        $this->db->join("Usuarios u", "u.IdUsuarios=p.UsuariosId");
+        $this->db->where("p.IdPedidos", $pedidoid);
+        $fila = $this->db->get()->row()->Nombre;
+        return $fila;
+    }
+    public function UsuarioLiberaCredito($pedidoid) {
+        $this->db->select("u.Nombre");
+        $this->db->from("Pedidos p");
+        $this->db->join("Usuarios u", "u.IdUsuarios=p.UsuarioLiberaId");
+        $this->db->where("p.IdPedidos", $pedidoid);
+        $fila = $this->db->get()->row()->Nombre;
+        return $fila;
+    }
+    public function UsuarioEntregaPedido($pedidoid) {
+        $this->db->select("u.Nombre");
+        $this->db->from("Pedidos p");
+        $this->db->join("Usuarios u", "u.IdUsuarios=p.UsuarioEntregaId");
+        $this->db->where("p.IdPedidos", $pedidoid);
+        $fila = $this->db->get()->row()->Nombre;
+        return $fila;
+    }
+    public function CodigoProducto($producto_id) {
+        $producto = $this->ObtenerProducto($producto_id);
+        $this->db->select("c.Clave");
+        $this->db->from("Claves c");
+        $this->db->where("c.CProductosId", $producto->CProductosId);
+        $this->db->where("c.ModelosId", $producto->ModelosId);
+        $this->db->where("c.ColoresId", $producto->ColoresId);
+        $this->db->where("c.ClasificacionesId", $producto->ClasificacionesId);
+        $fila = $this->db->get()->row()->Clave;
+        return $fila;
+    }
     public function ResumenProductosPedido($pedidoid) {
-        /*
-          SELECT count(*),cp.Nombre,m.Nombre FROM `InventariosCedis` i
-          join Productos p on p.IdProductos=i.ProductosId
-          join CProductos cp on p.CProductosId=cp.IdCProductos
-          join Modelos m on p.ModelosId=m.IdModelos
-          where PedidosId=14
-          GROUP BY p.CProductosId,p.ModelosId
-         * $this->db->group_by('h.IdHornos');
-         */
-        $this->db->select("count(*) as cantidad, cp.Nombre as producto, m.Nombre as modelo");
+        $this->db->select("count(*) as cantidad, cp.Nombre as producto, m.Nombre as modelo,c.Nombre as color,cl.Letra as clasificacion,p.IdProductos");
         $this->db->from("InventariosCedis i");
         $this->db->join("Productos p", "p.IdProductos=i.ProductosId");
         $this->db->join("CProductos cp", "p.CProductosId=cp.IdCProductos");
         $this->db->join("Modelos m", "p.ModelosId=m.IdModelos");
+        $this->db->join("Colores c", "p.ColoresId=c.IdColores");
+        $this->db->join("Clasificaciones cl", "p.ClasificacionesId=cl.IdClasificaciones");
         $this->db->where("i.Activo", 1);
         $this->db->where("i.PedidosId", $pedidoid);
         $this->db->group_by('p.CProductosId');
         $this->db->group_by('p.ModelosId');
+        $this->db->group_by('p.ColoresId');
+        $this->db->group_by('p.ClasificacionesId');
         $fila = $this->db->get();
         return $fila;
     }

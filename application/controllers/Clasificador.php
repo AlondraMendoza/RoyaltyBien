@@ -573,9 +573,18 @@ class Clasificador extends CI_Controller {
             $font = "fonts/arial.ttf";
 
             /* Aquí se agrega el texto a la etiqueta*/
-            $this->load->model("Modeloclasificador");
-            $producto=$this->Modeloclasificador->ObtenerProducto($id);
-            imagettftext($image, 30, 0, 350, $img_height + $text_height + 10, $black, $font, $text."\n".$producto->NombreProducto." | ".$producto->Modelo." | ".$producto->Color);
+            
+            $agregado="";
+            if (strpos($text, '*') !== false) {
+                $agregado="           TARIMA";
+            }
+            else{
+                $this->load->model("Modeloclasificador");
+                $producto=$this->Modeloclasificador->ObtenerProducto($id);
+                $agregado=$producto->NombreProducto." | ".$producto->Modelo." | ".$producto->Color;
+            }
+            
+            imagettftext($image, 15, 0, 450, $img_height + $text_height + 10, $black, $font, $text."\n".$agregado);
 
         }
 

@@ -106,10 +106,10 @@ var guardadoP = 0;
                 $.post("GuardarProcesarMerma", {"idProducto": id}, function (data) {
                     if (data == "Correcto")
                     {
-                       $("#td2" + id).html('<span class="mif-checkmark fg-green"></span> Producto Guardado');
+                       $("#td2" + id).html('<span class="mif-checkmark fg-green"></span> Producto Destruido');
                     } else if (data == "Existe")
                     {
-                       $("#td2" + id).html("<span class='mif-cancel fg-red'></span> El producto ya se encuentra <br>en el Almacén ");
+                       $("#td2" + id).html("<span class='mif-cancel fg-red'></span> El producto ya se habia <br>destruido ");
                     } else
                     {
                         $.Notify({

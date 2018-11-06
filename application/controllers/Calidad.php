@@ -53,7 +53,7 @@ class Calidad extends CI_Controller {
     public function GuardarProcesarMerma() {
         $idProducto = $this->input->post_get('idProducto', TRUE);
         $this->load->model("Modelocalidad");
-        $resp1 = $this->Modelocalidad->ProductoEnAlmacenP($idProducto);
+        $resp1 = $this->Modelocalidad->ProductoEnAlmacenPNoDestruido($idProducto);
         if ($resp1 == true) {
             $resp = $this->Modelocalidad->GuardarProcesar($idProducto);
             if ($resp == "correcto") {

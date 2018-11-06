@@ -49,6 +49,19 @@ class Modelocalidad extends CI_Model {
             return false;
         }
     }
+    
+    public function ProductoEnAlmacenPNoDestruido($idProducto) {
+        $this->db->select("i.IdInventariosMermas");
+        $this->db->from("InventariosMermas i");
+        $this->db->where("i.ProductosId", $idProducto);
+        $this->db->where("i.Procesado", 0);
+        $fila = $this->db->get();
+        if ($fila->num_rows() > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public function GuardarProductoAlmacenP($idProducto) {
         $datos = array(

@@ -517,6 +517,7 @@ class Cedis extends CI_Controller
             imagedestroy($image);
         }
     }
+<<<<<<< HEAD
     
      public function BusquedaProductos() {
         $infoheader["titulo"] = "Cedis: Royalty Ceramic";
@@ -562,6 +563,114 @@ class Cedis extends CI_Controller
         print json_encode($infocontent);
     }
 
+=======
+public function ReportePedido()
+{
+    // Se carga el modelo alumno
+    $this->load->model('Modelocedis');
+    // Se carga la libreria fpdf
+    $this->load->library('pdf');
+    $idpedido = $this->input->post_get('idpedido', true);
+    // Se obtienen los alumnos de la base de datos
+
+    $productos = $this->Modelocedis->ResumenProductosPedido($idpedido);
+    $pedido=$this->Modelocedis->ObtenerPedido($idpedido);
+    $usuariocrea=$this->Modelocedis->UsuarioCreaPedido($idpedido);
+    $usuariolibera=$this->Modelocedis->UsuarioLiberaCredito($idpedido);
+    $usuarioentrega=$this->Modelocedis->UsuarioEntregaPedido($idpedido);
+    
+    // Creacion del PDF
+    /*
+     * Se crea un objeto de la clase Pdf, recuerda que la clase Pdf
+     * heredó todos las variables y métodos de fpdf
+     */
+    $this->pdf = new Pdf();
+    // Agregamos una página
+    $this->pdf->AddPage();
+    // Define el alias para el número de página que se imprimirá en el pie
+    $this->pdf->AliasNbPages();
+ 
+    /* Se define el titulo, márgenes izquierdo, derecho y
+     * el color de relleno predeterminado
+     */
+    $this->pdf->SetTitle("Reporte Pedido");
+    $this->pdf->SetLeftMargin(15);
+    $this->pdf->SetRightMargin(15);
+    $this->pdf->SetFillColor(200,200,200);
+ 
+    // Se define el formato de fuente: Arial, negritas, tamaño 9
+    $this->pdf->SetFont('Arial', 'B', 8);
+    /*
+     * TITULOS DE COLUMNAS
+     *
+     * $this->pdf->Cell(Ancho, Alto,texto,borde,posición,alineación,relleno);
+     */
+
+        
+
+    $this->pdf->MultiCell(80,4,"PARA: \n ".$pedido->Cliente. "\n XAXX010101000",0,'L',0);
+    $this->pdf->SetXY(80,25);
+    $this->pdf->MultiCell(50,4,utf8_decode("DOMICILIO FISCAL: \n CARR. LEÓN SILAO KM 15.5 \n Guanajuato León LOS SAUCES \n 37545 \n MÉXICO"),0,'L',0);
+    $this->pdf->SetXY(150,25);
+    $this->pdf->MultiCell(40,4,utf8_decode("Facturas Cliente: A1858 \n ".Date("Y-m-d")),0,'L',0);
+    $this->pdf->SetXY(10,50);
+    $this->pdf->Cell(190,0,'','T',0,'C','1');
+    $this->pdf->Ln(7);
+    $this->pdf->SetXY(10,60);
+    $this->pdf->Cell(30,7,$usuariocrea,'B',0,'C',0);
+    $this->pdf->Cell(10,0,'','',0,'C',0);
+    $this->pdf->Cell(30,7,$usuariolibera,'B',0,'C',0);
+    $this->pdf->Cell(10,0,'','',0,'C',0);
+    $this->pdf->Cell(30,7,$usuarioentrega,'B',0,'C',0);
+    $this->pdf->Cell(10,0,'','',0,'C',0);
+    $this->pdf->Cell(30,7,$pedido->Cliente,'B',0,'C',0);
+    $this->pdf->Cell(10,0,'','',0,'C',0);
+    $this->pdf->Cell(30,7,"Guardia YYY",'B',0,'C',0);
+    $this->pdf->Ln(7);
+    $this->pdf->SetXY(10,68);
+    $this->pdf->Cell(30,7,"Ventas",'',0,'C',0);
+    $this->pdf->Cell(10,0,'','',0,'C',0);
+    $this->pdf->Cell(30,7,utf8_decode("Libera Crédito y Cobranza"),'',0,'C',0);
+    $this->pdf->Cell(10,0,'','',0,'C',0);
+    $this->pdf->Cell(30,7,utf8_decode("Entrega Almacén"),'',0,'C',0);
+    $this->pdf->Cell(10,0,'','',0,'C',0);
+    $this->pdf->Cell(30,7,utf8_decode("Recibe Cliente"),'',0,'C',0);
+    $this->pdf->Cell(10,0,'','',0,'C',0);
+    $this->pdf->Cell(30,7,utf8_decode("Guardia en turno"),'',0,'C',0);
+    $this->pdf->Ln(15);
+
+    $this->pdf->Cell(25,7,'CANTIDAD','TBL',0,'C','1');
+    $this->pdf->Cell(40,7,'UNIDAD DE MEDIDA','TBL',0,'C','1');
+    $this->pdf->Cell(25,7,utf8_decode('CÓDIGO'),'TBL',0,'C','1');
+    $this->pdf->Cell(90,7,utf8_decode('DESCRIPCIÓN'),'TBLR',0,'C','1');
+    $this->pdf->Ln(7);
+
+    
+    // La variable $x se utiliza para mostrar un número consecutivo
+    $x = 1;
+    foreach ($productos->result() as $producto) {
+        $codigo=$this->Modelocedis->CodigoProducto($producto->IdProductos);
+      // se imprime el numero actual y despues se incrementa el valor de $x en uno
+      // Se imprimen los datos de cada alumno
+      $this->pdf->Cell(25,5,$producto->cantidad,'BL',0,'C',0);
+      $this->pdf->Cell(40,5,"Pieza",'BL',0,'C',0);
+      $this->pdf->Cell(25,5,$codigo,'BL',0,'C',0);
+      $this->pdf->Cell(90,5,$producto->producto." | ".$producto->modelo." | ".$producto->color." | ". $producto->clasificacion,'BLR',0,'L',0);
+      //Se agrega un salto de linea
+      $this->pdf->Ln(5);
+    }
+    /*
+     * Se manda el pdf al navegador
+     *
+     * $this->pdf->Output(nombredelarchivo, destino);
+     *
+     * I = Muestra el pdf en el navegador
+     * D = Envia el pdf para descarga
+     *
+     */
+    $this->pdf->Output("ReportePedido.pdf", 'I');
+}
+>>>>>>> 731afe007660cf7f0a4a395a214289dcfa600282
 }
 
 //Guardar fecha de presalida

@@ -6,6 +6,8 @@
         $("#grafica").html("");
         $("#detalleseleccionado").html("");
     }
+    
+
 </script>
 <center><button onclick="RegresoCriterios()" class="button block-shadow-info text-shadow primary big-button">Regresar a Criterios de Selección</button></center>
 <br>
@@ -66,11 +68,14 @@
                 echo "- ".$pedi;
                 ?>   
                 </td>
-                <td class="center"><b class="fg-darkGreen">
+                <td class="center">
                 <?php $Total= $producto->cuantos+$almacen-$pedi;
-                echo "= ".$Total;?>
-                    </b>
-               
+                if ($Total<0){?>
+                    <b class="fg-red"><?= "= ".$Total; ?> </b><?php
+                }else{?>
+                    <b class="fg-darkGreen"> <?= "= ".$Total; ?> </b><?php
+                }
+                ?>
                 </td>
                 
                 

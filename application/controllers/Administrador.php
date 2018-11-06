@@ -812,5 +812,49 @@ class Administrador extends CI_Controller {
         $infocontent["productos"] = $this->Modeloadministrador->GenerarConcentradoGlobal($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $por);
         $this->load->view('administrador/GenerarConcentradoGlobal', $infocontent);
     }
+    
+    public function BusquedaProductos() {
+        $infoheader["titulo"] = "Administrador: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $infocontent["Nombre"] = "";
+        $this->load->model("Modeloadministrador");
+        $this->load->view('administrador/BusquedaProducto', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+    
+    public function VerificarClaveProd() {
+        $clave = $this->input->post_get('clave', TRUE);
+        $this->load->model("Modeloadministrador");
+        $fila = $this->Modeloadministrador->BuscarClaveProducto($clave);
+        $infocontent["nombre"] = "No se encontró el producto";
+        if ($fila != "No se encontró el producto") {
+            $infocontent["nombre"] = $fila->producto . "/" . $fila->modelo . "/" . $fila->color;
+            $infocontent["id"] = $fila->IdProductos;
+        }
+        print json_encode($infocontent);
+    }
+    
+    public function ExpedienteProducto() {
+        $infoheader["titulo"] = "Administrador: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $producto_id = $this->input->post_get('producto_id', TRUE);
+        $infocontent["Nombre"] = "Alondra Mendoza";
+        $this->load->model("Modeloclasificador");
+        $this->load->model("Modelousuario");
+        $infocontent["producto"] = $this->Modeloclasificador->ObtenerProducto($producto_id);
+        $infocontent["historiales"] = $this->Modeloclasificador->HistorialMovimientosProducto($producto_id);
+        $infocontent["ubicacion"] = $this->Modeloclasificador->Ubicacion($producto_id);
+        $infocontent["clasificacion"] = $this->Modeloclasificador->Clasificacion($producto_id);
+        $infocontent["tarima"] = $this->Modeloclasificador->EstatusTarima($producto_id);
+        $infocontent["tarimaid"] = $this->Modeloclasificador->EstatusTarimaId($producto_id);
+        $infocontent["pedido"] = $this->Modeloclasificador->EstatusPedido($producto_id);
+        $infocontent["defectos"] = $this->Modelousuario->ObtenerDefectos($producto_id);
+        $infocontent["clasificaciones"] = $this->Modeloclasificador->ClasificacionesProducto($producto_id);
+        $infocontent["entarimados"] = $this->Modeloclasificador->EntarimadosProducto($producto_id);
+        $infocontent["codigo"] = $this->Modeloclasificador->CodigoBarrasTexto($producto_id);
+        $infocontent["reparacion"] = $this->Modeloclasificador->ObtenerReparaciones($producto_id);
+        $this->load->view('administrador/ExpedienteProducto', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
 
 }

@@ -506,5 +506,37 @@ class Almacenista extends CI_Controller {
         $infocontent["modelo"] = $this->Modeloalmacenista->ObtenerModelo($modelo);
         $this->load->view('almacenista/CargaInfoModelo', $infocontent);
     }
+    
+       public function BusquedaProductos() {
+        $infoheader["titulo"] = "Almacenista: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $infocontent["Nombre"] = "";
+        $this->load->model("Modeloalmacenista");
+        $this->load->view('almacenista/BusquedaProducto', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+    
+    public function ExpedienteProducto() {
+        $infoheader["titulo"] = "Almacenista: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $producto_id = $this->input->post_get('producto_id', TRUE);
+        $infocontent["Nombre"] = "";
+        $this->load->model("Modeloclasificador");
+        $this->load->model("Modelousuario");
+        $infocontent["producto"] = $this->Modeloclasificador->ObtenerProducto($producto_id);
+        $infocontent["historiales"] = $this->Modeloclasificador->HistorialMovimientosProducto($producto_id);
+        $infocontent["ubicacion"] = $this->Modeloclasificador->Ubicacion($producto_id);
+        $infocontent["clasificacion"] = $this->Modeloclasificador->Clasificacion($producto_id);
+        $infocontent["tarima"] = $this->Modeloclasificador->EstatusTarima($producto_id);
+        $infocontent["tarimaid"] = $this->Modeloclasificador->EstatusTarimaId($producto_id);
+        $infocontent["pedido"] = $this->Modeloclasificador->EstatusPedido($producto_id);
+        $infocontent["defectos"] = $this->Modelousuario->ObtenerDefectos($producto_id);
+        $infocontent["clasificaciones"] = $this->Modeloclasificador->ClasificacionesProducto($producto_id);
+        $infocontent["entarimados"] = $this->Modeloclasificador->EntarimadosProducto($producto_id);
+        $infocontent["codigo"] = $this->Modeloclasificador->CodigoBarrasTexto($producto_id);
+        $infocontent["reparacion"] = $this->Modeloclasificador->ObtenerReparaciones($producto_id);
+        $this->load->view('almacenista/ExpedienteProducto', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
 
 }

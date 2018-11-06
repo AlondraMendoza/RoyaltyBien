@@ -517,6 +517,50 @@ class Cedis extends CI_Controller
             imagedestroy($image);
         }
     }
+    
+     public function BusquedaProductos() {
+        $infoheader["titulo"] = "Cedis: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $infocontent["Nombre"] = "";
+        $this->load->model("Modelocedis");
+        $this->load->view('cedis/BusquedaProducto', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+    
+    public function ExpedienteProducto() {
+        $infoheader["titulo"] = "Cedis: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $producto_id = $this->input->post_get('producto_id', TRUE);
+        $infocontent["Nombre"] = "";
+        $this->load->model("Modeloclasificador");
+        $this->load->model("Modelousuario");
+        $infocontent["producto"] = $this->Modeloclasificador->ObtenerProducto($producto_id);
+        $infocontent["historiales"] = $this->Modeloclasificador->HistorialMovimientosProducto($producto_id);
+        $infocontent["ubicacion"] = $this->Modeloclasificador->Ubicacion($producto_id);
+        $infocontent["clasificacion"] = $this->Modeloclasificador->Clasificacion($producto_id);
+        $infocontent["tarima"] = $this->Modeloclasificador->EstatusTarima($producto_id);
+        $infocontent["tarimaid"] = $this->Modeloclasificador->EstatusTarimaId($producto_id);
+        $infocontent["pedido"] = $this->Modeloclasificador->EstatusPedido($producto_id);
+        $infocontent["defectos"] = $this->Modelousuario->ObtenerDefectos($producto_id);
+        $infocontent["clasificaciones"] = $this->Modeloclasificador->ClasificacionesProducto($producto_id);
+        $infocontent["entarimados"] = $this->Modeloclasificador->EntarimadosProducto($producto_id);
+        $infocontent["codigo"] = $this->Modeloclasificador->CodigoBarrasTexto($producto_id);
+        $infocontent["reparacion"] = $this->Modeloclasificador->ObtenerReparaciones($producto_id);
+        $this->load->view('cedis/ExpedienteProducto', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+    
+     public function VerificarClaveProdExpediente() {
+        $clave = $this->input->post_get('clave', TRUE);
+        $this->load->model("Modelocedis");
+        $fila = $this->Modelocedis->BuscarClaveProductoExpediente($clave);
+        $infocontent["nombre"] = "No se encontró el producto";
+        if ($fila != "No se encontró el producto") {
+            $infocontent["nombre"] = $fila->producto . "/" . $fila->modelo . "/" . $fila->color;
+            $infocontent["id"] = $fila->IdProductos;
+        }
+        print json_encode($infocontent);
+    }
 
 }
 

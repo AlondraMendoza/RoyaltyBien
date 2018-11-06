@@ -21,9 +21,9 @@
             <th>Color</th>
             <th>Clasificación</th>
             <th>Cedis</th>
+            <th>+ Almacén</th>
             <th>- Pedidos</th>
             <th>= Total</th>
-            <th>+ Almacén</th>
             
         </tr>
     </thead>
@@ -56,22 +56,25 @@
                 $ci2 =&get_instance();
                 $ci2->load->model("modelocedis");
                 $pedi = $ci->modelocedis->ProductosPedidosVentas($ped->ModelosId, $ped->ColoresId, $ped->ClasificacionesId, $ped->CProductosId);
-                echo "- ".$pedi;
-                ?>
-                </td>
-                <td class="center"><b class="fg-darkGreen">
-                <?php $Total= $producto->cuantos-$pedi;
-                echo "= ".$Total;?>
-                    </b>
-               
-                </td>
-                <td class="center">
-                <?php 
                 $ci3 =&get_instance();
                 $ci3->load->model("modeloalmacenista");
                 $almacen = $ci3->modeloalmacenista->ProductosEnAlmacenTotal($ped->ModelosId, $ped->ColoresId, $ped->ClasificacionesId, $ped->CProductosId);
                 echo "+ ".$almacen;
+                ?>
+                </td>
+                <td class="center">
+                <?php 
+                echo "- ".$pedi;
                 ?>   
+                </td>
+                <td class="center">
+                <?php $Total= $producto->cuantos+$almacen-$pedi;
+                if ($Total<0){?>
+                    <b class="fg-red"><?= "= ".$Total; ?> </b><?php
+                }else{?>
+                    <b class="fg-darkGreen"> <?= "= ".$Total; ?> </b><?php
+                }
+                ?>
                 </td>
                 
             </tr>

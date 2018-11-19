@@ -714,6 +714,74 @@ class Modeloalmacenista extends CI_Model {
             return null;
         }
     }
+    
+    public function AbrirTarima($idtarima) {
+        $datos = array(
+            'FechaApertura' => date('Y-m-d | H:i:sa')
+        );
+        $this->db->where('IdTarimas', $idtarima);
+        $this->db->update('Tarimas', $datos);
+        
+        $historial = array(
+            'Fecha'=> date('Y-m-d | H:i:sa'),
+            'UsuariosId'=> IdUsuario(),
+            'MovimientosTarimasId'=>6,
+            'TarimasId'=>$idtarima,
+            'Activo'=>1
+        );
+        $this->db->insert('HistorialTarima', $historial);
+        
+    }
+    
+    public function GuardarPeticion($idTarima) {
+        $datos= array(
+            'TarimasId'=> $idTarima,
+            'UsuarioSolicita'=> IdUsuario(),
+            'FechaSolicita'=> date('Y-m-d | H:i:sa'),
+            'Activo'=>1
+        );
+        $this->db->insert('TarimasPendientes', $datos);
+        return "correcto";
+        
+    }
+    
+    public function TarimaenPendiente($tarima_id) {
+        $this->db->select("tp.*");
+        $this->db->from("TarimasPendientes tp");
+        $this->db->where("tp.TarimasId", $tarima_id);
+        $fila = $this->db->get()->row();
+        return $fila;
+        
+    }
+    
+    public function SalidaEsp($idTarima){
+        $datos = array(
+            'FechaSalida'=>date('Y-m-d | H:i:sa'),
+            'UsuariosIdSalida'=> IdUsuario()
+        );
+        $this->db->where('TarimasId', $idTarima);
+        $this->db->update('InventariosAlmacen', $datos);
+        return "correcto";
+    }
+    
+    public function GuardadoEspecial($idTarima){
+        $this->db->select("dt.ProductosId");
+        $this->db->from("DetalleTarimas dt");
+        $this->db->where("dt.TarimasId", $idTarima);
+        $fila = $this->db->get();
+        foreach ($fila->result() as $f){
+            $this->GuardarProductoAlmacenP($f->ProductosId);
+        }
+    }
+    
+    public function TarimasDestruidas($tarima_id){
+        $this->db->select('t.*');
+        $this->db->from('Tarimas t');
+        $this->db->where('t.IdTarimas', $tarima_id);
+        $this->db->where('t.Activo',1);
+        $fila = $this->db->get()->row();
+        return $fila;
+    }
 }
 
 ?>

@@ -856,5 +856,28 @@ class Administrador extends CI_Controller {
         $this->load->view('administrador/ExpedienteProducto', $infocontent);
         $this->load->view('template/footerd', '');
     }
+    
+    public function Pendientes() {
+        $this->load->model("Modeloadministrador");
+        $infoheader["titulo"] = "Administrador: Royalty Ceramic";
+        $infocontent["hoy"] = date("d/m/Y");
+        $infocontent["tarimas"] = $this->Modeloadministrador->TarimasPendientes();
+        $infocontent["tarimasabiertas"] = $this->Modeloadministrador->TarimasAbiertas();
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->view('administrador/Pendientes', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+    
+    public function AceptarAbrirTarima() {
+        $idTarima = $this->input->post_get('idtarima', TRUE);
+        $this->load->model("Modeloadministrador");
+        $query = $this->Modeloadministrador->AbrirTarima($idTarima);
+            if ($query == "correcto") {
+                print("Correcto");
+            } else {
+                print("Error");
+            }
+    }
+
 
 }

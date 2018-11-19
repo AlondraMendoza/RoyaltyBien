@@ -35,7 +35,11 @@ class Modeloventas extends CI_Model {
         $fila = $query->row();
         return $fila;
     }
-
+    public function ObtenerSubProductoImportacion($clave) {
+        $query = $this->db->query("select * from CGriferia where Clave='$clave'");
+        $fila = $query->row();
+        return $fila;
+    }
     public function ObtenerModeloImportacion($clave) {
         $query = $this->db->query("select IdModelos from Modelos where ClaveImportacion='$clave'");
         $fila = $query->row();
@@ -386,7 +390,16 @@ class Modeloventas extends CI_Model {
         return $fila;
         
     }
-
+    public function ConsultarCliente($texto) {
+        $query = $this->db->query("select * from Clientes where Nombre like '%$texto%'");
+        return $query;
+        
+    }
+    public function Cliente($id) {
+        $query = $this->db->query("select * from Clientes where IdClientes=$id");
+        return $query->row();
+        
+    }
 }
 
 ?>

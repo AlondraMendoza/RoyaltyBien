@@ -16,4 +16,5 @@
             <td><?= $producto->color ?></td>
         </tr>
     <?php endforeach; ?>
+    
 </table>

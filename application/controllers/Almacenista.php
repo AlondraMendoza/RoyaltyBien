@@ -318,6 +318,7 @@ class Almacenista extends CI_Controller {
         $resp = $this->Modeloalmacenista->SalirTarima($idtarima);
         if ($resp != null) {
             $query = $this->Modeloalmacenista->SalirProductoAlmacen($resp);
+            $query3 = $this->Modeloalmacenista->AbrirTarima($idtarima);
             $query2 = $this->Modeloalmacenista->GuardarAccidenteT($idtarima, $Responsable, $Motivo);
             if ($query == "correcto") {
                 print("Correcto");
@@ -464,6 +465,8 @@ class Almacenista extends CI_Controller {
         $infocontent["producto"] = $this->Modeloalmacenista->ObtenerProducto($tarima_id);
         $infocontent["historiales"] = $this->Modeloalmacenista->HistorialMovimientosTarima($tarima_id);
         $infocontent["ubicacion"] = $this->Modeloalmacenista->Ubicacion($tarima_id);
+        $infocontent["tarima"]= $tarima_id;
+        $infocontent["pendiente"]=$this->Modeloalmacenista->TarimaenPendiente($tarima_id);
         /* $infocontent["tarima"] = $this->modeloclasificador->EstatusTarima($producto_id);
           $infocontent["tarimaid"] = $this->modeloclasificador->EstatusTarimaId($producto_id);
           $infocontent["clasificaciones"] = $this->modeloclasificador->ClasificacionesProducto($producto_id);
@@ -537,6 +540,34 @@ class Almacenista extends CI_Controller {
         $infocontent["reparacion"] = $this->Modeloclasificador->ObtenerReparaciones($producto_id);
         $this->load->view('almacenista/ExpedienteProducto', $infocontent);
         $this->load->view('template/footerd', '');
+    }
+    
+    public function PeticionAbrirTarima() {
+        $idTarima = $this->input->post_get('idtarima', TRUE);
+        $this->load->model("Modeloalmacenista");
+        $query = $this->Modeloalmacenista->GuardarPeticion($idTarima);
+            if ($query == "correcto") {
+                print("Correcto");
+            } else {
+                print("Error");
+            }
+//        redirect("almacenista/expedientetarima?tarima_id=".$idTarima);
+    }
+    
+    public function AbrirTarima(){
+        $idTarima = $this->input->post_get('idtarima', TRUE);
+        $this->load->model("Modeloalmacenista");
+        $salida = $this->Modeloalmacenista->SalidaEsp($idTarima);
+        if ($salida == "correcto") {
+            $guardarproductos = $this->Modeloalmacenista->GuardadoEspecial($idTarima);
+            $query = $this->Modeloalmacenista->AbrirTarima($idTarima);
+                print("Correcto");
+            } else {
+                print("Error");
+            }
+        
+        
+            
     }
 
 }

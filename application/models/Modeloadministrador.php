@@ -1629,6 +1629,40 @@ class Modeloadministrador extends CI_Model {
         }
     }
     
+    public function TarimasPendientes() {
+        $this->db->select('tp.*');
+        $this->db->from("TarimasPendientes tp");
+        $this->db->where("tp.FechaAutoriza", null);
+        $this->db->where("tp.Activo=", 1);
+        return $this->db->get();
+    }
+    
+    public function TarimasAbiertas() {
+        $this->db->select('tp.*');
+        $this->db->from("TarimasPendientes tp");
+        $this->db->where("tp.FechaAutoriza!=", null);
+        $this->db->where("tp.Activo=", 1);
+        return $this->db->get();
+    }
+    
+    public function DetalleTarimas($TarimasId){
+        $this->db->select('t.*');
+        $this->db->from("Tarimas t");
+        $this->db->where("t.IdTarimas", $TarimasId);
+        $this->db->where("t.Activo=", 1);
+        return $this->db->get()->row();
+    }
+    
+    public function AbrirTarima($idTarima){
+        $datos = array(
+            "UsuarioAutoriza"=>IdUsuario(),
+            "FechaAutoriza"=>date('Y-m-d | H:i:sa')
+        );
+        $this->db->where('TarimasId', $idTarima);
+        $this->db->update('TarimasPendientes', $datos);
+        return "correcto";
+    }
+    
 }
 ?>
 

@@ -1,5 +1,46 @@
 <script>
+function AbrirT(codigo){
+    
+    $.post("PeticionAbrirTarima", {"idtarima": codigo}, function (data) {
+        if (data == "Correcto")
+        {
+            $.Notify({
+            caption: 'Bien',
+            content: 'Se esta procesando',
+            type: 'success'
+            });
+        }else {
+            $.Notify({
+            caption: 'Error',
+            content: 'Ocurrió un error con la tarima',
+            type: 'alert'
+            });
+            }
+     });
+     $("#Abrir").fadeOut();
+     location.reload();
+}
 
+function AbrirTarima(codigo){
+    $.post("AbrirTarima", {"idtarima": codigo}, function (data) {
+        if (data == "Correcto")
+        {
+            $.Notify({
+            caption: 'Bien',
+            content: 'Se esta procesando',
+            type: 'success'
+            });
+        }else {
+            $.Notify({
+            caption: 'Error',
+            content: 'Ocurrió un error con la tarima',
+            type: 'alert'
+            });
+            }
+     });
+     $("#Abrir2").fadeOut();
+     location.reload();
+}
 </script>
 <h1><b> EXPEDIENTE TARIMA</b></h1><br>
 <center>
@@ -20,7 +61,9 @@
 
                 </tr>
                 <tr>
-                    <td>
+                    <td><?php $ci = &get_instance();
+                          $ci->load->model("modeloalmacenista");
+                          $destruida = $ci->modeloalmacenista->TarimasDestruidas($tarima);?>
                         <b>Productos:</b><br>
                         <hr><?php foreach ($producto->result() as $p): ?>
                         <?= "Clave-".$p->clave."  ".$p->Nombre."/".$p->modelo."/".$p->color; ?>
@@ -29,6 +72,14 @@
                         <hr> 
                         <b>Ubicación:</b><br>
                         <hr><?= $ubicacion ?>
+                        <hr><b>Acción:</b><br>
+                        <hr><?php if ($pendiente==null){?>
+                        <div class="input-control text big-input medium-size" id="Abrir" ><button class="button danger" onclick="AbrirT(<?=$tarima?>)">Abrir Tarima</button></div>
+                        <?php } else if ($pendiente->FechaAutoriza==null) {
+                        echo 'Esta pendiente la autorización';}else if ($destruida->FechaApertura==null){ ?>
+                         <div class="input-control text big-input medium-size" id="Abrir2" ><button class="button success" onclick="AbrirTarima(<?=$tarima?>)">Abrir</button></div>
+                         <b>Nota: </b>Al abrir la tarima los productos tendrán que salir del almacén como producto solo
+                            <?php }else{  echo 'Tarima Abierta';}?>
                         <hr>
                     </td>
                     

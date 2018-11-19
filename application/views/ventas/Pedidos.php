@@ -1,14 +1,31 @@
 <script>
-    $(document).ready(function () {
-<?php
-$correcto = $this->session->flashdata('correcto');
-if ($correcto) {
-    ?>
-            MsjCorrecto("<?= $correcto ?>");
+$(document).ready(function () {
     <?php
+    $correcto = $this->session->flashdata('correcto');
+    if ($correcto) {
+        ?>
+            MsjCorrecto("<?= $correcto ?>");
+        <?php
+    }
+    ?>
+});
+function ConsultarCliente(texto)
+{
+    if(texto.length>2)
+    {
+        $("#divcliente").load("ConsultarCliente",{"texto":texto});
+    }
 }
-?>
+function CambioContabilizar(pedido)
+{
+    $.get("CambioContabilizar",{"pedido_id":pedido},function(data){
+        if(data.includes("correcto"))
+        {
+            MsjCorrecto("El pedido se actualizó correctamente.");
+        }
     });
+}
+
 </script>
 <h1 class="light text-shadow">PEDIDOS</h1><br>
 
@@ -47,6 +64,7 @@ if ($correcto) {
                                     $ci = &get_instance();
                                     $ci->load->model("modeloventas");
                                     $npen = $ci->modeloventas->Usuario($pedido->UsuariosId);
+                                    $cliente = $ci->modeloventas->Cliente($pedido->ClientesId);
                                     $textomodifico = "";
                                     if ($pedido->UsuarioModificaId != null) {
                                         $modifico = $ci->modeloventas->Usuario($pedido->UsuarioModificaId);
@@ -55,12 +73,13 @@ if ($correcto) {
                                     ?>
                                     <br><br><div class="text-small fg-darkGreen">Creó:<br>
                                         <?= $npen->Nombre . " " . $npen->APaterno ?>
+                                        $cliente = $ci->modeloventas->Cliente($pedido->ClientesId);
                                     </div>
                                     <div class="text-small fg-darkGreen">
                                         <?= $textomodifico ?>
                                     </div>
                                 </td>
-                                <td><?= $pedido->Cliente ?></td>
+                                <td><?= $cliente->Nombre ?></td>
                                 <td><?= $pedido->NotaCedis ?></td>
                                 <td><?= $pedido->NotaCredito ?></td>
                                 <td>
@@ -68,6 +87,7 @@ if ($correcto) {
                                     $ci = &get_instance();
                                     $ci->load->model("modelocedis");
                                     $resumen = $ci->modelocedis->ResumenProductosPedidoAgrupados($pedido->IdPedidos);
+                                    $resumen2 = $ci->modelocedis->ResumenSubProductosPedidoAgrupados($pedido->IdPedidos);
                                     ?>
                                     <ul class="simple-list">
                                         <?php foreach ($resumen->result() as $r): ?>
@@ -77,6 +97,19 @@ if ($correcto) {
                                                 <?= $r->modelo ?>
                                                 <?= $r->color ?>
                                                 <?= $r->clasificacion ?>
+                                                <br>
+                                            </li>
+                                        <?php endforeach; ?>
+                                        <?php 
+                                        if($resumen2->num_rows()>0){
+                                            echo"<hr>";
+                                        }
+                                        ?>
+                                        <?php foreach ($resumen2->result() as $r2): ?>
+                                     
+                                            <li >
+                                                <?= $r2->Cantidad ?>
+                                                <?= $r2->producto ?>
                                                 <br>
                                             </li>
                                         <?php endforeach; ?>
@@ -119,6 +152,7 @@ if ($correcto) {
                                 <th>Nota para C y C</th>
                                 <th>Observación de liberación por C y C</th>
                                 <th>Resumen</th>
+                                <th>Contabilizar</th>
                                 <th>Acción</th>
                             </tr>
                         </thead>
@@ -130,6 +164,7 @@ if ($correcto) {
                                     $ci = &get_instance();
                                     $ci->load->model("modeloventas");
                                     $npen = $ci->modeloventas->Usuario($pedido->UsuariosId);
+                                    $cliente = $ci->modeloventas->Cliente($pedido->ClientesId);
                                     $textomodifico = "";
                                     if ($pedido->UsuarioModificaId != null) {
                                         $modifico = $ci->modeloventas->Usuario($pedido->UsuarioModificaId);
@@ -160,7 +195,7 @@ if ($correcto) {
                                     }
                                     ?>
                                 </td>
-                                <td><?= $pedido->Cliente ?></td>
+                                <td><?= $cliente->Nombre ?></td>
                                 <td><?= $pedido->NotaCedis ?></td>
                                 <td><?= $pedido->NotaCredito ?></td>
                                 <td><?= $pedido->ObservacionLiberacion ?></td>
@@ -169,6 +204,7 @@ if ($correcto) {
                                     $ci = &get_instance();
                                     $ci->load->model("modelocedis");
                                     $resumen = $ci->modelocedis->ResumenProductosPedidoAgrupados($pedido->IdPedidos);
+                                    $resumen2 = $ci->modelocedis->ResumenSubProductosPedidoAgrupados($pedido->IdPedidos);
                                     ?>
                                     <ul class="simple-list">
                                         <?php foreach ($resumen->result() as $r): ?>
@@ -181,7 +217,27 @@ if ($correcto) {
                                                 <br>
                                             </li>
                                         <?php endforeach; ?>
+                                        <?php 
+                                        if($resumen2->num_rows()>0){
+                                            echo"<hr>";
+                                        }
+                                        ?>
+                                        <?php foreach ($resumen2->result() as $r2): ?>
+                                     
+                                            <li >
+                                                <?= $r2->Cantidad ?>
+                                                <?= $r2->producto ?>
+                                                <br>
+                                            </li>
+                                        <?php endforeach; ?>
                                     </ul>
+                                </td>
+                                <td>
+                                    <label class="input-control checkbox">
+                                        <input type="checkbox" id="contabilizar<?= $pedido->IdPedidos?>" onchange="CambioContabilizar(<?= $pedido->IdPedidos?>)" <?= $pedido->CheckContabilizar? 'checked':'' ?>>
+                                        <span class="check"></span>
+                                        <span class="caption"></span>
+                                    </label>
                                 </td>
                                 <td class="center">
                                     <form action="ReimportarPedido" method="POST" enctype="multipart/form-data">
@@ -232,6 +288,7 @@ if ($correcto) {
                                     $ci = &get_instance();
                                     $ci->load->model("modeloventas");
                                     $npen = $ci->modeloventas->Usuario($pedido->UsuariosId);
+                                    $cliente = $ci->modeloventas->Cliente($pedido->ClientesId);
                                     $textomodifico = "";
                                     if ($pedido->UsuarioModificaId != null) {
                                         $modifico = $ci->modeloventas->Usuario($pedido->UsuarioModificaId);
@@ -273,7 +330,7 @@ if ($correcto) {
                                         <?= $usuarioentrego->Nombre . " " . $usuarioentrego->APaterno ?>
                                     </div>
                                 </td>
-                                <td><?= $pedido->Cliente ?></td>
+                                <td><?= $cliente->Nombre ?></td>
                                 <td><?= $pedido->NotaCedis ?></td>
                                 <td><?= $pedido->NotaCredito ?></td>
                                 <td><?= $pedido->ObservacionSalida ?></td>
@@ -282,6 +339,7 @@ if ($correcto) {
                                     $ci = &get_instance();
                                     $ci->load->model("modelocedis");
                                     $resumen = $ci->modelocedis->ResumenProductosPedidoAgrupados($pedido->IdPedidos);
+                                    $resumen2 = $ci->modelocedis->ResumenSubProductosPedidoAgrupados($pedido->IdPedidos);
                                     ?>
                                     <ul class="simple-list">
                                         <?php foreach ($resumen->result() as $r): ?>
@@ -291,6 +349,19 @@ if ($correcto) {
                                                 <?= $r->modelo ?>
                                                 <?= $r->color ?>
                                                 <?= $r->clasificacion ?>
+                                                <br>
+                                            </li>
+                                        <?php endforeach; ?>
+                                        <?php 
+                                        if($resumen2->num_rows()>0){
+                                            echo"<hr>";
+                                        }
+                                        ?>
+                                        <?php foreach ($resumen2->result() as $r2): ?>
+                                     
+                                            <li >
+                                                <?= $r2->Cantidad ?>
+                                                <?= $r2->producto ?>
                                                 <br>
                                             </li>
                                         <?php endforeach; ?>
@@ -312,6 +383,16 @@ if ($correcto) {
                     <br><br>
                     <form action="ImportarPedido" method="POST" enctype="multipart/form-data">
                         <div class="grid">
+                        <div class="row cells1">
+                                <div class="cell">
+                                    <h4>Cliente</h4>
+                                    <div class="input-control full-size text">
+                                        <input type="text" placeholder="Teclea el nombre del cliente" name="" onkeyup="ConsultarCliente(this.value)" id="textocliente">
+                                    </div>
+                                    <input type="hidden" name="cliente" id="inputcliente">
+                                    <div id="divcliente"></div>
+                                </div>
+                            </div>
                             <div class="row cells2">
                                 <div class="cell">
                                     <h4>Formato aceptado .XLSX</h4>
@@ -321,9 +402,24 @@ if ($correcto) {
                                     </div>
                                 </div>
                                 <div class="cell">
-                                    <h4>Cliente</h4>
+                                    <h4>Fecha Posible Entrega</h4>
+                                    <div class="input-control text full-size" data-role="datepicker" data-locale="es" data-format="dd/mm/yyyy" id="datepicker">
+                                        <input type="text" id="fechaentrega" value="<?= $hoy ?>" name="fechaentrega">
+                                        <button class="button"><span class="mif-calendar"></span></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row cells2">
+                                <div class="cell">
+                                    <h4>Serie</h4>
                                     <div class="input-control full-size text">
-                                        <input type="text" placeholder="Teclea el nombre del cliente" name="cliente">
+                                        <input type="text" name="serie" id="">
+                                    </div>
+                                </div>
+                                <div class="cell">
+                                    <h4>Folio</h4>
+                                    <div class="input-control full-size text">
+                                        <input type="text" name="folio" id="">
                                     </div>
                                 </div>
                             </div>

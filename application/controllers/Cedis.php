@@ -623,7 +623,7 @@ public function ReportePedido()
     $this->pdf->Cell(10,0,'','',0,'C',0);
     $this->pdf->Cell(30,7,$pedido->Cliente,'B',0,'C',0);
     $this->pdf->Cell(10,0,'','',0,'C',0);
-    $this->pdf->Cell(30,7,"Guardia YYY",'B',0,'C',0);
+    $this->pdf->Cell(30,7,"",'B',0,'C',0);
     $this->pdf->Ln(7);
     $this->pdf->SetXY(10,68);
     $this->pdf->Cell(30,7,"Ventas",'',0,'C',0);

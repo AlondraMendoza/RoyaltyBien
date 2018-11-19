@@ -49,7 +49,6 @@ class Modeloalmacenista extends CI_Model {
         $this->db->where("c.Activo", 1);
         //$this->db->where("c.ClasificacionesSubproductosId", 4);
         $this->db->where("c.Clave", $clave);
-        $this->db->where_in("c.ClasificacionesSubproductosId", [1, 2, 3]);
         $fila = $this->db->get();
         if ($fila->num_rows() > 0) {
             return $fila->row();

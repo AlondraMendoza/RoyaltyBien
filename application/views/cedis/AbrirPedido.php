@@ -109,7 +109,6 @@
     });
 </script>
 <h1><b> INFORMACIÓN DE PEDIDO: <?= $pedidoid ?></b></h1><br>
-<b>Cliente: <?= $pedido->Cliente ?></b><br>
 <div class="grid">
     <div class="row cells2">
         <div class="cell ">
@@ -202,3 +201,4 @@
     </div>
 </center>
 
+<br><br><br>

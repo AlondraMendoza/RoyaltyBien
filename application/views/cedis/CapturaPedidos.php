@@ -129,6 +129,7 @@
                                         $ci = &get_instance();
                                         $ci->load->model("modeloventas");
                                         $npen = $ci->modeloventas->Usuario($pedido->UsuariosId);
+                                        $cliente = $ci->modeloventas->Cliente($pedido->ClientesId);
                                         $textomodifico = "";
                                         if ($pedido->UsuarioModificaId != null) {
                                             $modifico = $ci->modeloventas->Usuario($pedido->UsuarioModificaId);
@@ -142,13 +143,14 @@
                                             <?= $textomodifico ?>
                                         </div>
                                     </td>
-                                    <td><?= $pedido->Cliente ?></td>
+                                    <td><?= $cliente->Nombre ?></td>
                                     <td><?= $pedido->NotaCedis ?></td>
                                     <td>
                                         <?php
                                         $ci = &get_instance();
                                         $ci->load->model("modelocedis");
                                         $resumen = $ci->modelocedis->ResumenProductosPedidoAgrupados($pedido->IdPedidos);
+                                        $resumen2 = $ci->modelocedis->ResumenSubProductosPedidoAgrupados($pedido->IdPedidos);
                                         ?>
                                         <ul class="simple-list">
                                             <?php foreach ($resumen->result() as $r): ?>
@@ -158,6 +160,19 @@
                                                     <?= $r->modelo ?>
                                                     <?= $r->color ?>
                                                     <?= $r->clasificacion ?>
+                                                    <br>
+                                                </li>
+                                            <?php endforeach; ?>
+                                            <?php 
+                                            if($resumen2->num_rows()>0){
+                                                echo"<hr>";
+                                            }
+                                            ?>
+                                            <?php foreach ($resumen2->result() as $r2): ?>
+                                         
+                                                <li >
+                                                    <?= $r2->Cantidad ?>
+                                                    <?= $r2->producto ?>
                                                     <br>
                                                 </li>
                                             <?php endforeach; ?>
@@ -197,6 +212,7 @@
                                         $ci = &get_instance();
                                         $ci->load->model("modeloventas");
                                         $npen = $ci->modeloventas->Usuario($pedido->UsuariosId);
+                                        $cliente = $ci->modeloventas->Cliente($pedido->ClientesId);
                                         $textomodifico = "";
                                         if ($pedido->UsuarioModificaId != null) {
                                             $modifico = $ci->modeloventas->Usuario($pedido->UsuarioModificaId);
@@ -227,13 +243,14 @@
                                         }
                                         ?>
                                     </td>
-                                    <td><?= $pedido->Cliente ?></td>
+                                    <td><?= $cliente->Nombre ?></td>
                                     <td><?= $pedido->NotaCedis ?></td>
                                     <td>
                                         <?php
                                         $ci = &get_instance();
                                         $ci->load->model("modelocedis");
                                         $resumen = $ci->modelocedis->ResumenProductosPedidoAgrupados($pedido->IdPedidos);
+                                        $resumen2 = $ci->modelocedis->ResumenSubProductosPedidoAgrupados($pedido->IdPedidos);
                                         ?>
                                         <ul class="simple-list">
                                             <?php foreach ($resumen->result() as $r): ?>
@@ -243,6 +260,19 @@
                                                     <?= $r->modelo ?>
                                                     <?= $r->color ?>
                                                     <?= $r->clasificacion ?>
+                                                    <br>
+                                                </li>
+                                            <?php endforeach; ?>
+                                            <?php 
+                                            if($resumen2->num_rows()>0){
+                                                echo"<hr>";
+                                            }
+                                            ?>
+                                            <?php foreach ($resumen2->result() as $r2): ?>
+                                         
+                                                <li >
+                                                    <?= $r2->Cantidad ?>
+                                                    <?= $r2->producto ?>
                                                     <br>
                                                 </li>
                                             <?php endforeach; ?>
@@ -287,6 +317,7 @@
                                         $ci = &get_instance();
                                         $ci->load->model("modeloventas");
                                         $npen = $ci->modeloventas->Usuario($pedido->UsuariosId);
+                                        $cliente = $ci->modeloventas->Cliente($pedido->ClientesId);
                                         $textomodifico = "";
                                         if ($pedido->UsuarioModificaId != null) {
                                             $modifico = $ci->modeloventas->Usuario($pedido->UsuarioModificaId);
@@ -327,13 +358,14 @@
                                             <?= $usuarioentrego->Nombre . " " . $usuarioentrego->APaterno ?>
                                         </div>
                                     </td>
-                                    <td><?= $pedido->Cliente ?></td>
+                                    <td><?= $cliente->Nombre ?></td>
                                     <td><?= $pedido->NotaCedis ?></td>
                                     <td>
                                         <?php
                                         $ci = &get_instance();
                                         $ci->load->model("modelocedis");
                                         $resumen = $ci->modelocedis->ResumenProductosPedidoAgrupados($pedido->IdPedidos);
+                                        $resumen2 = $ci->modelocedis->ResumenSubProductosPedidoAgrupados($pedido->IdPedidos);
                                         ?>
                                         <ul class="simple-list">
                                             <?php foreach ($resumen->result() as $r): ?>
@@ -343,6 +375,19 @@
                                                     <?= $r->modelo ?>
                                                     <?= $r->color ?>
                                                     <?= $r->clasificacion ?>
+                                                    <br>
+                                                </li>
+                                            <?php endforeach; ?>
+                                            <?php 
+                                            if($resumen2->num_rows()>0){
+                                                echo"<hr>";
+                                            }
+                                            ?>
+                                            <?php foreach ($resumen2->result() as $r2): ?>
+                                         
+                                                <li >
+                                                    <?= $r2->Cantidad ?>
+                                                    <?= $r2->producto ?>
                                                     <br>
                                                 </li>
                                             <?php endforeach; ?>
@@ -357,6 +402,6 @@
             </div>
         </div>
     </div>
-</center><br><br><br>
+</center><br><br><br><br><br><br>
 
 

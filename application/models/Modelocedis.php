@@ -158,7 +158,7 @@ class Modelocedis extends CI_Model {
             return "No se encontró el producto";
         }
     }
-
+  
     public function GuardarPedido($cliente) {
         $datos = array(
             'UsuariosId' => IdUsuario(),
@@ -362,27 +362,38 @@ class Modelocedis extends CI_Model {
         $fila = $this->db->get();
         return $fila;
     }
+    public function SubProductosPedidoAgrupados($pedidoid) {
+        $this->db->select("*");
+        $this->db->from("SubPedidosVentas i");
+        $this->db->where("i.Activo", 1);
+        $this->db->where("i.PedidosId", $pedidoid);
+        $fila = $this->db->get();
+        return $fila;
+    }
 
     public function UsuarioCreaPedido($pedidoid) {
-        $this->db->select("u.Nombre");
+        $this->db->select("concat(per.Nombre,' ',per.APaterno) as Nombre");
         $this->db->from("Pedidos p");
         $this->db->join("Usuarios u", "u.IdUsuarios=p.UsuariosId");
+        $this->db->join("Personas per", "per.IdPersonas=u.PersonasId");
         $this->db->where("p.IdPedidos", $pedidoid);
         $fila = $this->db->get()->row()->Nombre;
         return $fila;
     }
     public function UsuarioLiberaCredito($pedidoid) {
-        $this->db->select("u.Nombre");
+        $this->db->select("concat(per.Nombre,' ',per.APaterno) as Nombre");
         $this->db->from("Pedidos p");
         $this->db->join("Usuarios u", "u.IdUsuarios=p.UsuarioLiberaId");
+        $this->db->join("Personas per", "per.IdPersonas=u.PersonasId");
         $this->db->where("p.IdPedidos", $pedidoid);
         $fila = $this->db->get()->row()->Nombre;
         return $fila;
     }
     public function UsuarioEntregaPedido($pedidoid) {
-        $this->db->select("u.Nombre");
+        $this->db->select("concat(per.Nombre,' ',per.APaterno) as Nombre");        
         $this->db->from("Pedidos p");
         $this->db->join("Usuarios u", "u.IdUsuarios=p.UsuarioEntregaId");
+        $this->db->join("Personas per", "per.IdPersonas=u.PersonasId");
         $this->db->where("p.IdPedidos", $pedidoid);
         $fila = $this->db->get()->row()->Nombre;
         return $fila;
@@ -395,6 +406,16 @@ class Modelocedis extends CI_Model {
         $this->db->where("c.ModelosId", $producto->ModelosId);
         $this->db->where("c.ColoresId", $producto->ColoresId);
         $this->db->where("c.ClasificacionesId", $producto->ClasificacionesId);
+        $fila = $this->db->get()->row()->Clave;
+        return $fila;
+    }
+    public function ClaveProducto($CProductosId,$ModelosId,$ColoresId,$ClasificacionesId) {
+        $this->db->select("c.Clave");
+        $this->db->from("Claves c");
+        $this->db->where("c.CProductosId", $CProductosId);
+        $this->db->where("c.ModelosId", $ModelosId);
+        $this->db->where("c.ColoresId", $ColoresId);
+        $this->db->where("c.ClasificacionesId", $ClasificacionesId);
         $fila = $this->db->get()->row()->Clave;
         return $fila;
     }
@@ -428,13 +449,33 @@ class Modelocedis extends CI_Model {
         $fila = $this->db->get();
         return $fila;
     }
-
+    public function ResumenSubProductosPedidoAgrupados($pedidoid) {
+        $this->db->select("p.Descripcion as producto,p.Cantidad,p.CGriferiaId,cg.Clave,p.IdSubPedidosVentas");
+        $this->db->from("SubPedidosVentas p");
+        $this->db->join("CGriferia cg", "cg.IdCGriferia=p.CGriferiaId");
+        $this->db->where("p.Activo", 1);
+        $this->db->where("p.PedidosId", $pedidoid);
+        $fila = $this->db->get();
+        return $fila;
+    }
     public function SalidaPedido($pedidoid) {
         foreach ($this->ProductosPedido($pedidoid)->result() as $row) {
             $this->db->set("FechaSalida", date('Y-m-d | H:i:sa'));
             $this->db->where("ProductosId", $row->IdProductos);
             $this->db->update("InventariosCedis");
         }
+        /**Obtengo  los subproductos del pedido*/
+        foreach ($this->ResumenSubProductosPedidoAgrupados($pedidoid)->result() as $sub) {
+                $datos = array(
+                    'CGriferiaId' => $sub->CGriferiaId,
+                    'FechaSalida' => date('Y-m-d | H:i:sa'),
+                    'Cantidad' => $sub->Cantidad,
+                    'UsuariosId' => IdUsuario(),
+                    'Activo' => 1
+                );
+                $this->db->insert('AlmacenSubproductos', $datos); 
+        }
+
         $this->db->set("FechaSalida", date('Y-m-d | H:i:sa'));
         $this->db->set("Estatus", "Entregado");
         $this->db->set("UsuarioEntregaId", IdUsuario());

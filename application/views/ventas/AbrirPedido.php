@@ -109,7 +109,6 @@
     });
 </script>
 <h1><b> INFORMACIÓN DE PEDIDO: <?= $pedidoid ?></b></h1><br>
-<b>Cliente: <?= $pedido->Cliente ?></b><br>
 <div class="grid">
     <div class="row cells2">
         <div class="cell">
@@ -163,21 +162,17 @@
                     <div id="productosenpedido"></div>
                     <br><br>
                 </div>
-            </div>
+                </div>
         </div>
     </div>
 </div>
-
-
 <br><br>
-
 <br><br>
 <center>
     <div class="input-control text big-input medium-size" id="">
         <a class="button primary" href="Pedidos">Regresar a Pedidos</a>
     </div>
     <div class="input-control text big-input medium-size" id="divbotonsalida">
-
     </div>
 </center>
 

@@ -517,7 +517,6 @@ class Cedis extends CI_Controller
             imagedestroy($image);
         }
     }
-<<<<<<< HEAD
     
      public function BusquedaProductos() {
         $infoheader["titulo"] = "Cedis: Royalty Ceramic";
@@ -563,7 +562,6 @@ class Cedis extends CI_Controller
         print json_encode($infocontent);
     }
 
-=======
 public function ReportePedido()
 {
     // Se carga el modelo alumno
@@ -670,7 +668,6 @@ public function ReportePedido()
      */
     $this->pdf->Output("ReportePedido.pdf", 'I');
 }
->>>>>>> 731afe007660cf7f0a4a395a214289dcfa600282
 }
 
 //Guardar fecha de presalida

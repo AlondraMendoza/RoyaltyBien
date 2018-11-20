@@ -44,6 +44,36 @@ class Creditocobranza extends CI_Controller {
         $this->db->update("Pedidos");
         print("correcto");
     }
+    
+    public function Reportes() {
+        $this->load->model("Modeloventas");
+        $infoheader["titulo"] = "Crédito y Cobranza: Royalty Ceramic";
+        $infocontent["hoy"] = date("d/m/Y");
+        $infocontent["clasificaciones"] = $this->Modeloventas->Clasificaciones();
+        $infocontent["productos"] = $this->Modeloventas->Productos();
+        $infocontent["modelos"] = $this->Modeloventas->Modelos(0);
+        $infocontent["colores"] = $this->Modeloventas->Colores(0);
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->view('creditocobranza/Reportes', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+     public function GenerarReporte() {
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $clasificacion = $this->input->post_get('clasificacion', TRUE);
+        $aclasificacion = json_decode($clasificacion);
+        $producto = $this->input->post_get('producto', TRUE);
+        $aproducto = json_decode($producto);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $amodelo = json_decode($modelo);
+        $color = $this->input->post_get('color', TRUE);
+        $acolor = json_decode($color);
+        $defecto = $this->input->post_get('defecto', TRUE);
+        $adefecto = json_decode($defecto);
+        $this->load->model("Modeloventas");
+        $infocontent["productos"] = $this->Modeloventas->GenerarReporte($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $adefecto);
+        $this->load->view('creditocobranza/GenerarReporte', $infocontent);
+    }
 
 }
 ?>

@@ -356,7 +356,7 @@
                         <i>Se mostrarán los productos a detalle</i><br>
                         <button id="" style="" class="button block-shadow-info text-shadow primary big-button" onclick="Detalle()"><span class="mif-arrow-right mif-ani-hover-horizontal"></span> Consultar</button>
                     </td>
-                    <td class="center">
+<!--                    <td class="center">
                         <div class="input-control select full-size">
                             <select id="concentradox">
                                 <option value="Clasificacion(p.IdProductos)">Clasificación</option>
@@ -367,7 +367,7 @@
                         </div>
                         <br>
                         <button id="" style="" class="button block-shadow-warning text-shadow warning big-button" onclick="Concentrado()"><span class="mif-arrow-right mif-ani-hover-horizontal"></span> Consultar</button>
-                    </td>
+                    </td>-->
                 </tr>
             </table>
             <center>

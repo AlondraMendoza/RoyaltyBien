@@ -532,7 +532,7 @@ class Modelocedis extends CI_Model {
 
     public function ProductosPedidosVentas($modelo, $color, $clasificacion, $producto) {
         //print("SELECT count(*) as cuantos from PedidosVentas p JOIN Pedidos pe on pe.IdPedidos=p.PedidosId where p.CProductosId= " . $producto . " AND ClasificacionesId=" . $clasificacion . " AND p.Activo=1 AND p.ModelosId= " . $modelo . " AND pe.Activo=1 AND pe.Estatus='Liberado' AND  p.ColoresId= " . $color . " ");
-        $query = $this->db->query("SELECT IFNULL(sum(p.Cantidad),0) as cuantos from PedidosVentas p JOIN Pedidos pe on pe.IdPedidos=p.PedidosId where p.CProductosId= " . $producto . " AND ClasificacionesId=" . $clasificacion . " AND p.Activo=1 AND p.ModelosId= " . $modelo . " AND pe.Activo=1 AND pe.Estatus='Liberado' AND  p.ColoresId= " . $color . " ");
+        $query = $this->db->query("SELECT IFNULL(sum(p.Cantidad),0) as cuantos from PedidosVentas p JOIN Pedidos pe on pe.IdPedidos=p.PedidosId where p.CProductosId= " . $producto . " AND ClasificacionesId=" . $clasificacion . " AND p.Activo=1 AND p.ModelosId= " . $modelo . " AND pe.Activo=1 AND pe.Estatus='Liberado' AND  p.ColoresId= " . $color . " AND pe.CheckContabilizar=1");
         $row = $query->row();
         if (isset($row)) {
             return $row->cuantos;

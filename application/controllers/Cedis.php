@@ -377,9 +377,10 @@ class Cedis extends CI_Controller
         print(str_pad($idprod, 10, '0', STR_PAD_LEFT) . "*" . $fechaformateada);
     }
 
-    public function barcodeventana($filepath = "", $text = "", $size = "100", $orientation = "horizontal", $code_type = "code128", $print = true, $SizeFactor = 4.5)
-    {
-        $text = $this->input->post_get('text', true);
+     public function barcodeventana($filepath = "", $text = "", $size = "100", $orientation = "horizontal", $code_type = "code128", $print = true, $SizeFactor = 4.5) {
+        $text = $this->input->post_get('text', TRUE);
+        $id = substr($text, 9, 19);
+
         $code_string = "";
         // Translate the $text into barcode the correct $code_type
         if (in_array(strtolower($code_type), array("code128", "code128b"))) {
@@ -428,10 +429,8 @@ class Cedis extends CI_Controller
 
             for ($X = 1; $X <= strlen($text); $X++) {
                 for ($Y = 0; $Y < count($code_array1); $Y++) {
-                    if (substr($text, ($X - 1), 1) == $code_array1[$Y]) {
+                    if (substr($text, ($X - 1), 1) == $code_array1[$Y])
                         $temp[$X] = $code_array2[$Y];
-                    }
-
                 }
             }
 
@@ -439,10 +438,8 @@ class Cedis extends CI_Controller
                 if (isset($temp[$X]) && isset($temp[($X + 1)])) {
                     $temp1 = explode("-", $temp[$X]);
                     $temp2 = explode("-", $temp[($X + 1)]);
-                    for ($Y = 0; $Y < count($temp1); $Y++) {
+                    for ($Y = 0; $Y < count($temp1); $Y++)
                         $code_string .= $temp1[$Y] . $temp2[$Y];
-                    }
-
                 }
             }
 
@@ -456,10 +453,8 @@ class Cedis extends CI_Controller
 
             for ($X = 1; $X <= strlen($upper_text); $X++) {
                 for ($Y = 0; $Y < count($code_array1); $Y++) {
-                    if (substr($upper_text, ($X - 1), 1) == $code_array1[$Y]) {
+                    if (substr($upper_text, ($X - 1), 1) == $code_array1[$Y])
                         $code_string .= $code_array2[$Y] . "1";
-                    }
-
                 }
             }
             $code_string = "11221211" . $code_string . "1122121";
@@ -484,7 +479,7 @@ class Cedis extends CI_Controller
             $img_width = $size;
             $img_height = $code_length * $SizeFactor;
         }
-        $image = imagecreate($img_width, $img_height + $text_height + 12);
+        $image = imagecreate($img_width, $img_height + $text_height + 120);
         $black = imagecolorallocate($image, 0, 0, 0);
         $white = imagecolorallocate($image, 255, 255, 255);
 
@@ -492,18 +487,30 @@ class Cedis extends CI_Controller
         if ($print) {
             //imagestring($image, 5, 441, $img_height, $text, $black);
             $font = "fonts/arial.ttf";
-            imagettftext($image, 30, 0, 350, $img_height + $text_height + 10, $black, $font, $text);
+
+            /* Aquí se agrega el texto a la etiqueta*/
+            
+            $agregado="";
+            if (strpos($text, '*') !== false) {
+                $agregado="           TARIMA";
+            }
+            else{
+                $this->load->model("Modeloclasificador");
+                $producto=$this->Modeloclasificador->ObtenerProducto($id);
+                $agregado=$producto->NombreProducto." | ".$producto->Modelo." | ".$producto->Color;
+            }
+            
+            imagettftext($image, 15, 0, 450, $img_height + $text_height + 10, $black, $font, $text."\n".$agregado);
+
         }
 
         $location = 10;
         for ($position = 1; $position <= strlen($code_string); $position++) {
-            $cur_size = $location + (substr($code_string, ($position - 1), 1));
-            if (strtolower($orientation) == "horizontal") {
+            $cur_size = $location + ( substr($code_string, ($position - 1), 1) );
+            if (strtolower($orientation) == "horizontal")
                 imagefilledrectangle($image, $location * $SizeFactor, 0, $cur_size * $SizeFactor, $img_height, ($position % 2 == 0 ? $white : $black));
-            } else {
+            else
                 imagefilledrectangle($image, 0, $location * $SizeFactor, $img_width, $cur_size * $SizeFactor, ($position % 2 == 0 ? $white : $black));
-            }
-
             $location = $cur_size;
         }
 

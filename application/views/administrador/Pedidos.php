@@ -1,14 +1,14 @@
 <script>
-$(document).ready(function () {
-    <?php
+//$(document).ready(function () {
+//    <?php
     $correcto = $this->session->flashdata('correcto');
     if ($correcto) {
-        ?>
-            MsjCorrecto("<?= $correcto ?>");
-        <?php
+        ?>//
+//            MsjCorrecto("<?= $correcto ?>");
+//        <?php
     }
-    ?>
-});
+    ?>//
+//});
 function ConsultarCliente(texto)
 {
     if(texto.length>2)
@@ -16,15 +16,15 @@ function ConsultarCliente(texto)
         $("#divcliente").load("ConsultarCliente",{"texto":texto});
     }
 }
-function CambioContabilizar(pedido)
-{
-    $.get("CambioContabilizar",{"pedido_id":pedido},function(data){
-        if(data.includes("correcto"))
-        {
-            MsjCorrecto("El pedido se actualizó correctamente.");
-        }
-    });
-}
+//function CambioContabilizar(pedido)
+//{
+//    $.get("CambioContabilizar",{"pedido_id":pedido},function(data){
+//        if(data.includes("correcto"))
+//        {
+//            MsjCorrecto("El pedido se actualizó correctamente.");
+//        }
+//    });
+//}
 
 </script>
 <h1 class="light text-shadow">PEDIDOS</h1><br>
@@ -34,7 +34,7 @@ function CambioContabilizar(pedido)
         <li class="active"><a href="#pedidoscapturados" >Pedidos Importados</a></li>
         <li class="active"><a href="#pedidosliberados" >Pedidos Liberados</a></li>
         <li class="active"><a href="#pedidosentregados" >Pedidos Entregados</a></li>
-        <li class="active"><a href="#importar" >Importar Pedido</a></li>
+<!--        <li class="active"><a href="#importar" >Importar Pedido</a></li>-->
     </ul>
     <div class="frames">
         <div class="frame" id="pedidoscapturados">
@@ -53,7 +53,7 @@ function CambioContabilizar(pedido)
                                 <th>Nota CEDIS</th>
                                 <th>Nota Crédito y Cobranza</th>
                                 <th>Resumen</th>
-                                <th>Acción</th>
+                                <!--<th>Acción</th>-->
                             </tr>
                         </thead>
                         <?php foreach ($ListaPedidosCapturados->result() as $pedido): ?>
@@ -116,8 +116,8 @@ function CambioContabilizar(pedido)
                                         <?php endforeach; ?>
                                     </ul>
                                 </td>
-                                <td class="center">
-                                    <form action="ReimportarPedido" method="POST" enctype="multipart/form-data">
+                                <!--<td class="center">-->
+<!--                                    <form action="ReimportarPedido" method="POST" enctype="multipart/form-data">
                                         <div class="input-control file full-size" data-role="input">
                                             <input type="file" name="file" id="file" accept=".xlsx" class="form-control">
                                             <button class="button"><span class="mif-folder"></span></button>
@@ -127,8 +127,8 @@ function CambioContabilizar(pedido)
                                         <div class="input-control text big-input medium-size">
                                             <button type="submit" class="button primary large-button text-shadow block-shadow-primary">Reimportar</button>
                                         </div>
-                                    </form>
-                                </td>
+                                    </form>-->
+                                <!--</td>-->
                             </tr>
                         <?php endforeach; ?>
                     </table>
@@ -153,8 +153,8 @@ function CambioContabilizar(pedido)
                                 <th>Nota para C y C</th>
                                 <th>Observación de liberación por C y C</th>
                                 <th>Resumen</th>
-                                <th>Contabilizar</th>
-                                <th>Acción</th>
+                                <!--<th>Contabilizar</th>-->
+<!--                                <th>Acción</th>-->
                             </tr>
                         </thead>
                         <?php foreach ($ListaPedidosLiberados->result() as $pedido): ?>
@@ -233,14 +233,14 @@ function CambioContabilizar(pedido)
                                         <?php endforeach; ?>
                                     </ul>
                                 </td>
-                                <td>
+<!--                                <td>
                                     <label class="input-control checkbox">
                                         <input type="checkbox" id="contabilizar<?= $pedido->IdPedidos?>" onchange="CambioContabilizar(<?= $pedido->IdPedidos?>)" <?= $pedido->CheckContabilizar? 'checked':'' ?>>
                                         <span class="check"></span>
                                         <span class="caption"></span>
                                     </label>
-                                </td>
-                                <td class="center">
+                                </td>-->
+<!--                                <td class="center">
                                     <form action="ReimportarPedido" method="POST" enctype="multipart/form-data">
                                         <div class="input-control file full-size" data-role="input">
                                             <input type="file" name="file" id="file" accept=".xlsx" class="form-control">
@@ -252,7 +252,7 @@ function CambioContabilizar(pedido)
                                             <button type="submit" class="button primary large-button text-shadow block-shadow-primary">Reimportar</button>
                                         </div>
                                     </form>
-                                </td>
+                                </td>-->
                             </tr>
                         <?php endforeach; ?>
                     </table>
@@ -371,82 +371,6 @@ function CambioContabilizar(pedido)
                             </tr>
                         <?php endforeach; ?>
                     </table>
-                </div>
-            </div>
-        </div>
-        <div class="frame" id="importar">
-            <div class="panel collapsible" data-role="panel">
-                <div class="heading fg-white bg-Cyan">
-                    <span class="icon mif-cog fg-white bg-darkCyan "></span>
-                    <span class="title fg-white">Selecciona el archivo a importar</span>
-                </div>
-                <div class="content" style="text-align: center;">
-                    <br><br>
-                    <form action="ImportarPedido" method="POST" enctype="multipart/form-data">
-                        <div class="grid">
-                        <div class="row cells1">
-                                <div class="cell">
-                                    <h4>Cliente</h4>
-                                    <div class="input-control full-size text">
-                                        <input type="text" placeholder="Teclea el nombre del cliente" name="" onkeyup="ConsultarCliente(this.value)" id="textocliente">
-                                    </div>
-                                    <input type="hidden" name="cliente" id="inputcliente">
-                                    <div id="divcliente"></div>
-                                </div>
-                            </div>
-                            <div class="row cells2">
-                                <div class="cell">
-                                    <h4>Formato aceptado .XLSX</h4>
-                                    <div class="input-control file full-size" data-role="input">
-                                        <input type="file" name="file" id="file" accept=".xlsx" class="form-control">
-                                        <button class="button"><span class="mif-folder"></span></button>
-                                    </div>
-                                </div>
-                                <div class="cell">
-                                    <h4>Fecha Posible Entrega</h4>
-                                    <div class="input-control text full-size" data-role="datepicker" data-locale="es" data-format="dd/mm/yyyy" id="datepicker">
-                                        <input type="text" id="fechaentrega" value="<?= $hoy ?>" name="fechaentrega">
-                                        <button class="button"><span class="mif-calendar"></span></button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row cells2">
-                                <div class="cell">
-                                    <h4>Serie</h4>
-                                    <div class="input-control full-size text">
-                                        <input type="text" name="serie" id="">
-                                    </div>
-                                </div>
-                                <div class="cell">
-                                    <h4>Folio</h4>
-                                    <div class="input-control full-size text">
-                                        <input type="text" name="folio" id="">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row cells2">
-                                <div class="cell">
-                                    <h4>Nota para crédito y cobranza</h4>
-                                    <div class="input-control full-size text">
-                                        <textarea type="text" name="notacredito"></textarea>
-                                    </div>
-                                </div>
-                                <div class="cell">
-                                    <h4>Nota para CEDIS</h4>
-                                    <div class="input-control full-size text">
-                                        <textarea type="text" name="notacedis"></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row cells2">
-                                <div class="cell colspan2">
-                                    <br><br><br><br>
-                                    <button class="button block-shadow-success text-shadow success big-button">Importar Pedido</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                    <br><br>
                 </div>
             </div>
         </div>

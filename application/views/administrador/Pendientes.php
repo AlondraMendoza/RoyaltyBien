@@ -104,9 +104,9 @@
                                 <td><?php
                                         $ci = &get_instance();
                                         $ci->load->model("modeloventas");
-                                        $usuario = $ci->modeloventas->Usuario($tpa->UsuarioSolicita);
+                                        $usuario1 = $ci->modeloventas->Usuario($tpa->UsuarioSolicita);
                                         ?>
-                                        <?= $usuario->Nombre . " " . $usuario->APaterno ?></td>
+                                        <?= $usuario1->Nombre . " " . $usuario1->APaterno ?></td>
                                 <td><?= $ta->FechaAutoriza ?></td>
                                 <td><?php
                                     $usuario2 = $ci->modeloventas->Usuario($ta->UsuarioAutoriza);

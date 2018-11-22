@@ -123,7 +123,7 @@
                                 <td class="center" colspan="4">
                                     <b style="font-size: 1.3em" class="fg-darkEmerald">Selecciona la clasificación</b><br>
                                     <?php foreach ($clasificaciones->result() as $clasificacion): ?>
-                                        <?php if ($clasificacion->IdClasificaciones < 4) { ?>
+                                        <?php if ($clasificacion->IdClasificaciones < 3) { ?>
                                             <button  id="botonclasificacionacc<?= $clasificacion->IdClasificaciones ?>" class="botonesclasificacionacc button cycle-button <?= $clasificacion->Color ?>" style="width: 100px;height:100px;font-size: 3em" onclick="SeleccionarClasificacionacc(<?= $clasificacion->IdClasificaciones ?>, '<?= $clasificacion->Letra ?>')"><?= $clasificacion->Letra ?></button>
                                             <input type="hidden" id="claselacc">
                                             <input type="hidden" id="letraclaselacc">

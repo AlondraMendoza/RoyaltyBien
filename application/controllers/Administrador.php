@@ -530,7 +530,7 @@ class Administrador extends CI_Controller {
     }
 
     public function ExpedienteTarima() {
-        $infoheader["titulo"] = "Almacén: Royalty Ceramic";
+        $infoheader["titulo"] = "Administrador: Royalty Ceramic";
         $this->load->view('template/headerd', $infoheader);
         $tarima_id = $this->input->post_get('tarima_id', TRUE);
         $infocontent["Nombre"] = "Alondra Mendoza";
@@ -543,7 +543,7 @@ class Administrador extends CI_Controller {
           $infocontent["clasificaciones"] = $this->ModeloClasificador->ClasificacionesProducto($producto_id);
           $infocontent["entarimados"] = $this->ModeloClasificador->EntarimadosProducto($producto_id); */
         $infocontent["codigo"] = $this->Modeloalmacenista->CodigoBarrasTarimaTexto($tarima_id);
-        $this->load->view('almacenista/ExpedienteTarima', $infocontent);
+        $this->load->view('administrador/ExpedienteTarima', $infocontent);
         $this->load->view('template/footerd', '');
     }
 
@@ -877,6 +877,40 @@ class Administrador extends CI_Controller {
             } else {
                 print("Error");
             }
+    }
+    
+    public function BusquedaTarimas() {
+        $infoheader["titulo"] = "Administrador Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $infocontent["Nombre"] = "Alondra Mendoza";
+        $this->load->model("Modeloadministrador");
+        $infocontent["nombre"] = "No se encontró la tarima";
+        $this->load->view('administrador/BusquedaTarimas', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+    
+    public function VerificarClaveTarima2() {
+        $clave = $this->input->post_get('clave', TRUE);
+        $this->load->model("Modeloalmacenista");
+        $fila = $this->Modeloalmacenista->BuscarClaveTarimaExp($clave);
+        $infocontent["nombre"] = "No se encontró la tarima";
+        if ($fila != "No se encontró la tarima") {
+            $infocontent["nombre"] = $fila->Productos;
+            $infocontent["id"] = $fila->IdTarimas;
+        }
+        print json_encode($infocontent);
+    }
+
+    public function Pedidos() {
+        $infoheader["titulo"] = "Administrador: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->model("Modelocedis");
+        $infocontent["hoy"] = date("d/m/Y");
+        $infocontent["ListaPedidosCapturados"] = $this->Modelocedis->ListaCompletaPedidosCapturados();
+        $infocontent["ListaPedidosLiberados"] = $this->Modelocedis->ListaCompletaPedidosLiberados();
+        $infocontent["ListaPedidosEntregados"] = $this->Modelocedis->ListaCompletaPedidosEntregados();
+        $this->load->view('administrador/Pedidos', $infocontent);
+        $this->load->view('template/footerd', '');
     }
 
 

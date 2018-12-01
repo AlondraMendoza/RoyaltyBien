@@ -366,7 +366,7 @@ class Ventas extends CI_Controller {
         }
         return "";
     }
-    public static function CambioContabilizar()
+    public function CambioContabilizar()
     {
         $pedido = $this->input->post_get('pedido_id', TRUE);
         $p = $this->Modelocedis->ObtenerPedido($pedido);

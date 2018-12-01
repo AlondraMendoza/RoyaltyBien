@@ -111,20 +111,20 @@
                         <span class="title">Lista de pedidos solicitados</span>
                     </div>
                     <div class="content" id="listapedidos" style="padding: 15px">
-                        <table class="dataTable border bordered hovered hover" id="tablalistapedidos" data-role="datatable">
+                        <table class="dataTable border bordered hovered hover " id="tablalistapedidos" data-role="datatable">
                             <thead>
-                                <tr>
-                                    <th>Clave</th>
-                                    <th>Fecha registro</th>
-                                    <th>Cliente</th>
-                                    <th>Nota</th>
+                                <tr class="row">
+                                    <th class="cell">Clave</th>
+                                    <th class="cell">Fecha registro</th>
+                                    <th class="cell">Cliente</th>
+                                    <th class="cell">Nota</th>
                                     <th>Resumen</th>
                                 </tr>
                             </thead>
                             <?php foreach ($ListaPedidosCapturados->result() as $pedido): ?>
-                                <tr>
-                                    <td><?= $pedido->IdPedidos ?></td>
-                                    <td><?= $pedido->FechaRegistro ?>
+                                <tr class="row">
+                                    <td class="cell"><?= $pedido->IdPedidos ?></td>
+                                    <td class="cell"><?= $pedido->FechaRegistro ?>
                                         <?php
                                         $ci = &get_instance();
                                         $ci->load->model("modeloventas");
@@ -143,9 +143,9 @@
                                             <?= $textomodifico ?>
                                         </div>
                                     </td>
-                                    <td><?= $cliente->Nombre ?></td>
-                                    <td><?= $pedido->NotaCedis ?></td>
-                                    <td>
+                                    <td style="width:200px"><?= $cliente->Nombre ?></td>
+                                    <td class="cell"><?= $pedido->NotaCedis ?></td>
+                                    <td class="cell">
                                         <?php
                                         $ci = &get_instance();
                                         $ci->load->model("modelocedis");
@@ -243,7 +243,7 @@
                                         }
                                         ?>
                                     </td>
-                                    <td><?= $cliente->Nombre ?></td>
+                                    <td style="width:200px"><?= $cliente->Nombre ?></td>
                                     <td><?= $pedido->NotaCedis ?></td>
                                     <td>
                                         <?php
@@ -358,7 +358,7 @@
                                             <?= $usuarioentrego->Nombre . " " . $usuarioentrego->APaterno ?>
                                         </div>
                                     </td>
-                                    <td><?= $cliente->Nombre ?></td>
+                                    <td style="width:200px"><?= $cliente->Nombre ?></td>
                                     <td><?= $pedido->NotaCedis ?></td>
                                     <td>
                                         <?php

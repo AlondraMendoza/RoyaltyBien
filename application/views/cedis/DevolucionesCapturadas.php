@@ -11,7 +11,8 @@ $ci->load->model("modelocedis");
             <th>Responsable</th>
             <th>Cliente</th>
             <th>Productos</th>
-        </tr>
+            <th>Enviada Clasificación</th>
+        </tr> 
     </thead>
     <?php foreach ($devolucionescapturadas->result() as $dev): ?>
         <tr>
@@ -40,6 +41,24 @@ $ci->load->model("modelocedis");
                     <?php endforeach; ?>
                 </ol>
             </td>
+            <td>
+                <label class="input-control checkbox">
+                    <input type="checkbox" id="enviada<?= $dev->IdDevoluciones?>" onchange="CambioEnviada(<?= $dev->IdDevoluciones?>)" <?= $dev->CheckEnviada? 'checked':'' ?>>
+                    <span class="check"></span>
+                    <span class="caption"></span>
+                </label>
+            </td>
         </tr>
     <?php endforeach; ?>
 </table>
+<script>
+    function CambioEnviada(dev)
+    {
+        $.get("CambioEnviada",{"devolucion_id":dev},function(data){
+            if(data.includes("correcto"))
+            {
+                MsjCorrecto("La devolución se actualizó correctamente.");
+            }
+        });
+    }
+</script>

@@ -782,7 +782,7 @@ class Clasificador extends CI_Controller {
         $fechainicio = $this->input->post_get('fechainicio', TRUE);
         $fechafin = $this->input->post_get('fechafin', TRUE);
         $this->load->model("Modeloclasificador");
-        $infocontent["clasificaciones"] = $this->Modeloclasificador->ConsultarClasificacionesFecha($fechainicio, $fechafin);
+        $infocontent["clasificaciones"] = $this->Modeloclasificador->ConsultarClasificacionesFechaUsuario($fechainicio, $fechafin);
         $this->load->view('clasificador/CargarClasificacionesFecha', $infocontent);
     }
 
@@ -794,7 +794,7 @@ class Clasificador extends CI_Controller {
         $color = $this->input->post_get('color', TRUE);
         $clasificacion = $this->input->post_get('clasificacion', TRUE);
         $this->load->model("Modeloclasificador");
-        $infocontent["clasificaciones"] = $this->Modeloclasificador->ConsultarClasificacionesFechaDetalle($fechainicio, $fechafin, $producto, $modelo, $color, $clasificacion);
+        $infocontent["clasificaciones"] = $this->Modeloclasificador->ConsultarClasificacionesFechaDetalleUsuario($fechainicio, $fechafin, $producto, $modelo, $color, $clasificacion);
         $this->load->view('clasificador/CargarClasificacionesFechaDetalle', $infocontent);
     }
 

@@ -391,7 +391,7 @@ function CambioContabilizar(pedido)
                                         <input type="text" placeholder="Teclea el nombre del cliente" name="" onkeyup="ConsultarCliente(this.value)" id="textocliente">
                                     </div>
                                     <input type="hidden" name="cliente" id="inputcliente">
-                                    <div id="divcliente"></div>
+                                    <div id="divcliente" style="padding:10px"></div>
                                 </div>
                             </div>
                             <div class="row cells2">

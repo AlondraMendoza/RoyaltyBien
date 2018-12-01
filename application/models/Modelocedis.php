@@ -297,6 +297,13 @@ class Modelocedis extends CI_Model {
         $fila = $this->db->get()->row();
         return $fila;
     }
+    public function ObtenerDevolucion($id) {
+        $this->db->select("d.*");
+        $this->db->from("Devoluciones d");
+        $this->db->where("d.IdDevoluciones", $id);
+        $fila = $this->db->get()->row();
+        return $fila;
+    }
 
     public function ListaImagenesPedido($pedidoid) {
         $this->db->select("i.*");
@@ -396,6 +403,13 @@ class Modelocedis extends CI_Model {
         $this->db->join("Personas per", "per.IdPersonas=u.PersonasId");
         $this->db->where("p.IdPedidos", $pedidoid);
         $fila = $this->db->get()->row()->Nombre;
+        return $fila;
+    }
+    public function ObtenerCliente($cliente_id) {
+        $this->db->select("*");        
+        $this->db->from("Clientes c");
+        $this->db->where("c.IdClientes", $cliente_id);
+        $fila = $this->db->get()->row();
         return $fila;
     }
     public function CodigoProducto($producto_id) {

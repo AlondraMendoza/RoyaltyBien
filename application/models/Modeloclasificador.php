@@ -627,8 +627,25 @@ class Modeloclasificador extends CI_Model {
                 . " order by p.CProductosId,p.ModelosId,p.ColoresId, p.ClasificacionesId");
         return $query;
     }
-
-    public function ConsultarClasificacionesFechaDetalle($fechainicio, $fechafin, $cproducto, $modelo, $color, $clasificacion) {
+    public function ConsultarClasificacionesFechaUsuario($fechainicio, $fechafin) {
+        $fechainicio = $this->FechaIngles($fechainicio);
+        $fechafin = $this->FechaIngles($fechafin);
+        $query = $this->db->query("select count(*) as cuantos,cp.Nombre as NombreProducto,m.Nombre as NombreModelo , c.Nombre as NombreColor ,cl.Letra,cl.IdClasificaciones,cp.IdCProductos,m.IdModelos,c.IdColores"
+                . " from HistorialClasificacion hc"
+                . " join Productos p on p.IdProductos=hc.ProductosId"
+                . " join Modelos m on m.IdModelos=p.ModelosId"
+                . " join CProductos cp on cp.IdCProductos=p.CProductosId"
+                . " join Colores c on c.IdColores=p.ColoresId"
+                . " join Clasificaciones cl on cl.IdClasificaciones=p.ClasificacionesId"
+                . " where DATE(hc.FechaClasificacion) BETWEEN " . $fechainicio . ' AND ' . $fechafin . " "
+                . " and p.Activo=1"
+                . " and hc.Activo=1"
+                . " and hc.UsuariosId=".IdUsuario()
+                . " group by p.CProductosId, p.ModelosId, p.ColoresId,p.ClasificacionesId"
+                . " order by p.CProductosId,p.ModelosId,p.ColoresId, p.ClasificacionesId");
+        return $query;
+    }
+    public function ConsultarClasificacionesFechaDetalleUsuario($fechainicio, $fechafin, $cproducto, $modelo, $color, $clasificacion) {
 
         $fechainicio = $this->FechaIngles($fechainicio);
         $fechafin = $this->FechaIngles($fechafin);
@@ -645,6 +662,7 @@ class Modeloclasificador extends CI_Model {
                 . " and m.IdModelos=$modelo"
                 . " and c.IdColores=$color"
                 . " and p.ClasificacionesId=$clasificacion"
+                . " and hc.UsuariosId=".IdUsuario()
                 . " order by p.CProductosId,p.ModelosId,p.ColoresId, p.ClasificacionesId");
         return $query;
     }

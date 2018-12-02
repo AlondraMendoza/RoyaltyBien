@@ -145,7 +145,19 @@ class Clasificador extends CI_Controller {
         $this->Modeloclasificador->GuardarDefectos($defecto1, $puestodefecto1, $defecto2, $puestodefecto2, $idclasificacion);
         print("correcto");
     }
-
+    public function GuardarReClasificacion() {
+        $idclasi = $this->input->post_get('idclasi', TRUE);
+        $idprod = $this->input->post_get('idprod', TRUE);
+        $defecto1 = $this->input->post_get('defecto1', TRUE);
+        $defecto2 = $this->input->post_get('defecto2', TRUE);
+        $puestodefecto2 = $this->input->post_get('puestodefecto2', TRUE);
+        $puestodefecto1 = $this->input->post_get('puestodefecto1', TRUE);
+        $fueratono = $this->input->post_get('fueratono', TRUE);
+        $this->load->model("Modeloclasificador");
+        $idclasificacion = $this->Modeloclasificador->GuardarReClasificacion($idprod, $idclasi, $fueratono);
+        $this->Modeloclasificador->GuardarDefectos($defecto1, $puestodefecto1, $defecto2, $puestodefecto2, $idclasificacion);
+        print("correcto");
+    }
     public function TablaProductos() {
         $horno = $this->input->post_get('horno', TRUE);
         $fecha = $this->input->post_get('fecha', TRUE);

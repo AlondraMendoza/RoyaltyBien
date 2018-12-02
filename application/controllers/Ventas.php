@@ -339,7 +339,7 @@ class Ventas extends CI_Controller {
         $this->load->view('ventas/ConsultarCliente', $infocontent);
     }
     public static function FechaIngles($date) {
-        if ($date) {
+        if ($date) { 
             $fecha = $date;
             $hora = "";
 

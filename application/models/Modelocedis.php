@@ -102,7 +102,17 @@ class Modelocedis extends CI_Model {
             'UsuariosIdEntrada' => IdUsuario(),
             'Activo' => 1
         );
+        
         $this->db->insert('InventariosCedis', $datos);
+        //Historial captura
+        $HistorialCaptura = array(
+            'UsuariosId' => IdUsuario(),
+            'MovimientosProductosId' => 6,
+            'Activo' => 1,
+            'ProductosId' => $idproducto,
+            'Fecha' => date('Y-m-d | H:i:sa')
+        );
+        $this->db->insert('HistorialProducto', $HistorialCaptura);
     }
 
     public function SubirImagenPedido($ruta, $pedidoid) {
@@ -477,6 +487,15 @@ class Modelocedis extends CI_Model {
             $this->db->set("FechaSalida", date('Y-m-d | H:i:sa'));
             $this->db->where("ProductosId", $row->IdProductos);
             $this->db->update("InventariosCedis");
+            //Historial captura
+            $HistorialCaptura = array(
+            'UsuariosId' => IdUsuario(),
+            'MovimientosProductosId' => 8,
+            'Activo' => 1,
+            'ProductosId' => $row->IdProductos,
+            'Fecha' => date('Y-m-d | H:i:sa')
+        );
+            $this->db->insert('HistorialProducto', $HistorialCaptura); 
         }
         /**Obtengo  los subproductos del pedido*/
         foreach ($this->ResumenSubProductosPedidoAgrupados($pedidoid)->result() as $sub) {
@@ -495,6 +514,8 @@ class Modelocedis extends CI_Model {
         $this->db->set("UsuarioEntregaId", IdUsuario());
         $this->db->where("IdPedidos", $pedidoid);
         $this->db->update("Pedidos");
+
+        
     }
 
     public function ListaModelos() {
@@ -663,8 +684,6 @@ class Modelocedis extends CI_Model {
             'FechaCaptura' => date('Y-m-d | H:i:sa')
         );
         $this->db->insert("Devoluciones", $datos);
-
-
         return $this->db->insert_id();
     }
 

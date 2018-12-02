@@ -720,6 +720,72 @@ class Cedis extends CI_Controller
         $this->db->update("Devoluciones");
         print "correcto";
     }
+    public function GenerarDetalleSeleccionadoGlobal() {
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $nombre = $this->input->post_get('nombre', TRUE);
+        $clasificacion = $this->input->post_get('clasificacion', TRUE);
+        $aclasificacion = json_decode($clasificacion);
+        $producto = $this->input->post_get('producto', TRUE);
+        $por = $this->input->post_get('por', TRUE);
+        $aproducto = json_decode($producto);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $amodelo = json_decode($modelo);
+        $color = $this->input->post_get('color', TRUE);
+        $acolor = json_decode($color);
+        $this->load->model("Modeloadministrador");
+        $infocontent["productos"] = $this->Modeloadministrador->GenerarDetalleSeleccionadoGlobal($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $por, $nombre);
+        $this->load->view('cedis/GenerarDetalleSeleccionadoGlobal', $infocontent);
+    }
+    
+     public function GenerarReporteGlobal() {
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $clasificacion = $this->input->post_get('clasificacion', TRUE);
+        $aclasificacion = json_decode($clasificacion);
+        $producto = $this->input->post_get('producto', TRUE);
+        $aproducto = json_decode($producto);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $amodelo = json_decode($modelo);
+        $color = $this->input->post_get('color', TRUE);
+        $acolor = json_decode($color);
+        $defecto = $this->input->post_get('defecto', TRUE);
+        $adefecto = json_decode($defecto);
+        $this->load->model("Modeloadministrador");
+        $infocontent["productos"] = $this->Modeloadministrador->GenerarReporteGlobal($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $adefecto);
+        $this->load->view('cedis/GenerarReporteGlobal', $infocontent);
+    }
+    
+    public function GenerarConcentradoGlobal() {
+        $fechainicio = $this->input->post_get('fechainicio', TRUE);
+        $fechafin = $this->input->post_get('fechafin', TRUE);
+        $clasificacion = $this->input->post_get('clasificacion', TRUE);
+        $aclasificacion = json_decode($clasificacion);
+        $producto = $this->input->post_get('producto', TRUE);
+        $aproducto = json_decode($producto);
+        $modelo = $this->input->post_get('modelo', TRUE);
+        $amodelo = json_decode($modelo);
+        $color = $this->input->post_get('color', TRUE);
+        $acolor = json_decode($color);
+        $por = $this->input->post_get('por', TRUE);
+        $this->load->model("Modeloadministrador");
+        $infocontent["por"] = $por;
+        $infocontent["productos"] = $this->Modeloadministrador->GenerarConcentradoGlobal($fechainicio, $fechafin, $aclasificacion, $aproducto, $amodelo, $acolor, $por);
+        $this->load->view('cedis/GenerarConcentradoGlobal', $infocontent);
+    }
+    public function ReportesGlobal() {
+        $this->load->model("Modeloadministrador");
+        $infoheader["titulo"] = "Administrador: Royalty Ceramic";
+        $infocontent["hoy"] = date("d/m/Y");
+        $infocontent["clasificaciones"] = $this->Modeloadministrador->Clasificaciones();
+        $infocontent["productos"] = $this->Modeloadministrador->Productos();
+        $infocontent["modelos"] = $this->Modeloadministrador->Modelos(0);
+        $infocontent["colores"] = $this->Modeloadministrador->Colores(0);
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->view('administrador/ReportesGlobal', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+    
 }
 
 //Guardar fecha de presalida

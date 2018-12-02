@@ -116,6 +116,7 @@
                                 <tr class="row">
                                     <th class="cell">Clave</th>
                                     <th class="cell">Fecha registro</th>
+                                    <th class="cell">Fecha posible entrega</th>
                                     <th class="cell">Cliente</th>
                                     <th class="cell">Nota</th>
                                     <th>Resumen</th>
@@ -143,6 +144,7 @@
                                             <?= $textomodifico ?>
                                         </div>
                                     </td>
+                                    <td class="center"><?= $pedido->FechaPosibleEntrega ?></td>
                                     <td style="width:200px"><?= $cliente->Nombre ?></td>
                                     <td class="cell"><?= $pedido->NotaCedis ?></td>
                                     <td class="cell">
@@ -197,6 +199,7 @@
                                 <tr>
                                     <th>Clave</th>
                                     <th>Fecha registro</th>
+                                    <th>Fecha posible entrega</th>
                                     <th>Fecha liberación</th>
                                     <th>Cliente</th>
                                     <th>Nota</th>
@@ -226,6 +229,7 @@
                                             <?= $textomodifico ?>
                                         </div>
                                     </td>
+                                    <td class="center"><?= $pedido->FechaPosibleEntrega ?></td>
                                     <td class="center">
                                         <?php
                                         if ($pedido->FechaLiberacion != null) {
@@ -301,6 +305,7 @@
                                 <tr>
                                     <th>Clave</th>
                                     <th>Fecha registro</th>
+                                    <th>Fecha posible entrega</th>
                                     <th>Fecha liberación</th>
                                     <th>Fecha salida</th>
                                     <th>Cliente</th>
@@ -331,6 +336,7 @@
                                             <?= $textomodifico ?>
                                         </div>
                                     </td>
+                                    <td class="center"><?= $pedido->FechaPosibleEntrega ?></td>
                                     <td class="center">
                                         <?php
                                         if ($pedido->FechaLiberacion != null) {

@@ -49,6 +49,7 @@ function CambioContabilizar(pedido)
                             <tr>
                                 <th>Clave</th>
                                 <th>Fecha registro</th>
+                                <th>Fecha posible entrega</th>
                                 <th>Cliente</th>
                                 <th>Nota CEDIS</th>
                                 <th>Nota Crédito y Cobranza</th>
@@ -80,6 +81,7 @@ function CambioContabilizar(pedido)
                                         <?= $textomodifico ?>
                                     </div>
                                 </td>
+                                <td class="center"><?= $pedido->FechaPosibleEntrega ?></td>
                                 <td><?= $cliente->Nombre ?></td>
                                 <td><?= $pedido->NotaCedis ?></td>
                                 <td><?= $pedido->NotaCredito ?></td>
@@ -147,6 +149,7 @@ function CambioContabilizar(pedido)
                             <tr>
                                 <th>Clave</th>
                                 <th>Fecha registro</th>
+                                <th>Fecha posible entrega</th>
                                 <th>Fecha liberación</th>
                                 <th>Cliente</th>
                                 <th>Nota para CEDIS</th>
@@ -179,6 +182,7 @@ function CambioContabilizar(pedido)
                                         <?= $textomodifico ?>
                                     </div>
                                 </td>
+                                <td class="center"><?= $pedido->FechaPosibleEntrega ?></td>
                                 <td class="center">
                                     <?php
                                     if ($pedido->FechaLiberacion != null) {
@@ -271,6 +275,7 @@ function CambioContabilizar(pedido)
                             <tr>
                                 <th>Clave</th>
                                 <th>Fecha registro</th>
+                                <th>Fecha posible entrega</th>
                                 <th>Fecha liberación</th>
                                 <th>Fecha salida</th>
                                 <th>Cliente</th>
@@ -303,6 +308,7 @@ function CambioContabilizar(pedido)
                                         <?= $textomodifico ?>
                                     </div>
                                 </td>
+                                <td class="center"><?= $pedido->FechaPosibleEntrega ?></td>
                                 <td class="center">
                                     <?php
                                     if ($pedido->FechaLiberacion != null) {

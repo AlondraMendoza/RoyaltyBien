@@ -278,7 +278,38 @@ class Modeloclasificador extends CI_Model {
         $this->db->insert('HistorialClasificacion', $datos);
         return $this->db->insert_id();
     }
+    public function GuardarReClasificacion($idprod, $idclasi, $fueratono) {
+        $this->db->set("Clasificado", 1);
+        $this->db->where("IdProductos", $idprod);
+        $this->db->update("Productos");
 
+        //Guardar historial producto
+        $Historial = array(
+            'UsuariosId' => IdUsuario(),
+            'MovimientosProductosId' => 11,
+            'Activo' => 1,
+            'ProductosId' => $idprod);
+        $this->db->set('Fecha', 'NOW()', FALSE);
+        $this->db->insert('HistorialProducto', $Historial);
+        //fin historial
+
+        $datos = array(
+            'ProductosId' => $idprod,
+            'FechaClasificacion' => date('Y-m-d | H:i:sa'),
+            'ClasificacionesId' => $idclasi,
+            'FueraTono' => $fueratono,
+            'UsuariosId' => IdUsuario(),
+            'Activo' => 1
+        );
+        /* Se actualiza la clasificacion actual */
+        $this->db->set("ClasificacionesId", $idclasi);
+        $this->db->where("IdProductos", $idprod);
+        $this->db->update("Productos");
+        /* Fin clasificación actual */
+
+        $this->db->insert('HistorialClasificacion', $datos);
+        return $this->db->insert_id();
+    }
     public function GuardarDefectos($defecto1, $puestodefecto1, $defecto2, $puestodefecto2, $idclasificacion) {
         if ($defecto1 != null && $defecto1 != 0) {
             $datos = array(

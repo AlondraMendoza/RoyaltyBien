@@ -206,6 +206,7 @@ class Modeloalmacenista extends CI_Model {
         $this->db->from('AlmacenSubproductos a');
         $this->db->join('CGriferia c', 'a.CGriferiaId=c.IdCGriferia');
         $this->db->where('a.Activo', 1);
+        $this->db->where('a.UsuariosId',IdUsuario());
         $query = $this->db->get();
         return $query;
     }
@@ -769,7 +770,14 @@ class Modeloalmacenista extends CI_Model {
         $this->db->where("dt.TarimasId", $idTarima);
         $fila = $this->db->get();
         foreach ($fila->result() as $f){
-            $this->GuardarProductoAlmacenP($f->ProductosId);
+            //$this->GuardarProductoAlmacenP($f->ProductosId);
+            $datos = array(
+                'AlmacenesId' => 1,
+                'ProductosId' => $f->ProductosId,
+                'UsuariosIdEntrada' => IdUsuario(),
+                'FechaEntrada' => date('Y-m-d | H:i:sa')
+            );
+            $this->db->insert('InventariosAlmacen', $datos);
         }
     }
     

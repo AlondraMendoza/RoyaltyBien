@@ -375,6 +375,22 @@ class Ventas extends CI_Controller {
         $this->db->update("Pedidos");
         print "correcto";
     }
+    
+    public function InventarioCedisCyX() {
+        $infoheader["titulo"] = "Inventario Cedis: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->model("Modelocedis");
+        $infocontent["modelos"] = $this->Modelocedis->ListaModelos();
+        $this->load->view('ventas/InventarioCedisCyX', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+    
+    public function CargaInfoModeloCyX() {
+        $modelo = $this->input->post_get('modelo_id', TRUE);
+        $this->load->model("Modeloventas");
+        $infocontent["modelo"] = $this->Modeloventas->ObtenerModelo($modelo);
+        $this->load->view('ventas/CargaInfoModeloCyX', $infocontent);
+    }
 }
 ?>
 

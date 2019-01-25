@@ -1,9 +1,7 @@
 <script>
     function Redireccionar(id,codigo)
-    {
-        $("#areaimprimir").html("<img src='barcodeventana?text="+codigo+"'>");
-        $("#areaimprimir").printArea();        
-        
+    {        
+        $("#areaimprimir").printArea();           
     }
 
     function VerificarClave(e) {
@@ -19,6 +17,7 @@
                         $("#des").html("Producto encontrado");
 
                         //metodo para Abrir tabla y agregar datos
+                        $("#areaimprimir").html("<img src='barcodeventana?text="+data.codigo+"'>");
                         var input = '<tr><td class="center">' + data.id + '</td><td class="center">';
                         input += '<b style="font-size: 1.3em" class="fg-darkEmerald">Descripción:</b><br>';
                         input += data.nombre;
@@ -27,6 +26,7 @@
                         input += '<div class="input-control text big-input medium-size" id="botonguardar">';
                         input += '<button class="button success" onclick="Redireccionar(' + data.id + ','+data.codigo+')">Reimprimir código</button></div>';
                         input += '</td></tr>';
+                        
                         $("#tablaproductos").html(input);
                         $("#claveProd").val("");
                         $("#des").html("");

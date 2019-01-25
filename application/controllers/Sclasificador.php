@@ -346,7 +346,7 @@ class Sclasificador extends CI_Controller {
                 $agregado=$producto->NombreProducto." | ".$producto->Modelo." | ".$producto->Color;
             }
             
-            imagettftext($image, 15, 0, 450, $img_height + $text_height + 10, $black, $font, $text."\n".$agregado);
+            imagettftext($image, 22, 0, 440, $img_height + $text_height + 10, $black, $font, $text."\n".$agregado);
 
         }
 

@@ -31,5 +31,5 @@ function CodigoBarras(id, codigo, imgid) {
 	});
 	var canvas = document.getElementById('barcode');
 	var img = canvas.toDataURL('image/png');
-	$(imgid).html('<center><img width="400px" src="' + img + '"></center>');
+	$(imgid).html('<center><img width="200px" src="' + img + '"></center>');
 }

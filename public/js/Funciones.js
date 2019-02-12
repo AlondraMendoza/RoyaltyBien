@@ -14,13 +14,13 @@ function MsjCorrecto(texto) {
 		type: 'success'
 	});
 }
-function CodigoBarras(id, codigo, imgid) {
+function CodigoBarras(id, codigo, imgid, descripcion) {
 	$(id).JsBarcode(codigo, {
 		width: 2,
 		height: 50,
 		quite: 10,
 		format: 'CODE128',
-		displayValue: true,
+		displayValue: false,
 		fontOptions: '',
 		font: 'monospace',
 		textAlign: 'center',
@@ -31,5 +31,13 @@ function CodigoBarras(id, codigo, imgid) {
 	});
 	var canvas = document.getElementById('barcode');
 	var img = canvas.toDataURL('image/png');
-	$(imgid).html('<center><img width="100px" src="' + img + '"></center>');
+	$(imgid).html(
+		'<center><img width="100px" src="' +
+			img +
+			'"> <br><span style="font-size:.3em">' +
+			codigo +
+			'<br>' +
+			descripcion +
+			'</span></center>'
+	);
 }

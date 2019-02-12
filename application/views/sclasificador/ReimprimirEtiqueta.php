@@ -19,7 +19,7 @@ function VerificarClave(e) {
 
                     //metodo para Abrir tabla y agregar datos
 
-                    CodigoBarras("#barcode", data.codigo, "#imgbarcode");
+                    CodigoBarras("#barcode", data.codigo, "#imgbarcode", data.descripcion);
 
 
                     //$("#areaimprimir").html("<img src='barcodeventana?text=" + data.codigo + "'>");

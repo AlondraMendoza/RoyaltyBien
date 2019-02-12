@@ -1,44 +1,70 @@
 <script>
-    function Redireccionar(id,codigo)
-    {        
-        $("#areaimprimir").printArea();           
-    }
+function Redireccionar(id, codigo) {
+    var canvas = document.getElementById("barcode");
+    var img = canvas.toDataURL("image/png");
+    $("#areaimprimir").html('<img width="600px" src="' + img + '" id="imagen">');
+    $("#areaimprimir").printArea();
+}
 
-    function VerificarClave(e) {
-        var code = (e.keyCode ? e.keyCode : e.which);
-        if (code != 13 && code != 16 && code != 17 && code != 18) { //Enter keycode
-            var cadena = $("#claveProd").val();
-            if (cadena.length == 19) {
-                var inicio = 9;
-                var clave = cadena.substring(inicio);
-                $("#des").html("Verificando clave...");
-                $.getJSON("VerificarClaveProdReimprimir", {"clave": clave}, function (data) {
-                    if (data.id != null) {
-                        $("#des").html("Producto encontrado");
+function printContent(el) {
 
-                        //metodo para Abrir tabla y agregar datos
-                        $("#areaimprimir").html("<img src='barcodeventana?text="+data.codigo+"'>");
-                        var input = '<tr><td class="center">' + data.id + '</td><td class="center">';
-                        input += '<b style="font-size: 1.3em" class="fg-darkEmerald">Descripción:</b><br>';
-                        input += data.nombre;
-                        input += '</td>';
-                        input += '<td class="center" id="td' + data.id + '">';
-                        input += '<div class="input-control text big-input medium-size" id="botonguardar">';
-                        input += '<button class="button success" onclick="Redireccionar(' + data.id + ','+data.codigo+')">Reimprimir código</button></div>';
-                        input += '</td></tr>';
-                        
-                        $("#tablaproductos").html(input);
-                        $("#claveProd").val("");
-                        $("#des").html("");
-                        $("#ResultadosBusqueda").fadeIn();
-                    } else
-                    {
-                        $("#des").html("No se encontró producto");
-                    }
-                });
-            }
+}
+
+
+function VerificarClave(e) {
+    var code = (e.keyCode ? e.keyCode : e.which);
+    if (code != 13 && code != 16 && code != 17 && code != 18) { //Enter keycode
+        var cadena = $("#claveProd").val();
+        if (cadena.length == 19) {
+            var inicio = 9;
+            var clave = cadena.substring(inicio);
+            $("#des").html("Verificando clave...");
+            $.getJSON("VerificarClaveProdReimprimir", {
+                "clave": clave
+            }, function(data) {
+                if (data.id != null) {
+                    $("#des").html("Producto encontrado");
+
+                    //metodo para Abrir tabla y agregar datos
+
+                    $("#barcode").JsBarcode(data.codigo, {
+                        width: 2,
+                        height: 50,
+                        quite: 10,
+                        format: "CODE128",
+                        displayValue: true,
+                        fontOptions: "",
+                        font: "monospace",
+                        textAlign: "center",
+                        margin: 3,
+                        fontSize: 15,
+                        backgroundColor: "",
+                        lineColor: "#000"
+                    });
+
+
+                    //$("#areaimprimir").html("<img src='barcodeventana?text=" + data.codigo + "'>");
+                    var input = '<tr><td class="center">' + data.id + '</td><td class="center">';
+                    input += '<b style="font-size: 1.3em" class="fg-darkEmerald">Descripción:</b><br>';
+                    input += data.nombre;
+                    input += '</td>';
+                    input += '<td class="center" id="td' + data.id + '">';
+                    input += '<div class="input-control text big-input medium-size" id="botonguardar">';
+                    input += '<button class="button success" onclick="Redireccionar(' + data.id + ',' + data
+                        .codigo + ')">Reimprimir código</button></div>';
+                    input += '</td></tr>';
+
+                    $("#tablaproductos").html(input);
+                    $("#claveProd").val("");
+                    $("#des").html("");
+                    $("#ResultadosBusqueda").fadeIn();
+                } else {
+                    $("#des").html("No se encontró producto");
+                }
+            });
         }
     }
+}
 </script>
 <h1><b> BÚSQUEDA DE PRODUCTOS</b></h1><br>
 <center>
@@ -73,8 +99,9 @@
             </thead>
         </table>
     </div>
-    <div style="display:none">
-        <div id="areaimprimir">
+    <div id="areaimprimir"></div>
+    <div style="display:block" id="area">
+        <canvas id="barcode" onclick="print()">
 
-        </div>
+        </canvas>
     </div>

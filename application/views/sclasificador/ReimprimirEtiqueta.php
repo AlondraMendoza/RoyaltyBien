@@ -1,15 +1,7 @@
 <script>
 function Redireccionar(id, codigo) {
-    var canvas = document.getElementById("barcode");
-    var img = canvas.toDataURL("image/png");
-    $("#areaimprimir").html('<img width="600px" src="' + img + '" id="imagen">');
-    $("#areaimprimir").printArea();
+    $("#imgbarcode").printArea();
 }
-
-function printContent(el) {
-
-}
-
 
 function VerificarClave(e) {
     var code = (e.keyCode ? e.keyCode : e.which);
@@ -27,20 +19,7 @@ function VerificarClave(e) {
 
                     //metodo para Abrir tabla y agregar datos
 
-                    $("#barcode").JsBarcode(data.codigo, {
-                        width: 2,
-                        height: 50,
-                        quite: 10,
-                        format: "CODE128",
-                        displayValue: true,
-                        fontOptions: "",
-                        font: "monospace",
-                        textAlign: "center",
-                        margin: 3,
-                        fontSize: 15,
-                        backgroundColor: "",
-                        lineColor: "#000"
-                    });
+                    CodigoBarras("#barcode", data.codigo, "#imgbarcode");
 
 
                     //$("#areaimprimir").html("<img src='barcodeventana?text=" + data.codigo + "'>");
@@ -99,9 +78,7 @@ function VerificarClave(e) {
             </thead>
         </table>
     </div>
-    <div id="areaimprimir"></div>
-    <div style="display:block" id="area">
-        <canvas id="barcode" onclick="print()">
-
-        </canvas>
+    <div style="display:none">
+        <div id="imgbarcode"></div>
+        <canvas id="barcode"></canvas>
     </div>

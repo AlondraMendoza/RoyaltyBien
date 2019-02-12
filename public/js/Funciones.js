@@ -32,9 +32,9 @@ function CodigoBarras(id, codigo, imgid, descripcion) {
 	var canvas = document.getElementById('barcode');
 	var img = canvas.toDataURL('image/png');
 	$(imgid).html(
-		'<center><img width="100px" src="' +
+		'<center><img width="400px" src="' +
 			img +
-			'"> <br><span style="font-size:.3em">' +
+			'"> <br><span style="font-size:.5em">' +
 			codigo +
 			'<br>' +
 			descripcion +

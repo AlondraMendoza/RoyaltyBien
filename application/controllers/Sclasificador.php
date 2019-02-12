@@ -45,7 +45,8 @@ class Sclasificador extends CI_Controller {
         $infocontent["nombre"] = "No se encontró el producto";
         if ($fila != "No se encontró el producto") {
             $infocontent["nombre"] = $fila->producto . "/" . $fila->modelo . "/" . $fila->color;
-            $infocontent["id"] = $fila->IdProductos;
+			$infocontent["id"] = $fila->IdProductos;
+			$infocontent["descripcion"] = $this->DescripcionCodigo($fila->IdProductos);
             $infocontent["codigo"] = $this->CodigoBarras($fila->IdProductos);
         }
         print json_encode($infocontent);
@@ -131,7 +132,7 @@ class Sclasificador extends CI_Controller {
     {
         $this->load->model("Modelosclasificador");
         $producto = $this->Modeloclasificador->ObtenerProducto($id);
-        return date_format(date_create($producto->FechaCaptura), 'dmY').str_pad($producto->IdProductos, 10, '0', STR_PAD_LEFT);
+        return date_format(date_create($producto->FechaCaptura), 'dmY')."-".str_pad($producto->IdProductos, 10, '0', STR_PAD_LEFT);
     }
     public function GuardarSubproductosAlmacen() {
     $id = $this->input->post_get('idsubproducto', TRUE);
@@ -222,7 +223,14 @@ class Sclasificador extends CI_Controller {
     $this->load->view('template/headerd', $infoheader);
     $this->load->view('sclasificador/ReimprimirEtiqueta');
     $this->load->view('template/footerd', '');
-    }
+	}
+	public function DescripcionCodigo($id)
+	{
+		$this->load->model("Modeloclasificador");
+        $producto=$this->Modeloclasificador->ObtenerProducto($id);
+		$agregado=$producto->NombreProducto." | ".$producto->Modelo." | ".$producto->Color;
+		return $agregado;
+	}
     public function barcodeventana($filepath = "", $text = "", $size = "100", $orientation = "horizontal", $code_type = "code128", $print = true, $SizeFactor = 4.5) {
         $text = $this->input->post_get('text', TRUE);
         $id = substr($text, 9, 19);
@@ -346,7 +354,7 @@ class Sclasificador extends CI_Controller {
                 $agregado=$producto->NombreProducto." | ".$producto->Modelo." | ".$producto->Color;
             }
             
-            imagettftext($image, 22, 0, 440, $img_height + $text_height + 10, $black, $font, $text."\n".$agregado);
+            imagettftext($image, 40, 0, 300, $img_height + $text_height + 13, $black, $font, $text."\n".$agregado);
 
         }
 
@@ -369,5 +377,6 @@ class Sclasificador extends CI_Controller {
             imagepng($image, $filepath);
             imagedestroy($image);
         }
-    }
+	}
+	
 }

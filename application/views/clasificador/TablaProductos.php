@@ -1,7 +1,7 @@
 <?php
 $cont = 1;
 ?>
-<div style="display:block">
+<div style="display:none">
     <?php foreach ($productos->result() as $producto): ?>
     <canvas id="barcode<?= $producto->IdProductos ?>"></canvas>
     <div id="imgbarcode<?= $producto->IdProductos ?>"></div>

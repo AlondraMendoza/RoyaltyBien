@@ -15,24 +15,25 @@ function MsjCorrecto(texto) {
 	});
 }
 function CodigoBarras(id, codigo, imgid, descripcion) {
-	$(id).JsBarcode(codigo, {
+	/*Parámetro id no se debe enviar con el # sólo el id*/
+	$('#' + id).JsBarcode(codigo, {
 		width: 2,
-		height: 50,
+		height: 20,
 		quite: 10,
 		format: 'CODE128',
 		displayValue: false,
 		fontOptions: '',
 		font: 'monospace',
 		textAlign: 'center',
-		margin: 3,
+		margin: 0,
 		fontSize: 15,
 		backgroundColor: '',
 		lineColor: '#000'
 	});
-	var canvas = document.getElementById('barcode');
+	var canvas = document.getElementById(id);
 	var img = canvas.toDataURL('image/png');
 	$(imgid).html(
-		'<center><img width="400px" src="' +
+		'<center><img width="400px" height="100px" src="' +
 			img +
 			'"> <br><span style="font-size:.5em">' +
 			codigo +

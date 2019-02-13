@@ -71,7 +71,6 @@
             <button class='button success' onclick='GuardarDatos("+i+")'>Imprimir</button></div></td></tr>";
            $("#ListaTabla").append(tr);
         }       
-       
     }
     
     function GuardarDatos(i){
@@ -80,30 +79,25 @@
         var col = Color;
         var clasi = Clasi;
         
-        $.post("Guardado", {"prod": prod, "mod": mod, "col": col, "clasi": clasi},function(data){
-             if (data != null)
+        $.getJSON("Guardado", {"prod": prod, "mod": mod, "col": col, "clasi": clasi},function(data){
+             if (data.codigo != null)
             {
                 $("#tdAccion" + i).html('<span class="mif-checkmark fg-green"></span> Listo');
                 Notificacion("Correcto", "Guardado correctamente", "check", "success");
-                var idprod=data.substring(0,data.indexOf("*"));
-                var fechaformateada=data.substring(data.indexOf("*")+1);
-                var linea="<img src='barcodeventana?text="+fechaformateada+"-"+idprod+"'>";
-                $("#areaimprimir").html(linea); 
-                $("#areaimprimir").printArea(); 
+                CodigoBarras("barcode", data.codigo, "#imgbarcode", data.descripcion);
+                $("#imgbarcode").printArea();
             } else
             {
                 Notificacion("Error", "Ocurrió un error al guardar", "cancel", "alert");
             }
         });
     }
-   
-
-
-
+    
     function Cancelar(){
     location.reload();
        
     }
+    
 </script>
 <h1><b> CAPTURA DE PRODUCTOS</b></h1><br>
 <center>
@@ -213,5 +207,9 @@
 <div style="display: none">
      <div id="areaimprimir"></div>
 </div>
+<div style="display:none">
+        <div id="imgbarcode"></div>
+        <canvas id="barcode"></canvas>
+    </div>
 
 

@@ -339,7 +339,7 @@ class Cedis extends CI_Controller {
         $idprod = $this->Modelocedis->GuardarProductos($prod, $mod, $col, $clasi);
         $producto = $this->Modelocedis->ObtenerProducto($idprod);
         $fechaformateada = date_format(date_create($producto->FechaCaptura), 'dmY');
-        $infocontent["codigo"] = str_pad($idprod, 10, '0', STR_PAD_LEFT) . "-" . $fechaformateada;
+        $infocontent["codigo"] =  $fechaformateada. "-".str_pad($idprod, 10, '0', STR_PAD_LEFT);
         $infocontent["descripcion"] =$this->DescripcionCodigo($idprod);
         print json_encode($infocontent);
     }

@@ -6,6 +6,8 @@
         $("#grafica").html("");
         $("#detalleseleccionado").html("");
     }
+    
+
 </script>
 <center><button onclick="RegresoCriterios()" class="button block-shadow-info text-shadow primary big-button">Regresar a Criterios de Selección</button></center>
 <br>
@@ -24,7 +26,6 @@
             <th>+ Almacén</th>
             <th>- Pedidos</th>
             <th>= Total</th>
-            
         </tr>
     </thead>
     <tbody>
@@ -76,6 +77,7 @@
                 }
                 ?>
                 </td>
+                
                 
             </tr>
             <?php $cont++; ?>

@@ -55,7 +55,7 @@
             <table class="table">
                 <tr>
                     <td class="center" rowspan="3" style="width: 30%">
-                        <img onerror="this.src='<?= base_url() ?>public/imagenes/fotos/user.png'" class="block-shadow-warning" src="<?= base_url() ?>public/imagenes/fotos/<?= $persona->IdPersonas ?>.jpg" height="250px;" width="250px;" title="<?= $persona->NombreCompleto; ?>">
+                        <img onerror="this.src='<?= base_url() ?>public/imagenes/fotos/user.png'" class="block-shadow-warning" src="<?= base_url() ?>public/imagenes/fotos/<?= $persona->IdPersonas ?>.jpg?v=<?= Date(DATE_RFC822, time()); ?>" height="250px;" width="250px;" title="<?= $persona->NombreCompleto; ?>">
                         <br><br>
                     </td>
                 </tr>

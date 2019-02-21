@@ -145,7 +145,19 @@ class Clasificador extends CI_Controller {
         $this->Modeloclasificador->GuardarDefectos($defecto1, $puestodefecto1, $defecto2, $puestodefecto2, $idclasificacion);
         print("correcto");
     }
-
+    public function GuardarReClasificacion() {
+        $idclasi = $this->input->post_get('idclasi', TRUE);
+        $idprod = $this->input->post_get('idprod', TRUE);
+        $defecto1 = $this->input->post_get('defecto1', TRUE);
+        $defecto2 = $this->input->post_get('defecto2', TRUE);
+        $puestodefecto2 = $this->input->post_get('puestodefecto2', TRUE);
+        $puestodefecto1 = $this->input->post_get('puestodefecto1', TRUE);
+        $fueratono = $this->input->post_get('fueratono', TRUE);
+        $this->load->model("Modeloclasificador");
+        $idclasificacion = $this->Modeloclasificador->GuardarReClasificacion($idprod, $idclasi, $fueratono);
+        $this->Modeloclasificador->GuardarDefectos($defecto1, $puestodefecto1, $defecto2, $puestodefecto2, $idclasificacion);
+        print("correcto");
+    }
     public function TablaProductos() {
         $horno = $this->input->post_get('horno', TRUE);
         $fecha = $this->input->post_get('fecha', TRUE);
@@ -782,7 +794,7 @@ class Clasificador extends CI_Controller {
         $fechainicio = $this->input->post_get('fechainicio', TRUE);
         $fechafin = $this->input->post_get('fechafin', TRUE);
         $this->load->model("Modeloclasificador");
-        $infocontent["clasificaciones"] = $this->Modeloclasificador->ConsultarClasificacionesFecha($fechainicio, $fechafin);
+        $infocontent["clasificaciones"] = $this->Modeloclasificador->ConsultarClasificacionesFechaUsuario($fechainicio, $fechafin);
         $this->load->view('clasificador/CargarClasificacionesFecha', $infocontent);
     }
 
@@ -794,7 +806,7 @@ class Clasificador extends CI_Controller {
         $color = $this->input->post_get('color', TRUE);
         $clasificacion = $this->input->post_get('clasificacion', TRUE);
         $this->load->model("Modeloclasificador");
-        $infocontent["clasificaciones"] = $this->Modeloclasificador->ConsultarClasificacionesFechaDetalle($fechainicio, $fechafin, $producto, $modelo, $color, $clasificacion);
+        $infocontent["clasificaciones"] = $this->Modeloclasificador->ConsultarClasificacionesFechaDetalleUsuario($fechainicio, $fechafin, $producto, $modelo, $color, $clasificacion);
         $this->load->view('clasificador/CargarClasificacionesFechaDetalle', $infocontent);
     }
 

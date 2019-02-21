@@ -90,7 +90,7 @@
         var cliente = $("#cliente").val();
         var motivo = $("#motivo").val();
         var responsable = $("#responsable").val();
-        if (cliente == "" || motivo == "" || responsable == "") {
+        if (cliente == 0 || motivo == "" || responsable == "") {
             $.Notify({
                 caption: 'Error',
                 content: 'Es necesario capturar el cliente, responsable y motivo',
@@ -149,7 +149,7 @@
         location.reload(true);
     }
 </script>
-<h1><b> DEVOLUCIONES</b></h1><br>
+<h1 class="light text-shadow">DEVOLUCIONES</h1><br>
 <center>
     <div class="tabcontrol" data-role="tabcontrol" data-open-target="#capturadevolucion" data-save-state="true" id='tabs'>
         <ul class="tabs">
@@ -218,9 +218,12 @@
                             <tbody>
                                 <tr>
                                     <td>
-                                        <div class="input-control text full-size" style="height:80px;font-size: x-large">
-                                            <input type="text" id="cliente">
-                                        </div>
+                                    <div class="input-control full-size text">
+                                        <input type="text" placeholder="Teclea el nombre del cliente" name="" onkeyup="ConsultarCliente(this.value)" id="textocliente">
+                                    </div>
+                                    <input type="hidden" value="0" name="cliente" id="cliente">
+                                    <div id="divcliente" style="padding:10px"></div>
+                                        
                                     </td>
                                     <td>
                                         <div class="input-control text full-size" style="height:80px;font-size: x-large">
@@ -353,4 +356,11 @@
     $(document).ready(function () {
         CargarDevoluciones();
     });
+    function ConsultarCliente(texto)
+    {
+        if(texto.length>2)
+        {
+            $("#divcliente").load("ConsultarCliente",{"texto":texto});
+        }
+    }
 </script>

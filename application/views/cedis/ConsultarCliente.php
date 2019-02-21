@@ -10,7 +10,7 @@
 <script>
 function SeleccionarCliente(id,nombre)
 {
-    $("#inputcliente").val(id);
+    $("#cliente").val(id);
     $("#textocliente").val(nombre);
     $("#divcliente").html("");
 }

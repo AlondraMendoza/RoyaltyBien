@@ -48,7 +48,19 @@ class Modelosclasificador extends CI_Model {
             return "existe";
         }
     }
-
+    public function ObtenerProducto($producto_id) {
+        $this->db->select("p.*,cpm.Imagen as foto,cp.Nombre as NombreProducto,c.Nombre as Color,m.Nombre as Modelo,p.FechaCaptura");
+        $this->db->from("Productos p");
+        $this->db->join("CProductosModelos cpm", "p.ModelosId=cpm.ModelosId AND p.CProductosId=cpm.CProductosId");
+        $this->db->join("CProductos cp", "p.CProductosId=cp.IdCProductos");
+        $this->db->join("Colores c", "p.ColoresId=c.IdColores");
+        $this->db->join("Modelos m", "p.ModelosId=m.IdModelos");
+        $this->db->where("p.IdProductos", $producto_id);
+        // print($this->db->get_compiled_select());
+        $fila = $this->db->get()->row();
+        //print($producto_id);
+        return $fila;
+    }
     public function VerificarProductoTarima($idproducto) {
         $this->db->select("p.IdProductos");
         $this->db->from("DetalleTarimas d");

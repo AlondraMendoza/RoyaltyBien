@@ -339,7 +339,7 @@ class Ventas extends CI_Controller {
         $this->load->view('ventas/ConsultarCliente', $infocontent);
     }
     public static function FechaIngles($date) {
-        if ($date) {
+        if ($date) { 
             $fecha = $date;
             $hora = "";
 
@@ -366,7 +366,7 @@ class Ventas extends CI_Controller {
         }
         return "";
     }
-    public static function CambioContabilizar()
+    public function CambioContabilizar()
     {
         $pedido = $this->input->post_get('pedido_id', TRUE);
         $p = $this->Modelocedis->ObtenerPedido($pedido);
@@ -374,6 +374,22 @@ class Ventas extends CI_Controller {
         $this->db->where("IdPedidos", $pedido);
         $this->db->update("Pedidos");
         print "correcto";
+    }
+    
+    public function InventarioCedisCyX() {
+        $infoheader["titulo"] = "Inventario Cedis: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->model("Modelocedis");
+        $infocontent["modelos"] = $this->Modelocedis->ListaModelos();
+        $this->load->view('ventas/InventarioCedisCyX', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+    
+    public function CargaInfoModeloCyX() {
+        $modelo = $this->input->post_get('modelo_id', TRUE);
+        $this->load->model("Modeloventas");
+        $infocontent["modelo"] = $this->Modeloventas->ObtenerModelo($modelo);
+        $this->load->view('ventas/CargaInfoModeloCyX', $infocontent);
     }
 }
 ?>

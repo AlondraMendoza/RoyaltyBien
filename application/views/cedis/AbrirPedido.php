@@ -192,7 +192,7 @@
 <br><br>
 <center>
 <div class="input-control text big-input medium-size" id="">
-        <a class="button warning" href="ReportePedido?idpedido=<?= $pedido->IdPedidos?>">Descargar Formato</a>
+        <a target="_blank" class="button warning" href="ReportePedido?idpedido=<?= $pedido->IdPedidos?>">Descargar Formato</a>
     </div>
     <div class="input-control text big-input medium-size" id="">
         <a class="button primary" href="CapturaPedidos">Regresar a Pedidos</a>

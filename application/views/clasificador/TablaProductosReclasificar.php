@@ -214,7 +214,7 @@ $cont++;
             Notificacion("Error", "Es necesario que captures la clave del empleado relacionado al defecto 2.", "cancel", "alert");
             return(0);
         }
-        $.post("GuardarClasificacion", {"idclasi": idclasi, "idprod": idprod, "defecto1": iddefecto1, "defecto2": iddefecto2, "puestodefecto1": clavepuesto1, "puestodefecto2": clavepuesto2, "fueratono": fueratono}, function (data) {
+        $.post("GuardarReClasificacion", {"idclasi": idclasi, "idprod": idprod, "defecto1": iddefecto1, "defecto2": iddefecto2, "puestodefecto1": clavepuesto1, "puestodefecto2": clavepuesto2, "fueratono": fueratono}, function (data) {
             if (data == "correcto")
             {
                 Notificacion("Correcto", "La Clasificación se guardó correctamente", "check", "success");

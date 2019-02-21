@@ -153,6 +153,7 @@ class Modeloclasificador extends CI_Model {
     public function ListaTodosColores() {
         $this->db->select('c.Nombre,c.Descripcion,c.IdColores');
         $this->db->from('Colores c');
+        $this->db->where('c.Activo', 1);
         $this->db->Order_by('c.ClaveImportacion');
         $query = $this->db->get();
         return $query;

@@ -78,8 +78,7 @@ function VerificarClave(e) {
             </thead>
         </table>
     </div>
-    <div id="imgbarcode" style=""></div>
     <div style="display:none">
-        
+        <div id="imgbarcode"></div>
         <canvas id="barcode"></canvas>
     </div>

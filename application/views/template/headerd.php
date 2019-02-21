@@ -12,6 +12,7 @@
     <script src="<?= base_url() ?>public/js/Funciones.js"></script>
     <script src="<?= base_url() ?>public/js/jquery.dataTables.min.js"></script>
     <script src="<?= base_url() ?>public/js/JsBarcode.all.min.js" defer></script>
+    <script src="<?= base_url() ?>public/js/jQueryRotate.js" defer></script>
     <script src="<?= base_url() ?>public/js/jquery.PrintArea.js" type="text/JavaScript" language="javascript"></script>
     <title><?= $titulo ?></title>
 </head>

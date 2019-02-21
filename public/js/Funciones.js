@@ -35,14 +35,15 @@ function CodigoBarras(id, codigo, imgid, descripcion) {
 	var img = canvas.toDataURL('image/png');
 	
 	$(imgid).html(
-		'<center><img width="400px" id="imagenconvertida" height="100px" src="' +
+		'<center><img style="" width="400px" id="imagenconvertida" height="100px" src="' +
 			img +
-			'"> <br><span style="font-size:.5em" id="textoetiqueta">' +
+			'"> <br><span style="font-size:.5em;" id="textoetiqueta" >' +
 			codigo +
 			'<br>' +
 			descripcion +
 			'</span></center>'
 	);
-	document.getElementById('imagenconvertida').style.transform = 'rotate(' + 90 + 'deg)';
-	document.getElementById('textoetiqueta').style.transform = 'rotate(' + 90 + 'deg)';
+	//document.getElementById('imagenconvertida').style.transform = 'rotate(' + 90 + 'deg)';
+	$(imgid).rotate(90);
+	
 }

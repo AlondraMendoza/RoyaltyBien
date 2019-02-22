@@ -518,6 +518,27 @@ class Administrador extends CI_Controller {
         $infocontent["modelo"] = $this->Modeloadministrador->ObtenerModelo($modelo);
         $this->load->view('administrador/CargaInfoModelo', $infocontent);
     }
+    public function GuardarMaximo() {
+        $cproducto = $this->input->post_get('cproducto', true);
+        $modelo = $this->input->post_get('modelo', true);
+        $color = $this->input->post_get('color', true);
+        $clasificacion = $this->input->post_get('clasificacion', true);
+        $valor = $this->input->post_get('valor', true);
+        $this->load->model("Modelocedis");
+        $this->Modelocedis->GuardarMaximo($cproducto, $modelo, $color, $clasificacion, $valor);
+        print("correcto");
+    }
+
+    public function GuardarMinimo() {
+        $cproducto = $this->input->post_get('cproducto', true);
+        $modelo = $this->input->post_get('modelo', true);
+        $color = $this->input->post_get('color', true);
+        $clasificacion = $this->input->post_get('clasificacion', true);
+        $valor = $this->input->post_get('valor', true);
+        $this->load->model("Modelocedis");
+        $this->Modelocedis->GuardarMinimo($cproducto, $modelo, $color, $clasificacion, $valor);
+        print("correcto");
+    }
 
     public function InventarioCedisTarimas() {
         $infoheader["titulo"] = "Inventario Cedis Tarimas: Royalty Ceramic";

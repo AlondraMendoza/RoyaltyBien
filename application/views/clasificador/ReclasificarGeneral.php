@@ -26,7 +26,7 @@
         location.reload(true);
     }
 </script>
-<h1 class="light text-shadow">RECLASIFICAR DEVOLUCIÓN</h1><br>
+<h1 class="light text-shadow">RECLASIFICAR GENERAL</h1><br>
 <center>
     <div class="panel warning" data-role="panel" id="panelbusqueda">
         <div class="heading">

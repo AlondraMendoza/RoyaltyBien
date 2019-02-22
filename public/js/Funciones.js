@@ -31,6 +31,7 @@ function CodigoBarras(id, codigo, imgid, descripcion) {
 		lineColor: '#000'
 	});
 	var canvas = document.getElementById(id);
+	
 	var img = canvas.toDataURL('image/png');
 	$(imgid).html(
 		'<center><img width="400px" height="100px" src="' +

@@ -493,7 +493,7 @@ class Modeloclasificador extends CI_Model {
     }
 
     public function HistorialMovimientosProducto($producto_id) {
-        $this->db->select("p.*,h.*,mp.Nombre as Movimiento,CONCAT(per.Nombre,per.APaterno) as Persona");
+        $this->db->select("p.*,h.*,mp.Nombre as Movimiento,CONCAT(per.Nombre,' ',per.APaterno) as Persona");
         $this->db->from("HistorialProducto h");
         $this->db->join("MovimientosProductos mp", "mp.IdMovimientosProductos=h.MovimientosProductosId");
         $this->db->join("Usuarios u", "u.IdUsuarios=h.UsuariosId");
@@ -506,7 +506,7 @@ class Modeloclasificador extends CI_Model {
     }
 
     public function ClasificacionesProducto($producto_id) {
-        $this->db->select("h.*,c.*,CONCAT(per.Nombre,per.APaterno) as Persona");
+        $this->db->select("h.*,c.*,CONCAT(per.Nombre,' ',per.APaterno) as Persona");
         $this->db->from("HistorialClasificacion h");
         $this->db->join("Clasificaciones c", "c.IdClasificaciones=h.ClasificacionesId");
         $this->db->join("Usuarios u", "u.IdUsuarios=h.UsuariosId");
@@ -520,7 +520,7 @@ class Modeloclasificador extends CI_Model {
     }
 
     public function EntarimadosProducto($producto_id) {
-        $this->db->select("h.*,t.*,CONCAT(per.Nombre,per.APaterno) as Persona");
+        $this->db->select("h.*,t.*,CONCAT(per.Nombre,' ',per.APaterno) as Persona");
         $this->db->from("DetalleTarimas h");
         $this->db->join("Tarimas t", "t.IdTarimas=h.TarimasId");
         $this->db->join("Usuarios u", "u.IdUsuarios=h.UsuariosId");
@@ -628,7 +628,7 @@ class Modeloclasificador extends CI_Model {
     }
 
     public function ObtenerReparaciones($producto_id) {
-        $this->db->select("r.*,cr.Nombre as Diagnostico,CONCAT(per.Nombre,per.APaterno) as Persona");
+        $this->db->select("r.*,cr.Nombre as Diagnostico,CONCAT(per.Nombre,' ',per.APaterno) as Persona");
         $this->db->from("Reparaciones r");
         $this->db->join("CReparaciones cr", "cr.IdCReparaciones=r.CReparacionesId");
         $this->db->join("Productos p", "r.ProductosId=p.IdProductos");

@@ -874,6 +874,7 @@ class Administrador extends CI_Controller {
         $infocontent["entarimados"] = $this->Modeloclasificador->EntarimadosProducto($producto_id);
         $infocontent["codigo"] = $this->Modeloclasificador->CodigoBarrasTexto($producto_id);
         $infocontent["reparacion"] = $this->Modeloclasificador->ObtenerReparaciones($producto_id);
+        $infocontent["detdefectos"] = $this->Modelousuario->ObtenerDetalleDefectos($producto_id);
         $this->load->view('administrador/ExpedienteProducto', $infocontent);
         $this->load->view('template/footerd', '');
     }

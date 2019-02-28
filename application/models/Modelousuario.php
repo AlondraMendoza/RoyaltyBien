@@ -139,6 +139,26 @@ class Modelousuario extends CI_Model {
             return null;
         }
     }
+    
+    public function ObtenerDetalleDefectos($producto_id) {
+        $ultimaclasificacion = $this->Clasificacion($producto_id);
+        if ($ultimaclasificacion != null) {
+            $this->db->select("d.Nombre as Defecto, hc.FechaClasificacion as Fecha, a.Nombre as Area, CONCAT(per.Nombre,' ',per.APaterno) as Persona");
+            $this->db->from("HistorialClasificacionDefectos hcd");
+            $this->db->join("Defectos d", "d.IdDefectos=hcd.DefectosId");
+            $this->db->join("HistorialClasificacion hc", "hcd.HistorialClasificacionId= hc.IdHistorialClasificacion");
+            $this->db->join("Puestos p", "hcd.PuestosId=p.IdPuestos");
+            $this->db->join("Areas a", "p.AreasId=a.IdAreas");
+            $this->db->join("Personas per", "p.PersonasId= per.IdPersonas");
+            $this->db->where("hc.ProductosId", $producto_id);
+            $this->db->where("hc.IdHistorialClasificacion", $ultimaclasificacion->IdHistorialClasificacion);
+            //$this->db->order_by("hc.IdHistorialClasificacion", "desc");
+            $fila = $this->db->get();
+            return $fila;
+        } else {
+            return null;
+        }
+    }
 
     public function GuardarSoporte($mensaje) {
         $datos = array(

@@ -17,8 +17,8 @@ function MsjCorrecto(texto) {
 function CodigoBarras(id, codigo, imgid, descripcion) {
 	/*Parámetro id no se debe enviar con el # sólo el id*/
 	$('#' + id).JsBarcode(codigo, {
-		width: 2,
-		height: 20,
+		width: 1,
+		height: 10,
 		quite: 10,
 		format: 'CODE128',
 		displayValue: false,
@@ -34,7 +34,7 @@ function CodigoBarras(id, codigo, imgid, descripcion) {
 	
 	var img = canvas.toDataURL('image/png');
 	$(imgid).html(
-		'<center><img width="400px" height="100px" src="' +
+		'<center><img width="100%" src="' +
 			img +
 			'"> <br><span style="font-size:.5em">' +
 			codigo +

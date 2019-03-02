@@ -935,5 +935,24 @@ class Administrador extends CI_Controller {
         $this->load->view('template/footerd', '');
     }
 
+    public function AlmacenSubproductos() {
+        $infoheader["titulo"] = "Almacén de SubProductos: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $infocontent["Nombre"] = "Alondra Mendoza";
+        $this->load->model("Modeloalmacenista");
+        //$infocontent["subproductosdetalle"] = $this->Modeloalmacenista->ListarSubproductosDetalle();
+        $infocontent["subproductosunicos"] = $this->Modeloalmacenista->ListarSubproductosUnicos();
+        $this->load->view('administrador/AlmacenSubproductos', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+    
+    public function MaximosMinimos() {
+        $infoheader["titulo"] = "Máximos y Mínimos: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $this->load->model("Modelocedis");
+        $infocontent["modelos"] = $this->Modelocedis->ListaModelos();
+        $this->load->view('administrador/MaximosMinimos', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
 
 }

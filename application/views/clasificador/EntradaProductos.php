@@ -59,8 +59,9 @@
                 var idtarima = data;
 
                 var codigob = "<?= date_format(date_create($hoyingles), 'dmY') . '*' ?>" + pad(idtarima, 10);
-                var imagen = "barcodeventana?text=" + codigob + "";
-                $("#etiquetatarima").html("<img src=" + imagen + ">");
+                //var imagen = "barcodeventana?text=" + codigob + "";
+				//$("#etiquetatarima").html("<img src=" + imagen + ">");
+				CodigoBarras("barcode", codigob, "#imgbarcode", "Tarima "+data);
                 var cuantos = $("input[name='IDS[]']:checked").length;
                 $("input[name='IDS[]']:checked").each(function (index, item) {
                     var id = $(this).val();
@@ -88,7 +89,7 @@
                     });
                     if (index == cuantos - 1)
                     {
-                        $("#etiquetatarima").printArea();
+                        $("#imgbarcode").printArea();
                     }
                 });
             });
@@ -105,6 +106,10 @@
 </script>
 <h1><b> CAPTURA DE TARIMAS</b></h1><br>
 <center>
+	<div style="display:block">
+        <div id="imgbarcode"></div>
+        <canvas id="barcode"></canvas>
+    </div>
     <div style="display: none">
         <div id="etiquetatarima"></div>
     </div>

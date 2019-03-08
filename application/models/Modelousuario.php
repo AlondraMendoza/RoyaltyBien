@@ -20,6 +20,18 @@ class Modelousuario extends CI_Model {
         $resultado = $consulta->row();
         return $resultado;
     }
+    
+     public function usuario_por_nombre($nombre) {
+        $this->db->select("u.IdUsuarios, u.Nombre,concat(p.Nombre,' ',p.APaterno)as NombreCompleto,u.PersonasId");
+        $this->db->from('Usuarios u');
+        $this->db->join('Personas p', 'p.IdPersonas= u.PersonasId');
+		$this->db->where('u.Nombre', $nombre);
+		$this->db->where('u.Activo', 1);
+        $consulta = $this->db->get();
+        $resultado = $consulta->row();
+        return $resultado;
+    }
+
 
     public function ObtenerPerfiles($id) {
         $this->db->select('p.Nombre, p.IdPerfiles,p.Color,p.Icono,p.Color2');

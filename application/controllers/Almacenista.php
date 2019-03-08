@@ -565,9 +565,106 @@ class Almacenista extends CI_Controller {
             } else {
                 print("Error");
             }
-        
-        
             
     }
+    
+    public function CapturaDevoluciones() {
+        $infoheader["titulo"] = "Devoluciones: Royalty Ceramic";
+        $this->load->view('template/headerd', $infoheader);
+        $infocontent["Nombre"] = "Alondra Mendoza";
+        $infocontent["hoy"] = date("d/m/Y");
+        $this->load->view('almacenista/CapturaDevoluciones', $infocontent);
+        $this->load->view('template/footerd', '');
+    }
+    
+    public function BuscarSubproducto() {
+        $texto = $this->input->post_get('texto', true);
+        $id = $this->input->post_get('id', true);
+        $this->load->model("Modeloalmacenista");
+        $encontrados = $this->Modeloalmacenista->BuscarSubproducto($texto);
+        $infocontent["encontrados"] = $encontrados;
+        $infocontent["id"] = $id;
+        $this->load->view('almacenista/BuscarSubproducto', $infocontent);
+    }
+    
+    public function GuardarSubproducto2() {
+        $detalle_id = $this->input->post_get("detalle_id");
+        $subproducto_id = $this->input->post_get("subproducto_id");
+        $this->load->model("Modeloalmacenista");
+        $iddetalle = $this->Modeloalmacenista->GuardarSubproducto2($subproducto_id, $detalle_id);
+        print($iddetalle);
+    }
+    
+    public function GuardarDevolucion() {
+        $cliente = $this->input->post_get('cliente', true);
+        $motivo = $this->input->post_get('motivo', true);
+        $responsable = $this->input->post_get('responsable', true);
+        $this->load->model("Modeloalmacenista");
+        $iddevolucion = $this->Modeloalmacenista->GuardarDevolucion($cliente, $motivo, $responsable);
+        print($iddevolucion);
+    }
+    
+    public function GuardarDetalleDevolucion() {
+        $id_producto = $this->input->post_get('producto_id', true);
+        $id_devolucion = $this->input->post_get('devolucion_id', true);
+        $this->load->model("Modelosclasificador");
+        $iddetalle = $this->Modelosclasificador->GuardarDetalleDevolucion($id_producto, $id_devolucion);
+        print($iddetalle);
+    }
 
+    public function ConsultarCliente() {
+        $texto = $this->input->post_get('texto', TRUE);
+        $this->load->model("Modeloventas");
+        $infocontent["clientes"] = $this->Modeloventas->ConsultarCliente($texto);
+        $this->load->view('almacenista/ConsultarCliente', $infocontent);
+    }
+    
+    public function GuardarProductoCedis() {
+        $idproducto = $this->input->post_get('idproducto', true);
+        $this->load->model("Modelocedis");
+        if ($this->Modelocedis->ProductoEnCedis($idproducto)) {
+            print("Existe");
+        } else {
+            $this->Modelocedis->GuardarProductoCedis($idproducto);
+            print("Correcto");
+        }
+    }
+    
+    public function DevolucionesCapturadas() {
+        $fechainicio = $this->input->post_get('fechainicio', true);
+        $fechafin = $this->input->post_get('fechafin', true);
+        $this->load->model("Modeloalmacenista");
+        $infocontent["devolucionescapturadas"] = $this->Modeloalmacenista->DevolucionesCapturadas($fechainicio, $fechafin);
+        $this->load->view('almacenista/DevolucionesCapturadas', $infocontent);
+    }
+    
+    
+    public function VerificarClaveProd2() {
+        $clave = $this->input->post_get('clave', true);
+        $this->load->model("Modelocedis");
+        $fila = $this->Modelocedis->BuscarClaveProducto($clave);
+        $infocontent["nombre"] = "";
+        switch ($fila) {
+            case "No se encontró el producto":
+                $infocontent["nombre"] = "No se encontró el producto";
+                break;
+            case "No se marcó salida de almacén":
+                $infocontent["nombre"] = "No se marcó salida de almacén";
+                break;
+            default:
+                $infocontent["nombre"] = $fila->producto . "/" . $fila->modelo . "/" . $fila->color;
+                $infocontent["id"] = $fila->IdProductos;
+        }
+        print json_encode($infocontent);
+    }
+    
+    public function CambioEnviada() {
+        $dev = $this->input->post_get('devolucion_id', TRUE);
+        $this->load->model("Modeloalmacenista");
+        $d = $this->Modeloalmacenista->ObtenerDevolucion($dev);
+        $this->db->set("CheckEnviada", !$d->CheckEnviada);
+        $this->db->where("IdDevoluciones", $dev);
+        $this->db->update("Devoluciones");
+        print "correcto";
+    }
 }

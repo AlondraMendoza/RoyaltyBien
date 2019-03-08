@@ -106,7 +106,7 @@
 </script>
 <h1><b> CAPTURA DE TARIMAS</b></h1><br>
 <center>
-	<div style="display:block">
+	<div style="display:none">
         <div id="imgbarcode"></div>
         <canvas id="barcode"></canvas>
     </div>

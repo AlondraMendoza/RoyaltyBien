@@ -17,7 +17,7 @@ function MsjCorrecto(texto) {
 function CodigoBarras(id, codigo, imgid, descripcion) {
 	/*Parámetro id no se debe enviar con el # sólo el id*/
 	$('#' + id).JsBarcode(codigo, {
-		width: 2,
+		width: 4,
 		height: 20,
 		quite: 10,
 		format: 'CODE128',
@@ -25,16 +25,20 @@ function CodigoBarras(id, codigo, imgid, descripcion) {
 		fontOptions: '',
 		font: 'monospace',
 		textAlign: 'center',
-		margin: 0,
-		fontSize: 15,
+		marginTop: 0, // Default
+		marginBottom: 0, // Default
+		marginLeft: 0, // Default
+		marginRight: 0, // Default
+		fontSize: 1,
 		backgroundColor: '',
 		lineColor: '#000'
 	});
 	var canvas = document.getElementById(id);
-	
+
 	var img = canvas.toDataURL('image/png');
+	$(imgid).css('margin-top', '0px');
 	$(imgid).html(
-		'<center><img width="400px" height="100px" src="' +
+		'<center style="border:red solid 1px"><img style="width:50%;height:20px" src="' +
 			img +
 			'"> <br><span style="font-size:.5em">' +
 			codigo +

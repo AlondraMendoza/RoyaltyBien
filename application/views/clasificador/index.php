@@ -219,12 +219,16 @@
         </div>
     </div>
     <br><br><br><br><br><br>
+	<div style="display:none">
+        <canvas id="barcode"></canvas>
+        <div id="imgbarcode"></div>
+    </div>
 </center>
-<iframe src="" id="imprimeme" width="100%" height="100%" style="display:none" ></iframe>
+
 
 <input type="hidden" id="colorseleccionado">
 
-<div style="display:none">
+<div style="display:block">
     <div id="etiquetaaccesorio"></div>
 </div>
 <script>
@@ -253,13 +257,13 @@
         if ($('#fueratonoaccesorio').prop('checked')) {
             fueratonoaccesorio = 1;
         }
-        $.post("GuardarAccesorios", {"fueratono": fueratonoaccesorio, "iddefecto1": iddefecto1, "iddefecto2": iddefecto2, "clavepuesto1": clavepuesto1, "clavepuesto2": clavepuesto2, "colorseleccionado": colorseleccionado, "clasificacionseleccionada": clasi}, function (data) {
-            var codigob = "<?= date_format(date_create($hoyingles), 'dmY') . '-' ?>" + pad(data, 10);
-            var imagen = "barcodeventana?text=" + codigob + "";
-            $("#etiquetaaccesorio").html("<img src=" + imagen + ">");
+        $.getJSON("GuardarAccesorios", {"fueratono": fueratonoaccesorio, "iddefecto1": iddefecto1, "iddefecto2": iddefecto2, "clavepuesto1": clavepuesto1, "clavepuesto2": clavepuesto2, "colorseleccionado": colorseleccionado, "clasificacionseleccionada": clasi}, function (data) {
+            var codigob = "<?= date_format(date_create($hoyingles), 'dmY') . '-' ?>" + pad(data.idproducto, 10);
+            //var imagen = "barcodeventana?text=" + codigob + "";
+            //$("#etiquetaaccesorio").html("<img src=" + imagen + ">");
             Notificacion("Correcto", "El accesorio se guardó correctamente", "check", "success");
-            $("#etiquetaaccesorio").printArea();
-
+			CodigoBarras("barcode", codigob, "#imgbarcode", data.descripcion);
+            $("#imgbarcode").printArea();
             //$("#imprimeme").attr("src", "EnviarTicket?codigo=<?= date_format(date_create($hoyingles), 'dmY') . "-" ?>" + pad(data, 10) + "&producto_id=" + data);
         });
     }

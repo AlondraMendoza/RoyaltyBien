@@ -636,7 +636,13 @@ class Clasificador extends CI_Controller {
 //        $this->autoprint->AutoPrint();
 //        $this->autoprint->Output();
     }
-
+	public function DescripcionCodigo($id)
+	{
+		$this->load->model("Modeloclasificador");
+        $producto=$this->Modeloclasificador->ObtenerProducto($id);
+		$agregado=$producto->NombreProducto." | ".$producto->Modelo." | ".$producto->Color;
+		return $agregado;
+	}
     public function GuardarAccesorios() {
         $fueratono = $this->input->post_get('fueratonoaccesorio', TRUE);
         $iddefecto1 = $this->input->post_get('iddefecto1', TRUE);
@@ -646,10 +652,14 @@ class Clasificador extends CI_Controller {
         $clavepuesto2 = $this->input->post_get('clavepuesto2', TRUE);
         $idclasi = $this->input->post_get('clasificacionseleccionada', TRUE);
         $this->load->model("Modeloclasificador");
-        $idproducto = $this->Modeloclasificador->GuardarAccesorio($colorseleccionado);
+		
+		$idproducto=$this->Modeloclasificador->GuardarAccesorio($colorseleccionado);
+		$infocontent["idproducto"] = $idproducto;
+		$infocontent["descripcion"] = $this->DescripcionCodigo($idproducto);
         $idclasificacion = $this->Modeloclasificador->GuardarClasificacion($idproducto, $idclasi, $fueratono);
-        $this->Modeloclasificador->GuardarDefectos($iddefecto1, $clavepuesto1, $iddefecto2, $clavepuesto2, $idclasificacion);
-        print($idproducto);
+		$this->Modeloclasificador->GuardarDefectos($iddefecto1, $clavepuesto1, $iddefecto2, $clavepuesto2, $idclasificacion);
+		print json_encode($infocontent);
+        
     }
 
     public function EntradaProductos() {

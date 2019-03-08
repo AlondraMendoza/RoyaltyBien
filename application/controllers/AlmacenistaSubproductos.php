@@ -12,7 +12,7 @@ class AlmacenistaSubproductos extends CI_Controller {
             redirect('usuario/index');
         }
         $id = $this->session->userdata('id');
-        if (!$this->Modelousuario->TienePerfil($id, 11)) {
+        if (!$this->Modelousuario->TienePerfil($id, 5)) {
             redirect('usuario/logueado');
         }
         $this->load->database();

@@ -14,12 +14,12 @@ class Usuario extends CI_Controller {
         $this->load->model("Modelousuario");
         if (EstaLogueado()) {
             redirect('usuario/logueado');
-        }
-        $infoheader["titulo"] = "Royalty Ceramic";
-        $this->load->view('template/headerLogin', $infoheader);
-        $data = array();
-        $this->load->view('usuario/iniciar_sesion', $data);
-        $this->load->view('template/footerLogin', '');
+		}
+			$infocontent["validacion"]="";
+			$infoheader["titulo"] = "Royalty Ceramic";
+        	$this->load->view('template/headerLogin', $infoheader);
+        	$this->load->view('usuario/iniciar_sesion',$infocontent);
+        	$this->load->view('template/footerLogin', '');
     }
 
     public function iniciar_sesion_post() {
@@ -32,7 +32,7 @@ class Usuario extends CI_Controller {
             if ($usuario) {
                 $usuario_data = array(
                     'id' => $usuario->IdUsuarios,
-                    'nombre' => $usuario->Nombre,
+					'nombre' => $usuario->Nombre,
                     'persona' => $usuario->NombreCompleto,
                     'perfiles' => $this->Modelousuario->ObtenerPerfiles($usuario->IdUsuarios),
                     'idpersona' => $usuario->PersonasId,
@@ -41,7 +41,11 @@ class Usuario extends CI_Controller {
                 $this->session->set_userdata($usuario_data);
                 redirect('usuario/logueado');
             } else {
-                redirect('usuario/index');
+				$infocontent["validacion"] = "El usuario y/o contraseña incorrectos";
+				$infoheader["titulo"] = "Royalty Ceramic";
+				$this->load->view('template/headerLogin', $infoheader);
+				$this->load->view('usuario/iniciar_sesion', $infocontent);
+				$this->load->view('template/footerLogin', '');
             }
         } else {
             redirect('usuario/index');

@@ -851,14 +851,14 @@ class Modelocedis extends CI_Model {
         $this->db->insert('HistorialProducto', $Historial);
         //Entrada al inventario
         $this->GuardarProductoCedis($idprod);
-        $HistorialEntrada = array(
-            'UsuariosId' => IdUsuario(),
-            'MovimientosProductosId' => 6,
-            'Activo' => 1,
-            'ProductosId' => $idprod,
-            'Fecha' => date('Y-m-d | H:i:sa')
-        );
-        $this->db->insert('HistorialProducto', $HistorialEntrada);
+//        $HistorialEntrada = array(
+//            'UsuariosId' => IdUsuario(),
+//            'MovimientosProductosId' => 6,
+//            'Activo' => 1,
+//            'ProductosId' => $idprod,
+//            'Fecha' => date('Y-m-d | H:i:sa')
+//        );
+        //$this->db->insert('HistorialProducto', $HistorialEntrada);
         return $idprod;
     }
     

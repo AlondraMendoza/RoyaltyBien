@@ -66,7 +66,7 @@
                         <table class="table">
                             <tr>
                                 <td style="width: 50%" class="center">
-                                    <b style="" class="fg-darkEmerald">Selecciona la fecha de quemado:</b><br>
+                                    <b style="" class="fg-darkEmerald">Selecciona la fecha de captura:</b><br>
                                     <div class="input-control text full-size" style="height:80px;" data-role="datepicker" data-locale="es" data-format="dd/mm/yyyy" id="datepicker" data-on-select="CargarHornos(d)">
                                         <input type="text" id="fecha" value="<?= $hoy ?>">
                                         <button class="button" style="height: 80px"><span class="mif-calendar"></span></button>

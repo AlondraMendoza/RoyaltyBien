@@ -125,6 +125,7 @@
                             <li><a href="#clasificaciones">Clasificaciones</a></li>
                             <li><a href="#entarimado">Entarimado</a></li>
                             <li><a href="#reparaciones">Reparaciones</a></li>
+                            <li><a href="#defectos">Defectos</a></li>
                         </ul>
                         <div class="frames">
                             <div class="frame" id="historial">
@@ -206,9 +207,29 @@
                                     <?php endforeach; ?>
                                 </table>
                             </div>
+                            <div class="frame" id="defectos">
+                                <table class="table">
+                                    <tr>
+                                        <th>Fecha</th>
+                                        <th>Defecto</th>
+                                        <th>Área</th>
+                                        <th>Responsable</th>
+                                    </tr>
+                                    <?php if($detdefectos!=null){ ?>
+                                    <?php foreach ($detdefectos->result() as $dd): ?>
+                                        <tr>
+                                            <td class="center"><?= $dd->Fecha ?></td>
+                                            <td class="center"><?= $dd->Defecto ?></td>
+                                            <td class="center"><?= $dd->Area ?></td>
+                                            <td class="center"><?= $dd->Persona ?></td>
+                                        </tr>
+                                    <?php endforeach; ?> <?php } ?>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
+            </div>
         </center>
     </div>
 </center><br><br><br>

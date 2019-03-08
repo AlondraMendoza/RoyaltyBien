@@ -43,12 +43,12 @@ $ci->load->model("modeloalmacenista");
                 <?php foreach ($subproductosdetalle->result() as $sd): ?>
                     <?php $tipo = $ci->modeloalmacenista->Tipo($sd->IdAlmacenSubproductos); ?>
                     <?php $fecha = $ci->modeloalmacenista->Fecha($sd->IdAlmacenSubproductos); ?>
-                    <?php $nombre = $ci->modeloalmacenista->NombreUsuario($sd->UsuariosId); ?>
+                    <?php $nombre = $ci->modeloalmacenista->NombreUsuario($sd->Usuario); ?>
                     <tr>
                         <td><?= $sd->Clave ?></td>
                         <td><?= $sd->Descripcion ?></td>
                         <td><?= $sd->Cantidad ?></td>
-                        <td><?= $nombre->Nombre ?> <?= $nombre->APaterno ?></td>
+                        <td><?= $nombre->Nombre ?> <?= $nombre->APaterno?></td>
                         <td><?= $fecha ?></td>
                         <td><?= $tipo ?></td>
                     </tr>

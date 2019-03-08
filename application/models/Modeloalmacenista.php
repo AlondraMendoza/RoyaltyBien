@@ -202,7 +202,7 @@ class Modeloalmacenista extends CI_Model {
     }
 
     public function ListarSubproductosDetalle() {
-        $this->db->select('*');
+        $this->db->select('*, a.UsuariosId as Usuario');
         $this->db->from('AlmacenSubproductos a');
         $this->db->join('CGriferia c', 'a.CGriferiaId=c.IdCGriferia');
         $this->db->where('a.Activo', 1);

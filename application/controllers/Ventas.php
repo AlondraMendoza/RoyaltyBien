@@ -180,10 +180,6 @@ class Ventas extends CI_Controller {
                 /* Actualizo el usuario que modificó pedido */
                 $this->db->set("UsuarioModificaId", IdUsuario());
                 $this->db->where("IdPedidos", $idpedido);
-				$this->db->update("Pedidos");
-				/* Actualizo el estatus del pedido*/
-				$this->db->set("Estatus", "Solicitado");
-                $this->db->where("IdPedidos", $idpedido);
                 $this->db->update("Pedidos");
                 foreach ($reader->getSheetIterator() as $sheet) {
                     // Numero de filas en el documento EXCEL

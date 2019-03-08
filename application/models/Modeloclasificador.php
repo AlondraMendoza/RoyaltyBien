@@ -17,7 +17,7 @@ class Modeloclasificador extends CI_Model {
         $this->db->select('*');
         $this->db->from('Productos p');
         $this->db->join('Hornos h', 'h.idhornos=p.hornosid');
-        $this->db->where('DATE(p.FechaCaptura)', $dia);
+        $this->db->where('DATE(p.FechaQuemado)', $dia);
         $this->db->where('h.Activo', 1);
         $this->db->where('p.Activo', 1);
         $this->db->where('p.Clasificado', 0);
@@ -59,7 +59,7 @@ class Modeloclasificador extends CI_Model {
         $this->db->select('h.*');
         $this->db->from('Productos p');
         $this->db->join('Hornos h', 'h.idhornos=p.hornosid');
-        $this->db->where('DATE(p.FechaCaptura)', $dia);
+        $this->db->where('DATE(p.FechaQuemado)', $dia);
         $this->db->where('h.Activo', 1);
         $this->db->where('p.Activo', 1);
         $this->db->where('p.Clasificado', 0);
@@ -73,7 +73,7 @@ class Modeloclasificador extends CI_Model {
         $this->db->select('*');
         $this->db->from('Productos p');
         $this->db->join('CProductos cp', 'cp.IdCProductos=p.CProductosId');
-        $this->db->where('DATE(p.FechaCaptura)', $dia);
+        $this->db->where('DATE(p.FechaQuemado)', $dia);
         $this->db->where('cp.Activo', 1);
         $this->db->where('p.Activo', 1);
         $this->db->where('p.HornosId', $horno);
@@ -87,7 +87,7 @@ class Modeloclasificador extends CI_Model {
         $this->db->select('*');
         $this->db->from('Productos p');
         $this->db->join('CProductos cp', 'cp.IdCProductos=p.CProductosId');
-        $this->db->where('DATE(p.FechaCaptura)', $this->FechaIngles($dia));
+        $this->db->where('DATE(p.FechaQuemado)', $this->FechaIngles($dia));
         $this->db->where('cp.Activo', 1);
         $this->db->where('p.Activo', 1);
         $this->db->where('p.HornosId', $horno);
@@ -100,7 +100,7 @@ class Modeloclasificador extends CI_Model {
     public function ProductosPendientesModelos($dia, $horno, $cprod, $modelo) {
         $this->db->select('*');
         $this->db->from('Productos p');
-        $this->db->where('DATE(p.FechaCaptura)', $this->FechaIngles($dia));
+        $this->db->where('DATE(p.FechaQuemado)', $this->FechaIngles($dia));
         $this->db->where('p.Activo', 1);
         $this->db->where('p.HornosId', $horno);
         $this->db->where('p.CProductosId', $cprod);
@@ -124,7 +124,7 @@ class Modeloclasificador extends CI_Model {
         $this->db->select('m.Nombre,p.ModelosId,p.CProductosId,p.HornosId');
         $this->db->from(' Productos p ');
         $this->db->join(' Modelos m', 'm.IdModelos=p.ModelosId ');
-        $this->db->where(' DATE(p.FechaCaptura) ', $dia);
+        $this->db->where(' DATE(p.FechaQuemado) ', $dia);
         $this->db->where(' p.CProductosId ', $cprod);
         $this->db->where(' p.Activo ', 1);
         $this->db->where(' p.HornosId ', $horno);
@@ -139,7 +139,7 @@ class Modeloclasificador extends CI_Model {
         $this->db->select('c.Nombre,c.Descripcion,p.ModelosId,p.CProductosId,p.HornosId,c.IdColores,p.HornosId');
         $this->db->from('Productos p');
         $this->db->join('Colores c', 'c.IdColores=p.ColoresId');
-        $this->db->where('DATE(p.FechaCaptura)', $dia);
+        $this->db->where('DATE(p.FechaQuemado)', $dia);
         $this->db->where('p.CProductosId', $cprod);
         $this->db->where('p.ModelosId', $mod);
         $this->db->where('p.Activo', 1);
@@ -162,7 +162,7 @@ class Modeloclasificador extends CI_Model {
     public function ProductosPendientesColores($dia, $horno, $cprod, $modelo, $color) {
         $this->db->select('*');
         $this->db->from('Productos p');
-        $this->db->where('DATE(p.FechaCaptura)', $this->FechaIngles($dia));
+        $this->db->where('DATE(p.FechaQuemado)', $this->FechaIngles($dia));
         $this->db->where('p.Activo', 1);
         $this->db->where('p.HornosId', $horno);
         $this->db->where('p.Clasificado ', 0);
@@ -180,7 +180,7 @@ class Modeloclasificador extends CI_Model {
         $this->db->join('Modelos m', "m.IdModelos=p.ModelosId");
         $this->db->join('CProductos cp', "cp.IdCProductos=p.CProductosId");
         $this->db->join('Colores c', "c.IdColores=p.ColoresId");
-        $this->db->where('DATE(p.FechaCaptura)', $dia);
+        $this->db->where('DATE(p.FechaQuemado)', $dia);
         $this->db->where('p.Activo', 1);
         $this->db->where('p.HornosId', $horno);
         $this->db->where('p.Clasificado ', 0);
@@ -493,7 +493,7 @@ class Modeloclasificador extends CI_Model {
     }
 
     public function HistorialMovimientosProducto($producto_id) {
-        $this->db->select("p.*,h.*,mp.Nombre as Movimiento,CONCAT(per.Nombre,' ',per.APaterno) as Persona");
+        $this->db->select("p.*,h.*,mp.Nombre as Movimiento,CONCAT(per.Nombre,per.APaterno) as Persona");
         $this->db->from("HistorialProducto h");
         $this->db->join("MovimientosProductos mp", "mp.IdMovimientosProductos=h.MovimientosProductosId");
         $this->db->join("Usuarios u", "u.IdUsuarios=h.UsuariosId");
@@ -506,7 +506,7 @@ class Modeloclasificador extends CI_Model {
     }
 
     public function ClasificacionesProducto($producto_id) {
-        $this->db->select("h.*,c.*,CONCAT(per.Nombre,' ',per.APaterno) as Persona");
+        $this->db->select("h.*,c.*,CONCAT(per.Nombre,per.APaterno) as Persona");
         $this->db->from("HistorialClasificacion h");
         $this->db->join("Clasificaciones c", "c.IdClasificaciones=h.ClasificacionesId");
         $this->db->join("Usuarios u", "u.IdUsuarios=h.UsuariosId");
@@ -520,7 +520,7 @@ class Modeloclasificador extends CI_Model {
     }
 
     public function EntarimadosProducto($producto_id) {
-        $this->db->select("h.*,t.*,CONCAT(per.Nombre,' ',per.APaterno) as Persona");
+        $this->db->select("h.*,t.*,CONCAT(per.Nombre,per.APaterno) as Persona");
         $this->db->from("DetalleTarimas h");
         $this->db->join("Tarimas t", "t.IdTarimas=h.TarimasId");
         $this->db->join("Usuarios u", "u.IdUsuarios=h.UsuariosId");
@@ -628,7 +628,7 @@ class Modeloclasificador extends CI_Model {
     }
 
     public function ObtenerReparaciones($producto_id) {
-        $this->db->select("r.*,cr.Nombre as Diagnostico,CONCAT(per.Nombre,' ',per.APaterno) as Persona");
+        $this->db->select("r.*,cr.Nombre as Diagnostico,CONCAT(per.Nombre,per.APaterno) as Persona");
         $this->db->from("Reparaciones r");
         $this->db->join("CReparaciones cr", "cr.IdCReparaciones=r.CReparacionesId");
         $this->db->join("Productos p", "r.ProductosId=p.IdProductos");

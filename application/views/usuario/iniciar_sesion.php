@@ -17,10 +17,7 @@ if ($mensaje == "error") {
     <form method="post"  action="<?php echo base_url() ?>usuario/iniciar_sesion_post">
         <h1 class="text-light"><b>Royalty Ceramic</b></h1>
         <hr class="thin"/>
-		<?php if ($validacion != ""):?>
-			<span class="fg-red"><?= $validacion; ?></span><br>
-		<?php endif;?>
-		<br>
+        <br />
         <div class="input-control text full-size" data-role="input">
             <label for="user_login"><b>Usuario:</b></label>
             <input type="text" name="nombre" id="nombre" required="required" style="padding-right: 36px;">

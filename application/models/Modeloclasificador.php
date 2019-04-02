@@ -1,8 +1,6 @@
 <?php
 
 //return str_pad((int) $number,$n,"0",STR_PAD_LEFT);
-//Saludos de Alondra del pasado a Tania del Futuro; jaajaja
-//Espero te sirva Tania del futuro, Gracias Tania del pasado.
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
